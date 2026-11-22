@@ -1,0 +1,15 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:05,  4.41it/s]Loading weights:  72%|███████▏  | 208/290 [00:00<00:00, 799.69it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 697.50it/s]
+[precheck121] seeds=9  items/seed=48  seeds=[20260501, 20260502, 20260503, 20260504, 20260505, 20260506, 20271126, 20271203, 20271210]
+
+[结构 1] n_seen 向量逐 seed 不同取值个数 = 1（=1 ⇒ 组成**不可**解释 seed 分裂；这是结构事实，不是判据）
+[结构 2] n_seen>=1 的题号个数 = 46  × 9 seed = 414（`D-151` 已发表 414 ⇒ 一致）
+[结构 3] 逐 seed 逃逸数 = [0, 3, 18, 0, 2, 9, 5, 0, 5]  (合计 42；`D-151` 已发表 [0, 3, 18, 0, 2, 9, 5, 0, 5]、合计 42 ⇒ 一致)
+[结构 4] 列边缘（每个题在 9 个 seed 上的逃逸次数）直方图 = {0: 17, 1: 19, 2: 7, 3: 3}
+         → 全 0 列 = 17，全 9 列 = 0，严格中间列 = 29
+         → 行边缘方差 = 有；列边缘方差 = 有
+[结构 5] n_seen 分层题数（n_seen>=1 内）= {1: 23, 2: 20, 3: 3}  合计 46
+
+[结构 6] 合并逃逸率 p = 42/414 = 0.101449；行边缘在齐次零假设下的**期望**离散指数 ≈ 1.0（Pearson χ²/df，df=8）；列边缘 df=45
+[precheck121] 结构核结束（★ 未计算、未打印任何判据统计量的观测值）
