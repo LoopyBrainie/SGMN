@@ -1,0 +1,28 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:54,  5.27it/s]Loading weights:  60%|█████▉    | 173/290 [00:00<00:00, 736.51it/s]Loading weights:  94%|█████████▍| 273/290 [00:00<00:00, 822.64it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 705.15it/s]
+事实 32；STEPS=600 LR=0.01；eval items=48；γ=(0.005, 0.05)
+[PASS] A109-0: 装置 md5 与卡片一致 {'sgmn_module.py': '80e334a5a6751a07d9e03162ebf17ff0', 'dir90/R1_task90.py': '2fb3b65360736e971da14e3d1c4da2a6', 'dir104/R1_task104.py': '89fd053699c031e94a42db653c7ad22b'}
+[PASS] A109-5a: 7 个分类算例全对（失败 []）
+[PASS] A109-5b: 穷尽性走遍 12/12 组合无异常
+[PASS] A109-5c: rank_eff 在 r=1/4/16 上等于 r（[True, True, True]）
+[PASS] A109-1b: params_sel('both') 与 D104.params_nogamma 逐项同对象同序（n=6 vs 6）
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir90/R1_task90.py:191: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  return float(-lp[cand_ids[0]])
+  [T-NONE g=0.005 seed=20261028] acc_item=0.2708 rho_q=0.0000 rho_o=0.0000 gain16=1.000e+00 kappa16=0.005 7.9s
+  [T-NONE g=0.005 seed=20261104] acc_item=0.2917 rho_q=0.0000 rho_o=0.0000 gain16=1.000e+00 kappa16=0.005 7.6s
+  [T-NONE g=0.005 seed=7] acc_item=0.2708 rho_q=0.0000 rho_o=0.0000 gain16=1.000e+00 kappa16=0.005 7.6s
+  [T-BOTH g=0.005 seed=20261028] acc_item=0.0208 rho_q=3.3228 rho_o=4.7254 gain16=5.374e+02 kappa16=66.785 41.3s
+  [T-BOTH g=0.005 seed=20261104] acc_item=0.0417 rho_q=4.1268 rho_o=4.9570 gain16=6.789e+02 kappa16=85.116 41.2s
+  [T-BOTH g=0.005 seed=7] acc_item=0.1042 rho_q=3.9599 rho_o=4.6471 gain16=6.303e+02 kappa16=80.107 41.2s
+  [T-Q g=0.005 seed=20261028] acc_item=0.0417 rho_q=2.5998 rho_o=0.0000 gain16=4.529e+00 kappa16=0.112 40.6s
+  [T-O g=0.005 seed=20261028] acc_item=0.2083 rho_q=0.0000 rho_o=2.3526 gain16=3.964e+00 kappa16=0.092 40.7s
+[PASS] A109-2: T-NONE(γ=0.005) 逐位复现 DIR-104 的 RAWINJ ×3 seed（差 []）
+[PASS] A109-1: T-BOTH(γ=0.005) 逐位复现 DIR-104 的 INJ ×3 seed（差 []）
+[PASS] A109-3: q/m 重算相对误差 max=0.000e+00 < 1e-05
+[PASS] A109-4: γ 精确冻结(float32 口径) ∧ ‖ΔW‖=0 ∧ 写入无梯度 ∧ Wq/Wo 有限（违例 []）
+[PASS] A109-9: 评测期写入次数恒为 0（违例 []）
+[PASS] A109-6: T-NONE: ρ_q=ρ_o=0 ∧ gain=1 精确（违例 []）
+[PASS] A109-7: T-Q 的 ρ_o=0 ∧ T-O 的 ρ_q=0 精确（违例 []）
+[PASS] A109-8: T-NONE 三 seed 三层 κ ∈ (0,∞) 有限（违例 []）

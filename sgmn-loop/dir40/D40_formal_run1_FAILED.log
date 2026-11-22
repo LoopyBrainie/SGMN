@@ -1,0 +1,12 @@
+=== DIR-40 · 正式轮失败轮 run 1（三臂同因，★ 留档） ===
+时间：2026-11-13 · 主机：trainer
+命令（三个臂并行）：/opt/pytorch/bin/python dir40/R1_task40.py formal --arm {oracle,rand,learned}
+★ 缺陷 **DEF-40-6**：CLI 解析 —— 卡的用法写的是 `formal --arm X`，而实现取 `sys.argv[2]`（= 字面量 `"--arm"`）
+  ⇒ `KeyError: '--arm'` ⇒ **三个臂都在训练开始前就退出**（未消耗任何训练时间）。
+★ **工程错误，与结论无关**。修法：解析时忽略 `--` 前缀的参数（两种写法都支持）。
+--- 终端输出（逐字，三臂相同） ---
+    qsrc, tctrl = {"oracle": ("oracle", False), "rand": ("rand", False),
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   "learned": ("learned", True)}[arm]
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+KeyError: '--arm'

@@ -1,0 +1,99 @@
+{
+ "n_inst": 3,
+ "n_cmp": 15,
+ "atol": 1e-09,
+ "max_abs_diff": 0.0,
+ "ok": true,
+ "rows": [
+  {
+   "seed": 31000,
+   "arm": "none",
+   "dose": null,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31000,
+   "arm": "hit1",
+   "dose": 0.0,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31000,
+   "arm": "hit1",
+   "dose": 1.0,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31000,
+   "arm": "hit2",
+   "dose": 0.0,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31000,
+   "arm": "hit2",
+   "dose": 1.0,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31001,
+   "arm": "none",
+   "dose": null,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31001,
+   "arm": "hit1",
+   "dose": 0.0,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31001,
+   "arm": "hit1",
+   "dose": 1.0,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31001,
+   "arm": "hit2",
+   "dose": 0.0,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31001,
+   "arm": "hit2",
+   "dose": 1.0,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31002,
+   "arm": "none",
+   "dose": null,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31002,
+   "arm": "hit1",
+   "dose": 0.0,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31002,
+   "arm": "hit1",
+   "dose": 1.0,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31002,
+   "arm": "hit2",
+   "dose": 0.0,
+   "max_abs_diff": 0.0
+  },
+  {
+   "seed": 31002,
+   "arm": "hit2",
+   "dose": 1.0,
+   "max_abs_diff": 0.0
+  }
+ ]
+}

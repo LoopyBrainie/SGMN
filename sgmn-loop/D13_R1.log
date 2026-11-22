@@ -1,0 +1,50 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-13 R1：键的去相关 vs 检索 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:56,  5.08it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 739.93it/s]Loading weights:  97%|█████████▋| 282/290 [00:00<00:00, 769.80it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 676.89it/s]
+
+[校准] 采集基座隐状态 → 白化 $P_k$
+  层 8: 校准样本 2048，特征值 [1.016e-09, 4.417e+03]
+  层 12: 校准样本 2048，特征值 [1.972e-09, 4.653e+03]
+  层 16: 校准样本 2048，特征值 [5.635e-10, 4.726e+03]
+
+[Stage A]
+[PASS] A1' Freeze C 逐臂复检（写入梯度精确0 / 读梯度有限非零 / 基座逐位不变 / 阴性对照）: 读梯度 9/9 非零且有限；写入梯度精确0 18/18；基座逐位不变 True；阴性对照泄漏 3/18
+[PASS] A3' 单一装置（句柄 2×层数）+ 写关记忆冻结 / 写开必须变化: 句柄 6；写关相对差 0.000e+00（须 <1e-12）；写开相对差 1.134e+02（须 >1e-9）
+
+  [种子 20261028]
+    K0_linear            码logp -2.3711 命中 0.0000 键cos +0.3408 键PR 7.941 写保真 +nan 注意力max 0.0062
+    K1_whitened          码logp -2.1788 命中 0.0000 键cos +0.3973 键PR 5.954 写保真 +0.0416 注意力max 0.0085
+    K2_sparse            码logp -2.3014 命中 0.0000 键cos +0.1021 键PR 56.338 写保真 +nan 注意力max 0.0085
+    K3_linear_randomq    码logp -2.3744 命中 0.0000 键cos +0.3408 键PR 7.941 写保真 +nan 注意力max 0.0060
+    K5_sparse_nowrite    码logp -2.1789 命中 0.0000 键cos +nan 键PR nan 写保真 +nan 注意力max 0.0086
+
+  [种子 20261104]
+    K0_linear            码logp -1.9761 命中 0.0000 键cos +0.3511 键PR 7.665 写保真 -0.0024 注意力max 0.0063
+    K1_whitened          码logp -1.9529 命中 0.0000 键cos +0.3866 键PR 6.268 写保真 +0.0505 注意力max 0.0081
+    K2_sparse            码logp -1.9463 命中 0.0000 键cos +0.1087 键PR 53.740 写保真 +0.0053 注意力max 0.0087
+    K3_linear_randomq    码logp -1.9425 命中 0.0000 键cos +0.3511 键PR 7.665 写保真 -0.0024 注意力max 0.0060
+    K5_sparse_nowrite    码logp -1.9530 命中 0.0000 键cos +nan 键PR nan 写保真 +nan 注意力max 0.0087
+
+  [种子 7]
+    K0_linear            码logp -2.3174 命中 0.0000 键cos +0.3401 键PR 8.241 写保真 +0.0101 注意力max 0.0067
+    K1_whitened          码logp -2.3042 命中 0.0000 键cos +0.3893 键PR 6.191 写保真 +0.0528 注意力max 0.0082
+    K2_sparse            码logp -2.3038 命中 0.0000 键cos +0.0966 键PR 62.532 写保真 -0.0001 注意力max 0.0085
+    K3_linear_randomq    码logp -2.2922 命中 0.0000 键cos +0.3401 键PR 8.241 写保真 +0.0101 注意力max 0.0068
+    K5_sparse_nowrite    码logp -2.3043 命中 0.0000 键cos +nan 键PR nan 写保真 +nan 注意力max 0.0086
+
+[K4] 正交键探针（代数层）
+    K0_linear_probe  写保真度 +0.0033  键cos +0.3587 键PR 7.182
+    K4_ortho_probe   写保真度 +0.0078  键cos +0.0002 键PR 245.483
+
+[R1] 分析
+  各臂： {"K0_linear": {"lp_first": -2.2215424100557963, "hit": 0.0}, "K1_whitened": {"lp_first": -2.1453002168072595, "hit": 0.0}, "K2_sparse": {"lp_first": -2.1838201011220613, "hit": 0.0}, "K3_linear_randomq": {"lp_first": -2.203047912319501, "hit": 0.0}, "K5_sparse_nowrite": {"lp_first": -2.1454283750719494, "hit": 0.0}}
+[FAIL] A2' 键构造的生效性（去相关臂的键间余弦 ↓20% 或 有效槽位 PR ↑20%）: K0 基线：键cos 0.3408，键PR 7.941；K1_whitened: cos 0.3973, PR 5.954, 改善 False；K2_sparse: cos 0.1021, PR 56.338, 改善 True
+[FAIL] H1 〔键去相关是必要条件〕白化臂 K1 的命中显著 > 基线 K0: K1-K0 配对差 +0.0000（t=+0.00, p=1, 正向 0/0）跨种子 +0.0000 +0.0000 +0.0000
+[FAIL] H1' 〔稀疏门控〕稀疏臂 K2 的命中显著 > 基线 K0: K2-K0 配对差 +0.0000（t=+0.00, p=1, 正向 0/0）跨种子 +0.0000 +0.0000 +0.0000
+[FAIL] H2 〔存在性〕最佳臂命中 ≥ 0.9（随机基线 0.0244）: 最佳臂 K1_whitened，命中 0.0000（逐种子 0.0000 0.0000 0.0000），随机基线 0.0244
+[FAIL] H3 〔严格对照〕K2 命中显著 > 其写关对照 K5: K2-K5 配对差 +0.0000（t=+0.00, p=1, 正向 0/0）
+[FAIL] H4 〔任务层〕K2 的正确码 log-prob 显著 > K0: K2-K0 码logp 配对差 +0.0377（t=+1.77, p=1.25e-12）
+[PASS] H5 〔决定性分离〕正交键探针 K4 的写保真度显著 > K0（否则障碍在写规则）: K4 写保真度 +0.0078（键cos +0.0002、键PR 245.483）vs K0 +0.0033，差 +0.0045
+
+=== DIR-13 R1：3/9 通过 ===

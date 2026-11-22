@@ -1,0 +1,9 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:14,  3.88it/s]Loading weights:  76%|███████▌  | 219/290 [00:00<00:00, 764.77it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 658.23it/s]
+事实 32；STEPS=600 LR=0.01；eval items=48；γ=(0.001,)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  [T-BOTH g=0.001 seed=20270415] acc_item=0.1250 rho_q=4.3518 rho_o=3.9715 gain16=3.936e+02 kappa16=3.875 42.1s
+  ✓ 落盘 out/iso/aT-BOTH_s20270415.json

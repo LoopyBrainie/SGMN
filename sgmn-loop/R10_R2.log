@@ -1,0 +1,21 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:45,  6.33it/s]Loading weights:  56%|█████▌    | 161/290 [00:00<00:00, 749.92it/s]Loading weights:  87%|████████▋ | 253/290 [00:00<00:00, 789.47it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 711.14it/s]
+=== DIR-10 R2-①：写通道发散边界（64-token 块写，600 次）===
+  η=1e-05    发散于第 None 次写（None=600 次内未发散）  max|U|: 0.3927 → 4.1827e-01（×1.07）
+  η=2e-05    发散于第 None 次写（None=600 次内未发散）  max|U|: 0.3927 → 4.2747e-01（×1.09）
+  η=3e-05    发散于第 None 次写（None=600 次内未发散）  max|U|: 0.3927 → 4.2457e-01（×1.08）
+  η=5e-05    发散于第 None 次写（None=600 次内未发散）  max|U|: 0.3927 → 4.0046e-01（×1.02）
+  η=7e-05    发散于第 21 次写（None=600 次内未发散）  max|U|: 0.3927 → 3.9274e-01（×nan）
+  η=0.0001   发散于第 21 次写（None=600 次内未发散）  max|U|: 0.3927 → 3.9274e-01（×nan）
+  η=0.0002   发散于第 21 次写（None=600 次内未发散）  max|U|: 0.3927 → 3.9274e-01（×nan）
+
+=== DIR-10 R2-②：A1' 复检（口径：写阶段产出有限记忆的臂）===
+  纳入 ['joint_nowrite', 'joint_1e-07', 'joint_1e-06', 'joint_1e-05']；排除 ['joint_0.0001']（写阶段发散，读侧训练未发生）
+  A1' 复检：PASS
+    joint_nowrite: ΔWq=3.8086e-01 ΔWo=3.6310e-01 γ→0.00512 NLL=2.46294
+    joint_1e-07: ΔWq=3.8192e-01 ΔWo=3.6264e-01 γ→0.00440 NLL=2.46427
+    joint_1e-06: ΔWq=3.8563e-01 ΔWo=3.6645e-01 γ→0.00473 NLL=2.46297
+    joint_1e-05: ΔWq=3.8647e-01 ΔWo=3.6959e-01 γ→0.00556 NLL=2.46320
+
+=== DIR-10 R2 完成 ===

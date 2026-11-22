@@ -1,0 +1,126 @@
+{
+ "0.0": {
+  "eta_th": 0.8871520222965251,
+  "bisect_ok": true,
+  "brackets": [
+   false,
+   true
+  ],
+  "nev": 12,
+  "rho": 0.9864658308198204,
+  "rho_diag": {
+   "ok": true,
+   "f_lo": false,
+   "f_hi": true
+  },
+  "eta_warm": 0.08871520222965251,
+  "fp_res": 9.979818740296882e-16,
+  "fp_steps": 794,
+  "lmax_at_warm": 1.0000000000624079,
+  "nonneutral_max": 0.9960339459737968
+ },
+ "3.0": {
+  "eta_th": 0.06497467870512895,
+  "bisect_ok": true,
+  "brackets": [
+   false,
+   true
+  ],
+  "nev": 12,
+  "rho": 0.06565421031339733,
+  "rho_diag": {
+   "ok": true,
+   "f_lo": false,
+   "f_hi": true
+  },
+  "eta_warm": 0.006497467870512895,
+  "fp_res": 9.99728747379612e-16,
+  "fp_steps": 2696,
+  "lmax_at_warm": 1.000000000120934,
+  "nonneutral_max": 0.9996887248460528
+ },
+ "10.0": {
+  "eta_th": 0.0073034051030731765,
+  "bisect_ok": true,
+  "brackets": [
+   false,
+   true
+  ],
+  "nev": 12,
+  "rho": 0.008653565824665371,
+  "rho_diag": {
+   "ok": true,
+   "f_lo": false,
+   "f_hi": true
+  },
+  "eta_warm": 0.0007303405103073177,
+  "fp_res": 9.999674048578163e-16,
+  "fp_steps": 155199,
+  "lmax_at_warm": 1.0000000001846419,
+  "nonneutral_max": 0.9999648045074468
+ },
+ "20.0": {
+  "eta_th": 0.001574060730697452,
+  "bisect_ok": true,
+  "brackets": [
+   false,
+   true
+  ],
+  "nev": 12,
+  "rho": 0.0023729777611564426,
+  "rho_diag": {
+   "ok": true,
+   "f_lo": false,
+   "f_hi": true
+  },
+  "eta_warm": 0.0001574060730697452,
+  "fp_res": 9.999979334156445e-16,
+  "fp_steps": 2332970,
+  "lmax_at_warm": 1.000000000429054,
+  "nonneutral_max": 0.9999924071421632
+ },
+ "30.0": {
+  "eta_th": 0.000578046652657717,
+  "bisect_ok": true,
+  "brackets": [
+   false,
+   true
+  ],
+  "nev": 12,
+  "rho": 0.001088839277698255,
+  "rho_diag": {
+   "ok": true,
+   "f_lo": false,
+   "f_hi": true
+  },
+  "eta_warm": 5.78046652657717e-05,
+  "fp_res": 9.99997723892086e-16,
+  "fp_steps": 6842291,
+  "lmax_at_warm": 1.0000000004063179,
+  "nonneutral_max": 0.999997210651542
+ },
+ "verdict": {
+  "C1": {
+   "ok": false,
+   "rel": [
+    0.18486729169987637,
+    0.5075515924376042,
+    0.8836529416648964
+   ],
+   "thr": 0.03
+  },
+  "C2": {
+   "ok": true,
+   "slope": -1.8846224255636106,
+   "band": [
+    -2.6,
+    -1.4
+   ]
+  },
+  "C3": {
+   "ok": false,
+   "C": 0.9302185942368839,
+   "ref": 0.55
+  }
+ }
+}

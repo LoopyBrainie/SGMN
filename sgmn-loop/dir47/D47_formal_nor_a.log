@@ -1,0 +1,8 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir47/R1_task47.py:92: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  num = float(W @ K[t] @ Vv[t])
+[nor] 100/250  3.6s
+[nor] 200/250  7.2s
+DONE nor n=250 seed0=25200 → dir47/out/DIR47r10_arm_nor_a.jsonl  墙钟 9.0s

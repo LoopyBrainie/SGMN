@@ -1,0 +1,80 @@
+{
+ "checks": [
+  {
+   "id": "A26Q-1",
+   "ok": true,
+   "msg": "装置 md5 零改动"
+  },
+  {
+   "id": "A26Q-2",
+   "ok": true,
+   "msg": "参照脚本 md5"
+  },
+  {
+   "id": "A26Q-2b",
+   "ok": false,
+   "msg": "本文件不重定义 run_unit / build_stream_ar1（只 monkeypatch build_stream_ar1）"
+  },
+  {
+   "id": "A26Q-3",
+   "ok": true,
+   "msg": "perm 在 φ=0 被拒绝"
+  },
+  {
+   "id": "A26Q-4",
+   "ok": false,
+   "msg": "W1：ρ_u 0 / 0.5、Λ 同值 0.7454（=√5/3）"
+  },
+  {
+   "id": "A26Q-5",
+   "ok": false,
+   "msg": "W2：几何偏差 ‖K‖ 7.48e-07 / cos 2.73e-07（≤1e-06）、多重集逐位还原 False"
+  },
+  {
+   "id": "A26Q-6",
+   "ok": false,
+   "msg": "Q-β：ρ_u nat@0.9=0.900 ≥0.80、perm@0.9=+0.837 ≤0.05、nat@0=-0.002；Λ(perm)=1.992"
+  },
+  {
+   "id": "A26Q-7",
+   "ok": true,
+   "msg": "W3：位级锚点 72/72 逐位相等（坏 0）"
+  },
+  {
+   "id": "A26Q-8",
+   "ok": true,
+   "msg": "同种子两次重建键与诊断逐位相同（置换只依赖 seed）"
+  },
+  {
+   "id": "A26Q-9",
+   "ok": true,
+   "msg": "mu_ret1_consistent（seed 20261028、perm@0.9）"
+  },
+  {
+   "id": "A26Q-9b",
+   "ok": true,
+   "msg": "测量不扰动 W"
+  },
+  {
+   "id": "A26Q-12",
+   "ok": true,
+   "msg": "测量闭包字段集同构（18 个字段）"
+  },
+  {
+   "id": "A26Q-11",
+   "ok": true,
+   "msg": "断言集非空（12 条）"
+  }
+ ],
+ "passed": false,
+ "rho_u": {
+  "nat09": 0.8997711290915807,
+  "perm09": 0.8374519854784012,
+  "nat00": -0.0020777384724674952
+ },
+ "lam_perm": 1.9915281534194946,
+ "anchor": {
+  "n_cmp": 72,
+  "n_bad": 0
+ }
+}

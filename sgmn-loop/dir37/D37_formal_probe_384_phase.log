@@ -1,0 +1,6 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+── 探针档 n_train=384 变体 phase
+    探针 phase  L 15.43018  (3577s)
+  探针 phase  L 15.43018
+  ⇒ /home/ec2-user/sgmn-loop/dir37/out/DIR37r10_probe_384.phase.json  (3577s)

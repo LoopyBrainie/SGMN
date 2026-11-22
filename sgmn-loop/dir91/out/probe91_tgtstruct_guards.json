@@ -1,0 +1,253 @@
+{
+ "card": "DIR-91 rev 3.3",
+ "file": "probe91_tgtstruct.py",
+ "gates": {
+  "G_gen": 0.5,
+  "G_low": 0.25,
+  "G_delta": 0.125,
+  "chance": 0.25,
+  "rec_min": 0.9,
+  "cap_loo": 0.3125,
+  "ceil_d106": 0.3125,
+  "cap_m1a": 0.3125,
+  "oracle_alpha": [
+   0.0,
+   1.0,
+   3.0,
+   10.0,
+   30.0,
+   100.0,
+   300.0,
+   1000.0
+  ]
+ },
+ "consts": {
+  "n_cls": 27,
+  "n_facts": 32,
+  "n_train_keys": 16,
+  "n_cand": 4,
+  "n_draws": 3,
+  "mount": [
+   8,
+   12,
+   16
+  ]
+ },
+ "guards": {
+  "A96-00": {
+   "ok": true,
+   "detail": "n_facts=32 n_train=16 n_held=16 n_cand=4 n_cls=27 MOUNT=[8, 12, 16] CHANCE=0.25",
+   "value": null
+  },
+  "A96-01": {
+   "ok": true,
+   "detail": "M1b 合成可读 LOO=0.312500（须 ==CAP_LOO 0.312500 精确）；纯噪声 LOO=0.0000（须 ≤0.15）。★ 同情形 M1a=0.0625（上限 0.3125，仅报告）",
+   "value": 0.3125
+  },
+  "A96-02": {
+   "ok": true,
+   "detail": "共享目标合成可解 rel_res=8.609e-04（须 ≤1e-3）；‖T‖−1 max=5.96e-08（须 <1e-6）；T 互异列 27（须 27）",
+   "value": 0.0008608663131762955
+  },
+  "A96-03": {
+   "ok": true,
+   "detail": "‖y‖min=1.264e+01（须 >0）；两两 cos max=0.9908（须 <0.999）；shape=(32,896) True",
+   "value": 0.9907569885253906
+  },
+  "A96-11": {
+   "ok": true,
+   "detail": "oracle 幅度扫描：最佳 alpha=10.0 ⇒ acc_held=1.0000（须 ≥0.5）；基线 alpha=0 held=0.1250；margin(10)=+9.285 > margin(0)=-0.713=True",
+   "value": 1.0
+  },
+  "A96-13": {
+   "ok": true,
+   "detail": "MAG_RATIO (‖y‖/‖m(alpha=1)‖) 逐层={'8': 13.02, '12': 19.34, '16': 28.32} ⇒ alpha=1 注入幅度远小于读出量级（DEF-96-07 的成因）",
+   "value": null
+  },
+  "A96-04": {
+   "ok": true,
+   "detail": "投毒 y_held：M1b=0.0000（须 ≤0.15，M1a=0.0000）；打乱 cls：M1b=0.0417（须 ≤0.15，M1a=0.0000）",
+   "value": null
+  },
+  "A96-05": {
+   "ok": true,
+   "detail": "ridge16 复现 D-111：train=1.0000（须 1.0） held=0.0625（须 0.0625）",
+   "value": null
+  },
+  "A96-06": {
+   "ok": true,
+   "detail": "M2 与 M0 用同一个 ridge_closed 函数对象（只换 T）",
+   "value": null
+  },
+  "A96-10": {
+   "ok": true,
+   "detail": "正式路径 Wo dtype={8: 'torch.float32', 12: 'torch.float32', 16: 'torch.float32'}",
+   "value": null
+  },
+  "A96-07": {
+   "ok": true,
+   "detail": "count_mounted()==0 先成立（0）；M4 两次独立构造 Wo 逐位相同 dW=0.000e+00",
+   "value": 0.0
+  },
+  "A96-06b": {
+   "ok": true,
+   "detail": "M4 冻结 Wq 生效：dWq=0.000e+00（须 0）",
+   "value": 0.0
+  },
+  "A96-09": {
+   "ok": true,
+   "detail": "n_item=48（须 48）；n_q=16（须 16）；每题 draws 数={3}；每题恰一正确项=True；chance=0.25",
+   "value": null
+  }
+ },
+ "arms": [],
+ "branch": {},
+ "worked": {
+  "A96-01": {
+   "M1b_good": 0.3125,
+   "M1b_noise": 0.0,
+   "M1a_good_reported": 0.0625,
+   "cap_m1a": 0.3125,
+   "note": "M1a 在合成可读情形下亦受 5/16 上限约束（DEF-96-01）"
+  },
+  "A96-02": {
+   "rel_res_synthetic": 0.0008608663131762955,
+   "T_norm_err": 5.960464477539063e-08,
+   "T_uniq": 27
+  },
+  "A96-11": {
+   "sweep": [
+    {
+     "alpha": 0.0,
+     "acc_train": 0.0625,
+     "acc_held": 0.125,
+     "margin_train": -2.537691666666667,
+     "margin_held": -0.7125395833333331
+    },
+    {
+     "alpha": 1.0,
+     "acc_train": 0.125,
+     "acc_held": 0.375,
+     "margin_train": -1.6776499999999996,
+     "margin_held": 0.15077083333333305
+    },
+    {
+     "alpha": 3.0,
+     "acc_train": 0.375,
+     "acc_held": 0.625,
+     "margin_train": 0.06631249999999982,
+     "margin_held": 1.9258479166666664
+    },
+    {
+     "alpha": 10.0,
+     "acc_train": 1.0,
+     "acc_held": 1.0,
+     "margin_train": 7.26705625,
+     "margin_held": 9.284741666666667
+    },
+    {
+     "alpha": 30.0,
+     "acc_train": 1.0,
+     "acc_held": 1.0,
+     "margin_train": 32.8398125,
+     "margin_held": 34.104191666666665
+    },
+    {
+     "alpha": 100.0,
+     "acc_train": 1.0,
+     "acc_held": 1.0,
+     "margin_train": 61.43068958333333,
+     "margin_held": 59.58851041666667
+    },
+    {
+     "alpha": 300.0,
+     "acc_train": 1.0,
+     "acc_held": 1.0,
+     "margin_train": 68.57431874999999,
+     "margin_held": 66.123725
+    },
+    {
+     "alpha": 1000.0,
+     "acc_train": 1.0,
+     "acc_held": 1.0,
+     "margin_train": 69.8854625,
+     "margin_held": 67.59170833333333
+    }
+   ],
+   "best": {
+    "alpha": 10.0,
+    "acc_train": 1.0,
+    "acc_held": 1.0,
+    "margin_train": 7.26705625,
+    "margin_held": 9.284741666666667
+   },
+   "grid": [
+    0.0,
+    1.0,
+    3.0,
+    10.0,
+    30.0,
+    100.0,
+    300.0,
+    1000.0
+   ]
+  },
+  "A96-13": {
+   "8": {
+    "y_norm_mean": 13.01996898651123,
+    "m_norm_alpha1": 1.0,
+    "ratio_y_over_m": 13.01996898651123
+   },
+   "12": {
+    "y_norm_mean": 19.335296630859375,
+    "m_norm_alpha1": 1.0,
+    "ratio_y_over_m": 19.335296630859375
+   },
+   "16": {
+    "y_norm_mean": 28.320158004760742,
+    "m_norm_alpha1": 1.0,
+    "ratio_y_over_m": 28.320158004760742
+   }
+  },
+  "A96-12": {
+   "M1b_v": 0.03125,
+   "cap_loo": 0.3125,
+   "M1a_v": 0.0,
+   "d108_A_mean_M2loo_ref": 0.042,
+   "note": "仅报告：原生 A_mean 池化下 v_i 近 chance（D-108 已测 0.042）；0.312 是 D_vtpos 臂的数，本 probe 不用那条臂",
+   "per_layer": {
+    "8": {
+     "held_top1": 0.0,
+     "loo_top1": 0.03125
+    },
+    "12": {
+     "held_top1": 0.0,
+     "loo_top1": 0.03125
+    },
+    "16": {
+     "held_top1": 0.0,
+     "loo_top1": 0.03125
+    }
+   }
+  },
+  "A96-04": {
+   "poison_M1a": 0.0,
+   "poison_M1b": 0.0,
+   "shuffled_M1a": 0.0,
+   "shuffled_M1b": 0.041666666666666664
+  },
+  "A96-05": {
+   "acc_train": 1.0,
+   "acc_held": 0.0625,
+   "expect": [
+    1.0,
+    0.0625
+   ]
+  },
+  "A96-06_m4": {
+   "dWq": 0.0,
+   "two_run_dW": 0.0
+  }
+ },
+ "stage_a_ok": true
+}

@@ -1,0 +1,30 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+── 档位 n_train=384
+  训练 A(dev) n=384 3453s
+  训练 C(ref) n=384 2004s
+    评估 100/400  (12s)
+    评估 200/400  (24s)
+    评估 300/400  (36s)
+    评估 400/400  (49s)
+  L_A 8.40426 · L_B 2.18899 · L_C 1.11324 · L_D 0.00022
+  G_inst +6.21527 · G_adapt +1.07574 · G_head +1.11302 · G_range +0.00022
+  主导 inst · 读侧合计 +7.29102 · 恒等式残差 -1.78e-15
+── 档位 n_train=96
+  训练 A(dev) n=96 315s
+  训练 C(ref) n=96 383s
+    评估 100/400  (13s)
+    评估 200/400  (25s)
+    评估 300/400  (37s)
+    评估 400/400  (50s)
+  L_A 9.66567 · L_B 4.11249 · L_C 1.22067 · L_D 0.00093
+  G_inst +5.55318 · G_adapt +2.89183 · G_head +1.21973 · G_range +0.00093
+  主导 inst · 读侧合计 +8.44501 · 恒等式残差 0.00e+00
+  C37-a: {'max_term': 6.215273256648065, 'dmin': 3.6423058526246352, 'terms': {'inst': 6.215273256648065, 'adapt': 1.075742766940335, 'head': 1.1130234263084362, 'range': 0.00021958297030180878}, 'ok': True} ⇒ 过
+  C37-b: {'dom': 'inst', 'second': 'head', 'diff': 5.1022498303396295, '3se': 0.5862802447794977, 'ok': True} ⇒ 过
+  C37-c: {'identity_resid': -1.7763568394002505e-15, 'L_F': 4.0102183495069374e-30, 'L_D': 0.00021958297030180878, 'L_C': 1.113243009278738, 'L_A': 8.404259032867138, 'ok': True} ⇒ 过
+  C37-d: {'tol': 1.456922341049854e-05, 'terms': {'inst': 6.215273256648065, 'adapt': 1.075742766940335, 'head': 1.1130234263084362, 'range': 0.00021958297030180878}, 'ok': True} ⇒ 过
+  P37-1: {'rell_dev': 0.7254783795663041, 'rell_ref': 0.06666666666666708, 'ok': True}
+  归因：('读侧（检索 + 头的适应）', '写/读侧：写规则、寻址、键可分性（**装置/协议** revision）')
+⇒ 判据状态 **SUCCEEDED**
+  （主测量完成 6253s）

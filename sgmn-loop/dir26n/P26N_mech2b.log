@@ -1,0 +1,155 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+=== 机制探针 2（种子 3 × 档 (40, 4)，τ=0.0950）===
+  b=40 seed=20261028 tau | gate 0.407 ret1 0.9375 | skip cos 0.1129 vs write 0.0449 | 末轮跳占比 0.522 (机会 0.250) | 末轮有写条目 0.417 | 写/条目 4-16 | 读命中 150/160
+  b=40 seed=20261028   H | gate 0.657 ret1 0.4813 | skip cos 0.0629 vs write 0.0223 | 末轮跳占比 0.326 (机会 0.250) | 末轮有写条目 0.467 | 写/条目 3-8 | 读命中 77/160
+  b=40 seed=20261028   R | gate 0.048 ret1 0.7875 | skip cos 0.0838 vs write 0.0842 | 末轮跳占比 0.087 (机会 0.250) | 末轮有写条目 1.000 | 写/条目 8-16 | 读命中 126/160
+        J(R,τ)=0.066 J(H,τ)=0.516 R跳而τ写=19 τ跳而R写=364
+  b=40 seed=20261104 tau | gate 0.421 ret1 0.8562 | skip cos 0.1128 vs write 0.0435 | 末轮跳占比 0.505 (机会 0.250) | 末轮有写条目 0.483 | 写/条目 4-15 | 读命中 137/160
+  b=40 seed=20261104   H | gate 0.646 ret1 0.4813 | skip cos 0.0643 vs write 0.0198 | 末轮跳占比 0.327 (机会 0.250) | 末轮有写条目 0.567 | 写/条目 3-10 | 读命中 77/160
+  b=40 seed=20261104   R | gate 0.104 ret1 0.7500 | skip cos 0.0747 vs write 0.0809 | 末轮跳占比 0.140 (机会 0.250) | 末轮有写条目 0.967 | 写/条目 4-16 | 读命中 120/160
+        J(R,τ)=0.128 J(H,τ)=0.556 R跳而τ写=43 τ跳而R写=347
+  b=40 seed=  7 tau | gate 0.402 ret1 0.9437 | skip cos 0.1132 vs write 0.0430 | 末轮跳占比 0.503 (机会 0.250) | 末轮有写条目 0.583 | 写/条目 5-14 | 读命中 151/160
+  b=40 seed=  7   H | gate 0.658 ret1 0.4938 | skip cos 0.0589 vs write 0.0181 | 末轮跳占比 0.315 (机会 0.250) | 末轮有写条目 0.617 | 写/条目 3-8 | 读命中 79/160
+  b=40 seed=  7   R | gate 0.075 ret1 0.6875 | skip cos 0.0892 vs write 0.0799 | 末轮跳占比 0.139 (机会 0.250) | 末轮有写条目 1.000 | 写/条目 6-16 | 读命中 110/160
+        J(R,τ)=0.106 J(H,τ)=0.522 R跳而τ写=28 τ跳而R写=342
+  b= 4 seed=20261028 tau | gate 0.644 ret1 0.9313 | skip cos 0.1356 vs write 0.0421 | 末轮跳占比 0.353 (机会 0.250) | 末轮有写条目 0.267 | 写/条目 1-16 | 读命中 149/160
+  b= 4 seed=20261028   H | gate 0.728 ret1 0.4562 | skip cos 0.1469 vs write 0.0522 | 末轮跳占比 0.319 (机会 0.250) | 末轮有写条目 0.250 | 写/条目 3-8 | 读命中 73/160
+  b= 4 seed=20261028   R | gate 0.306 ret1 0.6062 | skip cos 0.4355 vs write 0.2032 | 末轮跳占比 0.265 (机会 0.250) | 末轮有写条目 0.783 | 写/条目 2-16 | 读命中 97/160
+        J(R,τ)=0.436 J(H,τ)=0.715 R跳而τ写=17 τ跳而R写=341
+  b= 4 seed=20261104 tau | gate 0.626 ret1 0.8688 | skip cos 0.1345 vs write 0.0386 | 末轮跳占比 0.373 (机会 0.250) | 末轮有写条目 0.217 | 写/条目 1-13 | 读命中 139/160
+  b= 4 seed=20261104   H | gate 0.722 ret1 0.4688 | skip cos 0.1112 vs write 0.0298 | 末轮跳占比 0.319 (机会 0.250) | 末轮有写条目 0.283 | 写/条目 2-7 | 读命中 75/160
+  b= 4 seed=20261104   R | gate 0.360 ret1 0.7875 | skip cos 0.3661 vs write 0.1481 | 末轮跳占比 0.335 (机会 0.250) | 末轮有写条目 0.550 | 写/条目 2-16 | 读命中 126/160
+        J(R,τ)=0.513 J(H,τ)=0.721 R跳而τ写=25 τ跳而R写=280
+  b= 4 seed=  7 tau | gate 0.656 ret1 0.8875 | skip cos 0.1378 vs write 0.0424 | 末轮跳占比 0.356 (机会 0.250) | 末轮有写条目 0.217 | 写/条目 1-13 | 读命中 142/160
+  b= 4 seed=  7   H | gate 0.726 ret1 0.4375 | skip cos 0.1488 vs write 0.0499 | 末轮跳占比 0.314 (机会 0.250) | 末轮有写条目 0.333 | 写/条目 2-8 | 读命中 70/160
+  b= 4 seed=  7   R | gate 0.342 ret1 0.7812 | skip cos 0.3949 vs write 0.1921 | 末轮跳占比 0.305 (机会 0.250) | 末轮有写条目 0.650 | 写/条目 2-16 | 读命中 125/160
+        J(R,τ)=0.474 J(H,τ)=0.730 R跳而τ写=20 τ跳而R写=322
+{
+ "40": {
+  "tau": {
+   "gate_rate": 0.41006944444444443,
+   "ret1": 0.9125,
+   "skip_cos_mean": 0.11298183675437606,
+   "write_cos_mean": 0.04380626794213311,
+   "frac_skip_above_tau": 1.0,
+   "frac_write_le_tau": 1.0,
+   "skip_last_round_frac": 0.5097600996864724,
+   "opp_last_round_frac": 0.25,
+   "frac_items_last_round_written": 0.49444444444444446,
+   "writes_per_item_min": 4.333333333333333,
+   "writes_per_item_max": 15.0,
+   "read_hits_mean": 146.0,
+   "read_writes_mean": 207.0,
+   "nonread_writes_by_grp": {
+    "1": 8.983333333333334
+   }
+  },
+  "H": {
+   "gate_rate": 0.6538194444444444,
+   "ret1": 0.48541666666666666,
+   "skip_cos_mean": 0.06203166258763291,
+   "write_cos_mean": 0.020069606934050535,
+   "frac_skip_above_tau": 0.13013004111125273,
+   "frac_write_le_tau": 0.9848494561291045,
+   "skip_last_round_frac": 0.32291956655335674,
+   "opp_last_round_frac": 0.25,
+   "frac_items_last_round_written": 0.5499999999999999,
+   "writes_per_item_min": 3.0,
+   "writes_per_item_max": 8.666666666666666,
+   "read_hits_mean": 77.66666666666667,
+   "read_writes_mean": 113.0,
+   "nonread_writes_by_grp": {
+    "1": 5.483333333333333
+   }
+  },
+  "R": {
+   "gate_rate": 0.07569444444444445,
+   "ret1": 0.7416666666666667,
+   "skip_cos_mean": 0.08254338602036022,
+   "write_cos_mean": 0.0816824531723842,
+   "frac_skip_above_tau": 0.39043478260869563,
+   "frac_write_le_tau": 0.6089748697351364,
+   "skip_last_round_frac": 0.12194847020933978,
+   "opp_last_round_frac": 0.25,
+   "frac_items_last_round_written": 0.9888888888888889,
+   "writes_per_item_min": 6.0,
+   "writes_per_item_max": 16.0,
+   "read_hits_mean": 118.66666666666667,
+   "read_writes_mean": 301.3333333333333,
+   "nonread_writes_by_grp": {
+    "1": 14.65
+   }
+  },
+  "overlap": {
+   "J_R_tau": 0.09988354343226342,
+   "J_H_tau": 0.5314085394417277,
+   "R_skip_tau_write": 30.0,
+   "tau_skip_R_write": 351.0
+  }
+ },
+ "4": {
+  "tau": {
+   "gate_rate": 0.642013888888889,
+   "ret1": 0.8958333333333334,
+   "skip_cos_mean": 0.13597476194414623,
+   "write_cos_mean": 0.04105916759799039,
+   "frac_skip_above_tau": 1.0,
+   "frac_write_le_tau": 1.0,
+   "skip_last_round_frac": 0.3603395036798911,
+   "opp_last_round_frac": 0.25,
+   "frac_items_last_round_written": 0.2333333333333333,
+   "writes_per_item_min": 1.0,
+   "writes_per_item_max": 14.0,
+   "read_hits_mean": 143.33333333333334,
+   "read_writes_mean": 202.66666666666666,
+   "nonread_writes_by_grp": {
+    "10": 3.525
+   }
+  },
+  "H": {
+   "gate_rate": 0.7253472222222223,
+   "ret1": 0.45416666666666666,
+   "skip_cos_mean": 0.13564159743551343,
+   "write_cos_mean": 0.04393208702928095,
+   "frac_skip_above_tau": 0.6408464384646797,
+   "frac_write_le_tau": 0.7985123704411922,
+   "skip_last_round_frac": 0.31737807695468057,
+   "opp_last_round_frac": 0.25,
+   "frac_items_last_round_written": 0.2888888888888889,
+   "writes_per_item_min": 2.3333333333333335,
+   "writes_per_item_max": 7.666666666666667,
+   "read_hits_mean": 72.66666666666667,
+   "read_writes_mean": 113.0,
+   "nonread_writes_by_grp": {
+    "10": 3.766666666666667
+   }
+  },
+  "R": {
+   "gate_rate": 0.3361111111111111,
+   "ret1": 0.725,
+   "skip_cos_mean": 0.39884755008396705,
+   "write_cos_mean": 0.1811231300907994,
+   "frac_skip_above_tau": 0.955037351187479,
+   "frac_write_le_tau": 0.48301097142992994,
+   "skip_last_round_frac": 0.3018147622788013,
+   "opp_last_round_frac": 0.25,
+   "frac_items_last_round_written": 0.6611111111111111,
+   "writes_per_item_min": 2.0,
+   "writes_per_item_max": 16.0,
+   "read_hits_mean": 116.0,
+   "read_writes_mean": 300.6666666666667,
+   "nonread_writes_by_grp": {
+    "10": 8.416666666666666
+   }
+  },
+  "overlap": {
+   "J_R_tau": 0.4742820596675846,
+   "J_H_tau": 0.721901923712632,
+   "R_skip_tau_write": 20.666666666666668,
+   "tau_skip_R_write": 314.3333333333333
+  }
+ }
+}
+  → /home/ec2-user/sgmn-loop/dir26n/out/probe26n_mech2.json

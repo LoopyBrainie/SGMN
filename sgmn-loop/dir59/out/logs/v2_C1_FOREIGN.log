@@ -1,0 +1,9 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[C1/FOREIGN] 训头（learned+ctrl，250 步，n=96，shared_pk=20263321，pv=20263311，alpha=1)
+/home/ec2-user/sgmn-loop/dir59/R1_task59.py:75: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  q_fp = q_fp + float(q.sum())
+[C1/FOREIGN] 训练完成 2166s 梯度 {'g1': 14.618331814453406, 'Wo1': 14.340639407665487, 'bo1': 4.232377604771032, 'Wq1': 1.076509210646132, 'bq1': 0.5415849981200961}
+[C1/FOREIGN] L=1.425779 (sd 0.7026) |q|=1.8480 |y|=0.9977 m̄=0.3514 Wmax=2.2135 cos=-0.9129
+[C1/FOREIGN] → /home/ec2-user/sgmn-loop/dir59/out/PROBE59Dv2_C1_FOREIGN.json

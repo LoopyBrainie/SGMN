@@ -1,0 +1,23 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:06,  4.35it/s]Loading weights:  72%|███████▏  | 209/290 [00:00<00:00, 783.49it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 690.56it/s]
+[设定] alpha=1.0 lam=0.05 ||k||^2_mean=3663.30 epoch=400
+  n=1   eta=3e-05  floor=0.00003  eta*alpha*||k||^2=1.09899e-01  c=0.0003
+  n=1   eta=1e-05  floor=0.00004  eta*alpha*||k||^2=3.66330e-02  c=0.0011
+  n=1   eta=3e-06  floor=0.02671  eta*alpha*||k||^2=1.09899e-02  c=2.4305
+  n=1   eta=1e-06  floor=0.52187  eta*alpha*||k||^2=3.66330e-03  c=142.4585
+  n=8   eta=3e-05  floor=0.09750  eta*alpha*||k||^2=1.09899e-01  c=0.8872
+  n=8   eta=1e-05  floor=0.10630  eta*alpha*||k||^2=3.66330e-02  c=2.9017
+  n=8   eta=3e-06  floor=0.10953  eta*alpha*||k||^2=1.09899e-02  c=9.9668
+  n=8   eta=1e-06  floor=0.11047  eta*alpha*||k||^2=3.66330e-03  c=30.1562
+  n=32  eta=3e-05  floor=0.09873  eta*alpha*||k||^2=1.09899e-01  c=0.8984
+  n=32  eta=1e-05  floor=0.11004  eta*alpha*||k||^2=3.66330e-02  c=3.0038
+  n=32  eta=3e-06  floor=0.11493  eta*alpha*||k||^2=1.09899e-02  c=10.4576
+  n=32  eta=1e-06  floor=0.11642  eta*alpha*||k||^2=3.66330e-03  c=31.7805
+
+[定律检验] 对每个 n 做 log(floor) ~ log(eta) 斜率（预注册：≈1）
+  n=1   slope=-3.142
+  n=8   slope=-0.035
+  n=32  slope=-0.047
+
+★ 诊断完成

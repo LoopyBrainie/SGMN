@@ -1,0 +1,27 @@
+{
+ "dir": "DIR23r11",
+ "device": {
+  "file": "sgmn_module_hebb_v7.py",
+  "md5": "1a242d02c530307f6c76646ca13469ef",
+  "copied_from": "dir22/sgmn_module_hebb_v7.py",
+  "copy_is_byte_identical": true
+ },
+ "script": {
+  "file": "R1_scope.py",
+  "md5": "40e77f57d85f0942267e0fca8755f501",
+  "lines": 604,
+  "verbatim_funcs_from": "dir22/R1_rate.py",
+  "verbatim_funcs": [
+   "_norm_cdf",
+   "sign_test_p",
+   "paired"
+  ]
+ },
+ "decisions": [
+  "DEC-09（装置零改动；S 全在测量层）"
+ ],
+ "checks": {
+  "V01": true,
+  "V02": true
+ }
+}

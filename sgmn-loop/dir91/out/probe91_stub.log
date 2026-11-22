@@ -1,0 +1,47 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:55,  5.17it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 765.50it/s]Loading weights:  99%|█████████▉| 287/290 [00:00<00:00, 822.48it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 703.92it/s]
+tie_word_embeddings=True d=896 L=24
+
+[P0 BASE] 无栈  留出键 acc(项)=0.250 acc(题)=0.125
+
+--- S：分离桩（最后位置注入 rho*||h||*e_hat）---
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/probe91_stub.py:84: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  ref = float(hs_in[0, i, :].norm())
+  S-A_e_ans   rho=0.5  L=(16,)       acc(项)=0.917 acc(题)=0.875
+  S-A_e_ans   rho=0.5  L=(8, 12, 16) acc(项)=1.000 acc(题)=1.000
+  S-A_e_ans   rho=1.0  L=(16,)       acc(项)=1.000 acc(题)=1.000
+  S-A_e_ans   rho=1.0  L=(8, 12, 16) acc(项)=1.000 acc(题)=1.000
+  S-A_e_ans   rho=2.0  L=(16,)       acc(项)=1.000 acc(题)=1.000
+  S-A_e_ans   rho=2.0  L=(8, 12, 16) acc(项)=1.000 acc(题)=1.000
+  S-A_e_ans   rho=4.0  L=(16,)       acc(项)=1.000 acc(题)=1.000
+  S-A_e_ans   rho=4.0  L=(8, 12, 16) acc(项)=1.000 acc(题)=1.000
+  S-B_e_rand  rho=0.5  L=(16,)       acc(项)=0.021 acc(题)=0.000
+  S-B_e_rand  rho=0.5  L=(8, 12, 16) acc(项)=0.000 acc(题)=0.000
+  S-B_e_rand  rho=1.0  L=(16,)       acc(项)=0.000 acc(题)=0.000
+  S-B_e_rand  rho=1.0  L=(8, 12, 16) acc(项)=0.000 acc(题)=0.000
+  S-B_e_rand  rho=2.0  L=(16,)       acc(项)=0.000 acc(题)=0.000
+  S-B_e_rand  rho=2.0  L=(8, 12, 16) acc(项)=0.000 acc(题)=0.000
+  S-B_e_rand  rho=4.0  L=(16,)       acc(项)=0.000 acc(题)=0.000
+  S-B_e_rand  rho=4.0  L=(8, 12, 16) acc(项)=0.000 acc(题)=0.000
+
+--- M：尺度与对齐余弦 ---
+  M3 cos(e_ans_i, e_ans_j) 均值=+0.1815 最大绝对值=1.0000
+  L8: ||h||=13.1 | ||Δtie||/||h||=6.2239 ||Δfull||/||h||=0.1309
+       cos(Δtie,e_ans)=-0.0129 vs e_distr=-0.0245  边际=+0.0117
+       cos(Δfull,e_ans)=+0.0102 vs e_distr=+0.0265  边际=-0.0164
+  L12: ||h||=14.3 | ||Δtie||/||h||=4.9657 ||Δfull||/||h||=0.1513
+       cos(Δtie,e_ans)=-0.0208 vs e_distr=-0.0448  边际=+0.0239
+       cos(Δfull,e_ans)=-0.0276 vs e_distr=-0.0654  边际=+0.0378
+  L16: ||h||=21.3 | ||Δtie||/||h||=4.0247 ||Δfull||/||h||=0.1268
+       cos(Δtie,e_ans)=-0.0229 vs e_distr=-0.0443  边际=+0.0214
+       cos(Δfull,e_ans)=-0.0182 vs e_distr=-0.0267  边际=+0.0085
+
+--- L：全绑定单层注入 ---
+  fulltie L=(8,)        留出键 acc(项)=0.292 acc(题)=0.188
+  fulltie L=(12,)       留出键 acc(项)=0.250 acc(题)=0.125
+  fulltie L=(16,)       留出键 acc(项)=0.271 acc(题)=0.125
+  fulltie L=(8, 12, 16) 留出键 acc(项)=0.271 acc(题)=0.125
+
+★ 诊断完成（不产生裁决）

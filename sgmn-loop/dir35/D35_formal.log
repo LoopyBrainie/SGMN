@@ -1,0 +1,26 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/ec2-user/sgmn-loop/dir33/R1_task33.py:203: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  tot += float(L) / len(seeds)
+  oracle n_train=  24 N  出样本  24.71432 · 样本内   6.27360  (87s)
+  oracle n_train=  24 S  出样本  26.12767 · 样本内   5.41660  (180s)
+  oracle n_train=  24 T  出样本  19.10499 · 样本内   3.89069  (264s)
+  oracle n_train=  48 N  出样本  17.83122 · 样本内  11.20172  (166s)
+  oracle n_train=  48 S  出样本  20.39168 · 样本内   9.56787  (348s)
+  oracle n_train=  48 T  出样本  11.22536 · 样本内   6.12953  (511s)
+  oracle n_train=  96 N  出样本  16.09547 · 样本内  12.64667  (322s)
+  oracle n_train=  96 S  出样本  17.01891 · 样本内  11.89882  (680s)
+  oracle n_train=  96 T  出样本   9.30025 · 样本内   6.93010  (994s)
+  oracle n_train= 192 N  出样本  15.26178 · 样本内  13.28961  (627s)
+  oracle n_train= 192 S  出样本  15.46037 · 样本内  13.02902  (1322s)
+  oracle n_train= 192 T  出样本   8.53363 · 样本内   7.46135  (1944s)
+  oracle n_train= 384 N  出样本  14.51902 · 样本内  13.57904  (1254s)
+  oracle n_train= 384 S  出样本  14.74878 · 样本内  13.36890  (2671s)
+  oracle n_train= 384 T  出样本   8.36871 · 样本内   7.60065  (3932s)
+  C35-a: {'mean': 5.620531351911521, 'dmin': 3.4973108471158008, 'ok': True} ⇒ 过
+  C35-b: {'mean': 5.620531351911521, '3se': 0.6858360686115623, 'lower': 4.934695283299959, 'ok': True} ⇒ 过
+  C35-c: {'premium_384': 0.9399724047731404, 'premium_24': 18.44071845412434, 'N_out_384': 14.519015906336403, 'N_out_24': 24.714318119749567, 'ok': True} ⇒ 过
+  C35-d: {'3se': 0.6858360686115623, 'dmin': 3.4973108471158008, 'ok': True} ⇒ 过
+曲线 {"24": {"L_N": 24.714318119749567, "L_S": 26.127666689832992, "L_T": 19.104993102103297, "dZ_T": -5.115749713640094, "premium_N": 18.44071845412434, "dcontent": 7.0226735877296935}, "48": {"L_N": 17.83122055640618, "L_S": 20.39167608551769, "L_T": 11.225357760108903, "dZ_T": 2.763885628354302, "premium_N": 6.629500899759266, "dcontent": 9.166318325408792}, "96": {"L_N": 16.09547224605599, "L_S": 17.018913911964013, "L_T": 9.300253687717946, "dZ_T": 4.688989700745257, "premium_N": 3.4488069772598084, "dcontent": 7.718660224246064}, "192": {"L_N": 15.261784702779755, "L_S": 15.46037428100906, "L_T": 8.53362525876372, "dZ_T": 5.455618129699483, "premium_N": 1.972174942070044, "dcontent": 6.92674902224534}, "384": {"L_N": 14.519015906336403, "L_S": 14.748784977528041, "L_T": 8.368712036551683, "dZ_T": 5.620531351911521, "premium_N": 0.9399724047731404, "dcontent": 6.380072940976359}}
+d>0 的档位 [48, 96, 192, 384]  ⇒ 主判据状态 **SUCCEEDED**  (7647s)

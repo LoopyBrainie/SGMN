@@ -1,0 +1,157 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-20 R1（脚本 v1.0 · 卡片 rev 1.2 跨会话状态语义：两段式会话协议）===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:50,  5.77it/s]Loading weights:  56%|█████▌    | 161/290 [00:00<00:00, 716.03it/s]Loading weights:  88%|████████▊ | 255/290 [00:00<00:00, 776.98it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 697.58it/s]
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (270674 > 131072). Running this sequence through the model will result in indexing errors
+[初始化] ★ 复制 θ₀ 冻结快照到 CPU（KL 参考 + 基座还原源）…
+
+[Stage A]
+[PASS] A1' Freeze C（读梯度非零 / 写梯度精确 0 / 基座逐位不变 / 阴性对照泄漏）: 读梯度非零 6/9；写梯度精确0 12/12；基座逐位不变 True；阴性对照泄漏 3/12
+[PASS] A1' 句柄数 = 2×层数: handles=6 mems=3
+/dev/sdf/home/ec2-user/sgmn-loop/dir20/R1_xsession.py:638: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  traj.append((float(loss), gnorm))
+[PASS] A2' 训练生效性：Wo/gamma 改变且 gamma 梯度非零；cue 模式下 Wq 梯度恒 0 且不变: Δmax|Wo|=0.004012；Δmax|gamma|=0.003742；‖g_gamma‖=4.61；‖g_Wq‖=0；Δ|Wq|=0
+[PASS] A2' ⑩ Hebbian 核自检：写一步后 W 朝 v 移动且不发散: ‖Wk−v‖：41.8378 → 41.4426（须下降）；‖W‖=29.9（须有限且 < 1e6）
+[PASS] A2' ⑪ 梯度隔离：Hebbian 臂中任务梯度不流入核状态 W，且（非 W4 臂）P_v 梯度恒 0: 核状态 W 的梯度泄漏 0/3（须 0）；P_v 的梯度泄漏 0/3（须 0）
+[PASS] A2' ④ 读阶段冻结写 ⇒ 记忆状态逐位不变: equal=True
+[PASS] A2' ⑤ 跨方向对照探针：未训练的 cue 臂命中 = 1.0（复现 DIR-16 的 C1）: hit=1.0000（DIR-16 的 C1 = 1.0000）；每篇写入条目数=68
+[PASS] A2' ⑥ 槽位不回绕：每篇写入条目数 ≤ N_ENTRIES: 每篇 68 条（N_ENTRIES=256）
+[PASS] A2' ⑦ 评测码留出：训练码与评测码（含干扰码）零重叠: 目标码重叠 0；与干扰码重叠 0
+[PASS] A2' ⑧ 干扰项构造：同线索 + 异码 + 异上下文 + 码在文档末尾（唯一持有其身份的条目）: 线索 = CUE_A（目标与干扰相同）；码不同（全局唯一）；填充切片不同（间隔 ≥ 400 token）⇒ 上下文签名必不同；码为文档最后一个 token ⇒ 邻位条目**不含**码的身份；抽样 4 篇通过=True
+[PASS] A2' ⑨ 目标不可猜中：基座 NLL ≥ 3（否则任务平凡）: base NLL = 15.4878（阈值 3.0）；码为稀有单 token 词
+[PASS] A2' ⑫ 读路径一致性：W0_verbatim 的读出 y 与其来源槽 v_j 的余弦 ≥ 0.999: cos(y, v_j) 均值 = 0.999820（阈值 0.999，9 个槽）
+[PASS] A2'⑬ 真值槽**精确映射**自洽（D54）+ 槽空间寻址命中（未训练臂）: addr(写入序)=1.0000（★ DIR-17 协议下**必然 ≈ 0**（回绕 ⇒ 真值槽≠写入序），非缺陷）；addr(槽空间，精确映射)=1.0000（阈值 0.99）
+[PASS] A2'⑭ 槽表状态**确定性**：陈旧残留数逐篇一致 + 槽号映射 == (写入前 count + j) % N: 陈旧条目数（逐篇/逐层）= [0, 0, 0, 0, 0, 0, 0, 0, 0]（须**完全一致** ⇒ 确定性）；槽号映射违例 = 0 处（须 0）
+[PASS] A2'⑮ P_v 梯度语义：主臂任务损失下 P_v 梯度恒 0；写侧自监督臂 P_v 梯度非零: 主臂 ‖∂L_task/∂P_v‖ = [None, None, None]（须全 0/None）；pvw 臂 ‖∂L_write/∂P_v‖ = [1.0046374797821045, 1.0020302534103394, 0.9817663431167603]（须有非零）
+[PASS] A2'⑯ 维度一致：d_k == d_v == model.config.hidden_size（卡片 D49 已订正）: d_k = d_v = 896（hidden_size）；脚本传 896，非 64
+[PASS] A2'⑯′ 交换性对照可构造：同池、均匀抽样、从未写入的对照 token ≥ 32 个: 抽到 32 个（须 32）；同池、均匀抽样、从未写入
+[PASS] A2'⑰ 键尺度检查：renorm/ortho 的 ‖k‖² ≈ 5（恒定）；linear 的实测 ‖k‖² 远大于 5（D50/D51）: linear: E‖k‖²=['380839.2', '407843.4', '427719.8'] max=['13484455.0', '14463688.0', '15190310.0']；renorm: E‖k‖²=['5.000', '5.000', '5.000']；ortho: E‖k‖²=['5.000', '5.000', '5.000']（⇒ 装置的 pk_scale 标定口径错 ⇒ 真实键尺度 ≫ 5 ⇒ η 窗口不相交）
+[PASS] A2'⑱〔★ 修订 68 零效度自检〕「内容置换」钩子只动内容、不动寻址 ⇒ H14 的对照干净: 键逐位相同=True（置换不动地址 ⇒ H14 的寻址侧干净）；值的配对余弦均值=['-0.0008', '-0.0062', '0.3026', '0.0011', '-0.0090']（须 < 0.99 ⇒ 置换确实换了内容）
+[PASS] A4' 训练不发散（损失有限、max|Wo| 有限、gamma 有限）: loss 首/末 = 15.8405/14.3603；max|Wo|=0.1631；gamma 终值=[0.0537, 0.0537, 0.0505]
+[PASS] A19-1 基座冻结对照：联合训练后基座参数与初始参数**逐位相同**: max|θ−θ₀| = 0.000e+00（须精确为 0）
+[PASS] A19-2 基座可训：被训参数集合**非空**且其梯度**非零有限**: 可训基座参数数 = 290；有梯度的 = 290；梯度范数 min/max = 3.618e-02/3.753e+02；全部有限 = True；存在非零 = True
+[PASS] A19-3 保护旋钮的生效性检查**双向**：放开/关闭都改变被训集合；低秩投影后残差 ≈ 0: none=0 all=290 layers=72 lowrank=169（须 0<layers<all）；低秩残差 投影前=0.000e+00 扰动后=1.167e+01 投影后=7.090e-05（须 投影后 < 1e-4 且 扰动后 > 1e-6 ⇒ 双向可辨）
+[PASS] A19-4 训练数据与基座保持评测数据的**文档窗口集合**交集为空（逐位断言）: 训练窗口数=39827；探针窗口数=4226；**交集=0（须 0）**；两文件前缀不同=True（train.txt vs valid.txt）
+[PASS] A19-5 交换性对照 token 仍从码池**均匀抽样**（D53 教训：不得取最稀有者）: 抽到 32 个、去重后 32 个（须 32 且互不相同）
+[PASS] A19-6 记忆寻址指标 addr_slot 仍用**精确槽号映射**（D54：写入序 → 槽号可精确预测）: 写入记录数 == 槽号记录数 ⇒ 精确映射可用
+[PASS] A19-7 基座保持的 NLL 口径在挂记忆 vs 不挂记忆两个对照下**逐位可算**: PPL(挂记忆)=2.505492；PPL(不挂记忆)=2.506668；差=-0.001177（须非 0 ⇒ 挂记忆确实改变了基座输出）
+[PASS] A19-8 D_kv 漂移度量在「零训练步」对照下必须为 **0**（度量自检）: D_kv(零训练两次采样) = 0.000e+00（须 < 1e-9）
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:10,  4.10it/s]Loading weights:  67%|██████▋   | 195/290 [00:00<00:00, 718.62it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 644.74it/s]
+[PASS] A19-9 〔KL 正则生效性 · 双向〕启用 ⇒ 项非零且改变基座梯度；禁用 ⇒ 不贡献该梯度: KL 序列(启用) = [0.0, 0.135443, 0.583149]（须非零、有限）；基座梯度范数 启用=666.342197 vs 禁用=1162.240911（须不同 ⇒ 双向可辨）；★ **KL 是被惩罚项，其本身不要求下降**（原断言的期望写错 ⇒ 缺陷 D69）
+[PASS] A19-10〔内容置换只动内容、不动寻址〕⇒ H2′★ 的对照干净: 键逐位相同=True（置换不动地址 ⇒ H2′ 的寻址侧干净）；值的配对余弦均值=['-0.0009', '-0.0074', '0.3026', '0.0007', '-0.0104']（须 < 0.99 ⇒ 置换确实换了内容）
+
+[Stage A · DIR-20]
+[PASS] A20-0〔★ D86〕继承 Stage A 的遗留显存已释放，基座已重新冻结（供后续断言与主循环）: 释放对象=['_bf0', '_opt9']；清空基座梯度；基座 requires_grad 全部恢复 False；当前 alloc=5511 MiB reserved=6010 MiB
+[PASS] A20-9〔只读评测不写〕评测前后 core.count 与 write_calls 不变（且写权限未被永久关闭）: 评测前 count/write_calls=[(68, 68), (68, 68), (68, 68)]；评测后=[(68, 68), (68, 68), (68, 68)]；评测前写权限开启=True；★ 若评测期间未冻结写，前缀的前向会**自己写入**⇒ count 必增 ⇒ 本项必 FAIL
+[PASS] A20-1〔export → import 往返指纹逐位相同〕: 内存指纹=86e7c185373a90d4b59d07cd84781ed5；导入后重导出指纹=86e7c185373a90d4b59d07cd84781ed5
+[PASS] A20-2〔往返后读出逐位相同〕同一前缀下新旧装置的读出余弦 ≥ 0.999: 逐层余弦=['1.000000', '1.000000', '1.000000']（最小 1.000000）
+[PASS] A20-14〔状态文件往返：落盘后 torch.load 的指纹 == 内存中的指纹〕: 内存指纹=86e7c185373a90d4b59d07cd84781ed5；落盘读回指纹=86e7c185373a90d4b59d07cd84781ed5
+[PASS] A20-3〔import_state(strict=True) 喂错形状必须抛错（不得静默截断）〕: ValueError: 层 8：W 形状不符 (3, 3) vs (896, 896)
+[PASS] A20-4〔include_read_map=False ⇒ W_o / γ 未搬运（导入后仍为随机初值）〕: 导入后 W_o 仍 == 随机初值=True；γ 仍 == 随机初值=True；且 ≠ 源装置（源被扰动 +1.0）=True
+[PASS] A20-5〔include_addr=False ⇒ 地址表未搬运（count == 0、keys 全零）〕: 逐层 count=[0, 0, 0]；keys 全零=[True, True, True]
+[PASS] A20-7〔content_wrong 的置换**是排列且无不动点**〕: 层16: n=34 是排列=True 不动点数=0（★ D62：torch 视图别名会写坏排列 ⇒ 必须先取标量副本）
+[PASS] A20-6′〔内容置换只动**值**、不动**寻址键**；签名**逐层**报告（第一挂载层必须逐位相同）〕: keys 逐位相同=True（全部挂载层）；vals 逐位不同=True（全部挂载层）；sigs 逐层相同={'8': True, '12': False, '16': False}；★ 第一挂载层（层 8）逐位相同=True（下游层不同是**结构事实**：记忆注入会改变下游 hidden state ⇒ 签名携带注入痕迹 ⇒ 非缺陷）
+[PASS] A20-11〔vals 不进读路径（置零 ⇒ 读出逐位不变）；W 进读路径（置零 ⇒ 读出改变）〕: vals 置零后逐层余弦=['1.00000000', '1.00000000', '1.00000012']（须 ≥ 1-1e-6）；W 置零后逐层余弦=['0.000000', '0.000000', '0.000000']（须 < 0.999）
+[PASS] A20-12′〔真值槽精确可预测（= 写前 count + true_idx）且不回绕〕: 写前 count C0=0；逐层 slot_of_write[true_idx] == C0 + true_idx：[True, True, True]；写后 count=[68, 68, 68]；未回绕（≤ N_ENTRIES=256）=True；★ Stage A 中 C0=0（无训练残留）⇒ 退化为 true_slot == true_idx；正式轮里 C0=训练残留 ⇒ **addr（写入序口径）恒为 0，只有 addr_slot 可读**
+[PASS] A20-13〔X8_linear 的键尺度实测 ≫ 5（linear ≫ 100，renorm ≈ 5）〕: linear 逐层 E‖k‖²=['355493.3', '380907.8', '399417.2']；renorm 逐层 E‖k‖²=['5.0000', '5.0000', '5.0000']；★ 复现 D50/D51 ⇒ X8 必须用 η=1e-5（修订 20-C）
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:35,  3.02it/s]Loading weights:  93%|█████████▎| 269/290 [00:00<00:00, 786.03it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 654.44it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:34,  3.05it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 690.32it/s]
+[PASS] A20-8〔会话 B 的模型实例**确实是新的**（id 不同）；会话 A 的已释放（显存回落）〕: id(会话A)=140132339587408，id(会话B)=140132339585168；显存 9410 MiB → 7526 MiB（回落 1885 MiB）
+[Stage A · DIR-20] 13 项断言完成
+
+[Stage A 闸] 共 44 项，FAIL 0 项 ⇒ 全部通过
+
+[主循环]
+
+[规格] smoke=True  n_train=40  n_eval=12  seeds=[20261028, 20261104]  臂数=11
+
+[主循环] ★ 复用增量结果：1 臂 / 1 个 (臂,种子) 组合已完成 ⇒ 跳过
+  seed=20261028 X0_no_state            (增量复用) nll=14.3233
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:15,  3.82it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1060.42it/s]
+  [会话A] seed=20261104 X0_no_state            状态 12 份  （本臂不导出状态）
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:20,  3.60it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 937.04it/s]
+  [会话A] seed=20261028 X1_full_state          状态 12 份  md5[0]=0f9a3d9144
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:19,  3.63it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1009.38it/s]
+  [会话A] seed=20261104 X1_full_state          状态 12 份  md5[0]=ec902f19d8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:17,  3.73it/s]Loading weights:  88%|████████▊ | 256/290 [00:00<00:00, 875.85it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 744.27it/s]
+  [会话A] seed=20261028 X2_no_readmap          状态 12 份  md5[0]=1cc5094b1b
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:18,  3.69it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1028.37it/s]
+  [会话A] seed=20261104 X2_no_readmap          状态 12 份  md5[0]=5ee171b8e2
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:31,  3.15it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 833.58it/s]
+  [会话A] seed=20261028 X3_no_addr             状态 12 份  md5[0]=a0ebc2d07b
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:04,  4.45it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1229.98it/s]
+  [会话A] seed=20261104 X3_no_addr             状态 12 份  md5[0]=9fe610ed2b
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:11,  4.06it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1124.83it/s]
+  [会话A] seed=20261028 X4_content_wrong       状态 12 份  md5[0]=1ee4e37883
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:09,  4.18it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1078.54it/s]
+  [会话A] seed=20261104 X4_content_wrong       状态 12 份  md5[0]=973983ae7c
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:29,  3.21it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 779.87it/s]
+  [会话A] seed=20261028 X5_wrong_session       状态 12 份  md5[0]=04924490db
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:26,  3.34it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 878.25it/s]
+  [会话A] seed=20261104 X5_wrong_session       状态 12 份  md5[0]=91aa395884
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:14,  3.90it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1082.00it/s]
+  [会话A] seed=20261028 X7_renorm              状态 12 份  md5[0]=c96d90da35
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:13,  3.91it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1085.47it/s]
+  [会话A] seed=20261104 X7_renorm              状态 12 份  md5[0]=a62bb2751c
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:23,  3.46it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 846.85it/s]
+  [会话A] seed=20261028 X8_linear              状态 12 份  md5[0]=4b44d5c4d0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:35,  3.02it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 827.08it/s]
+  [会话A] seed=20261104 X8_linear              状态 12 份  md5[0]=74d36e51b1
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:36,  3.00it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 726.07it/s]
+  [会话A] seed=20261028 X6_verbatim            状态 12 份  md5[0]=5956bb32ec
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:13,  3.92it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 955.48it/s]
+  [会话A] seed=20261104 X6_verbatim            状态 12 份  md5[0]=0b111e3612
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:21,  3.54it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 813.09it/s]
+  [会话A] seed=20261028 X10_same_session       状态 12 份  （本臂不导出状态）
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:13,  3.94it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1093.33it/s]
+  [会话A] seed=20261104 X10_same_session       状态 12 份  （本臂不导出状态）
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:17,  3.74it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1041.02it/s]
+  [会话A] seed=20261028 X11_newinst_noexport   状态 12 份  （本臂不导出状态）
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:08,  4.20it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1162.69it/s]
+  [会话A] seed=20261104 X11_newinst_noexport   状态 12 份  （本臂不导出状态）
+/dev/sdf/home/ec2-user/sgmn-loop/dir20/R1_xsession.py:1990: RuntimeWarning: Mean of empty slice
+  f"fid_true={np.nanmean([r.get('fid_true', np.nan) for r in rows]):.4f} "
+/dev/sdf/home/ec2-user/sgmn-loop/dir20/R1_xsession.py:1991: RuntimeWarning: Mean of empty slice
+  f"cos_y_vtrue={np.nanmean([r.get('cos_y_vtrue', np.nan) for r in rows]):.4f}", flush=True)
+  seed=20261104 X0_no_state            nll=13.8949 lp=-13.8949 hit=0.0000 addr=0.0000 addr_slot=0.0000 fid_true=nan cos_y_vtrue=nan
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:19,  3.65it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 885.83it/s]
+  seed=20261028 X1_full_state          nll=11.3328 lp=-11.3328 hit=1.0000 addr=0.0000 addr_slot=1.0000 fid_true=0.9833 cos_y_vtrue=0.9833
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:16,  3.77it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 977.29it/s]
+  seed=20261104 X1_full_state          nll=11.0559 lp=-11.0559 hit=1.0000 addr=0.0000 addr_slot=1.0000 fid_true=0.9833 cos_y_vtrue=0.9833
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:18,  3.66it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 990.05it/s]
+  seed=20261028 X2_no_readmap          nll=14.1829 lp=-14.1829 hit=0.9444 addr=0.0556 addr_slot=0.9444 fid_true=0.9833 cos_y_vtrue=0.9579
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:14,  3.85it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 905.55it/s]
+  seed=20261104 X2_no_readmap          nll=14.1001 lp=-14.1001 hit=0.8889 addr=0.0833 addr_slot=0.8889 fid_true=0.9833 cos_y_vtrue=0.9302
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:09,  4.19it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 922.44it/s]
+  seed=20261028 X3_no_addr             nll=14.7427 lp=-14.7427 hit=0.0000 addr=0.0000 addr_slot=0.0000 fid_true=nan cos_y_vtrue=nan
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:27,  3.29it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 918.57it/s]
+  seed=20261104 X3_no_addr             nll=12.1516 lp=-12.1516 hit=0.0000 addr=0.0000 addr_slot=0.0000 fid_true=nan cos_y_vtrue=nan
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:55,  2.50it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 691.52it/s]
+  seed=20261028 X4_content_wrong       nll=11.9268 lp=-11.9268 hit=1.0000 addr=0.0000 addr_slot=1.0000 fid_true=0.9810 cos_y_vtrue=0.9810
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:17,  3.75it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1043.83it/s]
+  seed=20261104 X4_content_wrong       nll=11.5946 lp=-11.5946 hit=1.0000 addr=0.0000 addr_slot=1.0000 fid_true=0.9827 cos_y_vtrue=0.9827
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:11,  4.03it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1020.64it/s]
+  seed=20261028 X5_wrong_session       nll=11.8116 lp=-11.8116 hit=0.4167 addr=0.1389 addr_slot=0.4167 fid_true=0.9833 cos_y_vtrue=0.6723
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:47,  2.69it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 652.20it/s]
+  seed=20261104 X5_wrong_session       nll=11.6761 lp=-11.6761 hit=0.2778 addr=0.1111 addr_slot=0.2778 fid_true=0.9833 cos_y_vtrue=0.5744
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:20,  3.60it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 790.56it/s]
+  seed=20261028 X7_renorm              nll=11.2802 lp=-11.2802 hit=0.0000 addr=0.0000 addr_slot=1.0000 fid_true=0.6496 cos_y_vtrue=0.6496
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:15,  3.82it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1062.76it/s]
+  seed=20261104 X7_renorm              nll=11.0955 lp=-11.0955 hit=0.0000 addr=0.0000 addr_slot=1.0000 fid_true=0.6975 cos_y_vtrue=0.6975
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:22,  3.51it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 759.16it/s]
+  seed=20261028 X8_linear              nll=nan lp=+nan hit=0.0000 addr=0.0000 addr_slot=0.3333 fid_true=-0.0032 cos_y_vtrue=-0.0032
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:21,  3.56it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 868.81it/s]
+  seed=20261104 X8_linear              nll=nan lp=+nan hit=0.0000 addr=0.0000 addr_slot=0.3333 fid_true=0.0102 cos_y_vtrue=0.0102
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:30,  3.18it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 770.88it/s]
+Traceback (most recent call last):
+  File "/dev/sdf/home/ec2-user/sgmn-loop/dir20/R1_xsession.py", line 2188, in <module>
+    main()
+    ~~~~^^
+  File "/dev/sdf/home/ec2-user/sgmn-loop/dir20/R1_xsession.py", line 1968, in main
+    stB.import_state(state, strict=True, expect_key_mode=kmode)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dev/sdf/home/ec2-user/sgmn-loop/dir20/sgmn_module_hebb_v5.py", line 947, in import_state
+    if d["W"].shape != m.core.W.shape:
+       ^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'shape'

@@ -1,0 +1,70 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-16 R1：可寻址性的泛化 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:58,  4.96it/s]Loading weights:  63%|██████▎   | 184/290 [00:00<00:00, 753.29it/s]Loading weights: 100%|█████████▉| 289/290 [00:00<00:00, 802.83it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 682.62it/s]
+
+[Stage A]
+[PASS] A1' Freeze C（读梯度非零 / 写梯度精确 0 / 基座逐位不变 / 阴性对照泄漏）: 读梯度非零 9/9；写梯度精确0 12/12；基座逐位不变 True；阴性对照泄漏 3/12
+[PASS] A1' 句柄数 = 2×层数: handles=6 mems=3
+[PASS] A3' 写关时两次前视记忆相对差 < 1e-12: diff_off=0
+[PASS] A3' 写开时两次前视记忆变化 > 1e-9: diff_on=2.88
+[PASS] A2' ② 真值条目下标 = 写阶段写入序号（位置级写：L−1 次）: 写入次数 4，序列长度 5 ⇒ 期望 4
+[PASS] A2' ③ 地址=键 与 原始签名 逐位不同: ‖sig‖=1499 ‖key‖=3206 逐位相同=False
+[PASS] A2' ④ 槽位映射（写入序号 → 核心槽位，% N）: N_ENTRIES=64；多事实臂的写入数可达 ~73 ⇒ 必须按 ti % N 映射槽位
+
+[主循环]
+  seed=20261028 C1_cue_same    hit=1.0000 ahit=1.0000 cue_ok=1.0000 tgt_w=1.0000 lp=-1.9109
+  seed=20261028 C2_cue_para    hit=0.9944 ahit=0.9944 cue_ok=0.9944 tgt_w=0.9944 lp=-2.4699
+  seed=20261028 C3_cue_late    hit=0.9944 ahit=0.9944 cue_ok=0.9944 tgt_w=0.9944 lp=-1.9514
+  seed=20261028 C4_cue_multi   hit=0.9833 ahit=0.9833 cue_ok=0.9833 tgt_w=0.9829 lp=-3.3448
+  seed=20261028 C5_addr_key    hit=0.0056 ahit=0.0056 cue_ok=0.0056 tgt_w=0.0056 lp=-1.8854
+  seed=20261028 C6_ctx         hit=0.0000 ahit=0.0222 cue_ok=nan tgt_w=0.0205 lp=-1.8949
+  seed=20261028 base: same=-1.9412  para=-2.4472  late=-1.9911  multi=-3.3522
+  seed=20261104 C1_cue_same    hit=1.0000 ahit=1.0000 cue_ok=1.0000 tgt_w=1.0000 lp=-1.9730
+  seed=20261104 C2_cue_para    hit=1.0000 ahit=1.0000 cue_ok=1.0000 tgt_w=1.0000 lp=-2.2427
+  seed=20261104 C3_cue_late    hit=1.0000 ahit=1.0000 cue_ok=1.0000 tgt_w=1.0000 lp=-2.3335
+  seed=20261104 C4_cue_multi   hit=0.9722 ahit=0.9722 cue_ok=0.9722 tgt_w=0.9714 lp=-3.0916
+  seed=20261104 C5_addr_key    hit=0.0000 ahit=0.0000 cue_ok=0.0000 tgt_w=0.0000 lp=-1.9677
+  seed=20261104 C6_ctx         hit=0.0111 ahit=0.0000 cue_ok=nan tgt_w=0.0108 lp=-1.9796
+  seed=20261104 base: same=-2.0346  para=-2.2929  late=-2.4035  multi=-3.2633
+  seed=7 C1_cue_same    hit=1.0000 ahit=1.0000 cue_ok=1.0000 tgt_w=1.0000 lp=-2.8191
+  seed=7 C2_cue_para    hit=1.0000 ahit=1.0000 cue_ok=1.0000 tgt_w=1.0000 lp=-2.7499
+  seed=7 C3_cue_late    hit=1.0000 ahit=1.0000 cue_ok=1.0000 tgt_w=1.0000 lp=-2.4929
+  seed=7 C4_cue_multi   hit=0.9667 ahit=0.9667 cue_ok=0.9667 tgt_w=0.9664 lp=-3.2598
+  seed=7 C5_addr_key    hit=0.0000 ahit=0.0000 cue_ok=0.0000 tgt_w=0.0000 lp=-2.8388
+  seed=7 C6_ctx         hit=0.0000 ahit=0.0167 cue_ok=nan tgt_w=0.0185 lp=-2.8148
+  seed=7 base: same=-2.7714  para=-2.6699  late=-2.4615  multi=-3.2289
+
+[汇总与判据]
+  C1_cue_same      hit=1.0 lp=-2.2343
+  C2_cue_para      hit=0.9981481481481481 lp=-2.4875
+  C3_cue_late      hit=0.9981481481481482 lp=-2.2593
+  C4_cue_multi     hit=0.974074074074074 lp=-3.2320
+  C5_addr_key      hit=0.0018518518518518517 lp=-2.2306
+  C6_ctx           hit=0.0037037037037037034 lp=-2.2298
+  base_same        hit=None lp=-2.2491
+  base_para        hit=None lp=-2.4700
+  base_late        hit=None lp=-2.2854
+  base_multi       hit=None lp=-3.2815
+[PASS] H1 〔复现〕C1 cue_same 命中 ≥ 0.9（3 种子）: hit=1.0 by_seed=[1.0, 1.0, 1.0]
+[PASS] H2 〔① 改写线索〕 C2_cue_para 命中 ≥ 0.9（3 种子）: hit=0.9981481481481481 by_seed=[0.9944444444444444, 1.0, 1.0] cue_ok=0.9981
+[PASS] H3 〔② 上下文/位置扰动〕 C3_cue_late 命中 ≥ 0.9（3 种子）: hit=0.9981481481481482 by_seed=[0.9944444444444446, 1.0, 1.0] cue_ok=0.9981
+[PASS] H4 〔③ 多事实干扰〕 C4_cue_multi 命中 ≥ 0.9（3 种子）: hit=0.974074074074074 by_seed=[0.9833333333333333, 0.9722222222222222, 0.9666666666666667] cue_ok=0.9741
+[PASS] H5 〔阴性对照〕地址=键 命中 ≤ 0.1 且 C1 显著 > C5: hit=0.0018518518518518517（须 ≤0.1）；C1−C5=0.9981 p=1.25e-12 pos=180/180 consistent=True
+[PASS] H6 〔现状对照〕C6 (q=W_qc) 命中 ≤ 0.1: hit=0.0037037037037037034（随机基线 0.0244）
+  [H7] C1_cue_same    vs base_same  Δlp=+0.014744 t=2.12 p=0.0137 逐种子=['+0.0302', '+0.0617', '-0.0476'] 跨种子同向=False
+  [H7] C2_cue_para    vs base_para  Δlp=-0.017500 t=-2.32 p=0.117 逐种子=['-0.0227', '+0.0502', '-0.0800'] 跨种子同向=False
+  [H7] C3_cue_late    vs base_late  Δlp=+0.026093 t=3.46 p=0.00129 逐种子=['+0.0396', '+0.0700', '-0.0314'] 跨种子同向=False
+  [H7] C4_cue_multi   vs base_multi Δlp=+0.049449 t=5.59 p=0.00013 逐种子=['+0.0074', '+0.1718', '-0.0309'] 跨种子同向=False
+[FAIL] H7 〔任务层〕命中 ≥0.9 的臂：正确码 log-prob 显著 > 同前缀 base（跨种子同向）: C1_cue_same vs base_same: Δ=+0.014744 p=0.0137 逐种子=['+0.0302', '+0.0617', '-0.0476']；C2_cue_para vs base_para: Δ=-0.017500 p=0.117 逐种子=['-0.0227', '+0.0502', '-0.0800']；C3_cue_late vs base_late: Δ=+0.026093 p=0.00129 逐种子=['+0.0396', '+0.0700', '-0.0314']；C4_cue_multi vs base_multi: Δ=+0.049449 p=0.00013 逐种子=['+0.0074', '+0.1718', '-0.0309']
+  [报告] C1_cue_same    地址命中=1.0000 真值余弦=1.0000 目标权重=1.0000 线索选中真值=1.0
+  [报告] C2_cue_para    地址命中=0.9981 真值余弦=0.9992 目标权重=0.9981 线索选中真值=0.9981481481481481
+  [报告] C3_cue_late    地址命中=0.9981 真值余弦=0.9989 目标权重=0.9981 线索选中真值=0.9981481481481482
+  [报告] C4_cue_multi   地址命中=0.9741 真值余弦=0.9968 目标权重=0.9736 线索选中真值=0.974074074074074
+  [报告] C5_addr_key    地址命中=0.0019 真值余弦=0.4532 目标权重=0.0019 线索选中真值=0.0018518518518518517
+/home/ec2-user/sgmn-loop/dir16/R1_generalize.py:486: RuntimeWarning: Mean of empty slice
+  agg[name]["cue_ok"] = float(np.nanmean(co)) if co else None
+  [报告] C6_ctx         地址命中=0.0130 真值余弦=0.6005 目标权重=0.0166 线索选中真值=nan
+
+=== 判据通过 13/14 ===
+写出 /home/ec2-user/sgmn-loop/R1_results.json

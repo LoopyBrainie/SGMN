@@ -1,0 +1,177 @@
+{
+ "arm": "COLOCATED",
+ "missing": [],
+ "censored": [],
+ "rows": [
+  {
+   "seed": 20271126,
+   "acc_argmin": 0.020833333333333332,
+   "acc_argmax": 0.4583333333333333,
+   "rank_hist": [
+    1,
+    9,
+    16,
+    22
+   ],
+   "n_err": 47,
+   "err_in_train_frac": 0.8723404255319149,
+   "err_in_train_null": 0.5035460992907801,
+   "GAP": 0.36879432624113484
+  },
+  {
+   "seed": 20271203,
+   "acc_argmin": 0.020833333333333332,
+   "acc_argmax": 0.4166666666666667,
+   "rank_hist": [
+    1,
+    8,
+    19,
+    20
+   ],
+   "n_err": 47,
+   "err_in_train_frac": 0.9787234042553191,
+   "err_in_train_null": 0.5106382978723404,
+   "GAP": 0.46808510638297873
+  },
+  {
+   "seed": 20271210,
+   "acc_argmin": 0.0625,
+   "acc_argmax": 0.4791666666666667,
+   "rank_hist": [
+    3,
+    5,
+    17,
+    23
+   ],
+   "n_err": 45,
+   "err_in_train_frac": 0.9111111111111111,
+   "err_in_train_null": 0.5111111111111111,
+   "GAP": 0.4
+  },
+  {
+   "seed": 20260501,
+   "acc_argmin": 0.0,
+   "acc_argmax": 0.3125,
+   "rank_hist": [
+    0,
+    12,
+    21,
+    15
+   ],
+   "n_err": 48,
+   "err_in_train_frac": 0.9583333333333334,
+   "err_in_train_null": 0.5,
+   "GAP": 0.45833333333333337
+  },
+  {
+   "seed": 20260502,
+   "acc_argmin": 0.041666666666666664,
+   "acc_argmax": 0.3541666666666667,
+   "rank_hist": [
+    2,
+    12,
+    17,
+    17
+   ],
+   "n_err": 46,
+   "err_in_train_frac": 0.9347826086956522,
+   "err_in_train_null": 0.5144927536231884,
+   "GAP": 0.42028985507246386
+  },
+  {
+   "seed": 20260503,
+   "acc_argmin": 0.14583333333333334,
+   "acc_argmax": 0.3333333333333333,
+   "rank_hist": [
+    7,
+    15,
+    10,
+    16
+   ],
+   "n_err": 41,
+   "err_in_train_frac": 0.6829268292682927,
+   "err_in_train_null": 0.5203252032520325,
+   "GAP": 0.16260162601626027
+  },
+  {
+   "seed": 20260504,
+   "acc_argmin": 0.020833333333333332,
+   "acc_argmax": 0.3333333333333333,
+   "rank_hist": [
+    1,
+    6,
+    25,
+    16
+   ],
+   "n_err": 47,
+   "err_in_train_frac": 0.9787234042553191,
+   "err_in_train_null": 0.5106382978723404,
+   "GAP": 0.46808510638297873
+  },
+  {
+   "seed": 20260505,
+   "acc_argmin": 0.0,
+   "acc_argmax": 0.4375,
+   "rank_hist": [
+    0,
+    11,
+    16,
+    21
+   ],
+   "n_err": 48,
+   "err_in_train_frac": 0.9166666666666666,
+   "err_in_train_null": 0.5,
+   "GAP": 0.41666666666666663
+  },
+  {
+   "seed": 20260506,
+   "acc_argmin": 0.10416666666666667,
+   "acc_argmax": 0.22916666666666666,
+   "rank_hist": [
+    5,
+    13,
+    19,
+    11
+   ],
+   "n_err": 43,
+   "err_in_train_frac": 0.8604651162790697,
+   "err_in_train_null": 0.503875968992248,
+   "GAP": 0.3565891472868218
+  }
+ ],
+ "stat": {
+  "acc_argmin_mean": 0.0462962962962963,
+  "acc_argmax_mean": 0.3726851851851852,
+  "GAP_mean": 0.39104946304251537,
+  "t_argmin_vs_025": -12.292373205544575,
+  "t_GAP": 12.378224285168711
+ },
+ "judge": {
+  "J119-1": false,
+  "J119-2": true,
+  "J119-3": true,
+  "J119-4": true
+ },
+ "verdict": "M1",
+ "thresholds": {
+  "M2_ACC": 0.9,
+  "M1_GAP": 0.2,
+  "T_MIN": 2.0,
+  "JUDGE_MULT": 10000,
+  "REF_MULT": 1
+ },
+ "stageA": [
+  {
+   "name": "A119-13",
+   "ok": true,
+   "detail": "dose=0 与 dir118 逐位比对 81 个读数，不符 0 个（★ 无训练 ⇒ 确定性，可作硬门）",
+   "blocking": true
+  },
+  {
+   "name": "A119-12",
+   "ok": true,
+   "detail": "双进程复跑同一 cell：逐位相同=True",
+   "blocking": true
+  }
+ ]
+}

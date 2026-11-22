@@ -1,0 +1,36 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:06,  4.36it/s]Loading weights:  68%|██████▊   | 196/290 [00:00<00:00, 747.00it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 676.09it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/probe91_coexist.py:81: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  g1 = float((got - expect).norm() / (expect.norm() + 1e-30))
+[G1] 写回放 rel.err = 0.000e+00  => PASS
+[G2] 读重构 rel.err = 0.000e+00  => PASS
+[超参] alpha=1.0 lam=0.05 eta=3e-05  W=(896, 896)  ||k||~60.7 ||v||~28.6
+  n=1   E=1    rel mean=2.0356 max=2.0356 cos=+0.1077 满足(<0.05)=0/1
+  n=1   E=10   rel mean=0.7083 max=0.7083 cos=+0.7426 满足(<0.05)=0/1
+  n=1   E=50   rel mean=0.0065 max=0.0065 cos=+1.0000 满足(<0.05)=1/1
+  n=1   E=200  rel mean=0.0000 max=0.0000 cos=+1.0000 满足(<0.05)=1/1
+   ↳ n=1: Gram cond=1.000e+00  eta*alpha*||k||^2=1.107e-01
+  n=4   E=1    rel mean=1.4364 max=1.4375 cos=+0.3134 满足(<0.05)=0/4
+  n=4   E=10   rel mean=0.1074 max=0.1197 cos=+0.9942 满足(<0.05)=0/4
+  n=4   E=50   rel mean=0.1039 max=0.1174 cos=+0.9946 满足(<0.05)=0/4
+  n=4   E=200  rel mean=0.0992 max=0.1116 cos=+0.9951 满足(<0.05)=0/4
+   ↳ n=4: Gram cond=2.058e+03  eta*alpha*||k||^2=1.102e-01
+  n=8   E=1    rel mean=0.9084 max=0.9144 cos=+0.6101 满足(<0.05)=0/8
+  n=8   E=10   rel mean=0.1108 max=0.1281 cos=+0.9938 满足(<0.05)=0/8
+  n=8   E=50   rel mean=0.1093 max=0.1259 cos=+0.9940 满足(<0.05)=0/8
+  n=8   E=200  rel mean=0.1040 max=0.1183 cos=+0.9946 满足(<0.05)=0/8
+   ↳ n=8: Gram cond=6.275e+03  eta*alpha*||k||^2=1.099e-01
+  n=16  E=1    rel mean=0.3741 max=0.3819 cos=+0.9274 满足(<0.05)=0/16
+  n=16  E=10   rel mean=0.1156 max=0.1331 cos=+0.9933 满足(<0.05)=0/16
+  n=16  E=50   rel mean=0.1138 max=0.1302 cos=+0.9935 满足(<0.05)=0/16
+  n=16  E=200  rel mean=0.1075 max=0.1198 cos=+0.9942 满足(<0.05)=0/16
+   ↳ n=16: Gram cond=1.595e+04  eta*alpha*||k||^2=1.100e-01
+  n=32  E=1    rel mean=0.1307 max=0.1556 cos=+0.9914 满足(<0.05)=0/32
+  n=32  E=10   rel mean=0.1181 max=0.1422 cos=+0.9930 满足(<0.05)=0/32
+  n=32  E=50   rel mean=0.1158 max=0.1377 cos=+0.9933 满足(<0.05)=0/32
+  n=32  E=200  rel mean=0.1078 max=0.1248 cos=+0.9942 满足(<0.05)=0/32
+   ↳ n=32: Gram cond=6.687e+04  eta*alpha*||k||^2=1.099e-01
+
+★ 诊断完成

@@ -1,0 +1,26 @@
+{
+ "seed": 20261028,
+ "arms": {
+  "fulltie_g1.0": {
+   "gamma": 1.0,
+   "acc_eval": 0.3125,
+   "accq_eval": 0.25,
+   "acc_train": 0.3333333333333333,
+   "accq_train": 0.125
+  },
+  "fulltie_g0.05": {
+   "gamma": 0.05,
+   "acc_eval": 0.2708333333333333,
+   "accq_eval": 0.125,
+   "acc_train": 0.22916666666666666,
+   "accq_train": 0.0625
+  },
+  "fulltie_g0.2": {
+   "gamma": 0.2,
+   "acc_eval": 0.3333333333333333,
+   "accq_eval": 0.25,
+   "acc_train": 0.25,
+   "accq_train": 0.0625
+  }
+ }
+}

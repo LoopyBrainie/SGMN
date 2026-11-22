@@ -1,0 +1,28 @@
+=== wave 1/3: learned（判据臂，n=400）===
+wave done: learned shard1 rc=0
+wave done: learned shard0 rc=0
+wave done: learned shard3 rc=0
+wave done: learned shard2 rc=0
+=== wave 2/3: rand（诊断对照臂，n=100）===
+wave done: rand shard1 rc=0
+wave done: rand shard0 rc=0
+wave done: rand shard3 rc=0
+wave done: rand shard2 rc=0
+=== wave 3/3: direct（判据-非空臂，n=400）===
+wave done: direct shard0 rc=0
+wave done: direct shard1 rc=0
+wave done: direct shard2 rc=0
+wave done: direct shard3 rc=0
+=== formal 全部完成 ===
+-rw-rw-r--. 1 ec2-user ec2-user  57364 Nov 15 03:38 dir43/out/DIR43r10_arm_direct_shard0.json
+-rw-rw-r--. 1 ec2-user ec2-user  57357 Nov 15 03:38 dir43/out/DIR43r10_arm_direct_shard1.json
+-rw-rw-r--. 1 ec2-user ec2-user  57357 Nov 15 03:40 dir43/out/DIR43r10_arm_direct_shard2.json
+-rw-rw-r--. 1 ec2-user ec2-user  57356 Nov 15 03:40 dir43/out/DIR43r10_arm_direct_shard3.json
+-rw-rw-r--. 1 ec2-user ec2-user 156153 Nov 15 02:43 dir43/out/DIR43r10_arm_learned_shard0.json
+-rw-rw-r--. 1 ec2-user ec2-user 155981 Nov 15 02:43 dir43/out/DIR43r10_arm_learned_shard1.json
+-rw-rw-r--. 1 ec2-user ec2-user 156153 Nov 15 03:19 dir43/out/DIR43r10_arm_learned_shard2.json
+-rw-rw-r--. 1 ec2-user ec2-user 156206 Nov 15 03:18 dir43/out/DIR43r10_arm_learned_shard3.json
+-rw-rw-r--. 1 ec2-user ec2-user  38517 Nov 15 03:27 dir43/out/DIR43r10_arm_rand_shard0.json
+-rw-rw-r--. 1 ec2-user ec2-user  38520 Nov 15 03:27 dir43/out/DIR43r10_arm_rand_shard1.json
+-rw-rw-r--. 1 ec2-user ec2-user  38490 Nov 15 03:35 dir43/out/DIR43r10_arm_rand_shard2.json
+-rw-rw-r--. 1 ec2-user ec2-user  38505 Nov 15 03:35 dir43/out/DIR43r10_arm_rand_shard3.json

@@ -1,0 +1,55 @@
+=== DIR-40 · Stage A 失败轮 run 1（★ 留档，不删改、不追认） ===
+时间：2026-11-13 · 主机：trainer · 解释器：/opt/pytorch/bin/python
+命令：/opt/pytorch/bin/python dir40/R1_task40.py stageA
+★ 当时使用的卡：**rev 1.0**（md5 `07541c443fb971ef7fcaced9b201dad9`）⇒ ⇒ 本失败轮正是 **rev 1.1 的触发原因**。
+★ 本文件是**逐字转录**该次运行的终端输出（未重新执行、未修改）。
+★ 缺陷编号：**DEF-40-3**（冻结检查的基准张量与优化器里的张量**是同一个对象** ⇒ 差恒为 0 ⇒ 空断言）
+  与 **DEF-40-4**（A40-6 要求「四档查询指纹互不相同」⇒ **错**：共用控制器的两臂必然相同）。
+
+--- 终端输出（逐字，节选判定相关行） ---
+Stage A：★ 未通过
+  A40-10_dW_perm             3.5056610166517364
+  A40-10_ok                  True
+  A40-11_norm_inst_mean      1.889692867745664
+  A40-11_norm_shared         1.9157695762913933
+  A40-11_ok                  True
+  A40-11_shared_identical    True
+  A40-12_norm_ratio          1.0137994427511587
+  A40-12_ok                  True
+  A40-1_max_abs_diff         0.0
+  A40-1_ok                   True
+  A40-2_Wmax_38              2.041150584528398
+  A40-2_Wmax_40              2.041150584528398
+  A40-2_max_abs_diff         0.0
+  A40-2_ok                   True
+  A40-3_device_md5           8fa40f708600bec7e6c484727d2180c7
+  A40-3_dir38_md5            d725da6d80bd072f9068a51857abf744
+  A40-3_dir39_md5            795563cb6212f228f8463ed418f8ce8c
+  A40-3_ok                   True
+  A40-3_task_md5             96ef89e87ec61556b52e0e464850087e
+  A40-4_card_md5             07541c443fb971ef7fcaced9b201dad9
+  A40-4_ok                   True
+  A40-5_eval_hist            0
+  A40-5_ok                   True
+  A40-5_train_eval           0
+  A40-5_train_hist           0
+  A40-6_c_eq_h               {'oracle': 0.0, 'rand': 0.0, 'learned': 0.0, 'learned_rc': 0.0}
+  A40-6_ok                  False
+  A40-6_q_fp                 {'oracle': 8.983072201553044, 'rand': 12.331180699159102, 'learned': 12.331180699159102, 'learned_rc': 12.331180699159102}
+  A40-7_dWq1_frozen_arm      0.0
+  A40-7_dWq1_trained_arm     0.0
+  A40-7_gradnorm_Wq1         4.714157186505826
+  A40-7_ok                   False
+  A40-8_init_deterministic   True
+  A40-8_ok                   True
+  A40-9_Wmax                 {'oracle': 2.0331767885058887, 'rand': 2.0331767885058887, 'learned': 2.0331767885058887, 'learned_rc': 2.0331767885058887}
+  A40-9_ok                   True
+
+--- 诊断 ---
+A40-6 失败：指纹关系被**写错**了（`learned`/`learned_rc`/`rand` 在 Stage A 里用的是**同一个未训练**控制器
+  ⇒ 指纹必然相同）⇒ 正确的要求是**设计关系**（`oracle ≠ rand`、`rand ≠ learned`（训过之后）、
+  `learned = learned_rc`）。
+A40-7 失败：`meta_l["dWq1_from_init"]` 的比较基准 `init["Wq1"]` 与优化器里的 `phi["Wq1"]`
+  **是同一个张量对象** ⇒ 训练后它自己也被更新 ⇒ 差**恒为 0** ⇒ **空断言**。
+⇒ 处置：**不改阈值、不改判据**（§1.0/§1.1/§1.3/§2 逐字不动）⇒ **开 rev 1.1**（旧版留档）
+  + 修实现（快照 + 指纹设计关系）⇒ rev 1.1 的 Stage A **12/12 全过**。

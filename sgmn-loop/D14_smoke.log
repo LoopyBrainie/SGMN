@@ -1,0 +1,63 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-14 R1：替代写规则/记忆结构 vs 可检索性 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:59,  4.86it/s]Loading weights:  64%|██████▍   | 185/290 [00:00<00:00, 748.06it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 691.75it/s]
+
+[校准] 写量对齐（按每次写入的状态变化范数）
+  稠密基线每次写入变化量 = 0.00551863
+  A1_dense_linear        η=1e-05（基线） 每次写入变化量=0.005519
+  A2_dense_sparse        η=1.947e-05（×1.95，一步对齐） 每次写入变化量=0.002835
+  A3_slot_sparse         η=1e-05（声明值） 每次写入变化量=0.008263（与基线比 1.5）
+  A4_dict_sparse         η=1e-05（声明值） 每次写入变化量=0.0002938（与基线比 0.0532）
+  A5_kv_sparse           η=1e-05（声明值） 每次写入变化量=23.38（与基线比 4.24e+03）
+  A6_kv_linear           η=1e-05（声明值） 每次写入变化量=40.33（与基线比 7.31e+03）
+  A8_kv_sparse_b64       η=1e-05（声明值） 每次写入变化量=23.38（与基线比 4.24e+03）
+  A9_kv_sparse_b256      η=1e-05（声明值） 每次写入变化量=23.38（与基线比 4.24e+03）
+  A10_kv_sparse_b1024    η=1e-05（声明值） 每次写入变化量=23.38（与基线比 4.24e+03）
+  A11_kv_linear_b1024    η=1e-05（声明值） 每次写入变化量=40.33（与基线比 7.31e+03）
+
+[Stage A]
+[FAIL] A1' Freeze C（写入梯度精确0 / 读梯度有限非零 / 基座逐位不变 / 阴性对照）: 读梯度 9/9 非零且有限；写入梯度精确0 9/9；基座逐位不变 True；阴性对照泄漏 3/9
+[PASS] A3' 单一装置（句柄 2×层数）+ 写关记忆冻结 / 写开必须变化: 句柄 6；写关相对差 0.000e+00（须 <1e-12）；写开相对差 1.159e+02（须 >1e-9）
+[FAIL] A4' 写量对齐（稠密臂一步对齐，比值 ∈ [0.2,5]；其余臂写量作诊断报告）: 稠密：A1_dense_linear: 0.005519（基线 0.005519，比值 1）；A2_dense_sparse: 0.002835（基线 0.005519，比值 0.514）；A10_kv_sparse_b1024: 23.38（基线 0.005519，比值 4.24e+03）；A11_kv_linear_b1024: 40.33（基线 0.005519，比值 7.31e+03） ｜ 其余：A3_slot_sparse: 1.5×基线；A4_dict_sparse: 0.0532×基线；A5_kv_sparse: 4.24e+03×基线；A6_kv_linear: 7.31e+03×基线；A8_kv_sparse_b64: 4.24e+03×基线；A9_kv_sparse_b256: 4.24e+03×基线
+
+  [种子 20261028]
+/home/ec2-user/sgmn-loop/sgmn_module_structures.py:55: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  return {"slots_used": 1, "entries": 1, "state_norm": float(self.W.norm())}
+    A1_dense_linear        码logp -1.6637 命中 0.0000 地址命中 0.0000 槽/条目 1.0/1.0
+    A2_dense_sparse        码logp -1.6619 命中 0.0000 地址命中 0.0000 槽/条目 1.0/1.0
+    A3_slot_sparse         码logp -1.7172 命中 0.0000 地址命中 0.0000 槽/条目 3.0/72.0
+    A4_dict_sparse         码logp -1.6615 命中 0.0000 地址命中 0.0000 槽/条目 24.7/288.0
+    A5_kv_sparse           码logp -1.6300 命中 0.0000 地址命中 0.0000 槽/条目 64.0/72.0
+    A6_kv_linear           码logp -1.6274 命中 0.0000 地址命中 0.0000 槽/条目 64.0/72.0
+    A7_slot_sparse_nowrite 码logp -1.6646 命中 0.0000 地址命中 0.0000 槽/条目 0.0/0.0
+    A8_kv_sparse_b64       码logp -1.6114 命中 0.0000 地址命中 0.0000 槽/条目 64.0/72.0
+    A9_kv_sparse_b256      码logp -1.6002 命中 0.0000 地址命中 0.0000 槽/条目 64.0/72.0
+    A10_kv_sparse_b1024    码logp -1.5959 命中 0.0000 地址命中 0.0000 槽/条目 64.0/72.0
+    A11_kv_linear_b1024    码logp -1.6305 命中 0.0000 地址命中 0.0000 槽/条目 64.0/72.0
+
+  [种子 20261104]
+    A1_dense_linear        码logp -1.6457 命中 0.0417 地址命中 0.0000 槽/条目 1.0/1.0
+    A2_dense_sparse        码logp -1.6359 命中 0.0000 地址命中 0.0000 槽/条目 1.0/1.0
+    A3_slot_sparse         码logp -1.6320 命中 0.0000 地址命中 0.0417 槽/条目 3.3/72.0
+    A4_dict_sparse         码logp -1.6351 命中 0.0000 地址命中 0.0000 槽/条目 32.3/288.0
+    A5_kv_sparse           码logp -1.6068 命中 0.0000 地址命中 0.0000 槽/条目 64.0/72.0
+    A6_kv_linear           码logp -1.6071 命中 0.0000 地址命中 0.0000 槽/条目 64.0/72.0
+    A7_slot_sparse_nowrite 码logp -1.6312 命中 0.0000 地址命中 0.0000 槽/条目 0.0/0.0
+    A8_kv_sparse_b64       码logp -1.6097 命中 0.0000 地址命中 0.0000 槽/条目 64.0/72.0
+    A9_kv_sparse_b256      码logp -1.6214 命中 0.0000 地址命中 0.0000 槽/条目 64.0/72.0
+    A10_kv_sparse_b1024    码logp -1.6181 命中 0.0417 地址命中 0.0000 槽/条目 64.0/72.0
+    A11_kv_linear_b1024    码logp -1.6112 命中 0.0000 地址命中 0.0000 槽/条目 64.0/72.0
+
+[A2'] 结构生效性
+[FAIL] A2' 结构生效性（多槽/字典占用 ≥4，KV 写满 64 条，稠密有写入）: A1_dense_linear: 槽 1 条目 1 ⇒ True；A2_dense_sparse: 槽 1 条目 1 ⇒ True；A3_slot_sparse: 槽 3 条目 72 ⇒ False；A4_dict_sparse: 槽 25 条目 288 ⇒ True；A5_kv_sparse: 槽 64 条目 72 ⇒ True；A6_kv_linear: 槽 64 条目 72 ⇒ True；A8_kv_sparse_b64: 槽 64 条目 72 ⇒ True；A9_kv_sparse_b256: 槽 64 条目 72 ⇒ True；A10_kv_sparse_b1024: 槽 64 条目 72 ⇒ True；A11_kv_linear_b1024: 槽 64 条目 72 ⇒ True
+
+[R1] 分析
+  各臂： {"A1_dense_linear": {"lp_first": -1.654723346233368, "hit": 0.020833333333333332, "ahit": 0.0}, "A2_dense_sparse": {"lp_first": -1.648892369121313, "hit": 0.0, "ahit": 0.0}, "A3_slot_sparse": {"lp_first": -1.674608364701271, "hit": 0.0, "ahit": 0.020833333333333332}, "A4_dict_sparse": {"lp_first": -1.6483201943337917, "hit": 0.0, "ahit": 0.0}, "A5_kv_sparse": {"lp_first": -1.618421159684658, "hit": 0.0, "ahit": 0.0}, "A6_kv_linear": {"lp_first": -1.6172585114836693, "hit": 0.0, "ahit": 0.0}, "A7_slot_sparse_nowrite": {"lp_first": -1.647873166948557, "hit": 0.0, "ahit": 0.0}, "A8_kv_sparse_b64": {"lp_first": -1.610558196902275, "hit": 0.0, "ahit": 0.0}, "A9_kv_sparse_b256": {"lp_first": -1.6108383424580097, "hit": 0.0, "ahit": 0.0}, "A10_kv_sparse_b1024": {"lp_first": -1.6069800220429897, "hit": 0.020833333333333332, "ahit": 0.0}, "A11_kv_linear_b1024": {"lp_first": -1.620881736278534, "hit": 0.0, "ahit": 0.0}}
+[FAIL] H1 〔存在性〕至少一个替代结构的检索命中 ≥ 0.9（随机基线 0.0244）: 最佳替代臂 A10_kv_sparse_b1024，命中 0.0208（逐种子 0.0000 0.0417）
+[FAIL] H4 〔对比 v2.4〕最佳替代臂的命中显著 > 稠密基线 A1: A10_kv_sparse_b1024-A1 配对差 +0.0000（t=+0.00, p=1, 正向 1/2）跨种子 +0.0000 +0.0000
+[FAIL] H6 〔地址选择性·新增〕显式 KV 结构的地址命中随 β 上升，且存在 β 使其 ≥ 0.9: β→地址命中：16:0.0000 64:0.0000 256:0.0000 1024:0.0000（最佳 β=16.0，0.0000）
+[PASS] H7 〔分解·新增〕报告内容命中与地址命中的分离（写 vs 寻址）: A10_kv_sparse_b1024: 内容 0.0208 / 地址 0.0000；A11_kv_linear_b1024: 内容 0.0000 / 地址 0.0000；A1_dense_linear: 内容 0.0208 / 地址 0.0000；A2_dense_sparse: 内容 0.0000 / 地址 0.0000；A3_slot_sparse: 内容 0.0000 / 地址 0.0208；A4_dict_sparse: 内容 0.0000 / 地址 0.0000；A5_kv_sparse: 内容 0.0000 / 地址 0.0000；A6_kv_linear: 内容 0.0000 / 地址 0.0000；A7_slot_sparse_nowrite: 内容 0.0000 / 地址 0.0000；A8_kv_sparse_b64: 内容 0.0000 / 地址 0.0000；A9_kv_sparse_b256: 内容 0.0000 / 地址 0.0000
+
+=== DIR-14 R1：2/8 通过 ===

@@ -1,0 +1,46 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[G3] device=8fa40f708600bec7e6c484727d2180c7 task=96ef89e87ec61556b52e0e464850087e ok=True
+[G4] 与历史段交集=0 训练/评估交集=0
+[训练] φ_A(dev) n=96 319s
+[G1] dev 臂镜像相对差 max=0.000e+00 · [G2] ref 臂镜像相对差 max=0.000e+00
+[臂] dev     L=9.380290  (1s)
+[臂] ref     L=3.363062  (1s)
+[臂] key     L=8.876561  (2s)
+[臂] refkey  L=3.363062  (3s)
+[臂] heb     L=60.781633  (3s)
+
+══ 损失级（冻结头 φ_A，同一评估段）══
+  L[dev    ] = 9.380290
+  L[ref    ] = 3.363062
+  L[key    ] = 8.876561
+  L[refkey ] = 3.363062
+  L[heb    ] = 60.781633
+
+══ 分解 ══
+  G_inst_dir37_like                  = +6.017228
+  addr_gain                          = +0.503728
+  matrix_gain_at_ideal_addr          = +5.513499
+  matrix_gain_at_dev_query           = +6.017228
+  addr_gain_at_ref_matrix            = +0.000000
+  ideal_write_gain_at_dev_query      = -51.401344
+  total_to_ideal                     = +6.017228
+  identity_order1                    = +0.000000
+  identity_order2                    = +0.000000
+
+══ 份额 ══
+  addr_share_of_total                = +0.0837
+  matrix_share_of_total              = +0.9163
+  addr_share_of_Ginst                = +0.0837
+  matrix_share_of_Ginst              = +0.9163
+
+══ 机制级诊断（与头无关）══
+  e_dev    mean=0.701663 sd=0.164850
+  e_ref    mean=0.000000 sd=0.000000
+  e_addr   mean=0.000000 sd=0.000000
+  e_Wkey   mean=0.701663 sd=0.164850
+  e_Wh     mean=0.000000 sd=0.000000
+  e_addr_over_e_dev                  = +0.0000
+  e_Wkey_over_e_dev                  = +1.0000
+
+★ 探针完成（**不进判据**；只用于设计 DIR-38 的卡）

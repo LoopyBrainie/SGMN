@@ -1,0 +1,33 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:59,  4.85it/s]Loading weights:  64%|██████▍   | 185/290 [00:00<00:00, 735.88it/s]Loading weights:  99%|█████████▉| 287/290 [00:00<00:00, 811.69it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 686.41it/s]
+事实 32 条；块 600×64；值池 27；γ_run=0.05
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/R2_task91.py:231: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  return float(-lp[cand_ids[0]])
+  [BASE γ=0.0 seed=20261028] acc(题)=0.125 acc(项)=0.250 S91=None viol=None div=False 5.6s
+  [INJ γ=0.05 seed=20261028] acc(题)=0.062 acc(项)=0.188 S91=None viol=0 div=False 42.3s
+  [MEM γ=0.05 seed=20261028] acc(题)=0.062 acc(项)=0.083 S91=0.19139641523361206 viol=0 div=False 61.7s
+  [BASE γ=0.0 seed=20261104] acc(题)=0.125 acc(项)=0.250 S91=None viol=None div=False 5.5s
+  [INJ γ=0.05 seed=20261104] acc(题)=0.000 acc(项)=0.104 S91=None viol=0 div=False 42.8s
+  [MEM γ=0.05 seed=20261104] acc(题)=0.000 acc(项)=0.125 S91=0.19139641523361206 viol=0 div=False 62.0s
+  [BASE γ=0.0 seed=7] acc(题)=0.125 acc(项)=0.250 S91=None viol=None div=False 5.6s
+  [INJ γ=0.05 seed=7] acc(题)=0.000 acc(项)=0.083 S91=None viol=0 div=False 42.8s
+  [MEM γ=0.05 seed=7] acc(题)=0.125 acc(项)=0.146 S91=0.19139641523361206 viol=0 div=False 62.0s
+
+=== 裁决材料 ===
+  inj_ratio_vals = [0.02061095923045762, 0.02463856348632723, 0.014687935307902382]
+  arm_valid_per_seed = [False, False, False]
+  arm_valid = False
+  delta_content_vals = [0.0, 0.0, 0.125]
+  delta_content_mean = 0.041666666666666664
+  delta_content_same_sign = False
+  delta_inj_vals = [-0.0625, -0.125, -0.125]
+  delta_inj_mean = -0.10416666666666667
+  delta_content_se = 0.04166666666666667
+  delta_content_ci95 = [-0.08333333333333334, 0.16666666666666666]
+  s91_vals = [0.19139641523361206, 0.19139641523361206, 0.19139641523361206]
+  s91_pass = True
+  verdict = INCONCLUSIVE-ARM-INVALID
+  h91 = False
+  summary = {'BASE': {'mean': 0.125, 'vals': [0.125, 0.125, 0.125], 'sd': 0.0, 'item_mean': 0.25, 'item_vals': [0.25, 0.25, 0.25]}, 'INJ': {'mean': 0.020833333333333332, 'vals': [0.0625, 0.0, 0.0], 'sd': 0.036084391824351615, 'item_mean': 0.125, 'item_vals': [0.1875, 0.10416666666666667, 0.08333333333333333]}, 'MEM': {'mean': 0.0625, 'vals': [0.0625, 0.0, 0.125], 'sd': 0.0625, 'item_mean': 0.11805555555555554, 'item_vals': [0.08333333333333333, 0.125, 0.14583333333333334]}}

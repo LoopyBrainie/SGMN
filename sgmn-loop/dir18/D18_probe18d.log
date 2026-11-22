@@ -1,0 +1,19 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:50,  5.74it/s]Loading weights:  62%|██████▏   | 181/290 [00:00<00:00, 793.00it/s]Loading weights:  97%|█████████▋| 282/290 [00:00<00:00, 799.19it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 714.47it/s]
+对照稀有词 = [1099, 1219]（未写入任何记忆） | 中频词对照 = 892 (' which') | 稀有池大小 4000
+=== Q5：训练收益是「内容」还是「稀有词先验」 ===
+/home/ec2-user/sgmn-loop/dir18/R1_write.py:270: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  traj.append((float(loss), gnorm))
+[hebb_eta7_cue_train] NLL: code=11.0017 | dcode=11.6991 | rare(未写入)=12.4936 | mid=8.9784
+          ⇒ 内容余量(rare−code)=+1.4919 | 干扰余量(rare−dcode)=+0.7945 | P(code)=3.631e-05 | 稀有池总质量=1.224e-01
+[hebb_eta7_nowrite_train] NLL: code=11.0239 | dcode=11.7477 | rare(未写入)=12.4723 | mid=8.9068
+          ⇒ 内容余量(rare−code)=+1.4484 | 干扰余量(rare−dcode)=+0.7247 | P(code)=3.556e-05 | 稀有池总质量=1.222e-01
+[verbatim_cue_train] NLL: code=10.4638 | dcode=12.2733 | rare(未写入)=11.5141 | mid=9.5846
+          ⇒ 内容余量(rare−code)=+1.0503 | 干扰余量(rare−dcode)=-0.7592 | P(code)=1.469e-04 | 稀有池总质量=1.238e-01
+[verbatim_cue_notrain] NLL: code=14.1272 | dcode=15.7156 | rare(未写入)=13.1391 | mid=8.6317
+          ⇒ 内容余量(rare−code)=-0.9881 | 干扰余量(rare−dcode)=-2.5765 | P(code)=3.703e-06 | 稀有池总质量=1.629e-02
+[base] NLL: code=14.1687 | dcode=15.6866 | rare(未写入)=12.9745 | mid=8.6772 | 内容余量=-1.1942
+
+写出 /home/ec2-user/sgmn-loop/dir18/probe18d_out.json

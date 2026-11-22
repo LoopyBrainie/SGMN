@@ -1,0 +1,78 @@
+{
+ "A30-1 worked-example": {
+  "pass": true,
+  "J11,J12,J22": [
+   -0.21499999999999986,
+   -2.13,
+   -0.21499999999999986
+  ],
+  "det": -4.4906749999999995
+ },
+ "A30-2 jacobian-fd": {
+  "pass": true,
+  "worst_rel": 3.289526712704271e-09
+ },
+ "A30-3 cross-device-anchor": {
+  "pass": true,
+  "eta_c_full_g0": 0.4902980728263161,
+  "anchor": 0.49090552
+ },
+ "A30-4 archive-selfconsistency": {
+  "pass": true,
+  "med_stat_g0.0": {
+   "thr_D29stat": 0.17686228503964302,
+   "ref_D29": 0.1768623,
+   "rel": 8.458759713635193e-08
+  },
+  "med_stat_g0.5": {
+   "thr_D29stat": 0.1440872976322205,
+   "ref_D29": 0.1440873,
+   "rel": 1.6432950719773694e-08
+  },
+  "new_stat_full_g0.0": {
+   "thr_col": 0.49331056103257254,
+   "ref_D29": 0.4933106,
+   "rel": 7.899166863931969e-08
+  },
+  "new_stat_full_g0.5": {
+   "thr_col": 0.18799491692492837,
+   "ref_D29": 0.1879949,
+   "rel": 9.002865702985207e-08
+  }
+ },
+ "A30-5 censoring-imputation": {
+  "pass": true,
+  "n_censored": 1,
+  "eta_j0": 1.43916,
+  "CENSOR_IMPUTE": 1.43916,
+  "n_cols": 64
+ },
+ "A30-6 determinism": {
+  "pass": true,
+  "max_abs_diff": 0.0
+ },
+ "A30-7 column-seed-repro": {
+  "pass": true,
+  "max_abs_diff": 0.0
+ },
+ "A30-8 axes-coincide-at-1": {
+  "pass": true,
+  "same_state": true,
+  "thr_skew": 0.12823171066104994,
+  "thr_sym": 0.12823171066104994
+ },
+ "A30-9 skew-axis-equals-initB": {
+  "pass": true,
+  "g0.0": {
+   "thr_D29stat": 0.07391435204943869,
+   "ref_D29": 0.07391435204943869,
+   "rel": 0.0
+  },
+  "g0.5": {
+   "thr_D29stat": 0.059757595748992066,
+   "ref_D29": 0.059757595748992066,
+   "rel": 0.0
+  }
+ },
+ "all_pass": true
+}

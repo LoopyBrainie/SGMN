@@ -1,0 +1,132 @@
+=== 2026-11-22T05:10:49Z DIR-118 启动 PID 2311889 ===
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:01,  4.72it/s]Loading weights:  68%|██████▊   | 197/290 [00:00<00:00, 785.98it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 713.98it/s]
+=== Stage A：前提核 + 设备接续 ===
+  [PASS] A118-0a: SPLIT class_seen_frac_held=1.0000
+  [PASS] A118-0b: COLOCATED class_seen_frac_held=0.0000
+  [PASS] A118-0c: 分层实测 SPLIT=(48, 0) COLOCATED=(0, 48)（须 (48,0)/(0,48)）
+  [PASS] A118-0d: 4 候选全见过值：SPLIT 48/48、COLOCATED 0/48
+  [PASS] A118-8: 两臂 prompt_ids 集合差异 8/16 个（须 >0）
+  [PASS] A118-11: 6 个新 seed 在本卡以外零碰撞：冲突 []
+=== 共 36 格（继承 dir117 的 SPLIT 6 格）===
+  继承 dir117 读数 SPLIT|600|20271126
+  跳过（已有）SPLIT|600|20271126
+  继承 dir117 读数 SPLIT|600|20271203
+  跳过（已有）SPLIT|600|20271203
+  继承 dir117 读数 SPLIT|600|20271210
+  跳过（已有）SPLIT|600|20271210
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  SPLIT|600|20260501: prior=17 acc=[10, 9, 10, 11, 11, 11, 11, 11, 11] n_finite=9 88.1s
+  SPLIT|600|20260502: prior=17 acc=[20, 6, 6, 6, 6, 6, 6, 6, 6] n_finite=9 87.9s
+  SPLIT|600|20260503: prior=17 acc=[15, 15, 15, 15, 15, 15, 15, 15, 15] n_finite=9 88.0s
+  SPLIT|600|20260504: prior=17 acc=[10, 17, 16, 16, 16, 16, 16, 16, 16] n_finite=9 87.5s
+  SPLIT|600|20260505: prior=17 acc=[8, 10, 11, 11, 11, 11, 11, 11, 11] n_finite=9 87.6s
+  SPLIT|600|20260506: prior=17 acc=[13, 17, 14, 14, 14, 13, 13, 13, 13] n_finite=9 87.9s
+  继承 dir117 读数 SPLIT|0|20271126
+  跳过（已有）SPLIT|0|20271126
+  继承 dir117 读数 SPLIT|0|20271203
+  跳过（已有）SPLIT|0|20271203
+  继承 dir117 读数 SPLIT|0|20271210
+  跳过（已有）SPLIT|0|20271210
+  SPLIT|0|20260501: prior=17 acc=[17, 16, 18, 13, 13, 16, 13, 13, 12] n_finite=9 54.8s
+  SPLIT|0|20260502: prior=17 acc=[16, 16, 16, 11, 13, 13, 11, 10, 11] n_finite=9 54.6s
+  SPLIT|0|20260503: prior=17 acc=[17, 16, 16, 15, 15, 14, 14, 17, 17] n_finite=9 54.7s
+  SPLIT|0|20260504: prior=17 acc=[16, 15, 14, 12, 16, 13, 13, 14, 14] n_finite=9 54.8s
+  SPLIT|0|20260505: prior=17 acc=[17, 16, 16, 18, 8, 16, 11, 11, 11] n_finite=9 54.8s
+  SPLIT|0|20260506: prior=17 acc=[17, 15, 13, 12, 14, 13, 12, 12, 12] n_finite=9 54.7s
+  COLOCATED|600|20271126: prior=18 acc=[2, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 87.5s
+  COLOCATED|600|20271203: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 87.4s
+  COLOCATED|600|20271210: prior=18 acc=[1, 1, 3, 3, 3, 3, 3, 3, 3] n_finite=9 87.5s
+  COLOCATED|600|20260501: prior=18 acc=[0, 0, 0, 0, 0, 0, 0, 0, 0] n_finite=9 87.8s
+  COLOCATED|600|20260502: prior=18 acc=[1, 2, 2, 2, 2, 2, 2, 2, 2] n_finite=9 87.9s
+  COLOCATED|600|20260503: prior=18 acc=[4, 8, 7, 7, 7, 7, 7, 7, 7] n_finite=9 87.8s
+  COLOCATED|600|20260504: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 87.5s
+  COLOCATED|600|20260505: prior=18 acc=[3, 0, 0, 0, 0, 0, 0, 0, 0] n_finite=9 87.4s
+  COLOCATED|600|20260506: prior=18 acc=[10, 5, 5, 5, 5, 5, 5, 5, 5] n_finite=9 87.9s
+  COLOCATED|0|20271126: prior=18 acc=[18, 17, 14, 12, 13, 14, 17, 16, 16] n_finite=9 54.7s
+  COLOCATED|0|20271203: prior=18 acc=[18, 18, 18, 17, 10, 1, 5, 8, 8] n_finite=9 54.6s
+  COLOCATED|0|20271210: prior=18 acc=[18, 17, 19, 16, 8, 11, 15, 14, 15] n_finite=9 54.4s
+  COLOCATED|0|20260501: prior=18 acc=[18, 17, 21, 15, 9, 15, 22, 21, 22] n_finite=9 54.5s
+  COLOCATED|0|20260502: prior=18 acc=[18, 17, 17, 13, 7, 11, 16, 17, 17] n_finite=9 54.5s
+  COLOCATED|0|20260503: prior=18 acc=[18, 17, 16, 10, 14, 15, 9, 13, 13] n_finite=9 54.6s
+  COLOCATED|0|20260504: prior=18 acc=[18, 19, 19, 15, 13, 15, 14, 13, 13] n_finite=9 54.7s
+  COLOCATED|0|20260505: prior=18 acc=[18, 19, 17, 16, 17, 12, 6, 7, 7] n_finite=9 54.8s
+  COLOCATED|0|20260506: prior=18 acc=[18, 18, 15, 11, 8, 18, 12, 10, 9] n_finite=9 54.6s
+  [PASS] A118-1: 各臂 γ=0 先验恒定：{'SPLIT': [17], 'COLOCATED': [18]}（SPLIT 期望 17、COLOCATED 期望 18）
+  [PASS] A118-2: γ=0 时逐层 read_gamma 全为 0.0（违例 0）
+  [PASS] A118-3: SPLIT 3 旧 seed × 2 剂量 × 9 点与 dir117 逐位相同（不符 0 处）
+  [PASS] A118-4: 9 点 × 36 格 read_gamma==设定值（不符 0）
+  [PASS] A118-5: γ 严格递增且相邻比值 == MULT 比值：True
+  [PASS] A118-6: eval_writes=0/violations=0/W 逐位不变/未发散（违例 0: []）
+  [PASS] A118-7: 同 seed d=600 vs d=0 的 Wq/Wo md5 均不同（违例 0）
+  [PASS] A118-9: finite 与 acc-null 互斥自洽（违例 0）
+  [PASS] A118-10: 逐格 n_finite==9（违例 0）
+  [PASS] A118-12: ok 向量长 48 且 sum/48==acc（违例 0）
+  [PASS] A118-13: 同 arm 同 seed 的 γ=0 先验与剂量无关（违例 0）
+  [PASS] A118-17: 两臂配对 seed 完全一致（9 个）
+  [PASS] A118-14: 缺格时判 INCOMPLETE 而非实质支
+  [PASS] A118-15: 阻断守卫红时判 DEVICE-DRIFT
+  [PASS] A118-16: 判据逐条求值：已求 ['1_complete', '2_drift', '3_censored', '4_reversal_exists', '5_value_specific', '6_generic', '7_band']
+  [PASS] A118-18: R_SPLIT=+4.56(t=+2.46) R_COLOCATED=+4.78(t=+2.54) gap=+0.22
+  [PASS] A118-20: R 逐 seed：SPLIT [5.0, 9.0, 5.0, 5.0, -9.0, 3.0, 9.0, 9.0, 5.0] / COLOCATED [0.0, 13.0, 5.0, -4.0, 3.0, 12.0, 4.0, 9.0, 1.0]
+  [PASS] A118-19: Δ(1) SPLIT=-3.89 COLOC=-15.44；Δ(1e4) SPLIT=+0.67 COLOC=-10.67
+  [PASS] A118-21: COLOCATED 见过值个数分布 {0: 2, 1: 23, 2: 20, 3: 3}（前提核期望 {0:2,1:23,2:20,3:3}）
+  [PASS] A118-5b: 标称注入比见各格 inj_ratio_nominal（标称量，D-148 §7-6 边界沿用）
+
+★ Stage A 通过；阻断失败 0 条
+{
+ "code": "C118-REVERSAL-GENERIC",
+ "success": true,
+ "reason": "R_SPLIT=+4.56、R_COLOCATED=+4.78，|gap|=0.22 ≤ 2.0 ⇒ 翻转不依赖值见过 ⇒ H118 证实"
+}
+--- stage A rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Stage A 门通过；继承 36 格
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:56,  5.16it/s]Loading weights:  72%|███████▏  | 209/290 [00:00<00:00, 874.88it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 761.28it/s]
+  跳过（已有）SPLIT|600|20271126
+  跳过（已有）SPLIT|600|20271203
+  跳过（已有）SPLIT|600|20271210
+  跳过（已有）SPLIT|600|20260501
+  跳过（已有）SPLIT|600|20260502
+  跳过（已有）SPLIT|600|20260503
+  跳过（已有）SPLIT|600|20260504
+  跳过（已有）SPLIT|600|20260505
+  跳过（已有）SPLIT|600|20260506
+  跳过（已有）SPLIT|0|20271126
+  跳过（已有）SPLIT|0|20271203
+  跳过（已有）SPLIT|0|20271210
+  跳过（已有）SPLIT|0|20260501
+  跳过（已有）SPLIT|0|20260502
+  跳过（已有）SPLIT|0|20260503
+  跳过（已有）SPLIT|0|20260504
+  跳过（已有）SPLIT|0|20260505
+  跳过（已有）SPLIT|0|20260506
+  跳过（已有）COLOCATED|600|20271126
+  跳过（已有）COLOCATED|600|20271203
+  跳过（已有）COLOCATED|600|20271210
+  跳过（已有）COLOCATED|600|20260501
+  跳过（已有）COLOCATED|600|20260502
+  跳过（已有）COLOCATED|600|20260503
+  跳过（已有）COLOCATED|600|20260504
+  跳过（已有）COLOCATED|600|20260505
+  跳过（已有）COLOCATED|600|20260506
+  跳过（已有）COLOCATED|0|20271126
+  跳过（已有）COLOCATED|0|20271203
+  跳过（已有）COLOCATED|0|20271210
+  跳过（已有）COLOCATED|0|20260501
+  跳过（已有）COLOCATED|0|20260502
+  跳过（已有）COLOCATED|0|20260503
+  跳过（已有）COLOCATED|0|20260504
+  跳过（已有）COLOCATED|0|20260505
+  跳过（已有）COLOCATED|0|20260506
+{
+ "code": "C118-REVERSAL-GENERIC",
+ "success": true,
+ "reason": "R_SPLIT=+4.56、R_COLOCATED=+4.78，|gap|=0.22 ≤ 2.0 ⇒ 翻转不依赖值见过 ⇒ H118 证实"
+}
+--- stage formal rc=0 ---
+=== 2026-11-22T05:46:48Z 完成 ===

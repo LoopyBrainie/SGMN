@@ -1,0 +1,28 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:50,  5.67it/s]Loading weights:  62%|██████▏   | 179/290 [00:00<00:00, 764.03it/s]Loading weights:  95%|█████████▍| 275/290 [00:00<00:00, 816.11it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 714.58it/s]
+[setup] facts=32 chunks=600 tr=16 seeds=[20261028, 7777] stage=stageA dev=cuda
+/home/ec2-user/sgmn-loop/dir91/R2_task91.py:323: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+[values] n=32 distinct=27 Σ|S_i|=42 E_random=1.3125
+  ✓ A97-4/seed20261028  ‖W_after_read − W_write‖/‖W_write‖ = 0.000e+00 (< 1e-12)
+[seed 20261028 L8] N_hit^v: intact=1/32 W0=1/32 oracle=32/32 oracle^π=0/32 | strict=1/32 | L2=1/32 | stable_rank=1.0005 | max_pair_cos(v_uniq)=0.9986 | 59s
+[seed 20261028 L12] N_hit^v: intact=1/32 W0=1/32 oracle=32/32 oracle^π=0/32 | strict=1/32 | L2=1/32 | stable_rank=1.0007 | max_pair_cos(v_uniq)=0.9979 | 59s
+[seed 20261028 L16] N_hit^v: intact=0/32 W0=4/32 oracle=32/32 oracle^π=0/32 | strict=0/32 | L2=0/32 | stable_rank=1.0034 | max_pair_cos(v_uniq)=0.9960 | 59s
+  ✓ A97-4/seed7777  ‖W_after_read − W_write‖/‖W_write‖ = 0.000e+00 (< 1e-12)
+[seed 7777 L8] N_hit^v: intact=1/32 W0=1/32 oracle=32/32 oracle^π=0/32 | strict=1/32 | L2=1/32 | stable_rank=1.0005 | max_pair_cos(v_uniq)=0.9986 | 59s
+[seed 7777 L12] N_hit^v: intact=1/32 W0=1/32 oracle=32/32 oracle^π=0/32 | strict=1/32 | L2=1/32 | stable_rank=1.0007 | max_pair_cos(v_uniq)=0.9980 | 59s
+[seed 7777 L16] N_hit^v: intact=1/32 W0=1/32 oracle=32/32 oracle^π=0/32 | strict=1/32 | L2=1/32 | stable_rank=1.0029 | max_pair_cos(v_uniq)=0.9958 | 59s
+  ✓ A97-1  解算力 min(oracle − oracle^π) = 32/32 (≥30)
+  ✓ A97-2  max ‖k_i‖ 比 = 1.034 (< 10)
+  ✓ A97-3  max oracle 残差 = 7.645e-07 (< 1e-6)
+  ✓ A97-6  min 每事实块数 = 18 (≥18)
+  ✓ A97-7  max stable rank(ΔW) = 1.0034 (≤1.02，复现 D-126)
+  ✓ A97-9  Σ|S_i|=42==Σm_v²；不同值=27==27；E_random=1.3125
+  ✓ G97-1  min N_hit^v(oracle) = 32/32 (≥30)
+  ✓ G97-2  max N_hit^v(oracle^π) = 0/32 (≤3)
+  ✓ A97-5  N_hit^v 为同一函数；oracle 与 oracle^π 得分不同
+  ✓ M97-2  max N_hit^v(W0) = 4/32 (≤ E_random+3 = 4.312)
+
+[Stage A] 全部通过  → /mnt/sgmn/home/ec2-user/sgmn-loop/dir97/out/stage_A.json

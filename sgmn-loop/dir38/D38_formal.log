@@ -1,0 +1,19 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[训练] 头（装置臂 n_rep=1）n=384 ...
+[训练] 完成 1291s
+[评估] n_rep= 1 L=8.440916 e_Wkey=0.699420 Wmax=5.5449 finite=True  (1296s)
+[评估] n_rep= 4 L=3.882384 e_Wkey=0.345775 Wmax=4.1883 finite=True  (1304s)
+[评估] n_rep=16 L=2.126794 e_Wkey=0.101793 Wmax=2.6404 finite=True  (1322s)
+[评估] ridge    L=1.968958 e_Wkey=0.043165 Wmax=2.0879 finite=True  (1327s)
+
+══ 正式轮 ══
+  L[n1   ] = 8.440916   e_Wkey = 0.699420   Wmax = 5.5449
+  L[n4   ] = 3.882384   e_Wkey = 0.345775   Wmax = 4.1883
+  L[n16  ] = 2.126794   e_Wkey = 0.101793   Wmax = 2.6404
+  L[ridge] = 1.968958   e_Wkey = 0.043165   Wmax = 2.0879
+  分母 (L1−Lridge) = 6.471959 · 分子 (L1−L16) = 6.314122 · CL = 0.9756122995753314
+  配对 L1−L16: mean=6.314122 3se=0.550868 n=400
+  e_Wkey 配对: mean=0.597626 3se=0.022968
+  Wmax 比 (16/1) = 0.4762 · 发散 = False
+  ★ 结局 = PASS · 计入 SUCCEEDED = True

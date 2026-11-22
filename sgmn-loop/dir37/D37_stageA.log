@@ -1,0 +1,34 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/ec2-user/sgmn-loop/dir33/R1_task33.py:203: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  tot += float(L) / len(seeds)
+  训练 A(dev) n=8 27s
+  训练 C(ref) n=8 32s
+Stage A：★ 全部通过
+  A37-1_rel_max                0.000e+00
+  A37-1b_train_bitwise         0.000e+00
+  A37-2_ls_resid               6.994e-15
+  A37-3_pinv_gap               1.847e-13
+  A37-4_max_rank               2.000e+00
+  A37-5_solver_gap             2.220e-16
+  A37-6_worked_1               1.000e+00
+  A37-6_worked_2               0.000e+00
+  A37-6_exact_1                1.000e+00
+  A37-6_exact_2                0.000e+00
+  A37-7_rell_dev               7.316e-01
+  A37-7_rell_ref               6.667e-02
+  A37-7_fair_ok                1.000e+00
+  A37-8_device_diff            0.000e+00
+  A37-8_task_diff              0.000e+00
+  A37-9_hist_hits              none
+  A37-9_seed_disjoint          0.000e+00
+  A37-9_train_eval_overlap     0.000e+00
+  A37-10_train_bitwise         0.000e+00
+  A37-11_card_md5              3ce25d5b590ee8745ac903ee4d34a474
+  A37-11_card_diff             0.000e+00
+  A37-11_threshold_set         0.000e+00
+  A37-12_probe_head_gap        0.000e+00
+  A37-12_probe_dev_rel         0.000e+00
+  A37-13_identity_rel          0.000e+00
+  A37-14_violations            0.000e+00

@@ -1,0 +1,16 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir42/R1_task42.py:151: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  q_fp = q_fp + float(q.sum())
+[rand/shard3] 10/100 L=0.0113 (218s)
+[rand/shard3] 20/100 L=0.0032 (434s)
+[rand/shard3] 30/100 L=0.0020 (650s)
+[rand/shard3] 40/100 L=0.0090 (866s)
+[rand/shard3] 50/100 L=0.0112 (1082s)
+[rand/shard3] 60/100 L=0.0056 (1298s)
+[rand/shard3] 70/100 L=0.0236 (1514s)
+[rand/shard3] 80/100 L=0.0821 (1731s)
+[rand/shard3] 90/100 L=0.0007 (1947s)
+[rand/shard3] 100/100 L=0.0402 (2164s)
+[rand/shard3] 完成 100 个实例，2164s

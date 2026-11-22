@@ -1,0 +1,214 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-17 R1（脚本 v1.1 · 卡片 rev 1.3 任务构造）：可寻址读取 + 读侧训练 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:21,  3.55it/s]Loading weights:  88%|████████▊ | 255/290 [00:00<00:00, 839.28it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 710.07it/s]
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (270674 > 131072). Running this sequence through the model will result in indexing errors
+[初始化] ★ 复制 θ₀ 冻结快照到 CPU（KL 参考 + 基座还原源）…
+
+[Stage A]
+[PASS] A1' Freeze C（读梯度非零 / 写梯度精确 0 / 基座逐位不变 / 阴性对照泄漏）: 读梯度非零 6/9；写梯度精确0 12/12；基座逐位不变 True；阴性对照泄漏 3/12
+[PASS] A1' 句柄数 = 2×层数: handles=6 mems=3
+/home/ec2-user/sgmn-loop/dir19/R1_protect.py:552: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  traj.append((float(loss), gnorm))
+[PASS] A2' 训练生效性：Wo/gamma 改变且 gamma 梯度非零；cue 模式下 Wq 梯度恒 0 且不变: Δmax|Wo|=0.004012；Δmax|gamma|=0.003742；‖g_gamma‖=4.61；‖g_Wq‖=0；Δ|Wq|=0
+[PASS] A2' ⑩ Hebbian 核自检：写一步后 W 朝 v 移动且不发散: ‖Wk−v‖：41.8378 → 41.4426（须下降）；‖W‖=29.9（须有限且 < 1e6）
+[PASS] A2' ⑪ 梯度隔离：Hebbian 臂中任务梯度不流入核状态 W，且（非 W4 臂）P_v 梯度恒 0: 核状态 W 的梯度泄漏 0/3（须 0）；P_v 的梯度泄漏 0/3（须 0）
+[PASS] A2' ④ 读阶段冻结写 ⇒ 记忆状态逐位不变: equal=True
+[PASS] A2' ⑤ 跨方向对照探针：未训练的 cue 臂命中 = 1.0（复现 DIR-16 的 C1）: hit=1.0000（DIR-16 的 C1 = 1.0000）；每篇写入条目数=68
+[PASS] A2' ⑥ 槽位不回绕：每篇写入条目数 ≤ N_ENTRIES: 每篇 68 条（N_ENTRIES=128）
+[PASS] A2' ⑦ 评测码留出：训练码与评测码（含干扰码）零重叠: 目标码重叠 0；与干扰码重叠 0
+[PASS] A2' ⑧ 干扰项构造：同线索 + 异码 + 异上下文 + 码在文档末尾（唯一持有其身份的条目）: 线索 = CUE_A（目标与干扰相同）；码不同（全局唯一）；填充切片不同（间隔 ≥ 400 token）⇒ 上下文签名必不同；码为文档最后一个 token ⇒ 邻位条目**不含**码的身份；抽样 4 篇通过=True
+[PASS] A2' ⑨ 目标不可猜中：基座 NLL ≥ 3（否则任务平凡）: base NLL = 15.8384（阈值 3.0）；码为稀有单 token 词
+[PASS] A2' ⑫ 读路径一致性：W0_verbatim 的读出 y 与其来源槽 v_j 的余弦 ≥ 0.999: cos(y, v_j) 均值 = 0.999820（阈值 0.999，9 个槽）
+[PASS] A2'⑬ 真值槽**精确映射**自洽（D54）+ 槽空间寻址命中（未训练臂）: addr(写入序)=1.0000（★ DIR-17 协议下**必然 ≈ 0**（回绕 ⇒ 真值槽≠写入序），非缺陷）；addr(槽空间，精确映射)=1.0000（阈值 0.99）
+[PASS] A2'⑭ 槽表状态**确定性**：陈旧残留数逐篇一致 + 槽号映射 == (写入前 count + j) % N: 陈旧条目数（逐篇/逐层）= [0, 0, 0, 0, 0, 0, 0, 0, 0]（须**完全一致** ⇒ 确定性）；槽号映射违例 = 0 处（须 0）
+[PASS] A2'⑮ P_v 梯度语义：主臂任务损失下 P_v 梯度恒 0；写侧自监督臂 P_v 梯度非零: 主臂 ‖∂L_task/∂P_v‖ = [None, None, None]（须全 0/None）；pvw 臂 ‖∂L_write/∂P_v‖ = [1.0046374797821045, 0.9982835650444031, 0.9846732020378113]（须有非零）
+[PASS] A2'⑯ 维度一致：d_k == d_v == model.config.hidden_size（卡片 D49 已订正）: d_k = d_v = 896（hidden_size）；脚本传 896，非 64
+[PASS] A2'⑯′ 交换性对照可构造：同池、均匀抽样、从未写入的对照 token ≥ 32 个: 抽到 32 个（须 32）；同池、均匀抽样、从未写入
+[PASS] A2'⑰ 键尺度检查：renorm/ortho 的 ‖k‖² ≈ 5（恒定）；linear 的实测 ‖k‖² 远大于 5（D50/D51）: linear: E‖k‖²=['380839.2', '407837.4', '427683.1'] max=['13484455.0', '14463882.0', '15189815.0']；renorm: E‖k‖²=['5.000', '5.000', '5.000']；ortho: E‖k‖²=['5.000', '5.000', '5.000']（⇒ 装置的 pk_scale 标定口径错 ⇒ 真实键尺度 ≫ 5 ⇒ η 窗口不相交）
+[PASS] A2'⑱〔★ 修订 68 零效度自检〕「内容置换」钩子只动内容、不动寻址 ⇒ H14 的对照干净: 键逐位相同=True（置换不动地址 ⇒ H14 的寻址侧干净）；值的配对余弦均值=['-0.0008', '-0.0059', '0.3026', '0.0011', '-0.0086']（须 < 0.99 ⇒ 置换确实换了内容）
+[PASS] A4' 训练不发散（损失有限、max|Wo| 有限、gamma 有限）: loss 首/末 = 15.8405/14.3603；max|Wo|=0.1631；gamma 终值=[0.0537, 0.0537, 0.0505]
+[PASS] A19-1 基座冻结对照：联合训练后基座参数与初始参数**逐位相同**: max|θ−θ₀| = 0.000e+00（须精确为 0）
+[PASS] A19-2 基座可训：被训参数集合**非空**且其梯度**非零有限**: 可训基座参数数 = 290；有梯度的 = 290；梯度范数 min/max = 3.618e-02/3.753e+02；全部有限 = True；存在非零 = True
+[PASS] A19-3 保护旋钮的生效性检查**双向**：放开/关闭都改变被训集合；低秩投影后残差 ≈ 0: none=0 all=290 layers=72 lowrank=169（须 0<layers<all）；低秩残差 投影前=0.000e+00 扰动后=1.167e+01 投影后=7.070e-05（须 投影后 < 1e-4 且 扰动后 > 1e-6 ⇒ 双向可辨）
+[PASS] A19-4 训练数据与基座保持评测数据的**文档窗口集合**交集为空（逐位断言）: 训练窗口数=39827；探针窗口数=4226；**交集=0（须 0）**；两文件前缀不同=True（train.txt vs valid.txt）
+[PASS] A19-5 交换性对照 token 仍从码池**均匀抽样**（D53 教训：不得取最稀有者）: 抽到 32 个、去重后 32 个（须 32 且互不相同）
+[PASS] A19-6 记忆寻址指标 addr_slot 仍用**精确槽号映射**（D54：写入序 → 槽号可精确预测）: 写入记录数 == 槽号记录数 ⇒ 精确映射可用
+[PASS] A19-7 基座保持的 NLL 口径在挂记忆 vs 不挂记忆两个对照下**逐位可算**: PPL(挂记忆)=2.505492；PPL(不挂记忆)=2.506050；差=-0.000558（须非 0 ⇒ 挂记忆确实改变了基座输出）
+[PASS] A19-8 D_kv 漂移度量在「零训练步」对照下必须为 **0**（度量自检）: D_kv(零训练两次采样) = 0.000e+00（须 < 1e-9）
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:42,  2.82it/s]Loading weights:  97%|█████████▋| 281/290 [00:00<00:00, 803.08it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 635.06it/s]
+[PASS] A19-9 〔KL 正则生效性 · 双向〕启用 ⇒ 项非零且改变基座梯度；禁用 ⇒ 不贡献该梯度: KL 序列(启用) = [0.0, 0.135443, 0.583149]（须非零、有限）；基座梯度范数 启用=666.342197 vs 禁用=1162.240911（须不同 ⇒ 双向可辨）；★ **KL 是被惩罚项，其本身不要求下降**（原断言的期望写错 ⇒ 缺陷 D69）
+[PASS] A19-10〔内容置换只动内容、不动寻址〕⇒ H2′★ 的对照干净: 键逐位相同=True（置换不动地址 ⇒ H2′ 的寻址侧干净）；值的配对余弦均值=['-0.0009', '-0.0074', '0.3026', '0.0007', '-0.0104']（须 < 0.99 ⇒ 置换确实换了内容）
+
+[Stage A 闸] 共 30 项，FAIL 0 项 ⇒ 全部通过
+
+[主循环]
+
+[规格] smoke=True  n_train=40  n_eval=12  seeds=[20261028, 20261104]  臂数=11
+
+[主循环] ★ 复用增量结果：10 臂 / 10 个 (臂,种子) 组合已完成 ⇒ 跳过
+  seed=20261028 E5_base                    (增量复用) nll=14.1687 ppl=2.7779
+  seed=20261028 E5_base_mem                (增量复用) nll=14.1272 ppl=2.7779
+  seed=20261028 N1_frozen_base             (增量复用) nll=11.0017 ppl=2.7779
+  seed=20261028 N1_nowrite                 (增量复用) nll=11.0239 ppl=2.7779
+  seed=20261028 N1_content_wrong           (增量复用) nll=11.0016 ppl=2.7779
+  seed=20261028 N1_earlystop               (增量复用) nll=11.0017 ppl=2.7779
+  seed=20261028 N2_kl                      (增量复用) nll=10.8527 ppl=2.7833
+  seed=20261028 N3_lowrank                 (增量复用) nll=10.9904 ppl=2.7774
+  seed=20261028 N4_low_layers              (增量复用) nll=10.7494 ppl=2.7869
+  seed=20261028 N5_disjoint                (增量复用) nll=11.6451 ppl=2.7869
+/home/ec2-user/sgmn-loop/dir19/R1_protect.py:1460: RuntimeWarning: Mean of empty slice
+  f"hit={np.nanmean([r.get('hit', np.nan) for r in rows]):.4f} "
+/home/ec2-user/sgmn-loop/dir19/R1_protect.py:1461: RuntimeWarning: Mean of empty slice
+  f"addr={np.nanmean([r.get('addr', np.nan) for r in rows]):.4f} "
+/home/ec2-user/sgmn-loop/dir19/R1_protect.py:1462: RuntimeWarning: Mean of empty slice
+  f"addr_slot={np.nanmean([r.get('addr_slot', np.nan) for r in rows]):.4f} "
+/home/ec2-user/sgmn-loop/dir19/R1_protect.py:1463: RuntimeWarning: Mean of empty slice
+  f"fid={np.nanmean([r.get('fid', np.nan) for r in rows]):.4f} "
+/home/ec2-user/sgmn-loop/dir19/R1_protect.py:1464: RuntimeWarning: Mean of empty slice
+  f"fid_true={np.nanmean([r.get('fid_true', np.nan) for r in rows]):.4f} "
+/home/ec2-user/sgmn-loop/dir19/R1_protect.py:1465: RuntimeWarning: Mean of empty slice
+  f"cos_y_vtrue={np.nanmean([r.get('cos_y_vtrue', np.nan) for r in rows]):.4f} "
+/home/ec2-user/sgmn-loop/dir19/R1_protect.py:1468: RuntimeWarning: Mean of empty slice
+  f"base_drift={np.nanmean([_num(r.get('base_drift')) for r in rows]):.4f} "
+/home/ec2-user/sgmn-loop/dir19/R1_protect.py:1469: RuntimeWarning: Mean of empty slice
+  f"kl_last={np.nanmean([_num(r.get('kl_last')) for r in rows]):.4f}", flush=True)
+  seed=20261028 E5_base_cap                nll=11.8497 lp=-11.8497 hit=nan addr=nan addr_slot=nan fid=nan fid_true=nan cos_y_vtrue=nan ppl=3.0004 dkv=0.0000 base_drift=nan kl_last=nan
+  seed=20261104 E5_base                    nll=11.6752 lp=-11.6752 hit=nan addr=nan addr_slot=nan fid=nan fid_true=nan cos_y_vtrue=nan ppl=3.0004 dkv=0.0000 base_drift=nan kl_last=nan
+  seed=20261104 E5_base_mem                nll=11.6476 lp=-11.6476 hit=1.0000 addr=1.0000 addr_slot=1.0000 fid=nan fid_true=nan cos_y_vtrue=0.9997 ppl=3.0004 dkv=0.0000 base_drift=0.0000 kl_last=0.0000
+  seed=20261104 N1_frozen_base             nll=10.8978 lp=-10.8978 hit=0.0000 addr=0.0000 addr_slot=0.9722 fid=0.0049 fid_true=0.0040 cos_y_vtrue=0.0043 ppl=3.0004 dkv=0.0000 base_drift=0.0000 kl_last=0.0000
+  seed=20261104 N1_nowrite                 nll=10.8975 lp=-10.8975 hit=0.0000 addr=0.0000 addr_slot=0.9722 fid=0.0028 fid_true=0.0019 cos_y_vtrue=0.0022 ppl=3.0004 dkv=0.0000 base_drift=0.0000 kl_last=0.0000
+  seed=20261104 N1_content_wrong           nll=10.8978 lp=-10.8978 hit=0.0278 addr=0.0000 addr_slot=0.9722 fid=0.0035 fid_true=0.0034 cos_y_vtrue=0.0035 ppl=3.0004 dkv=0.0000 base_drift=0.0000 kl_last=0.0000
+  seed=20261104 N1_earlystop               nll=10.8978 lp=-10.8978 hit=0.0000 addr=0.0000 addr_slot=0.9722 fid=0.0049 fid_true=0.0040 cos_y_vtrue=0.0043 ppl=3.0004 dkv=0.0000 base_drift=0.0000 kl_last=0.0000
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:40,  2.88it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 698.41it/s]
+[W1106 08:00:08.390890954 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6094848, total: 15637086208).
+[W1106 08:00:08.751032248 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:08.981368613 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:09.333710670 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:09.572582438 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6094848, total: 15637086208).
+[W1106 08:00:09.926498993 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:09.165604512 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:10.520247925 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:10.765829675 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:10.117859222 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:11.359168136 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:11.712888270 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:11.953710353 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:12.306439801 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:12.547181040 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:12.897304841 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:12.137543788 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:13.486156163 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:13.726923237 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:13.078601740 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:14.320239541 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:14.673310898 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:14.911562201 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6094848, total: 15637086208).
+[W1106 08:00:14.261671106 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:15.502194021 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6094848, total: 15637086208).
+[W1106 08:00:15.854226075 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:15.094468173 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6094848, total: 15637086208).
+[W1106 08:00:16.446665247 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:16.685705090 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:16.037833238 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:16.276358001 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:17.627021213 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:17.866216537 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:17.217477447 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:18.458437380 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:18.810400327 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:18.048563076 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:19.404792204 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:19.647810019 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:19.005859096 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:19.252223988 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:20.614796728 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:20.862781700 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:20.219558322 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:21.463214757 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:21.818143568 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:21.057267856 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:22.410552499 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:22.652715256 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:22.005362572 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:22.246076647 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:23.599810535 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:23.842605526 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:23.195715500 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:24.437620982 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:24.795761101 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:24.035466415 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:25.389067118 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:25.631567503 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:25.984588325 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:25.226331485 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:26.578410407 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:26.818280735 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:26.169913089 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:27.409792594 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:27.760727672 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:27.999936870 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:28.350348890 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:28.592359086 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:28.949178827 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:28.189871492 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:29.540492054 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:29.781281442 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:29.133828612 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:30.373737022 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 6094848, total: 15637086208).
+[W1106 08:00:30.727370300 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:30.967601763 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1106 08:00:31.319451343 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 2097152 bytes (free: 1900544, total: 15637086208).
+[W1106 08:00:31.559895571 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+  seed=20261104 N2_kl                      nll=11.5517 lp=-11.5517 hit=0.0000 addr=0.0000 addr_slot=0.9444 fid=0.0078 fid_true=0.0058 cos_y_vtrue=0.0073 ppl=2.7699 dkv=0.0009 base_drift=0.0197 kl_last=0.0284
+  seed=20261104 N3_lowrank                 nll=11.3104 lp=-11.3104 hit=0.0000 addr=0.0000 addr_slot=0.9444 fid=0.0024 fid_true=0.0010 cos_y_vtrue=0.0021 ppl=2.7771 dkv=0.0000 base_drift=0.0011 kl_last=0.0000
+  seed=20261104 N4_low_layers              nll=11.2335 lp=-11.2335 hit=0.0000 addr=0.0000 addr_slot=0.9167 fid=-0.0002 fid_true=-0.0008 cos_y_vtrue=-0.0004 ppl=2.7628 dkv=0.0016 base_drift=0.0050 kl_last=0.0000
+  seed=20261104 N5_disjoint                nll=12.4069 lp=-12.4069 hit=0.0278 addr=0.0000 addr_slot=0.9722 fid=-0.0019 fid_true=-0.0025 cos_y_vtrue=-0.0022 ppl=2.7628 dkv=0.0000 base_drift=0.0000 kl_last=0.0000
+  seed=20261104 E5_base_cap                nll=11.5068 lp=-11.5068 hit=nan addr=nan addr_slot=nan fid=nan fid_true=nan cos_y_vtrue=nan ppl=3.0334 dkv=0.0000 base_drift=nan kl_last=nan
+
+[汇总与判据]
+  E5_base                    nll=12.9220 lp=-12.9220 hit=None addr=None addr_slot=None fid=None fid_true=None cos_y_vtrue=None ctrl=13.179447849591574
+/home/ec2-user/sgmn-loop/dir19/R1_protect.py:1490: RuntimeWarning: Mean of empty slice
+  "fid": (float(np.nanmean(fids)) if fids else None),
+/home/ec2-user/sgmn-loop/dir19/R1_protect.py:1491: RuntimeWarning: Mean of empty slice
+  "fid_true": (float(np.nanmean(fidt)) if fidt else None),
+  E5_base_mem                nll=12.8874 lp=-12.8874 hit=1.0 addr=1.0 addr_slot=1.0 fid=nan fid_true=nan cos_y_vtrue=0.9998337808582519 ctrl=13.184312860171
+  N1_frozen_base             nll=10.9498 lp=-10.9498 hit=0.0 addr=0.0 addr_slot=0.8194444444444443 fid=-0.0011578166967309593 fid_true=-0.0003642783154241946 cos_y_vtrue=0.002895510939803595 ctrl=11.003496448198954
+  N1_nowrite                 nll=10.9607 lp=-10.9607 hit=0.0 addr=0.0 addr_slot=0.8055555555555555 fid=-0.002543708766299662 fid_true=-0.0019114736088441636 cos_y_vtrue=0.0014881519439061068 ctrl=11.01656707127889
+  N1_content_wrong           nll=10.9497 lp=-10.9497 hit=0.027777777777777776 addr=0.0 addr_slot=0.8194444444444443 fid=0.008248492566862196 fid_true=0.008568574269399202 cos_y_vtrue=0.008565185623916073 ctrl=11.003490765889486
+  N1_earlystop               nll=10.9498 lp=-10.9498 hit=0.0 addr=0.0 addr_slot=0.8194444444444443 fid=-0.0011578166967309593 fid_true=-0.0003642783154241946 cos_y_vtrue=0.002895510939803595 ctrl=11.003496448198954
+  N2_kl                      nll=11.2022 lp=-11.2022 hit=0.0 addr=0.0 addr_slot=0.8055555555555555 fid=-0.0004330448387514075 fid_true=-0.0002550953949038462 cos_y_vtrue=0.0036293189008978917 ctrl=11.195802450180054
+  N3_lowrank                 nll=11.1504 lp=-11.1504 hit=0.0 addr=0.0 addr_slot=0.8055555555555555 fid=-0.002358285314080098 fid_true=-0.0018651084814741302 cos_y_vtrue=0.001862855595795231 ctrl=11.135287602742514
+  N4_low_layers              nll=10.9914 lp=-10.9914 hit=0.0 addr=0.0 addr_slot=0.8194444444444443 fid=-0.005822496367424417 fid_true=-0.0035432427895203647 cos_y_vtrue=-0.0008752096683666523 ctrl=10.99117386341095
+  N5_disjoint                nll=12.0260 lp=-12.0260 hit=0.013888888888888888 addr=0.0 addr_slot=0.9027777777777777 fid=-0.0031838175814805757 fid_true=-0.003569778196833795 cos_y_vtrue=-0.0035067002107906664 ctrl=11.56797436873118
+  E5_base_cap                nll=11.6782 lp=-11.6782 hit=None addr=None addr_slot=None fid=None fid_true=None cos_y_vtrue=None ctrl=11.721957524617514
+[PASS] H1′ 〔记忆收益〕N1_frozen_base 相对挂记忆零训练(E5_base_mem)有显著收益: Δ(Δnll)=+1.937662（阈值 > 0.5） t=4.47 p=0.00661 pos=19/24 逐种子=['+3.1256', '+0.7498']
+[PASS] H1′b 〔记忆收益 vs 纯基座〕N1_frozen_base 相对 E5_base 有显著收益: Δ(Δnll)=+1.972210（阈值 > 0.5） t=4.51 p=0.00661 逐种子=['+3.1670', '+0.7774']；benefit=+1.9722 nats
+[FAIL] H2′★ 〔★ 内容性 · 记忆内对照〕内容正确(N1_frozen_base) 显著优于 内容错误(N1_content_wrong): Δ(Δnll)=-0.000028（阈值 > 0.5） t=-1.18 p≈0.238 n=24 逐种子=['-0.0001', '-0.0000']；★ **本判据无零效度问题**（两臂记忆基础设施相同 ⇒ 内容被换掉 ⇒ 差异只可能来自内容）
+[PASS] H2′″ 〔★ 报告项〕交换性对照口径的超额（Δcode−Δctrl）—— 本轮内容判据**不用**该口径: N1_frozen_base 的超额(Δcode−Δctrl)=-0.2037 nats p≈0.569 n=24；★ DIR-19 的内容判据用 **H2′★（记忆内对照）** ⇒ 天然无零效度问题 ⇒ 本项仅供跨方向比较
+[PASS] H3′ 〔保护有效〕N1_frozen_base 的基座退化 相对 挂记忆零训练 无显著退化: ΔPPL(N1)=+0.0000 nats；ΔPPL(挂记忆零训练)=+0.0000 nats；差=+0.0000（|差| < 0.05 且 p≥0.05）t=0.00 p≈1 n=2 逐种子=['+0.0000', '+0.0000']
+[FAIL] H4′ 〔保护非平凡〕存在旋钮 R∈{N2,N3,N4} 使基座退化显著低于 N1_frozen_base 且收益保留 ≥ 90%: （无可用旋钮读数） ⇒ ★ 无旋钮满足
+[FAIL] H5′ 〔非早停可解〕保护旋钮的收益保留率 > 早停对照(N1_earlystop)的收益保留率: 旋钮最优保留率=0.9789（N4_low_layers） vs 早停对照保留率=1.0000 ⇒ 保护 ≈ 早停
+[PASS] H6′ 〔D_kv 度量有效〕可训基座臂的 D_kv > 0，零训练臂的 D_kv = 0: D_kv(可训基座 N3)=6.292201578617096e-05；D_kv(零训练 E5_base_mem)=0.0；D_kv(基座冻结 N1_frozen_base)=0.0（基座冻结 ⇒ 键分布不动 ⇒ 应为 0）
+[FAIL] H7′ 〔不伤基座〕所有臂的基座困惑度退化 ≤ 事先声明的界 0.10 nats: 越界臂：[('E5_base_cap', 0.1277697918461813)]；各臂 ΔPPL=E5_base:+0.0000, E5_base_cap:+0.1278, E5_base_mem:+0.0000, N1_content_wrong:+0.0000, N1_earlystop:+0.0000, N1_frozen_base:+0.0000, N1_nowrite:+0.0000, N2_kl:-0.1126, N3_lowrank:-0.1119, N4_low_layers:-0.1143, N5_disjoint:-0.1143
+\n【DIR-19 汇总】
+  E5_base              nll=12.9220 benefit=+0.0000 PPL=2.88913704367245 ΔPPL=+0.0000 dkv=0.0 base_drift=None 保留率=0.000
+  E5_base_cap          nll=11.6782 benefit=+1.2437 PPL=3.0169068355186313 ΔPPL=+0.1278 dkv=0.0 base_drift=None 保留率=0.631
+  E5_base_mem          nll=12.8874 benefit=+0.0345 PPL=2.88913704367245 ΔPPL=+0.0000 dkv=0.0 base_drift=0.0 保留率=0.018
+  N1_content_wrong     nll=10.9497 benefit=+1.9722 PPL=2.88913704367245 ΔPPL=+0.0000 dkv=0.0 base_drift=0.0 保留率=1.000
+  N1_earlystop         nll=10.9498 benefit=+1.9722 PPL=2.88913704367245 ΔPPL=+0.0000 dkv=0.0 base_drift=0.0 保留率=1.000
+  N1_frozen_base       nll=10.9498 benefit=+1.9722 PPL=2.88913704367245 ΔPPL=+0.0000 dkv=0.0 base_drift=0.0 保留率=1.000
+  N1_nowrite           nll=10.9607 benefit=+1.9613 PPL=2.88913704367245 ΔPPL=+0.0000 dkv=0.0 base_drift=0.0 保留率=0.994
+  N2_kl                nll=11.2022 benefit=+1.7198 PPL=2.7765522900749655 ΔPPL=-0.1126 dkv=0.001650387013796717 base_drift=0.019774985499680042 保留率=0.872
+  N3_lowrank           nll=11.1504 benefit=+1.7715 PPL=2.777223975985658 ΔPPL=-0.1119 dkv=6.292201578617096e-05 base_drift=0.0011580376303754747 保留率=0.898
+  N4_low_layers        nll=10.9914 benefit=+1.9305 PPL=2.774871706495098 ΔPPL=-0.1143 dkv=0.0014973492361605167 base_drift=0.011164986062794924 保留率=0.979
+  N5_disjoint          nll=12.0260 benefit=+0.8959 PPL=2.774871706495098 ΔPPL=-0.1143 dkv=0.0 base_drift=0.0 保留率=0.454
+Traceback (most recent call last):
+  File "/home/ec2-user/sgmn-loop/dir19/R1_protect.py", line 1729, in <module>
+    main()
+    ~~~~^^
+  File "/home/ec2-user/sgmn-loop/dir19/R1_protect.py", line 1721, in main
+    res["summary_pass"] = {"passed": passed, "total": len(res["checks"])}
+                                     ^^^^^^
+NameError: name 'passed' is not defined. Did you mean: 'paired'?

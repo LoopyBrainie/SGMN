@@ -1,0 +1,109 @@
+神经网络多尺度方程的完整推导：从微观到宏观
+
+0. 总体框架与推导路线
+
+以下从变量定义出发，对每一层级、每一个方程的构建过程进行完整的数学推导。推导遵循三条主线：极限操作（连续时间极限、无穷宽度极限）→ 方程的严格化（从离散更新到连续 PDE/SDE）→ 宏观约化（矩闭合、谱分解、对称性分析）。唯象方程将明确标注其来源。
+
+1. 微观层级：参数受力与前向传递
+
+1.1 前向传播动力学与 Neural ODE
+
+变量定义：设 L 层网络，第 l 层的隐藏状态为 z_l \in \mathbb{R}^{d_l}，权重矩阵 W_l \in \mathbb{R}^{d_{l+1} \times d_l}，偏置 b_l \in \mathbb{R}^{d_{l+1}}，激活函数 \sigma(\cdot)。离散前向映射为：
+
+z_{l+1} = \sigma(W_l z_l + b_l), \quad l = 0, 1, \dots, L-1
+
+连续层级极限推导：考虑残差形式 z_{l+1} = z_l + f_{\theta_l}(z_l)，设层间步长 h = 1/L。定义连续“深度时间” t = l/L \in [0,1]，令 z(t) \equiv z_{l}，则：
+
+\frac{z(t+h) - z(t)}{h} = L \cdot f_{\theta}(z(t))
+
+当 L \to \infty（即 h \to 0）时，左边趋于 \frac{dz}{dt}，右边需引入适当的缩放使 L \cdot f_{\theta}(z) 收敛到一个 O(1) 的向量场。最终得到 Neural ODE：
+
+\frac{dz(t)}{dt} = f_\theta(z(t), t), \quad z(t_0) = z_0
+
+其前向解为积分形式：
+
+z(t_1) = z_0 + \int_{t_0}^{t_1} f_\theta(z(t), t)\, dt
+
+这一连续深度表述统一了 ResNet 的前向传播与微分方程理论。Chen et al. (2018) 首次系统提出该框架，核心动机是 ResNet 的跳连接可视为 Euler 离散化的一种特例。
+
+1.2 参数更新动力学：从 SGD 离散到连续时间
+
+变量定义：设参数 w \in \mathbb{R}^d，批大小 B，小批量损失 \mathcal{L}_B(w) = \frac{1}{B}\sum_{i \in \mathcal{B}} \ell(f(x_i;w), y_i)，学习率 \eta。离散 SGD 更新为：
+
+w_{k+1} = w_k - \eta \nabla \mathcal{L}_{B_k}(w_k)
+
+将 \nabla \mathcal{L}_B(w) 分解为总体梯度与噪声：
+
+\nabla \mathcal{L}_B(w) = \nabla \mathcal{R}(w) + \xi_k(w)
+
+其中 \mathcal{R}(w) = \mathbb{E}_{(x,y)\sim\mathcal{D}}[\ell(f(x;w), y)] 为总体风险，\xi_k 为零均值、协方差 \Sigma(w) 的梯度噪声。
+
+连续时间极限：令 \eta \to 0，同时将离散步数 k 映射为连续时间 t = k\eta。由中心极限定理，\sqrt{\eta}\,\xi_k 收敛到标准 Wiener 过程的增量，得到 Langevin SDE：
+
+dw_t = -\nabla \mathcal{R}(w_t)\, dt + \sqrt{\eta\, \Sigma(w_t)}\, dB_t
+
+其中 B_t 为标准布朗运动。这一推导的关键假设是：梯度噪声在参数空间中是“白”的（即时间上不相关），且学习率足够小以保证离散更新与连续 SDE 的弱收敛。若考虑有限学习率下的二阶修正，Fokker-Planck 方程将偏离标准 Langevin 形式，出现 O(\eta^2) 的额外项。
+
+2. 介观层级：概率分布、统计场与连续极限
+
+介观层级不再追踪单个权重 w_i，而是追踪参数空间的概率密度 P(w,t) 或经验测度 \mu^N(t)。
+
+2.1 学习率极限 \eta \to 0：Fokker-Planck 方程
+
+变量定义：参数空间分布 P(w,t)，漂移项 -\nabla \mathcal{R}(w)，扩散矩阵 D(w) = \eta \Sigma(w)。
+
+从 Langevin SDE 到 FP 方程：给定 SDE dw_t = a(w_t)dt + b(w_t)dB_t，概率密度 P(w,t) 的演化由 Itô 公式和概率流守恒导出。对于 a(w) = -\nabla \mathcal{R}(w)，b(w) = \sqrt{\eta\Sigma(w)}：
+
+\frac{\partial P}{\partial t} = \nabla \cdot \big(P \nabla \mathcal{R}\big) + \frac{\eta}{2} \nabla \cdot \big(\Sigma \nabla P\big)
+
+此即 Fokker-Planck 输运方程。第一项为漂移项（损失函数引力），第二项为扩散项（小批量采样噪声）。
+
+与神经科学的同构性：在计算神经科学中，QIF/LIF 神经元群体的膜电位分布 P(V,t) 在扩散近似下满足结构完全相同的 FP 方程。神经元 FP 方程的推导从膜电位随机微分方程出发：\tau dV = (-V + \mu)dt + \sigma dW_t，通过 Markov 过程 Chapman-Kolmogorov 方程在 \Delta t \to 0 下取极限得到。两者的数学结构一致：漂移项对应确定性动力学（损失梯度/膜电位漏电），扩散项对应噪声（小批量采样/突触输入波动）。
+
+2.2 无穷宽度极限 N \to \infty（一）：平均场极限
+
+变量定义：两层网络 f(x) = \frac{1}{N}\sum_{i=1}^N c_i \sigma(a_i^\top x + b_i)，神经元参数 \theta_i = (c_i, a_i, b_i) \in \mathbb{R}^{d+2}。经验测度 \mu^N(t) = \frac{1}{N}\sum_{i=1}^N \delta_{\theta_i(t)}。
+
+极限推导：在 1/N 均场缩放下，当 N \to \infty 时，由 Propagation of Chaos（大数定律的推广），经验测度 \mu^N(t) 弱收敛到连续密度 \rho(\theta, t) \in \mathcal{P}(\mathbb{R}^{d+2})。每个神经元的梯度更新 \dot{\theta}_i = -\eta \nabla_\theta \ell(f(x;\theta_i),y) 在均场极限下变为连续密度的输运方程。
+
+由 Mei, Montanari & Nguyen (2018) 的里程碑工作，该极限对应 L^2-Wasserstein 空间上的梯度流：
+
+\partial_t \rho_t = \nabla \cdot \left( \rho_t \nabla \frac{\delta \mathcal{R}[\rho_t]}{\delta \rho_t} \right) = -\nabla_{W_2} \mathcal{R}[\rho_t]
+
+其中总体风险泛函为：
+
+\mathcal{R}[\rho] = \mathbb{E}_{(x,y)\sim\mathcal{D}} \left[ \ell\left( \int \sigma_\theta(x)\, \rho(d\theta),\, y \right) \right]
+
+这一方程在数学上等价于 McKean-Vlasov 连续性方程。其核心特征是：密度 \rho_t 的演化通过风险泛函 \mathcal{R}[\rho] 自洽地依赖于自身（自一致平均场），因此方程是非线性、非局部的。Propagation of Chaos 论证确保：在 N \to \infty 时，有限粒子系统的经验测度收敛到该确定性 PDE 的解。
+
+与物理学的对应：该方程在结构上对应 Vlasov 方程（无碰撞 Boltzmann 方程）在梯度流框架下的变体。物理中的 Vlasov 方程描述无碰撞等离子体中粒子分布函数的演化，其中自洽场通过 Poisson 方程依赖密度。神经网络的均场方程中，自洽场通过损失函数的梯度依赖密度。
+
+2.3 无穷宽度极限 N \to \infty（二）：NTK 极限
+
+变量定义：网络输出 f(\theta, x)，参数 \theta \in \mathbb{R}^P。参数空间梯度流（\eta \to 0 连续时间极限）：
+
+\frac{d\theta_t}{dt} = -\nabla_\theta \mathcal{R}(\theta_t)
+
+函数空间动力学的推导：由链式法则，网络输出 f_t(x) = f(\theta_t, x) 的演化为：
+
+\frac{df_t(x)}{dt} = \nabla_\theta f(\theta_t, x)^\top \frac{d\theta_t}{dt} = -\nabla_\theta f(\theta_t, x)^\top \nabla_\theta \mathcal{R}(\theta_t)
+
+对总体风险 \mathcal{R}(\theta) = \frac{1}{2}\mathbb{E}_{x,y}[(f(\theta,x)-y)^2]，梯度为 \nabla_\theta \mathcal{R} = \mathbb{E}_{x,y}[(f(\theta,x)-y)\nabla_\theta f(\theta,x)]。代入得：
+
+\frac{df_t(x)}{dt} = -\mathbb{E}_{x',y'}\left[ (f_t(x')-y') \cdot \nabla_\theta f(\theta_t, x)^\top \nabla_\theta f(\theta_t, x') \right]
+
+定义 神经切向核（NTK） ：
+
+\Theta_t(x, x') = \nabla_\theta f(\theta_t, x)^\top \nabla_\theta f(\theta_t, x')
+
+则函数空间动力学退化为线性泛函微分方程：
+
+\frac{df_t(x)}{dt} = -\int \Theta_t(x, x')\, (f_t(x') - y(x'))\, dP(x',y')
+
+NTK 冻结定理：Jacot, Gabriel & Hongler (2018) 证明：在标准 O(1/\sqrt{N}) 参数化下，当 N \to \infty 时，参数在训练过程中的位移 \|\theta_t - \theta_0\| = O(1/\sqrt{N}) \to 0，而 NTK 在整个训练过程中冻结为常核：
+
+\Theta_t(x, x') \equiv \Theta_0(x, x') \quad \forall t \geq 0
+
+该结论基于以下事实：NTK 对参数的梯度 \nabla_\theta \Theta 的范数随宽度衰减（对两层 ReLU 网络，\|\nabla_\theta \Theta\| = O(1/\sqrt{N})），因此当 N \to \infty 时核函数不随训练变化。这一极限对应“懒惰训练（Lazy Training）”机制：参数在切空间线性化，但网络输出仍可发生显著变化。
+
+与神经科学的同构性：NTK 极限对应 Kuramoto 振子模型在 Ott-Antonsen (OA) 流形上的精确约化。OA 约化证明：在特定条件下，无穷多耦合振子的宏观序参量

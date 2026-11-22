@@ -1,0 +1,148 @@
+{
+  "dir": "DIR-04",
+  "round": "R1",
+  "stage": "A",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "dtype": "torch.float32",
+  "device": "cuda",
+  "checks": [
+    {
+      "name": "A1a  G = alpha(Wk-v)k^T + lambda(W-W^0) vs autograd",
+      "passed": true,
+      "detail": "最大相对误差 0.000e+00",
+      "tolerance": "rel<1e-6",
+      "value": 0.0
+    },
+    {
+      "name": "A1b  因子化二阶展开 (v2.4 §3.3)",
+      "passed": true,
+      "detail": "最大相对误差 1.409e-07",
+      "tolerance": "rel<1e-6",
+      "value": 1.4091425271089975e-07
+    },
+    {
+      "name": "A1c  同步步与异步步确实不同（确认走同步支）",
+      "passed": true,
+      "detail": "两种步长 Delta W 最大差 9.569e-04",
+      "tolerance": ">1e-9",
+      "value": 0.0009568501263856888
+    },
+    {
+      "name": "A1d  k 取 t-1 输入、v 取 t 输入（v2.4 §2.3）",
+      "passed": true,
+      "detail": "首个时间步未写入: True；写入后 U 与手算值相对误差 0.000e+00",
+      "tolerance": "rel<1e-5",
+      "value": 0.0
+    },
+    {
+      "name": "A1e  读用 W_t、写产生 W_{t+1}（v2.4 §2.2 顺序）",
+      "passed": true,
+      "detail": "读后 W 未变: True；写后 W 已变: True",
+      "tolerance": "顺序正确",
+      "value": null
+    },
+    {
+      "name": "A2a  dL/dW|_read 精确为 0（None 或逐元素 0）",
+      "passed": true,
+      "detail": "W.grad max|.| = 0.0（grad 为 None=True；None 即'从未接入计算图'，同样满足'梯度为零'）",
+      "tolerance": "None 或精确 0",
+      "value": 0.0
+    },
+    {
+      "name": "A2b  读支路的输入梯度仍存在（截断只断 W，不断 q）",
+      "passed": true,
+      "detail": "q.grad max|.| = 1.974e+00",
+      "tolerance": ">1e-8",
+      "value": 1.9735573530197144
+    },
+    {
+      "name": "A2c  前向值仍参与计算（sg 不是前向断开）",
+      "passed": true,
+      "detail": "把 W 改变 0.1 量级后，m 的变化 3.437e-01（非 0 => 前向确实用了 W 的值）",
+      "tolerance": ">1e-8",
+      "value": 0.34366512298583984
+    },
+    {
+      "name": "A5  非退化点：gamma!=0, U,V!=0, ||W-W^0||>0",
+      "passed": true,
+      "detail": "gamma=[0.05000000074505806, 0.05000000074505806, 0.05000000074505806]；U,V 非零:True；||W-W0||>0:True",
+      "tolerance": "全部非零",
+      "value": [
+        0.05000000074505806,
+        0.05000000074505806,
+        0.05000000074505806
+      ]
+    },
+    {
+      "name": "A3a  冻结基座：参数 requires_grad=False 且 backward 后无梯度",
+      "passed": true,
+      "detail": "全部冻结:True；梯度全为 None/0:True",
+      "tolerance": "精确 0 / None",
+      "value": null
+    },
+    {
+      "name": "A3b  基座主路径仍传梯度（低层读参数拿到非零梯度）",
+      "passed": true,
+      "detail": "有非零梯度的读参数 9/9 个：['L8.Wq', 'L8.Wo', 'L8.gamma', 'L12.Wq', 'L12.Wo', 'L12.gamma']",
+      "tolerance": ">0 个",
+      "value": 9
+    },
+    {
+      "name": "A3c  优化器步进后冻结基座 .data 逐位不变",
+      "passed": true,
+      "detail": "全部 290 个基座张量逐位相同: True",
+      "tolerance": "bitwise 相同",
+      "value": null
+    },
+    {
+      "name": "A2d  模型级：写入通道梯度精确为 0（None 或 0）",
+      "passed": true,
+      "detail": "写入参数 15 个，最大梯度 0.000e+00",
+      "tolerance": "精确 0",
+      "value": null
+    },
+    {
+      "name": "A4  阴性对照：去掉 sg 后写入通道必须拿到非零梯度（检查有区分力）",
+      "passed": true,
+      "detail": "9/15 个写入参数拿到非零梯度：['L8.U', 'L8.V', 'L8.W0', 'L12.U', 'L12.V', 'L12.W0', 'L16.U', 'L16.V']",
+      "tolerance": ">0 个（否则检查恒真、无效）",
+      "value": 9
+    }
+  ],
+  "meta": {
+    "model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "n_layers": 24,
+    "hidden_size": 896,
+    "mount": [
+      8,
+      12,
+      16
+    ],
+    "d_k": 896,
+    "d_v": 896,
+    "r": 8,
+    "alpha": 1.0,
+    "lambda": 0.05,
+    "eta": 0.01,
+    "gamma": 0.05,
+    "dtype": "torch.float32",
+    "seq_len": 32,
+    "batch": 4,
+    "read_params_with_grad": [
+      "L8.Wq",
+      "L8.Wo",
+      "L8.gamma",
+      "L12.Wq",
+      "L12.Wo",
+      "L12.gamma",
+      "L16.Wq",
+      "L16.Wo",
+      "L16.gamma"
+    ]
+  },
+  "summary": {
+    "passed": 14,
+    "total": 14,
+    "stage_a_passed": true
+  }
+}

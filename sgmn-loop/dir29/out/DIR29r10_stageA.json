@@ -1,0 +1,49 @@
+{
+ "pass": true,
+ "checks": {
+  "A29-1 worked-example": {
+   "pass": true,
+   "J11,J12,J22": [
+    -0.21499999999999986,
+    -2.13,
+    -0.21499999999999986
+   ],
+   "det": -4.4906749999999995
+  },
+  "A29-2 jacobian-fd": {
+   "pass": true,
+   "worst_rel": 3.289526712704271e-09
+  },
+  "A29-3 cross-device-anchor": {
+   "pass": true,
+   "eta_c_full_g0": 0.49331056103257254,
+   "anchor": 0.49090552
+  },
+  "A29-4 triangular-split": {
+   "pass": true,
+   "d_full": 0.00464721274458571,
+   "d_fac": 0.005176802019887302
+  },
+  "A29-5 noise-present": {
+   "pass": true,
+   "median_noisy": 0.4763698593471969,
+   "median_noiseless": 0.0,
+   "ratio": 4.763698593471969e+299
+  },
+  "A29-6 determinism": {
+   "pass": true,
+   "run1": 61.889415890659514,
+   "run2": 61.889415890659514
+  },
+  "A29-7 col-seed": {
+   "pass": true,
+   "max_abs_diff": 0.0
+  },
+  "A29-8 stream-independence": {
+   "pass": true,
+   "corr_a_b1": 0.0009645288828744518
+  }
+ },
+ "md5": "cb4992d25b42a0af2b2230fcfc6f36c1",
+ "secs": 8.8
+}

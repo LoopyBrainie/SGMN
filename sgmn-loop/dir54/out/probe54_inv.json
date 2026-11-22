@@ -1,0 +1,26 @@
+{
+ "n_params": {
+  "none": 0,
+  "conc1": 40,
+  "conc2": 40,
+  "split": 40,
+  "both": 80
+ },
+ "A54p-1_matched": true,
+ "A54p-2_factor_identity": 5.551115123125783e-17,
+ "A54p-2_split_sum": 0.0,
+ "A54p-3_zero_conc1_L2": 0.0,
+ "A54p-3_zero_conc2_L1": 0.0,
+ "A54p-3_zero_none_L1": 0.0,
+ "A54p-3_zero_none_L2": 0.0,
+ "A54p-3_ok": true,
+ "A54p-4_none_eq_nomemory": 0.0,
+ "A54p-5_norm_device": 2.4690892179797705,
+ "A54p-5_norm_ours": 3.0952445630023644,
+ "A54p-5_ratio": 1.2535976992904774,
+ "A54p-5_ok": true,
+ "A54p-7_l1_eq_trace40": 0.0,
+ "A54p-8_l2_live": 0.07104781137882554,
+ "A54p-8_ok": true,
+ "A54p-6_det": 0.0
+}

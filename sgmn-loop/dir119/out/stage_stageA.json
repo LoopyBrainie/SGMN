@@ -1,0 +1,110 @@
+{
+ "stageA": [
+  {
+   "name": "A119-1",
+   "ok": true,
+   "detail": "dir118 cell 缺 6/6 个新字段（键数 22）⇒ 新测量层必要；仍缺 = ['rank_hist', 'pick_argmin', 'pick_argmax', 'err_in_train_frac', 'mech_by_mult', 'acc_argmax']",
+   "blocking": true
+  },
+  {
+   "name": "A119-2",
+   "ok": true,
+   "detail": "class_seen_frac_held(COLOCATED)=0.000000（须 0.0）；seen=0/16",
+   "blocking": true
+  },
+  {
+   "name": "A119-3",
+   "ok": true,
+   "detail": "48 项 × 4 候选、各恰 1 正确、候选皆单 token",
+   "blocking": true
+  },
+  {
+   "name": "A119-4",
+   "ok": true,
+   "detail": "tv 同源=True（|tv|=8）；零假设均值实测 0.5000（须 0.5±0.02）；n_seen_hist={'0': 2, '1': 23, '2': 20, '3': 3}",
+   "blocking": true
+  },
+  {
+   "name": "A119-5",
+   "ok": true,
+   "detail": "手算例 8 读数逐位相符",
+   "blocking": true
+  },
+  {
+   "name": "A119-6",
+   "ok": true,
+   "detail": "随机 200 例 + 真实题集：acc_argmax ≡ rank_hist[3]/n，不符 0 例",
+   "blocking": true
+  },
+  {
+   "name": "A119-7",
+   "ok": true,
+   "detail": "列置换：解析不变=True；真跑 S 逐位满足 S_b==S_a[:,p]=True；acc 不变=True ★ 这**只**证明装置无位置耦合，**不**等于「已排除位置效应」（DEF-119-01）",
+   "blocking": true
+  },
+  {
+   "name": "A119-8",
+   "ok": true,
+   "detail": "真实 S：|ok|=48、sum/48==acc、Σrank_hist==48",
+   "blocking": true
+  },
+  {
+   "name": "A119-9",
+   "ok": true,
+   "detail": "有限性口径：真实 S 全有限=True（逐 cell 的 eval_writes/W 不变/violations 在 cell 阶段复核）",
+   "blocking": false
+  },
+  {
+   "name": "A119-10",
+   "ok": true,
+   "detail": "正确项 rank1 ⇒ acc_argmax=0.0（须 0.0，不触发）；rank4 ⇒ 1.0（须 1.0，触发）",
+   "blocking": true
+  },
+  {
+   "name": "A119-11",
+   "ok": true,
+   "detail": "全选见过 ⇒ GAP=0.3333（须 ≥0.2，触发）；混合构造 ⇒ GAP=0.0（须 <0.2，不触发）",
+   "blocking": true
+  },
+  {
+   "name": "A119-12",
+   "ok": true,
+   "detail": "自确定性：在 det 阶段双进程复跑同一 cell 后复核",
+   "blocking": false
+  },
+  {
+   "name": "A119-13",
+   "ok": true,
+   "detail": "设备继承：dose=0 的 81 个读数在 merge 阶段逐位比对",
+   "blocking": false
+  }
+ ],
+ "cells": {},
+ "c2": {},
+ "c1": {},
+ "det": {},
+ "plan_n": 18,
+ "premise": {
+  "csf": {
+   "SPLIT": {
+    "frac": 1.0,
+    "seen": 16,
+    "n": 16,
+    "unseen_vals": 0
+   },
+   "COLOCATED": {
+    "frac": 0.0,
+    "seen": 0,
+    "n": 16,
+    "unseen_vals": 8
+   }
+  },
+  "n_item": 48,
+  "n_seen_hist": {
+   "0": 2,
+   "1": 23,
+   "2": 20,
+   "3": 3
+  }
+ }
+}

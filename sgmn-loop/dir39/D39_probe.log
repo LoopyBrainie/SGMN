@@ -1,0 +1,20 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[自检] n_rep=1 的 oracle 档 vs DIR-37 装置臂：|Δ| = 0.000e+00
+[oracle  ] 训练 727s · L=1.728645 (sd 1.0538) · align⟨q,k⟩=1.0976
+[rand    ] 训练 748s · L=18.925890 (sd 9.1321) · align⟨q,k⟩=0.0304
+[learned ] 训练 752s · L=25.457360 (sd 17.9727) · align⟨q,k⟩=0.0841
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir39/probe39_qsrc.py:216: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  out["dWq1_learned_vs_init"] = float((phis["learned"]["Wq1"] - init["Wq1"]).norm())
+
+══ 探针读数（**不是判据**）══
+  L[oracle  ] = 1.728645   align = 1.0976
+  L[rand    ] = 18.925890   align = 0.0304
+  L[learned ] = 25.457360   align = 0.0841
+  配对 rand−learned: mean=-6.531469 sd=18.460049 3se=7.993436
+  配对 rand−oracle : mean=17.197246 sd=8.551487 3se=3.702902
+  n=400 的功效参考 3se ≈ 2.769007（= 可寻址区间的 0.1610）
+  ‖ΔWq1‖（learned vs 初值）= 16.225852 · rand vs 初值 = 0.000000
+  ‖∇Wq1‖ = 1.072e+00 · ‖∇bq1‖ = 5.418e-01
+  耗时 2255s

@@ -1,0 +1,30 @@
+===== Stage A (rev 1.1) =====
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  ✓ A26Q'-1 装置 md5 零改动
+  ✓ A26Q'-2 参照脚本 md5
+  ✓ A26Q'-2b 不重定义参照函数（按行首 def 判）
+  ✓ A26Q'-3 穷举 $R!$：24 个置换、互不相同（非抽样）
+  ✓ A26Q'-4 W1：φ=0.9 的下界 = 0.7830（手算 0.783）
+  ✓ A26Q'-5 W2：24 置换的 Λ 极差 0.00e+00 ≤1e-6（集合逐位不变）
+  ✓ A26Q'-8 反解：‖Uc‖−1 偏差 6.0e-08、Uc·e_i 2.7e-07（float32 ≤1e-5）
+  ✓ A26Q'-6 W3：沿用 rev 1.0 的位级锚点 72/72 逐位相等（md5 未变 ⇒ 不重跑）
+  ✓ A26Q'-7 同 (φ,seed) 两次 min_π ρ_u 逐位相同
+  ✓ A26Q'-10 可行性前置：3 种子 min_π ρ_u=0.783 vs 解析下界 0.783、偏差 0.000 ≤0.05
+  ✓ A26Q'-9 断言集非空（10 条）
+=== Stage A(rev 1.1) PASS（11/11） 0.3s ===
+STAGEA11_EXIT=0
+===== 正式轮 analyze（30 种子 × 3 档，穷举 24 置换）=====
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== 轮序置换的可达性（穷举 R! = 24）===
+| φ | ρ_u(自然) | ρ_u 最小 | ρ_u 最大 | 最大去相关 | Λ(集合) | 解析下界 φ²(2+φ)/3 | 偏差 | 可达≤0.05 |
+|---|---|---|---|---|---|---|---|---|
+| 0.3 | +0.299 | +0.069 | +0.299 | +0.231 | 0.623 (±1.2e-07) | 0.069 | -0.000 | False |
+| 0.6 | +0.599 | +0.311 | +0.599 | +0.288 | 0.769 (±1.8e-07) | 0.312 | -0.001 | False |
+| 0.9 | +0.900 | +0.783 | +0.900 | +0.117 | 0.939 (±1.2e-07) | 0.783 | -0.000 | False |
+★ 解析下界成立（三档偏差 ≤0.05）: True
+★ φ=0.9 可达最小 ρ_u = +0.783 ⇒ 通道 = INFEASIBLE-STRUCTURAL
+ANALYZE_EXIT=0

@@ -1,0 +1,129 @@
+{
+ "stage_a_pass": true,
+ "assertions": {
+  "A52-1": {
+   "desc": "workex52 三项逐位核验全过",
+   "workex_pass": true,
+   "workex": {
+    "A": {
+     "desc": "μ(4) 截断 ≡ 完整呈现（逐位）",
+     "max_abs_diff": 0.0,
+     "pass": true
+    },
+    "C_keys": {
+     "desc": "第 0 轮键与值对两档 φ 逐位相同（F-52-a 的结构恒等式）",
+     "K0_equal": true,
+     "va_equal": true,
+     "vb_equal": true,
+     "pass": true
+    },
+    "C": {
+     "desc": "ΔδG_1 ≡ 0（ρ=1 两档 φ 读数逐位相同）",
+     "max_abs_diff": 0.0,
+     "pass": true
+    },
+    "B": {
+     "desc": "Σ_ρ ΔδG_ρ = ΔG(4)（算术恒等式）",
+     "dG": {
+      "1": 0.0,
+      "2": 0.000464911444578317,
+      "4": 0.002116483892314131
+     },
+     "inc": {
+      "1": 0.0,
+      "2": 0.000464911444578317,
+      "4": 0.0016515724477358142
+     },
+     "abs_err": 0.0,
+     "pass": true
+    }
+   },
+   "pass": true
+  },
+  "A52-2": {
+   "desc": "keep(1)⊂keep(2)⊂keep(3)⊂keep(4)、长度严格递增、末项=sum(cnt)",
+   "detail": {
+    "F": {
+     "lens": [
+      196,
+      378,
+      504,
+      566
+     ],
+     "sum_cnt": 566
+    },
+    "K": {
+     "lens": [
+      62,
+      188,
+      370,
+      566
+     ],
+     "sum_cnt": 566
+    }
+   },
+   "pass": true
+  },
+  "A52-3": {
+   "desc": "ΔδδG_1 ≡ 0：两档 φ 的第 1 轮读数逐位相同",
+   "keys_bit_equal_8seeds": true,
+   "mu_max_abs_diff_2seeds": 0.0,
+   "pass": true
+  },
+  "A52-4": {
+   "desc": "Σ_ρ ΔδG_ρ = ΔG(4) 每种子 ≤1e-12（完整性检查，非判据）",
+   "max_abs_err": 0.0,
+   "pass": true
+  },
+  "A52-5": {
+   "desc": "φ=0.9 用 frozen_cnt0 且与 φ=0 的 counts 逐位相同",
+   "pass": true
+  },
+  "A52-6": {
+   "desc": "独立第二链（从零重写截断+drive+读数）max|Δ| = 0",
+   "max_abs_diff": 0.0,
+   "pass": true
+  },
+  "A52-7": {
+   "desc": "读数为纯读（两次读一致 + W 逐位不变）",
+   "max_abs_diff": 0.0,
+   "pass": true
+  },
+  "A52-8": {
+   "desc": "正式段 62000..62399 与既往落盘种子交集为 0",
+   "n_landed_seen": 1072,
+   "overlaps": [],
+   "pass": true
+  },
+  "A52-10": {
+   "desc": "SHAPE/EARLY/TOTAL 由落盘 μ 独立重算一致（≤1e-15）",
+   "max_abs_diff": 0.0,
+   "pass": true
+  },
+  "A52-9": {
+   "desc": "卡存在 + md5 落盘 + 装置常数与卡一致",
+   "card_md5": "68c3d3f1d0f24da59ceb3058bafa37a3",
+   "consts": {
+    "N_KV": 60,
+    "R_PRES": 4,
+    "R_HO8": 8,
+    "N_READ": 20,
+    "R0": 8,
+    "M": 2,
+    "c_tau": 0.094970242679
+   },
+   "expected": {
+    "N_KV": 60,
+    "R_PRES": 4,
+    "R_HO8": 8,
+    "N_READ": 20,
+    "R0": 8,
+    "M": 2,
+    "c_tau": 0.094970242679
+   },
+   "info_D_MODEL": 896,
+   "pass": true
+  }
+ },
+ "rows": null
+}

@@ -1,0 +1,30 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:41,  6.92it/s]Loading weights:  60%|█████▉    | 173/290 [00:00<00:00, 764.73it/s]Loading weights:  96%|█████████▌| 279/290 [00:00<00:00, 870.97it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 775.57it/s]
+事实 32；训练键 16；留出键 16；READ_LR=0.001 READ_STEPS=600
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/probe91_identity.py:46: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  return float((a @ b) / (a.norm() * b.norm() + 1e-30))
+
+[20261028] 未训练对照：acc=0.271
+   L8 M1 cos(Wq,p·Pk^T)=-0.0002 relF=1.0956 |norm|=0.447
+   L12 M1 cos(Wq,p·Pk^T)=+0.0007 relF=1.0951 |norm|=0.447
+   L16 M1 cos(Wq,p·Pk^T)=+0.0002 relF=1.0953 |norm|=0.447
+   M2 训练键 cos(q,k)={8: 0.045003730086797714, 12: 0.00285899453193856, 16: 0.0482666963525552}
+   M3 留出键 cos(q,k)={8: 0.04456093027108102, 12: 0.0027782111956759174, 16: 0.047863699440848825}
+
+[20261028] 训练后：acc(项)=0.083 acc(题)=0.062 | loss=0.0000 div=False
+   L8 M1 cos(Wq,p·Pk^T)=-0.0003 relF=1.1033 |norm|=0.466
+   L12 M1 cos(Wq,p·Pk^T)=+0.0012 relF=1.1013 |norm|=0.463
+   L16 M1 cos(Wq,p·Pk^T)=-0.0001 relF=1.1007 |norm|=0.460
+   M2 训练键 cos(q,k)={8: 0.045857742659718564, 12: 0.03667991263628455, 16: 0.028156496672029508}
+   M3 留出键 cos(q,k)={8: 0.045214078079251444, 12: 0.0362515260325957, 16: 0.028965112592106743}
+   ★ M4 oracle-q：留出键 acc(项)=0.271 acc(题)=0.188
+     常规 q：    留出键 acc(项)=0.083 acc(题)=0.062
+     训练键：正常 q acc(题)=1.000 vs oracle-q acc(题)=0.062
+
+=== 汇总 ===
+  untrained|20261028 M1cos=+0.0002 M2=+0.0320 M3=+0.0317
+  trained|20261028 M1cos=+0.0003 M2=+0.0369 M3=+0.0368
+
+★ 诊断完成（不产生裁决）

@@ -1,0 +1,15 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:44,  6.54it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 872.22it/s]Loading weights:  99%|█████████▉| 288/290 [00:00<00:00, 881.35it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 776.99it/s]
+
+=== R3 · 分支 factorized ===
+  层 8: 状态有效秩 PR=437.332（秩 896）| 键有效槽位 PR=1.010（秩 60，共 60 键）| 键间余弦 均值 +0.995 p95 +0.997 | 写保真度 cos(Wk,v) 均值 -0.0298 最大 -0.0233
+  层 12: 状态有效秩 PR=442.807（秩 896）| 键有效槽位 PR=1.013（秩 60，共 60 键）| 键间余弦 均值 +0.993 p95 +0.996 | 写保真度 cos(Wk,v) 均值 +0.0248 最大 +0.0301
+  层 16: 状态有效秩 PR=435.714（秩 896）| 键有效槽位 PR=1.025（秩 60，共 60 键）| 键间余弦 均值 +0.987 p95 +0.993 | 写保真度 cos(Wk,v) 均值 -0.0050 最大 +0.0045
+
+=== R3 · 分支 full ===
+  层 8: 状态有效秩 PR=645.648（秩 896）| 键有效槽位 PR=1.010（秩 60，共 60 键）| 键间余弦 均值 +0.995 p95 +0.997 | 写保真度 cos(Wk,v) 均值 -0.0372 最大 -0.0298
+  层 12: 状态有效秩 PR=645.679（秩 896）| 键有效槽位 PR=1.013（秩 60，共 60 键）| 键间余弦 均值 +0.993 p95 +0.996 | 写保真度 cos(Wk,v) 均值 -0.0174 最大 -0.0099
+  层 16: 状态有效秩 PR=645.006（秩 896）| 键有效槽位 PR=1.026（秩 60，共 60 键）| 键间余弦 均值 +0.987 p95 +0.993 | 写保真度 cos(Wk,v) 均值 -0.0272 最大 -0.0157
+
+=== R3 完成 ===

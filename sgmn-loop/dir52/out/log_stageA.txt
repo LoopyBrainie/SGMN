@@ -1,0 +1,17 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+=== DIR-52 Stage A ===
+  A52-1: PASS   workex52 三项逐位核验全过
+  A52-10: PASS   SHAPE/EARLY/TOTAL 由落盘 μ 独立重算一致（≤1e-15）
+  A52-2: PASS   keep(1)⊂keep(2)⊂keep(3)⊂keep(4)、长度严格递增、末项=sum(cnt)
+  A52-3: PASS   ΔδδG_1 ≡ 0：两档 φ 的第 1 轮读数逐位相同
+  A52-4: PASS   Σ_ρ ΔδG_ρ = ΔG(4) 每种子 ≤1e-12（完整性检查，非判据）
+  A52-5: PASS   φ=0.9 用 frozen_cnt0 且与 φ=0 的 counts 逐位相同
+  A52-6: PASS   独立第二链（从零重写截断+drive+读数）max|Δ| = 0
+  A52-7: PASS   读数为纯读（两次读一致 + W 逐位不变）
+  A52-8: PASS   正式段 62000..62399 与既往落盘种子交集为 0
+  A52-9: FAIL   卡存在 + md5 落盘 + 装置常数与卡一致
+       {"desc": "卡存在 + md5 落盘 + 装置常数与卡一致", "card_md5": null, "consts": {"N_KV": 60, "R_PRES": 4, "R_HO8": 8, "N_READ": 20, "R0": 8, "M": 2, "D_MODEL": 896, "c_tau": 0.094970242679}, "expected": {"N_KV": 60, "R_PRES": 4, "R_HO8": 8, "N_READ": 20, "R0": 8, "M": 2, "D_MODEL": 8, "c_tau": 0.094970242679}}
+  总体：FAIL ⇒ 拦住正式轮

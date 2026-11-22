@@ -1,0 +1,106 @@
+{
+ "A57-1": {
+  "pass": true,
+  "md5": {
+   "dir31/R1_grad.py": "8fa40f708600bec7e6c484727d2180c7",
+   "dir33/R1_task33.py": "96ef89e87ec61556b52e0e464850087e",
+   "dir46/R1_task46.py": "d66c849692d93bc5b24a91f9a445e0ef",
+   "dir47/R1_task47.py": "fd03c70c6490cfd726489714b9c2c80f",
+   "dir48/R1_task48.py": "bb6154687a48d4ea33f0ebd9bc0cb393"
+  },
+  "frozen": {
+   "dir31/R1_grad.py": "8fa40f708600bec7e6c484727d2180c7",
+   "dir33/R1_task33.py": "96ef89e87ec61556b52e0e464850087e",
+   "dir46/R1_task46.py": "d66c849692d93bc5b24a91f9a445e0ef",
+   "dir47/R1_task47.py": "fd03c70c6490cfd726489714b9c2c80f",
+   "dir48/R1_task48.py": "bb6154687a48d4ea33f0ebd9bc0cb393"
+  }
+ },
+ "A57-2": {
+  "pass": true,
+  "max_abs_diff": 0.0
+ },
+ "A57-3": {
+  "pass": true,
+  "max_pair_cos": 0.2994986590981178
+ },
+ "A57-4": {
+  "pass": true,
+  "max_int_val_cos": 0.29930969275805985
+ },
+ "A57-5": {
+  "pass": true,
+  "max_cos_written_vs_unwritten": 0.8412731154318766,
+  "n_identical_pairs": 0,
+  "generators": {
+   "K": 57501,
+   "UNWRITTEN": 57503,
+   "INT": 57504
+  }
+ },
+ "A57-6": {
+  "pass": true,
+  "read_errors_src_has_cos": false,
+  "E_null_is_median_over_unwritten": true,
+  "n_unwritten": 5
+ },
+ "A57-7": {
+  "pass": true,
+  "max_identity_err": 0.0,
+  "disp_e_vs_s": 0.0
+ },
+ "A57-8": {
+  "pass": true,
+  "max_abs_dW": 0.0,
+  "E_hand": 0.4213250099521633,
+  "E_driver": 0.4213250099521633,
+  "frozen_E": 0.421325009952163,
+  "delta_vs_frozen": 3.3306690738754696e-16
+ },
+ "A57-9": {
+  "pass": true,
+  "init_fp": {
+   "m1": "98e2c05b0086cbba",
+   "m2": "98e2c05b0086cbba",
+   "m4": "98e2c05b0086cbba",
+   "m4_int8": "98e2c05b0086cbba"
+  }
+ },
+ "A57-10": {
+  "pass": true,
+  "n_int": 8,
+  "int_key_unique": true,
+  "int_val_cos_max": 0.2797733553472952
+ },
+ "A57-11": {
+  "pass": true,
+  "bad": []
+ },
+ "A57-12": {
+  "pass": true,
+  "n_overlap": 0,
+  "segments_checked": [
+   [
+    55000,
+    55023
+   ],
+   [
+    56000,
+    56095
+   ],
+   [
+    57000,
+    57095
+   ],
+   [
+    58000,
+    58463
+   ]
+  ]
+ },
+ "_summary": {
+  "all_pass": true,
+  "n_pass": 12,
+  "n_total": 12
+ }
+}

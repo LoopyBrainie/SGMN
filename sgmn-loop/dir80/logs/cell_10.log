@@ -1,0 +1,41 @@
+/home/ec2-user/sgmn-loop/dir70/ref70.py:39: RuntimeWarning: overflow encountered in matmul
+  U1 = U1 - eta * (G1 @ V1); V1 = V1 - eta * (G1.T @ U1)
+/home/ec2-user/sgmn-loop/dir70/ref70.py:43: RuntimeWarning: overflow encountered in matmul
+  G2 = (W2 @ C2 - B2) + LAM * W2
+/home/ec2-user/sgmn-loop/dir70/ref70.py:44: RuntimeWarning: invalid value encountered in matmul
+  U2 = U2 - eta * (G2 @ V2); V2 = V2 - eta * (G2.T @ U2)
+/home/ec2-user/sgmn-loop/dir70/ref70.py:35: RuntimeWarning: invalid value encountered in matmul
+  kin = [k + gamma * (W2 @ k) for k in ks]                  # ← 键被反馈扰动
+/home/ec2-user/sgmn-loop/dir70/ref70.py:38: RuntimeWarning: invalid value encountered in matmul
+  G1 = (W1 @ C1 - B1) + LAM * W1
+/home/ec2-user/sgmn-loop/dir70/ref70.py:43: RuntimeWarning: invalid value encountered in matmul
+  G2 = (W2 @ C2 - B2) + LAM * W2
+/home/ec2-user/sgmn-loop/dir70/ref70.py:44: RuntimeWarning: overflow encountered in matmul
+  U2 = U2 - eta * (G2 @ V2); V2 = V2 - eta * (G2.T @ U2)
+/home/ec2-user/sgmn-loop/dir70/ref70.py:29: RuntimeWarning: overflow encountered in matmul
+  W1 = U1 @ V1.T; W2 = U2 @ V2.T
+[   226s] γ=10  bisect nev=3 eta=0.0056234 div=False
+[   453s] γ=10  bisect nev=6 eta=0.025483 div=False
+/home/ec2-user/sgmn-loop/dir70/ref70.py:38: RuntimeWarning: overflow encountered in matmul
+  G1 = (W1 @ C1 - B1) + LAM * W1
+/home/ec2-user/sgmn-loop/dir70/ref70.py:39: RuntimeWarning: invalid value encountered in matmul
+  U1 = U1 - eta * (G1 @ V1); V1 = V1 - eta * (G1.T @ U1)
+/opt/pytorch/lib64/python3.13/site-packages/numpy/_core/numeric.py:995: RuntimeWarning: overflow encountered in multiply
+  return multiply(a.ravel()[:, newaxis], b.ravel()[newaxis, :], out)
+/home/ec2-user/sgmn-loop/dir70/ref70.py:43: RuntimeWarning: invalid value encountered in subtract
+  G2 = (W2 @ C2 - B2) + LAM * W2
+[   528s] γ=10  bisect nev=9 eta=0.027632 div=True
+/home/ec2-user/sgmn-loop/dir70/ref70.py:40: RuntimeWarning: overflow encountered in matmul
+  k2 = [W1 @ k for k in kin]                                    # ← 层 2 的输入 = 层 1 对（扰动）键的读出
+[   572s] γ=10  bisect nev=12 eta=0.026987 div=False
+[   572s] γ=10  eta_th=0.0270324 (nev=12 cap=False width=0.0034)
+Traceback (most recent call last):
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir80/cell80.py", line 58, in <module>
+    n1, n2, n3, n4 = jac80.step48(jac80.flat(x), eta_w, MODE, g, C)
+    ^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 4)
+  · 复用二分结果 eta_th=0.02703241（nev=12）
+[    72s] γ=10  warm fp_res=2.72e-16 steps=1
+[    73s] γ=10  rho_lambda=0.0830446 (nev=13 cap=False) 比=3.07204
+[    74s] γ=10  sup=1.6007 @t=5000  interior=False  ||J^5000||=1.6007
+DONE γ=10 eta_th=0.02703241 rho=0.083044624 gap=2.072039 sup=1.60073

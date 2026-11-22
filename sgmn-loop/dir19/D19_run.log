@@ -1,0 +1,5 @@
+[09:18:51] ===== DIR-19 正式轮（200/60/3 种子 · 11 臂）=====
+[09:18:51] 日志：D19_R2_formal.log
+[09:18:56] 正式轮已在后台启动
+ec2-user   16876   16875  0 09:18 ?        00:00:00 bash -c cd ~/sgmn-loop/dir19 && mv -f .ops/test_signature_consistency.py .ops/ 2>/dev/null; timeout 120 scp -i /workspace/.ssh/SGMN.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null .ops/test_signature_consistency.py ec2-user@ec2-3-27-212-181.ap-southeast-2.compute.amazonaws.com:.ops/ 2>/dev/null; md5sum R1_protect.py; python3 .ops/test_signature_consistency.py 2>&1|tail -3; mv -f D19_R2_formal.log D19_R2_formal_attempt2_sigbug.log 2>/dev/null; rm -f ~/sgmn-loop/.ops/formal_incremental_DIR19_full.json; setsid nohup bash .ops/run_dir19_formal.sh D19_R2_formal.log > D19_run.log 2>&1 < /dev/null & sleep 8; echo 重启; date -u
+ec2-user   16914   16910 99 09:18 ?        00:00:05 /opt/pytorch/bin/python -u R1_protect.py

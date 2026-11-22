@@ -1,0 +1,29 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:48,  5.91it/s]Loading weights:  59%|█████▉    | 172/290 [00:00<00:00, 773.05it/s]Loading weights:  93%|█████████▎| 270/290 [00:00<00:00, 820.57it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 733.15it/s]
+[setup] facts=32 chunks=600 tr=16 he=16 arms=['intact', 'center_fixed', 'white', 'permneg', 'w_oracle']
+  ✓ A99-9a     Δ(3/4,1/4)=0.5
+  ✓ A99-9b     Δ(2/4,2/4)=0
+  ✓ A99-9c     W_or 解算：max|W_or·K−V| = 0.00e+00 (<1e-6)，shape=(2, 2)
+/home/ec2-user/sgmn-loop/dir91/R2_task91.py:323: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+[20261028 intact] d_tr=+0.0000 d_ho=+0.0000 | acc_tr w=0.8125 W0=0.8125 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.1250 | maxcos=0.9986 dWrel=0.0e+00 104.4s
+[20261028 center_fixed] d_tr=+0.0000 d_ho=+0.0000 | acc_tr w=0.1875 W0=0.1875 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.1250 | maxcos=0.3790 dWrel=0.0e+00 105.3s
+Traceback (most recent call last):
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir99/R1_task99.py", line 402, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir99/R1_task99.py", line 358, in main
+    G["cells"].append(run_arm(model, tok, facts, chunks, owner, tr, he, sd, arm))
+                      ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir99/R1_task99.py", line 254, in run_arm
+    tf = build_tf(arm, Kraw[li], V[li], li)
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir99/R1_task99.py", line 219, in build_tf
+    s = _s_calib(lambda x: x @ Un.T, K)
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir99/R1_task99.py", line 57, in _s_calib
+    Tk = Tfun(Kp)
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir99/R1_task99.py", line 219, in <lambda>
+    s = _s_calib(lambda x: x @ Un.T, K)
+                           ~~^~~~~~
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (32x896 and 32x32)

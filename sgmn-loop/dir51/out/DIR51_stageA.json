@@ -1,0 +1,154 @@
+{
+ "stage_a_pass": true,
+ "assertions": {
+  "A51-1": {
+   "desc": "同种子下五臂初始状态指纹逐位相同",
+   "fps": {
+    "alpha0": [
+     "fdb99004856e1a05",
+     "86a857a7efda6d06",
+     "e40c0781e6caf342"
+    ],
+    "random": [
+     "fdb99004856e1a05",
+     "86a857a7efda6d06",
+     "e40c0781e6caf342"
+    ],
+    "ortho": [
+     "fdb99004856e1a05",
+     "86a857a7efda6d06",
+     "e40c0781e6caf342"
+    ],
+    "orthoP": [
+     "fdb99004856e1a05",
+     "86a857a7efda6d06",
+     "e40c0781e6caf342"
+    ],
+    "replay": [
+     "fdb99004856e1a05",
+     "86a857a7efda6d06",
+     "e40c0781e6caf342"
+    ]
+   },
+   "by_seed": {
+    "52000": [
+     "fdb99004856e1a05"
+    ],
+    "52001": [
+     "86a857a7efda6d06"
+    ],
+    "52002": [
+     "e40c0781e6caf342"
+    ]
+   },
+   "pass": true
+  },
+  "A51-2": {
+   "desc": "ortho/orthoP 写入键与 k_P 严格正交 |cos| ≤ 1e-12",
+   "max_abs_cos": 1.665334536937735e-16,
+   "pass": true
+  },
+  "A51-3": {
+   "desc": "alpha0 臂换 (k,v) 结果逐位相同（α=0 数据项为 0）",
+   "max_abs_diff": 0.0,
+   "pass": true
+  },
+  "A51-4": {
+   "desc": "alpha0 轨迹有限、‖r_P(t0)‖ > 0",
+   "pass": true
+  },
+  "A51-5": {
+   "desc": "同种子五臂起跑状态逐位相同（同 A51-1 的指纹证据）",
+   "pass": true
+  },
+  "A51-6": {
+   "desc": "replay 末态 c_P > alpha0 末态 c_P（方向性自检）",
+   "vals": {
+    "52000": {
+     "alpha0": 0.6617977988036557,
+     "replay": 0.9999994823696984
+    },
+    "52001": {
+     "alpha0": 0.16033731417629316,
+     "replay": 1.0
+    },
+    "52002": {
+     "alpha0": 0.035283720590360466,
+     "replay": 0.9999997689870564
+    }
+   },
+   "pass": true
+  },
+  "A51-7": {
+   "desc": "random 臂 v_rand 与 v_P^0 显著不平行 |cos| ≤ 0.5",
+   "max_abs_cos": 0.48371489934651984,
+   "pass": true
+  },
+  "A51-8": {
+   "desc": "工作例独立第二链复现 max|Δ| = 0",
+   "max_abs_diff": 0.0,
+   "pass": true
+  },
+  "A51-9": {
+   "desc": "种子段交集为 0",
+   "segments": {
+    "探针41000-41039": [
+     41000,
+     41039
+    ],
+    "标定51500-51799": [
+     51500,
+     51799
+    ],
+    "正式52000-52999": [
+     52000,
+     52999
+    ]
+   },
+   "overlaps": [],
+   "pass": true
+  },
+  "A51-10": {
+   "desc": "卡存在 + md5 落盘 + 装置常数与卡一致",
+   "card_md5": "6abafb480ccbfb09d2b228f4fb4e2c07",
+   "card_exists": true,
+   "consts": {
+    "D_H": 8,
+    "D_K": 16,
+    "D_V": 4,
+    "LAM": 0.05,
+    "ETA": 0.2,
+    "KEY_SCALE": 0.5,
+    "N_REP": 16,
+    "STEPS": 20
+   },
+   "expected": {
+    "D_H": 8,
+    "D_K": 16,
+    "D_V": 4,
+    "LAM": 0.05,
+    "ETA": 0.2,
+    "KEY_SCALE": 0.5,
+    "N_REP": 16,
+    "STEPS": 20
+   },
+   "pass": true
+  },
+  "A51-11": {
+   "desc": "D_P 由落盘 c 序列独立重算一致",
+   "max_abs_diff": 0.0,
+   "pass": true
+  },
+  "A51-12": {
+   "desc": "读数为纯读（两次读一致 + 状态逐位不变）",
+   "max_abs_diff": 0.0,
+   "pass": true
+  }
+ },
+ "seeds": [
+  52000,
+  52001,
+  52002
+ ],
+ "steps": 20
+}

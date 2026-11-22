@@ -1,0 +1,9 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/ec2-user/sgmn-loop/dir42/R1_task42.py:151: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  q_fp = q_fp + float(q.sum())
+[L0] instance 0: 24.3s  (L=0.0859)
+[L0] instance 1: 22.5s  (L=0.0011)
+[L0] instance 2: 21.9s  (L=0.0066)
+[L0] arm=learned reps=3 wall=68.7s per_inst=22.9s

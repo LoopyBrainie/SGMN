@@ -1,0 +1,21 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== Stage A（A26M-1 … A26M-14） ===
+  [PASS] A26M-1  装置 md5 == 1a242d02c530307f6c76646ca13469ef
+  [PASS] A26M-2  12 个复用对象逐项同源（不同源：[]）
+  [PASS] A26M-3  三档读集（K/proto/v^a/v^b）与键流逐位不变：[(40, True, True), (20, True, True), (4, True, True)]
+  [PASS] A26M-4  世界值模式数 m=20+b 实测：[(40, 60, 60), (20, 40, 40), (4, 24, 24)]
+  [PASS] A26M-5  b=40 折叠是**恒等**（与未折叠逐位相同）
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+  [PASS] A26M-6  c_tau(60)=0.0950（三档共用同一冻结值）
+  [PASS] A26M-7  N_DIST 已复位 35
+  [PASS] A26M-8  派生单元 b=40/cnt_ref=None 与 `R1_gating12.run_unit` **逐位相同**（差异 []）
+  [PASS] A26M-9  外生 cnt 生效：k_B 569==569、cnt/日程逐位相同
+  [PASS] A26M-10  折叠改变了写侧门控读数（q̄ 9.483 → 8.017；k_B_own 569 → 481）⇒ 独立变量真的在动
+  [PASS] A26M-11  G=-（μ_F−μ_K）、R=G/μ_U0 恒等式成立
+  [PASS] A26M-12  三档共用同一初值指纹 W0sig（同 seed）
+  [PASS] A26M-13  六臂读后 W 逐位不变（测量层无副作用）
+  [PASS] A26M-14  _eff 的 se/k 与手算一致（se=0.577350）
+
+★ Stage A 全部通过（14/14）
+  [落盘] /home/ec2-user/sgmn-loop/dir26m/out/DIR26Mr10_stageA.json（747.2s）

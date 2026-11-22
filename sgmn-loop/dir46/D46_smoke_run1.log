@@ -1,0 +1,6 @@
+ALL SHARDS DONE (smoke)
+total 84
+-rw-rw-r--. 1 ec2-user ec2-user 38720 Nov 15 09:06 DIR46_probe_a.json
+-rw-rw-r--. 1 ec2-user ec2-user 28158 Nov 15 10:02 DIR46_smoke_arm_period2.jsonl
+-rw-rw-r--. 1 ec2-user ec2-user 10277 Nov 15 10:02 DIR46_smoke_arm_perstep.jsonl
+-rw-rw-r--. 1 ec2-user ec2-user  1266 Nov 15 10:01 DIR46r10_stageA.json

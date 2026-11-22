@@ -1,0 +1,153 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-11：写-读键空间一致性与记忆的可检索性 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:53,  5.45it/s]Loading weights:  55%|█████▌    | 160/290 [00:00<00:00, 694.46it/s]Loading weights:  87%|████████▋ | 253/290 [00:00<00:00, 777.06it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 683.99it/s]
+
+[Stage A] 装置校验门
+  [A1'] Freeze C 逐臂复检
+    K1_random            读梯度 9/9 (最小 nan) 写入梯度精确0 15/15 基座不变 True 阴性泄漏 9/15 [FAIL]
+    K2_key_align         读梯度 9/9 (最小 nan) 写入梯度精确0 15/15 基座不变 True 阴性泄漏 9/15 [FAIL]
+    K3_ideal             读梯度 9/9 (最小 nan) 写入梯度精确0 15/15 基座不变 True 阴性泄漏 9/15 [FAIL]
+    K4_ideal_nowrite     读梯度 9/9 (最小 9.751e-02) 写入梯度精确0 15/15 基座不变 True 阴性泄漏 9/15 [PASS]
+    K5_ideal_overwrite   读梯度 9/9 (最小 nan) 写入梯度精确0 15/15 基座不变 True 阴性泄漏 9/15 [FAIL]
+    K6_ideal_full        读梯度 9/9 (最小 2.138e-02) 写入梯度精确0 18/18 基座不变 True 阴性泄漏 9/15 [PASS]
+    K7_random_full       读梯度 9/9 (最小 3.617e-02) 写入梯度精确0 18/18 基座不变 True 阴性泄漏 9/15 [PASS]
+    K8_ideal_full_nowrite 读梯度 9/9 (最小 1.194e-01) 写入梯度精确0 18/18 基座不变 True 阴性泄漏 9/15 [PASS]
+    K9_ideal_full_overwrite 读梯度 9/9 (最小 2.138e-02) 写入梯度精确0 18/18 基座不变 True 阴性泄漏 9/15 [PASS]
+    K10_pure_full        读梯度 9/9 (最小 3.023e+00) 写入梯度精确0 18/18 基座不变 True 阴性泄漏 9/15 [PASS]
+    K11_pure_full_nowrite 读梯度 9/9 (最小 0.000e+00) 写入梯度精确0 18/18 基座不变 True 阴性泄漏 9/15 [PASS]
+    P1_pos_random        读梯度 9/9 (最小 nan) 写入梯度精确0 15/15 基座不变 True 阴性泄漏 9/15 [FAIL]
+    P2_pos_key_align     读梯度 9/9 (最小 nan) 写入梯度精确0 15/15 基座不变 True 阴性泄漏 9/15 [FAIL]
+    P3_pos_ideal         读梯度 9/9 (最小 nan) 写入梯度精确0 15/15 基座不变 True 阴性泄漏 9/15 [FAIL]
+    P4_pos_ideal_full    读梯度 9/9 (最小 nan) 写入梯度精确0 18/18 基座不变 True 阴性泄漏 9/15 [FAIL]
+    P5_pos_ideal_full_nowrite 读梯度 9/9 (最小 1.194e-01) 写入梯度精确0 18/18 基座不变 True 阴性泄漏 9/15 [PASS]
+    P6_pos_ideal_full_over 读梯度 9/9 (最小 nan) 写入梯度精确0 18/18 基座不变 True 阴性泄漏 9/15 [FAIL]
+[FAIL] A1' Freeze C 复检（逐臂；③写入梯度精确0 ②读梯度非零 ④基座逐位不变 + 阴性对照）: K1_random: read=False write=True base=True leak=9；K2_key_align: read=False write=True base=True leak=9；K3_ideal: read=False write=True base=True leak=9；K4_ideal_nowrite: read=True write=True base=True leak=9；K5_ideal_overwrite: read=False write=True base=True leak=9；K6_ideal_full: read=True write=True base=True leak=9；K7_random_full: read=True write=True base=True leak=9；K8_ideal_full_nowrite: read=True write=True base=True leak=9；K9_ideal_full_overwrite: read=True write=True base=True leak=9；K10_pure_full: read=True write=True base=True leak=9；K11_pure_full_nowrite: read=True write=True base=True leak=9；P1_pos_random: read=False write=True base=True leak=9；P2_pos_key_align: read=False write=True base=True leak=9；P3_pos_ideal: read=False write=True base=True leak=9；P4_pos_ideal_full: read=False write=True base=True leak=9；P5_pos_ideal_full_nowrite: read=True write=True base=True leak=9；P6_pos_ideal_full_over: read=False write=True base=True leak=9
+[PASS] A2' 覆盖 hook 的正确性（非零覆盖必须改变 logits；空覆盖必须逐位一致）: 非零覆盖 ⇒ logits 最大变化 1.993e+01（>0，覆盖生效）；空覆盖 ⇒ 与无覆盖差 0.000e+00（<1e-6）
+[PASS] A3' 同一时刻只允许一个装置挂在被测模型上: 装置句柄 6（每层 2 个），记忆数 3
+[FAIL] A4' 读/查询阶段记忆逐位不变（写被冻结）: 两次前视后记忆相对差 6.038e+01
+
+  [A5'] 写步长探针（K3 理想臂，检索命中率）
+    [factorized] eta=1e-05    命中 0.000  码 logp -2.6587  有限 True
+    [factorized] eta=0.0001   命中 0.000  码 logp -2.6587  有限 True
+    [factorized] eta=0.001    命中 0.000  码 logp -2.6587  有限 True
+    [factorized] eta=0.01     命中 0.000  码 logp -2.6587  有限 True
+    [factorized] eta=0.1      命中 0.000  码 logp -2.6587  有限 True
+    [full     ] eta=1e-05    命中 0.000  码 logp -2.5029  有限 True
+    [full     ] eta=0.0001   命中 0.000  码 logp -2.5029  有限 True
+    [full     ] eta=0.001    命中 0.000  码 logp -2.5029  有限 True
+    [full     ] eta=0.01     命中 0.000  码 logp -2.5029  有限 True
+    [full     ] eta=0.1      命中 0.000  码 logp -2.5029  有限 True
+    [pure     ] eta=1e-05    命中 0.000  码 logp -2.2816  有限 True
+    [pure     ] eta=0.0001   命中 0.000  码 logp -2.2816  有限 True
+    [pure     ] eta=0.001    命中 0.000  码 logp -2.2816  有限 True
+    [pure     ] eta=0.01     命中 0.000  码 logp -2.2816  有限 True
+    [pure     ] eta=0.1      命中 0.000  码 logp -2.2816  有限 True
+    [pos      ] eta=1e-05    命中 0.000  码 logp -2.0851  有限 True
+    [pos      ] eta=0.0001   命中 0.000  码 logp -12.1787  有限 True
+    [pos      ] eta=0.001    命中 0.000  码 logp -13.3008  有限 True
+[PASS] A5' 写步长探针（四组各至少一个 eta 有限且可测）: 因子化 ETA=1e-05（命中 0.000）；全矩阵 ETA_FULL=1e-05（命中 0.000）；干净记忆 ETA_PURE=1e-05（命中 0.000）；逐位置写 ETA_POS=1e-05（命中 0.000）
+
+[R3] 主测量（因子化 ETA=1e-05 / 全矩阵 ETA_FULL=1e-05 / 干净记忆 ETA_PURE=1e-05）
+
+  [种子 20261028]
+    K0_base            码 logp -2.1794
+    K1_random            码 logp -2.0088 命中 0.011 cos_best 0.0435 cos_true -0.0119
+    K2_key_align         码 logp -1.9658 命中 0.028 cos_best 0.0479 cos_true 0.0051
+    K3_ideal             码 logp -2.5106 命中 0.000 cos_best 0.0287 cos_true -0.0272
+    K4_ideal_nowrite     码 logp -2.5106 命中 0.000 cos_best 0.0288 cos_true -0.0269
+    K5_ideal_overwrite   码 logp -0.6356 命中 0.000 cos_best 0.0298 cos_true -0.0318
+    K6_ideal_full        码 logp -2.2828 命中 0.000 cos_best 0.0297 cos_true -0.0317
+    K7_random_full       码 logp -2.2261 命中 0.044 cos_best 0.0300 cos_true -0.0121
+    K8_ideal_full_nowrite 码 logp -2.2828 命中 0.000 cos_best 0.0297 cos_true -0.0317
+    K9_ideal_full_overwrite 码 logp -0.6004 命中 0.000 cos_best 0.0293 cos_true -0.0337
+    K10_pure_full        码 logp -2.1794 命中 0.011 cos_best 0.0884 cos_true 0.0298
+    K11_pure_full_nowrite 码 logp -2.1794 命中 0.000 cos_best 0.0000 cos_true 0.0000
+    P1_pos_random        码 logp +nan 命中 0.000 cos_best nan cos_true nan
+    P2_pos_key_align     码 logp +nan 命中 0.000 cos_best nan cos_true nan
+    P3_pos_ideal         码 logp +nan 命中 0.000 cos_best nan cos_true nan
+    P4_pos_ideal_full    码 logp -2.3672 命中 0.000 cos_best nan cos_true nan
+    P5_pos_ideal_full_nowrite 码 logp -2.2828 命中 0.000 cos_best 0.0297 cos_true -0.0317
+    P6_pos_ideal_full_over 码 logp -2.7456 命中 0.000 cos_best nan cos_true nan
+
+  [种子 20261104]
+    K0_base            码 logp -1.9526
+    K1_random            码 logp -1.9051 命中 0.006 cos_best 0.0631 cos_true 0.0094
+    K2_key_align         码 logp -1.6115 命中 0.000 cos_best 0.0744 cos_true 0.0133
+    K3_ideal             码 logp -2.0254 命中 0.000 cos_best 0.0663 cos_true 0.0182
+    K4_ideal_nowrite     码 logp -2.0254 命中 0.000 cos_best 0.0663 cos_true 0.0181
+    K5_ideal_overwrite   码 logp -0.5642 命中 0.022 cos_best 0.0688 cos_true 0.0233
+    K6_ideal_full        码 logp -1.9201 命中 0.006 cos_best 0.0557 cos_true 0.0028
+    K7_random_full       码 logp -1.8331 命中 0.000 cos_best 0.0763 cos_true 0.0229
+    K8_ideal_full_nowrite 码 logp -1.9201 命中 0.006 cos_best 0.0556 cos_true 0.0028
+    K9_ideal_full_overwrite 码 logp -0.5700 命中 0.011 cos_best 0.0565 cos_true 0.0070
+    K10_pure_full        码 logp -1.9526 命中 0.006 cos_best 0.1029 cos_true 0.0474
+    K11_pure_full_nowrite 码 logp -1.9526 命中 0.000 cos_best 0.0000 cos_true 0.0000
+    P1_pos_random        码 logp +nan 命中 0.000 cos_best nan cos_true nan
+    P2_pos_key_align     码 logp +nan 命中 0.000 cos_best nan cos_true nan
+    P3_pos_ideal         码 logp +nan 命中 0.000 cos_best nan cos_true nan
+    P4_pos_ideal_full    码 logp -1.5818 命中 0.017 cos_best 0.0526 cos_true -0.0109
+    P5_pos_ideal_full_nowrite 码 logp -1.9201 命中 0.006 cos_best 0.0556 cos_true 0.0028
+    P6_pos_ideal_full_over 码 logp -4.6013 命中 0.006 cos_best 0.0526 cos_true -0.0109
+
+  [种子 7]
+    K0_base            码 logp -2.3041
+    K1_random            码 logp -2.0635 命中 0.006 cos_best 0.0433 cos_true -0.0211
+    K2_key_align         码 logp -2.3878 命中 0.072 cos_best 0.0611 cos_true 0.0214
+    K3_ideal             码 logp -2.1820 命中 0.000 cos_best 0.0465 cos_true -0.0223
+    K4_ideal_nowrite     码 logp -2.1820 命中 0.000 cos_best 0.0465 cos_true -0.0222
+    K5_ideal_overwrite   码 logp -0.6025 命中 0.000 cos_best 0.0459 cos_true -0.0206
+    K6_ideal_full        码 logp -2.2712 命中 0.000 cos_best 0.0436 cos_true -0.0176
+    K7_random_full       码 logp -2.0667 命中 0.006 cos_best 0.0402 cos_true -0.0211
+    K8_ideal_full_nowrite 码 logp -2.2712 命中 0.000 cos_best 0.0435 cos_true -0.0177
+    K9_ideal_full_overwrite 码 logp -0.6223 命中 0.000 cos_best 0.0430 cos_true -0.0220
+    K10_pure_full        码 logp -2.3041 命中 0.000 cos_best 0.1033 cos_true 0.0454
+    K11_pure_full_nowrite 码 logp -2.3041 命中 0.000 cos_best 0.0000 cos_true 0.0000
+    P1_pos_random        码 logp +nan 命中 0.000 cos_best nan cos_true nan
+    P2_pos_key_align     码 logp +nan 命中 0.000 cos_best nan cos_true nan
+    P3_pos_ideal         码 logp +nan 命中 0.000 cos_best nan cos_true nan
+    P4_pos_ideal_full    码 logp -2.4378 命中 0.011 cos_best 0.0453 cos_true 0.0016
+    P5_pos_ideal_full_nowrite 码 logp -2.2712 命中 0.000 cos_best 0.0435 cos_true -0.0177
+    P6_pos_ideal_full_over 码 logp -2.9470 命中 0.000 cos_best 0.0403 cos_true -0.0120
+
+[R2] 分析与判据
+  各臂（跨种子均值）:
+    K0_base              码logp -2.1454  命中 0.000  cos_best 0.0000  cos_true 0.0000
+    K1_random            码logp -1.9925  命中 0.007  cos_best 0.0499  cos_true -0.0078
+    K2_key_align         码logp -1.9884  命中 0.033  cos_best 0.0611  cos_true 0.0132
+    K3_ideal             码logp -2.2393  命中 0.000  cos_best 0.0472  cos_true -0.0104
+    K4_ideal_nowrite     码logp -2.2393  命中 0.000  cos_best 0.0472  cos_true -0.0103
+    K5_ideal_overwrite   码logp -0.6008  命中 0.007  cos_best 0.0481  cos_true -0.0097
+    K6_ideal_full        码logp -2.1580  命中 0.002  cos_best 0.0430  cos_true -0.0155
+    K7_random_full       码logp -2.0420  命中 0.017  cos_best 0.0488  cos_true -0.0035
+    K8_ideal_full_nowrite 码logp -2.1580  命中 0.002  cos_best 0.0429  cos_true -0.0155
+    K9_ideal_full_overwrite 码logp -0.5975  命中 0.004  cos_best 0.0429  cos_true -0.0162
+    K10_pure_full        码logp -2.1454  命中 0.006  cos_best 0.0982  cos_true 0.0409
+    K11_pure_full_nowrite 码logp -2.1454  命中 0.000  cos_best 0.0000  cos_true 0.0000
+    P1_pos_random        码logp +nan  命中 0.000  cos_best nan  cos_true nan
+    P2_pos_key_align     码logp +nan  命中 0.000  cos_best nan  cos_true nan
+    P3_pos_ideal         码logp +nan  命中 0.000  cos_best nan  cos_true nan
+    P4_pos_ideal_full    码logp -2.1289  命中 0.009  cos_best nan  cos_true nan
+    P5_pos_ideal_full_nowrite 码logp -2.1580  命中 0.002  cos_best 0.0429  cos_true -0.0155
+    P6_pos_ideal_full_over 码logp -3.4313  命中 0.002  cos_best nan  cos_true nan
+[FAIL] H1 〔代数层〕键空间对齐使写入内容可被读出（K2 命中 > K1 命中）: 命中配对差 +0.0259（sd 0.1193, t=+2.92, 符号检验 p=0.007197, 正向 17/21）跨种子 +0.0167 -0.0056 +0.0667
+[FAIL] H2 〔存在性〕理想映射（Q=Pk, Pv=I, O=I）下检索确实成立（命中率≥0.9）: K3 命中率 0.0000（逐种子 0.000, 0.000, 0.000）；cos_true -0.0104
+[FAIL] H3 〔任务层〕读出的记忆能因果改变输出（K3 正确码 log-prob > base）: 码 log-prob 配对差 -0.0940（sd 0.2420, t=-5.21, 符号检验 p=0.03037, 正向 75/180）跨种子 -0.3312 -0.0729 +0.1221
+[FAIL] H4 〔对照〕增益来自记忆内容而非注入结构（K3 > K4 写关对照）: 配对差 +0.0000（sd 0.0000, t=+0.00, p=1）跨种子 +0.0000 +0.0000 +0.0000
+[PASS] H5 〔分解〕失败点可定位（K5 直接注入真值 vs K3 读出 / vs base）: K5-K3 = +1.6385（跨种子 +1.8750 +1.4612 +1.5794）；K5-base = +1.5446 ⇒ 无法归因：直接注入真值既不优于读出也不优于基座
+[FAIL] H6 Freeze C 回归（全部臂写入梯度精确 0）: 见 A1'（逐臂）
+[FAIL] H1' 〔对齐·容量不受限〕查询坐标对齐是检索有效的必要条件（K6 命中 > K7）: 命中配对差 -0.0148（sd 0.0774, t=-2.57, 符号检验 p=0.02148, 正向 1/10）跨种子 -0.0444 +0.0056 -0.0056
+[FAIL] H2' 〔存在性·容量不受限〕检索确实可实现（K6 命中 ≥ 0.9）: K6 命中率 0.0019（逐种子 0.000, 0.006, 0.000）；cos_true -0.0155
+[FAIL] H2'' 〔容量界〕因子化核心的检索失败可归因于 rank-r 容量界（K6 命中 > K3）: K6-K3 命中配对差 +0.0019（t=+1.00, p=1）；K6 命中 0.0019 vs K3 0.0000
+[FAIL] H3' 〔任务层·容量不受限〕读出的记忆能因果改变输出（K6 码 logp > base）: 配对差 -0.0126（sd 0.1297, t=-1.31, 符号检验 p=0.1565, 正向 80/180）跨种子 -0.1034 +0.0325 +0.0329
+[FAIL] H4' 〔对照·容量不受限〕增益来自记忆内容而非注入结构（K6 > K8 写关对照）: 配对差 +0.0000（t=+0.00, p=1）跨种子 +0.0000 +0.0000 +0.0000
+[PASS] H5' 〔使用通道·容量不受限〕oracle 注入真值有效（K9 码 logp > base）: 配对差 +1.5478（sd 0.9439, t=+22.00, 符号检验 p=1.25e-12, 正向 180/180）
+[FAIL] H2''' 〔干净记忆·存在性〕检索确实可实现（W^0=0 + 全矩阵 + 全对齐，命中 ≥ 0.9）: K10 命中率 0.0056（逐种子 0.011, 0.006, 0.000）；cos_true 0.0409；cos_best 0.0982
+[FAIL] H3''' 〔干净记忆·任务层〕记忆内容因果改变输出（K10 > K11 严格对照）: K10-K11 配对差 +0.0000（sd 0.0000, t=+0.00, 符号检验 p=1, 正向 0/0）跨种子 +0.0000 +0.0000 +0.0000；K11 与 base 的差 +0.000000（应≈0，验证对照的严格性）
+[FAIL] H6''' 〔W^0 淹没效应〕$W^0$ 的构造是检索的必要条件之一（K10 命中 > K6）: K10-K6 命中配对差 +0.0037（t=+1.00, p=0.625）；K10 命中 0.0056 vs K6 0.0019
+[FAIL] H7' 〔逐位置写·对齐〕查询坐标对齐在忠实写入下是检索有效的必要条件（P4 命中 > P1）: 命中配对差 +0.0093（sd 0.0549, t=+2.26, 符号检验 p=0.0625, 正向 5/5）跨种子 +0.0000 +0.0167 +0.0111
+[FAIL] H8' 〔逐位置写·存在性〕检索确实可实现（P4 命中 ≥ 0.9）: P4 命中率 0.0093（逐种子 0.000, 0.017, 0.011）；cos_true nan
+[FAIL] H9' 〔逐位置写·任务层〕记忆内容因果改变输出（P4 > P5 严格对照）: P4-P5 配对差 +0.0291（sd 1.6337, t=+0.24, 符号检验 p=0.04387, 正向 104/180）跨种子 -0.0844 +0.3383 -0.1666
+[FAIL] H10' 〔写入粒度〕逐位置写（忠实 v2.4）是可检索性的必要条件（P4 命中 > K10 平均写）: P4-K10 命中配对差 +0.0037（t=+0.71, p=0.7266）；P4 0.0093 vs K10 0.0056
+
+=== DIR-11 R4：5/24 通过 ===

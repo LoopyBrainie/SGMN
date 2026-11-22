@@ -1,0 +1,40 @@
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+Stage A · DIR-29（切线 Lyapunov 装置）
+  [PASS] A29-1 worked-example: {'J11,J12,J22': [-0.21499999999999986, -2.13, -0.21499999999999986], 'det': -4.4906749999999995}
+  [PASS] A29-2 jacobian-fd: {'worst_rel': 3.289526712704271e-09}
+  [PASS] A29-3 cross-device-anchor: {'eta_c_full_g0': 0.49331056103257254, 'anchor': 0.49090552}
+  [PASS] A29-4 triangular-split: {'d_full': 0.00464721274458571, 'd_fac': 0.005176802019887302}
+  [PASS] A29-5 noise-present: {'median_noisy': 0.4763698593471969, 'median_noiseless': 0.0, 'ratio': 4.763698593471969e+299}
+  [PASS] A29-6 determinism: {'run1': 61.889415890659514, 'run2': 61.889415890659514}
+  [PASS] A29-7 col-seed: {'max_abs_diff': 0.0}
+  [PASS] A29-8 stream-independence: {'corr_a_b1': 0.0009645288828744518}
+Stage A: 8/8 PASS  (8.8s)  md5=cb4992d25b42a0af2b2230fcfc6f36c1

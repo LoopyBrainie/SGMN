@@ -1,0 +1,29 @@
+REP keys γ=10 warm  u*=0.094983/ 0.952340  ‖W1‖=1.343269e-01  ΔW=2.32e-12  warmup 1773 步 res=1.0e-15  ‖Δ‖=1.0e-03
+RHO keys γ=10 ρ_λ^warm=0.565508  λ(1.05)=2.713479 λ(1.10)=2.890312  dλ/dρ=1.7684
+/opt/pytorch/lib64/python3.13/site-packages/numpy/_core/numeric.py:995: RuntimeWarning: overflow encountered in multiply
+  return multiply(a.ravel()[:, newaxis], b.ravel()[newaxis, :], out)
+/home/ec2-user/sgmn-loop/dir72/step72.py:27: RuntimeWarning: invalid value encountered in matmul
+  U1 = U1 - eta * (G1 @ V1); V1 = V1 - eta * (G1.T @ U1)
+/home/ec2-user/sgmn-loop/dir72/step72.py:28: RuntimeWarning: overflow encountered in matmul
+  k2 = [W1 @ k for k in kin]
+/home/ec2-user/sgmn-loop/dir72/step72.py:30: RuntimeWarning: invalid value encountered in matmul
+  B2 = sum(np.outer(P @ k, k) for k in k2) / D
+/home/ec2-user/sgmn-loop/dir72/step72.py:26: RuntimeWarning: invalid value encountered in matmul
+  G1 = (W1 @ C1 - B1) + LAM * W1
+  [near keys γ=10] 端检 lo=0.0248295 div=False / hi=0.124148 div=True
+   试 η=0.0555204 div=True
+   试 η=0.0371288 div=False
+   试 η=0.0454027 div=False
+/home/ec2-user/sgmn-loop/dir72/step72.py:32: RuntimeWarning: overflow encountered in matmul
+  U2 = U2 - eta * (G2 @ V2); V2 = V2 - eta * (G2.T @ U2)
+/home/ec2-user/sgmn-loop/dir72/step72.py:17: RuntimeWarning: overflow encountered in matmul
+  W1 = U1 @ V1.T; W2 = U2 @ V2.T
+/home/ec2-user/sgmn-loop/dir72/step72.py:23: RuntimeWarning: invalid value encountered in matmul
+  kin = [k + gamma * (W2 @ k) for k in ks]
+/home/ec2-user/sgmn-loop/dir72/step72.py:31: RuntimeWarning: invalid value encountered in matmul
+  G2 = (W2 @ C2 - B2) + LAM * W2
+   试 η=0.0502074 div=True
+   试 η=0.0477446 div=True
+   试 η=0.0465589 div=False
+   试 η=0.0471481 div=True
+DONE warm keys γ=10 ρ_div=0.5661 [0.5625,0.5697]·η*_lin n_eval=9 ok=True | ρ_λ=0.5655 | 相对差=0.10%

@@ -1,0 +1,20 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+=== smoke（b∈(40, 20, 4) × 5 种子，cnt 外生冻结，tau=0.0950）===
+  b=40 seed=20261028 | G +0.00999 U0 +0.04240 k_B 569 q̄ 9.483
+  b=20 seed=20261028 | G +0.01185 (b=40 的 +0.00999) Δ +0.00186 | k_B 569 q̄_own 8.017 dist 6.900 ν_cap 0.050
+  b= 4 seed=20261028 | G +0.00461 (b=40 的 +0.00999) Δ -0.00539 | k_B 569 q̄_own 5.700 dist 6.900 ν_cap 0.050
+  b=40 seed=20261104 | G +0.01122 U0 +0.03756 k_B 556 q̄ 9.267
+  b=20 seed=20261104 | G +0.01062 (b=40 的 +0.01122) Δ -0.00059 | k_B 556 q̄_own 8.067 dist 6.200 ν_cap 0.000
+  b= 4 seed=20261104 | G +0.00777 (b=40 的 +0.01122) Δ -0.00344 | k_B 556 q̄_own 5.983 dist 6.200 ν_cap 0.000
+  b=40 seed=7 | G +0.01355 U0 +0.04020 k_B 574 q̄ 9.567
+  b=20 seed=7 | G +0.01073 (b=40 的 +0.01355) Δ -0.00282 | k_B 574 q̄_own 7.650 dist 6.667 ν_cap 0.000
+  b= 4 seed=7 | G +0.00264 (b=40 的 +0.01355) Δ -0.01091 | k_B 574 q̄_own 5.500 dist 6.667 ν_cap 0.000
+  b=40 seed=20261111 | G +0.00713 U0 +0.04120 k_B 540 q̄ 9.000
+  b=20 seed=20261111 | G +0.00698 (b=40 的 +0.00713) Δ -0.00015 | k_B 540 q̄_own 7.867 dist 6.267 ν_cap 0.000
+  b= 4 seed=20261111 | G +0.00274 (b=40 的 +0.00713) Δ -0.00438 | k_B 540 q̄_own 5.850 dist 6.267 ν_cap 0.000
+  b=40 seed=20261118 | G +0.00517 U0 +0.03324 k_B 557 q̄ 9.283
+  b=20 seed=20261118 | G +0.00464 (b=40 的 +0.00517) Δ -0.00053 | k_B 557 q̄_own 8.083 dist 6.167 ν_cap 0.000
+  b= 4 seed=20261118 | G +0.00497 (b=40 的 +0.00517) Δ -0.00020 | k_B 557 q̄_own 5.967 dist 6.167 ν_cap 0.000
+  [落盘] /home/ec2-user/sgmn-loop/dir26m/out/DIR26Mr10_smoke.json（1738.5s）

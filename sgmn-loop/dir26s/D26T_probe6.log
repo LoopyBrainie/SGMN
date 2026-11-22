@@ -1,0 +1,10 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+n = 2 seeds = [20261028, 20261104] c_tau = 0.095
+★ 复现校验：max|重算μ − 落盘μ| = 0.0
+  t=0:  ΔF=-0.005331  ΔK=-0.003219  ΔG_t=+0.002113
+  t=1:  ΔF=-0.001579  ΔK=-0.000114  ΔG_t=+0.001465
+  t=2:  ΔF=-0.001550  ΔK=-0.001655  ΔG_t=-0.000105
+  t=3:  ΔF=-0.004949  ΔK=-0.010720  ΔG_t=-0.005771
+WROTE dir26s/out/DIR26T_probe_perround.json

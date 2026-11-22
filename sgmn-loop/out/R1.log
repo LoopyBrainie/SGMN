@@ -1,0 +1,31 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+
+[A1] 装置自检（纯张量层，机器精度）
+[PASS] A1a  G = alpha(Wk-v)k^T + lambda(W-W^0) vs autograd: 最大相对误差 0.000e+00
+[PASS] A1b  因子化二阶展开 (v2.4 §3.3): 最大相对误差 1.409e-07
+[PASS] A1c  同步步与异步步确实不同（确认走同步支）: 两种步长 Delta W 最大差 9.569e-04
+[PASS] A1d  k 取 t-1 输入、v 取 t 输入（v2.4 §2.3）: 首个时间步未写入: True；写入后 U 与手算值相对误差 0.000e+00
+[PASS] A1e  读用 W_t、写产生 W_{t+1}（v2.4 §2.2 顺序）: 读后 W 未变: True；写后 W 已变: True
+
+[A2] sg 语义：梯度为零 + 前向仍参与
+[PASS] A2a  dL/dW|_read 精确为 0（None 或逐元素 0）: W.grad max|.| = 0.0（grad 为 None=True；None 即'从未接入计算图'，同样满足'梯度为零'）
+[PASS] A2b  读支路的输入梯度仍存在（截断只断 W，不断 q）: q.grad max|.| = 1.974e+00
+/home/ec2-user/sgmn-loop/R1_stage_a.py:135: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  dch = float((m2 - m.detach()).abs().max())
+[PASS] A2c  前向值仍参与计算（sg 不是前向断开）: 把 W 改变 0.1 量级后，m 的变化 3.437e-01（非 0 => 前向确实用了 W 的值）
+
+[A3-A5] 模型级检查（真实预训练 LLM）
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:47,  6.04it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 725.11it/s]Loading weights:  92%|█████████▏| 267/290 [00:00<00:00, 789.07it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 721.58it/s]
+[PASS] A5  非退化点：gamma!=0, U,V!=0, ||W-W^0||>0: gamma=[0.05000000074505806, 0.05000000074505806, 0.05000000074505806]；U,V 非零:True；||W-W0||>0:True
+[PASS] A3a  冻结基座：参数 requires_grad=False 且 backward 后无梯度: 全部冻结:True；梯度全为 None/0:True
+[PASS] A3b  基座主路径仍传梯度（低层读参数拿到非零梯度）: 有非零梯度的读参数 9/9 个：['L8.Wq', 'L8.Wo', 'L8.gamma', 'L12.Wq', 'L12.Wo', 'L12.gamma']
+[PASS] A3c  优化器步进后冻结基座 .data 逐位不变: 全部 290 个基座张量逐位相同: True
+[PASS] A2d  模型级：写入通道梯度精确为 0（None 或 0）: 写入参数 15 个，最大梯度 0.000e+00
+  · A4 阴性对照：构造 drop_sg=True 的装置
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:18,  3.67it/s]Loading weights:  80%|████████  | 232/290 [00:00<00:00, 782.45it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 688.98it/s]
+[PASS] A4  阴性对照：去掉 sg 后写入通道必须拿到非零梯度（检查有区分力）: 9/15 个写入参数拿到非零梯度：['L8.U', 'L8.V', 'L8.W0', 'L12.U', 'L12.V', 'L12.W0', 'L16.U', 'L16.V']
+  · 模型元信息: {'model': 'Qwen/Qwen2.5-0.5B-Instruct', 'n_layers': 24, 'hidden_size': 896, 'mount': [8, 12, 16], 'd_k': 896, 'd_v': 896, 'r': 8, 'alpha': 1.0, 'lambda': 0.05, 'eta': 0.01, 'gamma': 0.05, 'dtype': 'torch.float32', 'seq_len': 32, 'batch': 4, 'read_params_with_grad': ['L8.Wq', 'L8.Wo', 'L8.gamma', 'L12.Wq', 'L12.Wo', 'L12.gamma', 'L16.Wq', 'L16.Wo', 'L16.gamma']}
+
+=== DIR-04 Stage A：14/14 通过 -> STAGE A PASSED ===

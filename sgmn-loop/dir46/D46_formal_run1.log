@@ -1,0 +1,26 @@
+ALL SHARDS DONE (formal)
+-rw-rw-r--. 1 ec2-user ec2-user  38720 Nov 15 09:06 DIR46_probe_a.json
+-rw-rw-r--. 1 ec2-user ec2-user  28158 Nov 15 10:02 DIR46_smoke_arm_period2.jsonl
+-rw-rw-r--. 1 ec2-user ec2-user  10277 Nov 15 10:02 DIR46_smoke_arm_perstep.jsonl
+-rw-rw-r--. 1 ec2-user ec2-user 612272 Nov 15 10:04 DIR46r10_arm_period2_a.jsonl
+-rw-rw-r--. 1 ec2-user ec2-user 646108 Nov 15 10:04 DIR46r10_arm_period2_b.jsonl
+-rw-rw-r--. 1 ec2-user ec2-user 296965 Nov 15 10:04 DIR46r10_arm_perstep_a.jsonl
+-rw-rw-r--. 1 ec2-user ec2-user 307732 Nov 15 10:04 DIR46r10_arm_perstep_b.jsonl
+-rw-rw-r--. 1 ec2-user ec2-user   1266 Nov 15 10:01 DIR46r10_stageA.json
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir46/p3_control46.py:66: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  num = float(W @ K[s] @ tgt)
+  genuine   C = +0.95800  (sd 0.0561, n=12, 删失 0)
+  rot_pk    C = +0.94407  (sd 0.0586, n=12, 删失 0)
+  swap_v    C = +0.15531  (sd 0.6799, n=12, 删失 0)
+  P-3   genuine − rot_pk : +0.01392  (3se 0.03453, n=12)  ns
+  P-3b  genuine − swap_v : +0.80269  (3se 0.60923, n=12)  ★显著
+→ /home/ec2-user/sgmn-loop/dir46/out/DIR46r10_p3.json
+
+★ 结局 = PASS（判定表第 8 支）
+  理由：H46 证实：C_perstep(8)<C_LOW 且 C_period2(8)≥C_HIGH，且不在噪声带内
+  [period2] C(2)=+0.98403  C(8)=+0.90712  (sd 0.1251, 3se 0.01891, n_use 394, 删失 6/400=0.015)  首次<0.5 于 N_w=None
+  [perstep] C(2)=+0.98403  C(8)=+0.25665  (sd 0.2258, 3se 0.03457, n_use 384, 删失 16/400=0.040)  首次<0.5 于 N_w=8
+  结构违规 0 处 ⇒ /home/ec2-user/sgmn-loop/dir46/out/DIR46r10_adjudication.json

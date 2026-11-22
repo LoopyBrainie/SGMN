@@ -1,0 +1,23 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:51,  5.57it/s]Loading weights:  64%|██████▍   | 185/290 [00:00<00:00, 781.98it/s]Loading weights:  99%|█████████▉| 287/290 [00:00<00:00, 871.29it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 742.61it/s]
+事实 32 条；块 600×64；值池 27；γ 网格 (0.005, 0.02, 0.05, 0.2)
+
+===== Stage A =====
+  md5: {'sgmn_module.md5': '80e334a5a6751a07d9e03162ebf17ff0', 'R1_task90.md5': '2fb3b65360736e971da14e3d1c4da2a6'}
+[PASS] A104-1: 装置由 `import R1_task90` 逐字复用；sgmn_module md5=80e334a5… R1_task90 md5=2fb3b653…
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:420: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  mx = max(float((m.gamma * probe).abs().max()) for m in st.mems.values())
+[PASS] A104-4: gamma=0 ⇒ max|mem.gamma*m| = 0.0e+00（须 = 0）
+[PASS] A104-3: learned: requires_grad=True（True）；frozen: requires_grad=False（True）；frozen 优化器参数组不含 gamma（见 `params_nogamma`）
+[PASS] A104-8: 两次测量 kappa 逐位相同（True）；层 ['12', '16', '8']
+  [LEARN-INJ g=0.05 seed=20261028] acc_item=0.0208 acc_q=0.0000 g_end=[0.08012425154447556, 0.11101379990577698, 0.13030366599559784] 40.5s
+  [LEARN-MEM g=0.05 seed=20261028] acc_item=0.0625 acc_q=0.0000 g_end=[0.05003779008984566, 0.2586973011493683, -0.03658862039446831] 61.9s
+[PASS] A104-2: 逐位复现 D-108（seed 20261028）：INJ.acc_q 0.000000 vs 0.000000 ✓; INJ.acc_item 0.020833 vs 0.020833 ✓; INJ.final_loss 0.810856 vs 0.810856 ✓; MEM.acc_q 0.000000 vs 0.000000 ✓; MEM.acc_item 0.062500 vs 0.062500 ✓; MEM.final_loss 0.778825 vs 0.778825 ✓
+[PASS] A104-5: 写侧参数梯度违规计数 = 0（须 0）
+[PASS] A104-9: 算例：acc_item=0.3750（须 0.3750）、acc_inj=0.1042（须 0.1042）、Δ=0.270833（须 0.270833）、不一致=15（须 15）、p=5.500e-04（须 ∈ [2.93e-04, 6.84e-04]，精确 16/2^15=4.883e-04）
+[PASS] A104-7: 置换零分布：item_mean=0.2475（须∈[0.18,0.32]）、q_mean=0.0152（须∈[0,0.10]）
+[PASS] A104-6: S 形状 (48, 4)、全有限=True；`preds`/`S`/`tgt` 全量落盘（修 `D-108` 的空 `preds`）
+
+★ Stage A 全过

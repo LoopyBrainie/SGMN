@@ -1,0 +1,57 @@
+{
+ "guards": {
+  "A40-3_device_md5": "8fa40f708600bec7e6c484727d2180c7",
+  "A40-3_task_md5": "96ef89e87ec61556b52e0e464850087e",
+  "A40-3_dir38_md5": "d725da6d80bd072f9068a51857abf744",
+  "A40-3_dir39_md5": "795563cb6212f228f8463ed418f8ce8c",
+  "A40-3_ok": true,
+  "A40-4_card_md5": "3522789d19fcd21894db949ce9253364",
+  "A40-4_card_v10_md5": "07541c443fb971ef7fcaced9b201dad9",
+  "A40-4_ok": true,
+  "A40-5_train_hist": 0,
+  "A40-5_train_eval": 0,
+  "A40-5_eval_hist": 0,
+  "A40-5_ok": true,
+  "A40-1_max_abs_diff": 0.0,
+  "A40-1_ok": true,
+  "A40-2_max_abs_diff": 0.0,
+  "A40-2_Wmax_40": 2.041150584528398,
+  "A40-2_Wmax_38": 2.041150584528398,
+  "A40-2_ok": true,
+  "A40-6_c_eq_h": {
+   "oracle": 0.0,
+   "rand": 0.0,
+   "learned": 0.0,
+   "learned_rc": 0.0
+  },
+  "A40-6_q_fp": {
+   "oracle": 8.983072201553044,
+   "rand": 6.280221571369992,
+   "learned": -3.980056158170547,
+   "learned_rc": -3.980056158170547
+  },
+  "A40-6_ok": true,
+  "A40-7_dWq1_frozen_arm": 0.0,
+  "A40-7_dWq1_trained_arm": 1.4752701724461148,
+  "A40-7_gradnorm_Wq1": 4.714157186505826,
+  "A40-7_ok": true,
+  "A40-8_init_deterministic": true,
+  "A40-8_ok": true,
+  "A40-9_Wmax": {
+   "oracle": 2.0331767885058887,
+   "rand": 2.0331767885058887,
+   "learned": 2.0331767885058887,
+   "learned_rc": 2.0331767885058887
+  },
+  "A40-9_ok": true,
+  "A40-10_dW_perm": 3.5056610166517364,
+  "A40-10_ok": true,
+  "A40-11_shared_identical": true,
+  "A40-11_norm_shared": 1.9157695762913933,
+  "A40-11_norm_inst_mean": 1.889692867745664,
+  "A40-11_ok": true,
+  "A40-12_norm_ratio": 1.0137994427511587,
+  "A40-12_ok": true
+ },
+ "ok": true
+}

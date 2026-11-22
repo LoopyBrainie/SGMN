@@ -1,0 +1,10 @@
+  import pynvml  # type: ignore[import]
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  num = float(Wm @ k @ v)
+[quiet] n=60 c0∈[+0.862,+1.000] mean_c0=+nan cross=0.000 cens=1.000 med_L=16 undef=2
+        curve: +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan
+[decay] n=60 c0∈[+0.862,+1.000] mean_c0=+nan cross=0.167 cens=0.828 med_L=16 undef=2
+        curve: +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan
+[busy ] n=60 c0∈[+0.862,+1.000] mean_c0=+nan cross=0.950 cens=0.017 med_L=2 undef=2
+        curve: +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan +nan
+saved dir48/out/DIR48_probe_a.json

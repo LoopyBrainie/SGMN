@@ -1,0 +1,33 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:56,  5.08it/s]Loading weights:  61%|██████▏   | 178/290 [00:00<00:00, 747.16it/s]Loading weights:  98%|█████████▊| 283/290 [00:00<00:00, 784.32it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 684.96it/s]
+事实 32；块 600；训练键 16；评测键 16；α=1.0 λ=0.05 η=3e-05
+
+===== Stage A 守卫（seed=20261028）=====
+[PASS] A91-26: γ=0 下「无写」与「写后」的 K,V 逐位相同（逐层 max|Δ|={8: 0.0, 12: 0.0, 16: 0.0}，须全为 0）
+[PASS] A91-20b: use_factorized 全 False（违例 []）；写入数={8: 599, 12: 599, 16: 599}，期望=599（=块数-1）
+[PASS] A91-22: W* 是装置自身目标的**精确不动点**：逐层相对残差 max=7.970e-11（须 ≤1e-10，float64）
+[PASS] A91-23: float32 落地保真：max(rel32/rel64)=1.0000（须 ≤1.05）；max rel32=7.899e-04（须 ≤1.5e-3，地板 8.03e-04）
+[PASS] A91-24: **逐对**方向：全部 32 对均降低（最小降低=4.371e+02，须>0）=True；**逐对**稳定：η 相对 2/(α|k|²+λ) 的最小余量=15.81×（须>1）=True；**报告** 模拟 rel 随轮数={0: 2.28e+00, 1: 1.30e-01, 2: 1.19e-01, 4: 1.19e-01, 8: 1.18e-01, 19: 1.18e-01, 64: 1.15e-01}
+
+  逐层读数（rel 为中位数口径）：
+    L8: rel(W0)=2.2846  rel(real)=0.1628  rel(W*)=7.899e-04  |W*|=29.505  η余量=18.01x  sim(19轮)=1.18e-01
+    L12: rel(W0)=2.5350  rel(real)=0.1914  rel(W*)=7.882e-04  |W*|=29.519  η余量=17.98x  sim(19轮)=1.40e-01
+    L16: rel(W0)=2.3811  rel(real)=0.2771  rel(W*)=4.799e-04  |W*|=29.498  η余量=15.81x  sim(19轮)=1.89e-01
+
+===== seed 20261028 =====
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/R2_task91.py:323: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  [W0 seed=20261028] acc_q=0.062 acc_item=0.1042 n_q=16 margin=-5.9421 pos=0.10 loss=2.1862949883200143e-06 div=False 42.7s
+  [real seed=20261028] acc_q=0.062 acc_item=0.1250 n_q=16 margin=-5.1094 pos=0.12 loss=2.3722601281406243e-06 div=False 62.0s
+  [Wstar seed=20261028] acc_q=0.000 acc_item=0.1250 n_q=16 margin=-5.1711 pos=0.12 loss=2.7084284602096886e-06 div=False 42.7s
+[PASS] A91-25@20261028: 三臂仅初值 W 不同：同 seed/同读批/同 READ_STEPS=600/同评测项 n_item=48（臂数 3）
+
+===== seed 7777 =====
+  [W0 seed=7777] acc_q=0.062 acc_item=0.1458 n_q=16 margin=-4.3491 pos=0.15 loss=1.5425665026214118e-06 div=False 42.8s
+  [real seed=7777] acc_q=0.000 acc_item=0.1250 n_q=16 margin=-5.0028 pos=0.12 loss=1.5521033886045644e-06 div=False 62.2s
+  [Wstar seed=7777] acc_q=0.062 acc_item=0.1458 n_q=16 margin=-4.7726 pos=0.15 loss=2.059933852933682e-06 div=False 42.9s
+[PASS] A91-25@7777: 三臂仅初值 W 不同：同 seed/同读批/同 READ_STEPS=600/同评测项 n_item=48（臂数 3）
+
+★ 完成 ⇒ dir91/out/probe91_wstar.json

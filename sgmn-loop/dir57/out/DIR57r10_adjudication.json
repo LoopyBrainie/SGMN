@@ -1,0 +1,60 @@
+{
+ "card": "DIR-57 rev 1.0",
+ "n": 96,
+ "seed_range": [
+  59000,
+  59095
+ ],
+ "structure": {
+  "same_seeds": true,
+  "n_ok": true,
+  "range_ok": true
+ },
+ "merge_agreement": {
+  "agree": true,
+  "max_abs_diff_m4_S": 0.0,
+  "max_abs_diff_m4_int8_S": 0.0
+ },
+ "rule": {
+  "T_GRAD": 0.2,
+  "T_ERASE": 0.1,
+  "T_DISP": 0.2,
+  "T_MIN": 0.5
+ },
+ "readings": {
+  "S1_bar": 0.18710458049920065,
+  "G_bar": 0.3600771771171117,
+  "three_se_G": 0.072635916604588,
+  "pi_min": 0.6666666666666666,
+  "M8_bar": -0.0066039478768975535,
+  "D8_bar": 0.0690088265461592,
+  "m1_pos_frac": 1.0,
+  "m1_null_frac": 0.9895833333333334,
+  "S4_by_position_median": [
+   0.18710458049920065,
+   0.32175869440499927,
+   0.41469532071223986,
+   0.5481240372477796
+  ],
+  "S8_by_position_median": [
+   -0.00479711908401903,
+   -0.012850315975236004,
+   -0.005725634540212909,
+   -0.008401370660148344
+  ],
+  "dS_by_position_median": [
+   0.20380734458901495,
+   0.3247714898630487,
+   0.4269514676108488,
+   0.5584569620871522
+  ],
+  "frac_all_S8_positive": 0.14583333333333334
+ },
+ "gate": {
+  "fail": false,
+  "finite_ok": true
+ },
+ "branch": "ORDER-DOMINATED",
+ "hit": "F1",
+ "counted": false
+}

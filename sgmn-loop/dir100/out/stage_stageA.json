@@ -1,0 +1,390 @@
+{
+ "stage": "stageA",
+ "cells": [
+  {
+   "seed": 20261028,
+   "arm": "wq_train",
+   "gamma_final": 0.015572194941341877,
+   "dW_rel_read": 0.0,
+   "write_calls": {
+    "8": 600,
+    "12": 600,
+    "16": 600
+   },
+   "geo": {
+    "8": {
+     "maxcos": 1.735985279083252e-06,
+     "cos_median": -1.5832483768463135e-08
+    },
+    "12": {
+     "maxcos": 1.9855797290802e-06,
+     "cos_median": 7.450580596923828e-09
+    },
+    "16": {
+     "maxcos": 1.7741695046424866e-06,
+     "cos_median": -4.842877388000488e-08
+    }
+   },
+   "acc": {
+    "written": {
+     "acc_train": 0.8125,
+     "acc_held": 0.0,
+     "margin_train": 7.8417875,
+     "margin_held": -9.507270833333335
+    },
+    "W0": {
+     "acc_train": 0.1875,
+     "acc_held": 0.0,
+     "margin_train": -0.9171583333333332,
+     "margin_held": -12.469697916666666
+    },
+    "zero": {
+     "acc_train": 0.0625,
+     "acc_held": 0.125,
+     "margin_train": -1.8685854166666669,
+     "margin_held": -0.63905
+    },
+    "Wor": {
+     "acc_train": 0.0625,
+     "acc_held": 0.0625,
+     "margin_train": -1.4940645833333333,
+     "margin_held": -0.7868770833333331
+    }
+   },
+   "Mchk": {
+    "8": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9985290765762329,
+     "cos_he_all": 1.0,
+     "cos_eff_he": -2.012130266848544e-07
+    },
+    "12": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9982401132583618,
+     "cos_he_all": 1.0,
+     "cos_eff_he": 1.3697501799470047e-07
+    },
+    "16": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9964532852172852,
+     "cos_he_all": 1.0,
+     "cos_eff_he": -8.142444585246267e-08
+    }
+   },
+   "Wq_drift": 0.49583959579467773,
+   "key_arm": "white",
+   "d_tr": 0.625,
+   "d_ho": 0.0,
+   "sec": 104.1,
+   "violations": 0,
+   "diverged": false,
+   "final_loss": 1.4710406551898815e-06
+  },
+  {
+   "seed": 20261028,
+   "arm": "wq_solved",
+   "gamma_final": 0.034590136259794235,
+   "dW_rel_read": 0.0,
+   "write_calls": {
+    "8": 600,
+    "12": 600,
+    "16": 600
+   },
+   "geo": {
+    "8": {
+     "maxcos": 1.730397343635559e-06,
+     "cos_median": -1.4435499906539917e-08
+    },
+    "12": {
+     "maxcos": 1.9855797290802e-06,
+     "cos_median": 7.450580596923828e-09
+    },
+    "16": {
+     "maxcos": 1.7741695046424866e-06,
+     "cos_median": -4.842877388000488e-08
+    }
+   },
+   "acc": {
+    "written": {
+     "acc_train": 0.8125,
+     "acc_held": 0.0,
+     "margin_train": 6.176285416666666,
+     "margin_held": -6.121568749999999
+    },
+    "W0": {
+     "acc_train": 0.3125,
+     "acc_held": 0.0,
+     "margin_train": -1.041366666666667,
+     "margin_held": -7.44405
+    },
+    "zero": {
+     "acc_train": 0.0625,
+     "acc_held": 0.125,
+     "margin_train": -1.8685854166666669,
+     "margin_held": -0.63905
+    },
+    "Wor": {
+     "acc_train": 0.0625,
+     "acc_held": 0.125,
+     "margin_train": -1.6870937499999998,
+     "margin_held": -0.7155479166666664
+    }
+   },
+   "Mchk": {
+    "8": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9985290765762329,
+     "cos_he_all": 1.0,
+     "cos_eff_he": -2.0079549756246706e-07
+    },
+    "12": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9982401132583618,
+     "cos_he_all": 1.0,
+     "cos_eff_he": 1.3697501799470047e-07
+    },
+    "16": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9964532852172852,
+     "cos_he_all": 1.0,
+     "cos_eff_he": -8.142444585246267e-08
+    }
+   },
+   "Wq_drift": 0.0,
+   "key_arm": "white",
+   "d_tr": 0.5,
+   "d_ho": 0.0,
+   "sec": 104.0,
+   "violations": 0,
+   "diverged": false,
+   "final_loss": 1.79813215345348e-05
+  },
+  {
+   "seed": 20261028,
+   "arm": "wq_solved_init",
+   "gamma_final": 0.015421400777995586,
+   "dW_rel_read": 0.0,
+   "write_calls": {
+    "8": 600,
+    "12": 600,
+    "16": 600
+   },
+   "geo": {
+    "8": {
+     "maxcos": 1.730397343635559e-06,
+     "cos_median": -1.4435499906539917e-08
+    },
+    "12": {
+     "maxcos": 1.9855797290802e-06,
+     "cos_median": 7.450580596923828e-09
+    },
+    "16": {
+     "maxcos": 1.7741695046424866e-06,
+     "cos_median": -4.842877388000488e-08
+    }
+   },
+   "acc": {
+    "written": {
+     "acc_train": 0.8125,
+     "acc_held": 0.0,
+     "margin_train": 7.747697916666667,
+     "margin_held": -9.6118875
+    },
+    "W0": {
+     "acc_train": 0.1875,
+     "acc_held": 0.0,
+     "margin_train": -0.9268166666666667,
+     "margin_held": -12.556947916666667
+    },
+    "zero": {
+     "acc_train": 0.0625,
+     "acc_held": 0.125,
+     "margin_train": -1.8685854166666669,
+     "margin_held": -0.63905
+    },
+    "Wor": {
+     "acc_train": 0.0625,
+     "acc_held": 0.0625,
+     "margin_train": -1.4912874999999997,
+     "margin_held": -0.7874374999999999
+    }
+   },
+   "Mchk": {
+    "8": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9985290765762329,
+     "cos_he_all": 1.0,
+     "cos_eff_he": -2.0079549756246706e-07
+    },
+    "12": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9982401132583618,
+     "cos_he_all": 1.0,
+     "cos_eff_he": 1.3697501799470047e-07
+    },
+    "16": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9964532852172852,
+     "cos_he_all": 1.0,
+     "cos_eff_he": -8.142444585246267e-08
+    }
+   },
+   "Wq_drift": 0.4973148703575134,
+   "key_arm": "white",
+   "d_tr": 0.625,
+   "d_ho": 0.0,
+   "sec": 104.6,
+   "violations": 0,
+   "diverged": false,
+   "final_loss": 1.5711763127512769e-06
+  },
+  {
+   "seed": 20261028,
+   "arm": "wq_oracle",
+   "gamma_final": 0.03387514501810074,
+   "dW_rel_read": 0.0,
+   "write_calls": {
+    "8": 600,
+    "12": 600,
+    "16": 600
+   },
+   "geo": {
+    "8": {
+     "maxcos": 1.730397343635559e-06,
+     "cos_median": -1.4435499906539917e-08
+    },
+    "12": {
+     "maxcos": 1.9855797290802e-06,
+     "cos_median": 7.450580596923828e-09
+    },
+    "16": {
+     "maxcos": 1.7760321497917175e-06,
+     "cos_median": -4.936009645462036e-08
+    }
+   },
+   "acc": {
+    "written": {
+     "acc_train": 0.8125,
+     "acc_held": 0.0,
+     "margin_train": 6.2371687499999995,
+     "margin_held": -5.676793749999999
+    },
+    "W0": {
+     "acc_train": 0.25,
+     "acc_held": 0.0,
+     "margin_train": -0.9891916666666667,
+     "margin_held": -7.527510416666666
+    },
+    "zero": {
+     "acc_train": 0.0625,
+     "acc_held": 0.125,
+     "margin_train": -1.8685854166666669,
+     "margin_held": -0.63905
+    },
+    "Wor": {
+     "acc_train": 0.0625,
+     "acc_held": 0.125,
+     "margin_train": -1.6891104166666668,
+     "margin_held": -0.7135916666666665
+    }
+   },
+   "Mchk": {
+    "8": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9985290765762329,
+     "cos_he_all": 1.0,
+     "cos_eff_he": -2.0079549756246706e-07
+    },
+    "12": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9982401132583618,
+     "cos_he_all": 1.0,
+     "cos_eff_he": 1.3697501799470047e-07
+    },
+    "16": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9964532852172852,
+     "cos_he_all": 1.0,
+     "cos_eff_he": -8.047647526154833e-08
+    }
+   },
+   "Wq_drift": 0.0,
+   "key_arm": "white",
+   "d_tr": 0.5625,
+   "d_ho": 0.0,
+   "sec": 104.0,
+   "violations": 0,
+   "diverged": false,
+   "final_loss": 1.6243269074038834e-05
+  }
+ ],
+ "checks": [
+  {
+   "id": "A99-9a",
+   "ok": true,
+   "detail": "Δ(3/4,1/4)=0.5"
+  },
+  {
+   "id": "A99-9b",
+   "ok": true,
+   "detail": "Δ(2/4,2/4)=0"
+  },
+  {
+   "id": "A99-9c",
+   "ok": true,
+   "detail": "W_or 解算：max|W_or·K−V| = 0.00e+00 (<1e-6)，shape=(2, 2)"
+  },
+  {
+   "id": "A100-9a",
+   "ok": true,
+   "detail": "ridge 精确解：shape=(2, 2)（应 (d,d_k)=(2,2)）· max|C·A−K|=0.00e+00"
+  },
+  {
+   "id": "A100-9b",
+   "ok": true,
+   "detail": "逐行余弦：shape=(2,)（应 (2,)）· cos=[1.0, 1.0]"
+  },
+  {
+   "id": "A100-9c",
+   "ok": true,
+   "detail": "同向目标：cos=[1.0, 1.0] ⇒ cos 不承担判别（判据只有 acc）"
+  },
+  {
+   "id": "A100-9d",
+   "ok": true,
+   "detail": "Wq=Aᵀ 约定：max|(Wq·cᵀ)ᵀ−K|=0.00e+00"
+  },
+  {
+   "id": "A100-0",
+   "ok": true,
+   "detail": "wq_train 复现 D-129 white：acc_tr=0.8125(应0.8125) acc_ho=0.0000(应0.0000) maxcos=1.7e-06(<1e-4)"
+  },
+  {
+   "id": "A100-1",
+   "ok": true,
+   "detail": "在位 cos_he(M) 最小层 = 0.9965 ≥ 0.90（前提核在正式装置内重现）"
+  },
+  {
+   "id": "A100-4",
+   "ok": true,
+   "detail": "wq_oracle 的 cos_he_all 最小层 = 1.0000 ≥ 0.99"
+  },
+  {
+   "id": "A100-3",
+   "ok": true,
+   "detail": "逐格 dWrel 最大 = 0.0e+00（A97-4：任务损失不改 W）"
+  }
+ ],
+ "d_ho_mean": {
+  "wq_train": 0.0,
+  "wq_solved": 0.0,
+  "wq_solved_init": 0.0,
+  "wq_oracle": 0.0
+ },
+ "d_tr_mean": {
+  "wq_train": 0.625,
+  "wq_solved": 0.5,
+  "wq_solved_init": 0.625,
+  "wq_oracle": 0.5625
+ }
+}

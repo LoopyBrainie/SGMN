@@ -1,0 +1,37 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:48,  5.94it/s]Loading weights:  55%|█████▍    | 159/290 [00:00<00:00, 716.65it/s]Loading weights:  86%|████████▌ | 250/290 [00:00<00:00, 768.77it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 676.40it/s]
+=== DIR-10 R4：A3' 复检（口径：write_calls = 前向次数 − 1）===
+  前向   1 次 ⇒ write_calls=0（期望 0） [PASS]
+  前向   2 次 ⇒ write_calls=1（期望 1） [PASS]
+  前向  20 次 ⇒ write_calls=19（期望 19） [PASS]
+  A3' 复检：PASS
+
+=== DIR-10 R4：联合训练的 γ / 注入相对幅度 / 损失 轨迹 ===
+/home/ec2-user/sgmn-loop/R4_recheck.py:122: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+
+  [joint_1e-06] 损失 3.7329 → 3.2901
+        步         γ         注入相对幅度        损失
+        1   0.05033     7.5747e-02    4.0634
+      101   0.01243     5.3603e-02    3.2567
+      201   0.00849     5.3893e-02    3.6749
+      301   0.00804     4.7885e-02    3.2731
+      401   0.00602     4.7166e-02    4.0664
+      501   0.00516     3.8489e-02    3.0125
+      600   0.00724     5.1322e-02    4.2286
+      600   0.00724     5.1322e-02    4.2286
+
+  [joint_nowrite] 损失 3.7247 → 3.2668
+        步         γ         注入相对幅度        损失
+        1   0.05033     7.5615e-02    4.0659
+      101   0.01236     5.1944e-02    3.1387
+      201   0.00738     4.4999e-02    3.5741
+      301   0.00761     4.6888e-02    3.0909
+      401   0.00603     3.8717e-02    4.0150
+      501   0.00455     2.7451e-02    3.0374
+      600   0.00627     5.0127e-02    4.2788
+      600   0.00627     5.0127e-02    4.2788
+
+=== DIR-10 R4 完成 ===

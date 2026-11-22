@@ -1,0 +1,5 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[SH5/oracle] 训头（分臂联合训练，共享 Pk1，n_rep=16）n=96 ...
+[SH5/oracle] 训练完成 1555s  梯度 {'g1': 14.763274513292906, 'Wo1': 16.972184583443283, 'bo1': 3.7290668096097632}
+[SH5/oracle] 评估 oracle      L=1.492300 (sd 0.9600) cos=1.0000 align=1.1826 |q|=1.1826 |y|=0.8220 m̄=0.3217 Wmax=2.6739

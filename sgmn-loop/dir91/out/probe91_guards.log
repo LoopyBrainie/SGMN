@@ -1,0 +1,14 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:34,  8.32it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 909.69it/s]Loading weights:  92%|█████████▏| 268/290 [00:00<00:00, 911.54it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 838.36it/s]
+[A91-19] L8 use_factorized=False rel_diff=8.5701e-01
+[A91-19] L12 use_factorized=False rel_diff=8.3878e-01
+[A91-19] L16 use_factorized=False rel_diff=8.6116e-01
+[A91-20] pre_nonnull=[] writes=[599, 599, 599] expect=599 => PASS
+[A91-21] per_layer_ratios={8: 14.033360709988049, 12: 13.244994315030462, 16: 8.59211860972716}
+[A91-21] median_of_ratios=13.245 min=8.592 max=14.033 | OLD cross-layer improve_ratio=12.440
+[A91-21] written={8: 0.1628006547689438, 12: 0.19139641523361206, 16: 0.27712178230285645}
+[A91-21] written_mean={8: 0.1603507697582245, 12: 0.19042687118053436, 16: 0.27064910531044006}
+[A91-21] baseline={8: 2.284640312194824, 12: 2.5350444316864014, 16: 2.381063222885132}
+
+★ 守卫复算完成

@@ -1,0 +1,23 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:54,  5.32it/s]Loading weights:  64%|██████▍   | 185/290 [00:00<00:00, 792.89it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 720.09it/s]
+[超参] eta=3e-05 alpha=1.0 lam=0.05 pk_scale=2.2364766887858467 use_factorized=False
+[C1] 两条重构路径 cos = +1.000000
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/probe91_overfit.py:76: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  W0n = float(((m.W0 + m.U @ m.V.T) if m.use_factorized else m.Wfull).norm())
+[C2] 固定对 ||k||=60.53 ||v||=28.59
+   t=0    rel=2.0335 cos=+0.1054 ||W-W0||=0.12
+   t=1    rel=1.8100 cos=+0.1696 ||W-W0||=0.22
+   t=2    rel=1.6111 cos=+0.2392 ||W-W0||=0.32
+   t=5    rel=1.1361 cos=+0.4674 ||W-W0||=0.54
+   t=10   rel=0.6348 cos=+0.7892 ||W-W0||=0.78
+   t=25   rel=0.1107 cos=+0.9944 ||W-W0||=1.03
+   t=50   rel=0.0061 cos=+1.0000 ||W-W0||=1.08
+   t=100  rel=0.0000 cos=+1.0000 ||W-W0||=1.08
+   t=150  rel=0.0000 cos=+1.0000 ||W-W0||=1.08
+   t=200  rel=0.0000 cos=+1.0000 ||W-W0||=1.08
+[C3] eta*alpha*||k||^2 = 1.099e-01（Hebb 收敛需 ≈1）
+[C3] ||W0|| = 29.93
+
+★ 诊断完成

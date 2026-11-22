@@ -1,0 +1,10 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-07 R4：真实 LLM 的 (k -> v) 回归信噪比 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:59,  4.86it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 748.45it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 684.82it/s]
+  层 8: n=4088  SNR(R^2)=+0.82354  E[k^2]=6.346  Var(v)=0.440
+  层 12: n=4088  SNR(R^2)=+0.76192  E[k^2]=6.195  Var(v)=0.389
+  层 16: n=4088  SNR(R^2)=+0.70662  E[k^2]=6.626  Var(v)=0.362
+[PASS] R4 真实 LLM 的 (k->v) 回归信噪比已测定: 真实 LLM 的 SNR >= 0.10 —— 落在 R3 的【窗口非空】区间 => 存在可行窗口（但位置随尺度左移）
+
+=== DIR-07 R4：1/1 通过 ===

@@ -1,0 +1,24 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:45,  6.33it/s]Loading weights:  57%|█████▋    | 164/290 [00:00<00:00, 776.95it/s]Loading weights:  90%|█████████ | 261/290 [00:00<00:00, 789.72it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 721.00it/s]
+=== Q1/Q2：口径与槽位空间 ===
+/home/ec2-user/sgmn-loop/dir18/R1_write.py:270: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  traj.append((float(loss), gnorm))
+[hebb_eta7_cue_train] nll=11.0017 | addr(写入序)=0.0000 addr(槽空间)=0.6667 | 真值槽==true_idx: 0.000 | 真值槽排名=1.03 | 搜索槽数=128.0 陈旧=60.0 | cos(y,v_true)=0.0015 | fid(真值槽)=-0.0047 fid(选中槽)=-0.0072
+[hebb_eta7_cue_notrain] nll=14.2301 | addr(写入序)=1.0000 addr(槽空间)=1.0000 | 真值槽==true_idx: 1.000 | 真值槽排名=0.00 | 搜索槽数=68.0 陈旧=0.0 | cos(y,v_true)=-0.0028 | fid(真值槽)=-0.0028 fid(选中槽)=-0.0028
+[verbatim_cue_train] nll=10.4638 | addr(写入序)=0.0000 addr(槽空间)=1.0000 | 真值槽==true_idx: 0.000 | 真值槽排名=0.00 | 搜索槽数=128.0 陈旧=60.0 | cos(y,v_true)=0.9999 | fid(真值槽)=nan fid(选中槽)=nan
+[verbatim_cue_notrain] nll=14.1272 | addr(写入序)=1.0000 addr(槽空间)=1.0000 | 真值槽==true_idx: 1.000 | 真值槽排名=0.00 | 搜索槽数=68.0 陈旧=0.0 | cos(y,v_true)=1.0000 | fid(真值槽)=nan fid(选中槽)=nan
+
+=== Q4：收益归因（内容对照） ===
+[hebb_eta7_misaddr_train] nll=12.3837 | addr(写入序)=0.0556 addr(槽空间)=0.9444 | 真值槽==true_idx: 0.000 | 真值槽排名=0.11 | 搜索槽数=128.0 陈旧=60.0 | cos(y,v_true)=0.1079 | fid(真值槽)=-0.0040 fid(选中槽)=-0.0032
+[hebb_eta7_nowrite_train] nll=11.0239 | addr(写入序)=0.0000 addr(槽空间)=0.6389 | 真值槽==true_idx: 0.000 | 真值槽排名=1.03 | 搜索槽数=128.0 陈旧=60.0 | cos(y,v_true)=0.0008 | fid(真值槽)=-0.0057 fid(选中槽)=-0.0078
+[hebb_eta7_shuffle_train] nll=11.0951 | addr(写入序)=0.0000 addr(槽空间)=0.5000 | 真值槽==true_idx: 0.000 | 真值槽排名=1.31 | 搜索槽数=128.0 陈旧=60.0 | cos(y,v_true)=0.0032 | fid(真值槽)=-0.0055 fid(选中槽)=-0.0001
+[base] nll=14.1687
+
+=== Q3：P_v 是否拿到梯度（D47） ===
+  层 8: ‖∂L/∂P_v‖ = None（None ⇒ 从未参与反向）
+  层 12: ‖∂L/∂P_v‖ = None（None ⇒ 从未参与反向）
+  层 16: ‖∂L/∂P_v‖ = None（None ⇒ 从未参与反向）
+
+写出 /home/ec2-user/sgmn-loop/dir18/probe18c_out.json

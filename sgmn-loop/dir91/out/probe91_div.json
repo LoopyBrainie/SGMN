@@ -1,0 +1,89 @@
+{
+ "note": "pre-card diagnostic, NOT a criterion",
+ "stageA_rev13_reference": {
+  "ceil_acc_by_question": 0.375,
+  "gamma_after": {
+   "L8": 0.030143,
+   "L12": 0.044086,
+   "L16": 0.227573
+  },
+  "inj_norm_L16": 191000000.0
+ },
+ "arms": [
+  {
+   "label": "T_baseline",
+   "freeze_gamma": false,
+   "read_lr": 0.01,
+   "gamma_after": {
+    "8": 0.044086165726184845,
+    "12": 0.22757330536842346,
+    "16": 0.030143342912197113
+   },
+   "inj_norm": {
+    "L8": 6314.20263671875,
+    "L12": 809705.8125,
+    "L16": 194191856.0
+   },
+   "inj_max": 21338248.0,
+   "ceil_acc_by_item": 0.4791666666666667,
+   "ceil_acc_by_question": 0.375,
+   "n_question": 16,
+   "loss_first": 4.63862851858139,
+   "loss_last": 0.012053783459123224,
+   "loss_max": 39.68294906616211,
+   "n_steps_ran": 600,
+   "diverged_W": false,
+   "write_violations": 0
+  },
+  {
+   "label": "F_freeze_gamma",
+   "freeze_gamma": true,
+   "read_lr": 0.01,
+   "gamma_after": {
+    "8": 0.05000000074505806,
+    "12": 0.05000000074505806,
+    "16": 0.05000000074505806
+   },
+   "inj_norm": {
+    "L8": 7618.98095703125,
+    "L12": 173928.125,
+    "L16": 51061184.0
+   },
+   "inj_max": 6460237.0,
+   "ceil_acc_by_item": 0.4791666666666667,
+   "ceil_acc_by_question": 0.375,
+   "n_question": 16,
+   "loss_first": 5.353341850638389,
+   "loss_last": 0.00781124156947044,
+   "loss_max": 28.416112899780273,
+   "n_steps_ran": 600,
+   "diverged_W": false,
+   "write_violations": 0
+  },
+  {
+   "label": "L_lower_lr",
+   "freeze_gamma": false,
+   "read_lr": 0.001,
+   "gamma_after": {
+    "8": 0.04832492023706436,
+    "12": 0.04642602801322937,
+    "16": 0.0420120432972908
+   },
+   "inj_norm": {
+    "L8": 303.1779479980469,
+    "L12": 321.7630615234375,
+    "L16": 292.9818420410156
+   },
+   "inj_max": 33.29617691040039,
+   "ceil_acc_by_item": 0.9375,
+   "ceil_acc_by_question": 0.875,
+   "n_question": 16,
+   "loss_first": 1.9221082746982574,
+   "loss_last": 7.641285310455715e-06,
+   "loss_max": 4.589591979980469,
+   "n_steps_ran": 600,
+   "diverged_W": false,
+   "write_violations": 0
+  }
+ ]
+}

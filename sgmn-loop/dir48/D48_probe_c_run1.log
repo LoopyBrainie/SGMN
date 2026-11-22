@@ -1,0 +1,9 @@
+  num = float(Wm @ k @ v)
+[busy  W= 6] n=200 div=0.050(±0.046) use=190 cens=0.021 p_cross=0.979 KM_med=2 c0=0.990
+[busy  W= 8] n=200 div=0.100(±0.064) use=180 cens=-1.000 p_cross=1.000 KM_med=2 c0=0.989
+[busy  W=10] n=200 div=0.160(±0.078) use=168 cens=-1.000 p_cross=1.000 KM_med=2 c0=0.989
+[busy  W=12] n=200 div=0.200(±0.085) use=160 cens=-1.000 p_cross=1.000 KM_med=2 c0=0.989
+[busy  W=16] n=200 div=0.310(±0.098) use=138 cens=-1.000 p_cross=1.000 KM_med=2 c0=0.989
+[decay W=32] n=200 div=0.000(±0.000) use=200 cens=0.800 p_cross=0.200 KM_med=None(未达) c0=0.990
+[quiet W=16] n=200 div=0.000(±0.000) use=200 cens=1.000 p_cross=0.000 KM_med=None(未达) c0=0.990
+saved dir48/out/DIR48_probe_c.json

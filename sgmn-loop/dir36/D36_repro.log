@@ -1,0 +1,9 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/ec2-user/sgmn-loop/dir33/R1_task33.py:203: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  tot += float(L) / len(seeds)
+── 复现锚（train 5000..5383 / eval 6000..6399，n_train=384，臂 T）
+  L*(T,out) 8.36871204（期望 8.36871204，相对差 0.00e+00）
+  L*(T,in ) 7.60065402（期望 7.60065402，相对差 0.00e+00）
+  ⇒ 锚 通过（1219s）

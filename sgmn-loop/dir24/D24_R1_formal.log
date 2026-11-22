@@ -1,0 +1,69 @@
+
+=== 正式轮（7 水平 × d=896 + 6 水平 × d=64，5 种子） ===
+  d=896 r0=  0 seed=20261028 acc=0.4857 rank= 35 mA=0.1026 resid=1.26e-06
+  d=896 r0=  0 seed=20261104 acc=0.4857 rank= 35 mA=0.1037 resid=1.31e-06
+  d=896 r0=  0 seed=7 acc=0.4857 rank= 35 mA=0.1043 resid=1.27e-06
+  d=896 r0=  0 seed=20261111 acc=0.4857 rank= 35 mA=0.1033 resid=5.89e-07
+  d=896 r0=  0 seed=20261118 acc=0.4857 rank= 35 mA=0.1016 resid=9.47e-07
+  d=896 r0=  1 seed=20261028 acc=0.7429 rank=  1 mA=0.0017 resid=2.72e-08
+  d=896 r0=  1 seed=20261104 acc=0.7714 rank=  1 mA=0.0012 resid=2.38e-08
+  d=896 r0=  1 seed=7 acc=0.6000 rank=  1 mA=0.0011 resid=4.86e-08
+  d=896 r0=  1 seed=20261111 acc=0.8857 rank=  1 mA=0.0010 resid=3.49e-08
+  d=896 r0=  1 seed=20261118 acc=0.7143 rank=  1 mA=0.0013 resid=1.38e-08
+  d=896 r0=  2 seed=20261028 acc=0.8286 rank=  2 mA=0.0025 resid=1.87e-08
+  d=896 r0=  2 seed=20261104 acc=0.8000 rank=  2 mA=0.0020 resid=5.23e-08
+  d=896 r0=  2 seed=7 acc=0.7429 rank=  2 mA=0.0021 resid=2.46e-08
+  d=896 r0=  2 seed=20261111 acc=0.8857 rank=  2 mA=0.0025 resid=8.84e-08
+  d=896 r0=  2 seed=20261118 acc=0.8000 rank=  2 mA=0.0020 resid=4.85e-08
+  d=896 r0=  8 seed=20261028 acc=0.9714 rank=  8 mA=0.0098 resid=1.29e-07
+  d=896 r0=  8 seed=20261104 acc=1.0000 rank=  8 mA=0.0085 resid=1.37e-07
+  d=896 r0=  8 seed=7 acc=0.9714 rank=  8 mA=0.0074 resid=1.64e-07
+  d=896 r0=  8 seed=20261111 acc=1.0000 rank=  8 mA=0.0077 resid=8.57e-08
+  d=896 r0=  8 seed=20261118 acc=0.9714 rank=  8 mA=0.0095 resid=1.25e-07
+  d=896 r0= 35 seed=20261028 acc=1.0000 rank= 35 mA=0.0364 resid=2.21e-07
+  d=896 r0= 35 seed=20261104 acc=1.0000 rank= 35 mA=0.0363 resid=1.83e-07
+  d=896 r0= 35 seed=7 acc=1.0000 rank= 35 mA=0.0363 resid=2.25e-07
+  d=896 r0= 35 seed=20261111 acc=1.0000 rank= 35 mA=0.0369 resid=2.08e-07
+  d=896 r0= 35 seed=20261118 acc=1.0000 rank= 35 mA=0.0359 resid=2.73e-07
+  d=896 r0= 70 seed=20261028 acc=1.0000 rank= 70 mA=0.0762 resid=3.96e-07
+  d=896 r0= 70 seed=20261104 acc=1.0000 rank= 70 mA=0.0781 resid=3.94e-07
+  d=896 r0= 70 seed=7 acc=1.0000 rank= 70 mA=0.0736 resid=3.88e-07
+  d=896 r0= 70 seed=20261111 acc=1.0000 rank= 70 mA=0.0735 resid=3.15e-07
+  d=896 r0= 70 seed=20261118 acc=1.0000 rank= 70 mA=0.0711 resid=3.06e-07
+  d=896 r0=896 seed=20261028 acc=1.0000 rank=896 mA=0.9992 resid=0.00e+00
+  d=896 r0=896 seed=20261104 acc=1.0000 rank=896 mA=0.9990 resid=0.00e+00
+  d=896 r0=896 seed=7 acc=1.0000 rank=896 mA=1.0000 resid=0.00e+00
+  d=896 r0=896 seed=20261111 acc=1.0000 rank=896 mA=1.0000 resid=0.00e+00
+  d=896 r0=896 seed=20261118 acc=1.0000 rank=896 mA=1.0000 resid=0.00e+00
+  d=64 r0=  0 seed=20261028 acc=1.0000 rank= 12 mA=0.1720 resid=2.77e-07
+  d=64 r0=  0 seed=20261104 acc=1.0000 rank= 12 mA=0.1930 resid=1.52e-07
+  d=64 r0=  0 seed=7 acc=1.0000 rank= 12 mA=0.2098 resid=2.63e-07
+  d=64 r0=  0 seed=20261111 acc=1.0000 rank= 12 mA=0.1770 resid=2.50e-07
+  d=64 r0=  0 seed=20261118 acc=1.0000 rank= 12 mA=0.2014 resid=3.03e-07
+  d=64 r0=  1 seed=20261028 acc=0.8333 rank=  1 mA=0.0129 resid=8.02e-08
+  d=64 r0=  1 seed=20261104 acc=0.7500 rank=  1 mA=0.0083 resid=6.61e-08
+  d=64 r0=  1 seed=7 acc=0.6667 rank=  1 mA=0.0172 resid=3.68e-08
+  d=64 r0=  1 seed=20261111 acc=0.4167 rank=  1 mA=0.0079 resid=5.15e-08
+  d=64 r0=  1 seed=20261118 acc=0.7500 rank=  1 mA=0.0240 resid=6.83e-08
+  d=64 r0=  2 seed=20261028 acc=0.9167 rank=  2 mA=0.0164 resid=5.98e-08
+  d=64 r0=  2 seed=20261104 acc=0.8333 rank=  2 mA=0.0210 resid=9.40e-08
+  d=64 r0=  2 seed=7 acc=0.7500 rank=  2 mA=0.0261 resid=7.56e-08
+  d=64 r0=  2 seed=20261111 acc=0.7500 rank=  2 mA=0.0130 resid=5.70e-08
+  d=64 r0=  2 seed=20261118 acc=0.8333 rank=  2 mA=0.0584 resid=1.17e-07
+  d=64 r0=  8 seed=20261028 acc=1.0000 rank=  8 mA=0.1018 resid=1.38e-07
+  d=64 r0=  8 seed=20261104 acc=1.0000 rank=  8 mA=0.1310 resid=1.79e-07
+  d=64 r0=  8 seed=7 acc=1.0000 rank=  8 mA=0.1005 resid=1.38e-07
+  d=64 r0=  8 seed=20261111 acc=1.0000 rank=  8 mA=0.1025 resid=1.14e-07
+  d=64 r0=  8 seed=20261118 acc=1.0000 rank=  8 mA=0.1634 resid=1.48e-07
+  d=64 r0= 24 seed=20261028 acc=1.0000 rank= 24 mA=0.3368 resid=3.78e-07
+  d=64 r0= 24 seed=20261104 acc=1.0000 rank= 24 mA=0.3782 resid=4.54e-07
+  d=64 r0= 24 seed=7 acc=1.0000 rank= 24 mA=0.3853 resid=4.33e-07
+  d=64 r0= 24 seed=20261111 acc=1.0000 rank= 24 mA=0.3294 resid=4.49e-07
+  d=64 r0= 24 seed=20261118 acc=1.0000 rank= 24 mA=0.4570 resid=4.44e-07
+  d=64 r0= 64 seed=20261028 acc=1.0000 rank= 64 mA=1.0000 resid=0.00e+00
+  d=64 r0= 64 seed=20261104 acc=1.0000 rank= 64 mA=1.0000 resid=0.00e+00
+  d=64 r0= 64 seed=7 acc=1.0000 rank= 64 mA=1.0000 resid=0.00e+00
+  d=64 r0= 64 seed=20261111 acc=1.0000 rank= 64 mA=1.0000 resid=0.00e+00
+  d=64 r0= 64 seed=20261118 acc=1.0000 rank= 64 mA=1.0000 resid=0.00e+00
+
+→ /mnt/sgmn/home/ec2-user/sgmn-loop/dir24/out/DIR24r10_formal.json  (251.6s)

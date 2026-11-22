@@ -1,0 +1,26 @@
+=== DIR-40 探针 · 失败轮 run 2（★ 留档，不删改、不追认） ===
+时间：2026-11-13 · 主机：trainer · 解释器：/opt/pytorch/bin/python
+命令：同 run 1（inline 路径自检，2 步 / 2 实例）
+★ 说明：run 2 是 run 1 修好「非叶子张量」之后的**下一次**路径自检；读数同样**不是**任何结论的依据。
+★ 本文件是**逐字转录**该次 inline 运行的终端输出；未重新执行、未修改。缺陷编号 **DEF-40-2**。
+
+--- 终端输出（逐字） ---
+══ 探针甲 · 可表达性（per-instance 读控制器；头冻结） ══
+[甲] 训头（oracle 臂，n_rep=16）n=64 ...
+[甲] 头完成 1s  梯度 {'g1': 8.588, 'Wo1': 34.239, 'bo1': 16.6526}
+Traceback (most recent call last):
+  File "<string>", line 8, in <module>
+    j = p.probe_jia(); y = p.probe_yi()
+  File "/home/ec2-user/sgmn-loop/dir40/probe40.py", line 304, in probe_jia
+    e_o = eval40("oracle", phi_o, [sd])
+  File "/home/ec2-user/sgmn-loop/dir40/probe40.py", line 269, in eval40
+    out = {"mean_L": statistics.fmean(Ls), "sd_L": statistics.stdev(Ls),
+                                                   ~~~~~~~~^^^^^
+  File "/usr/lib64/python3.13/statistics.py", line 1207, in stdev
+    raise StatisticsError('stdev requires at least two data points')
+statistics.StatisticsError: stdev requires at least two data points
+
+--- 诊断（DEF-40-2）---
+探针甲的**逐实例**评估每次只有 **1** 个实例 ⇒ `statistics.stdev` 要求 ≥2 个数据点
+⇒ 修法：`sd_L = statistics.stdev(Ls) if len(Ls) > 1 else 0.0`
+⇒ ★ **工程错误，与结论无关**。

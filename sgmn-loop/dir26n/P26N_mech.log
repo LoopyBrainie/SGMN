@@ -1,0 +1,7 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+=== 机制探针（种子 6 × 档 (40, 4)，τ=0.0950）===
+  b=40 seed=20261028 | τ skip cos 0.1129 write 0.0449 | H skip 0.0629 write 0.0223 first 0.000 | R skip 0.0838 write 0.0842 aboveτ 0.391 | Jacc(R,τ) 0.066
+  b=40 seed=20261104 | τ skip cos 0.1128 write 0.0435 | H skip 0.0643 write 0.0198 first 0.000 | R skip 0.0747 write 0.0809 aboveτ 0.280 | Jacc(R,τ) 0.128
+  b=40 seed=  7 | τ skip cos 0.1132 write 0.0430 | H skip 0.0589 write 0.0181 first 0.000 | R skip 0.0892 write 0.0799 aboveτ 0.500 | Jacc(R,τ) 0.106

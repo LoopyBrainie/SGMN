@@ -1,0 +1,158 @@
+{
+ "checks": [
+  {
+   "id": "ADJ-43-1",
+   "ok": true,
+   "note": "\u5361 md5 == 9a9a8998\u2026\uff08rev 1.0 \u51bb\u7ed3\uff09"
+  },
+  {
+   "id": "ADJ-43-2",
+   "ok": true,
+   "note": "\u4e09\u81c2\u5b9e\u4f8b\u6570\u9f50\uff08learned/direct=400\u3001rand=100\uff09"
+  },
+  {
+   "id": "ADJ-43-3",
+   "ok": true,
+   "note": "learned \u81c2\u53cd\u63a8 SEED0 = 20261111\uff08\u552f\u4e00\uff09"
+  },
+  {
+   "id": "ADJ-43-3b",
+   "ok": true,
+   "note": "seed\u2194idx \u4e00\u81f4\uff08\u574f 0\uff09"
+  },
+  {
+   "id": "ADJ-43-4",
+   "ok": true,
+   "note": "\u4e0e merge \u9010\u5b57\u6bb5\u5bf9\u7167 12/12 \u4e00\u81f4"
+  }
+ ],
+ "fails": [],
+ "read_files": [
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_learned_shard0.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_learned_shard1.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_learned_shard2.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_learned_shard3.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_rand_shard0.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_rand_shard1.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_rand_shard2.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_rand_shard3.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_direct_shard0.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_direct_shard1.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_direct_shard2.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_direct_shard3.jsonl"
+ ],
+ "outcome": "NOT-ADDRESSING",
+ "counted": false,
+ "primary_label": "NULL",
+ "secondary_label": "NULL",
+ "P1": false,
+ "P1b": false,
+ "P2": false,
+ "P3": true,
+ "rho_primary": {
+  "mean": -0.011750211280198883,
+  "sd": 0.35742255588655214,
+  "se": 0.017871127794327608,
+  "3se": 0.05361338338298283,
+  "n": 400
+ },
+ "rho_secondary": {
+  "mean": -0.03770836793577924,
+  "sd": 0.42820953881253143,
+  "se": 0.02141047694062657,
+  "3se": 0.06423143082187971,
+  "n": 400
+ },
+ "rho_diff_primary": {
+  "mean": 0.009085040847956874,
+  "sd": 0.436426736139126,
+  "se": 0.0218213368069563,
+  "3se": 0.0654640104208689,
+  "n": 400
+ },
+ "rho_diff_secondary": {
+  "mean": -0.031056397289914016,
+  "sd": 0.4977071538208796,
+  "se": 0.02488535769104398,
+  "3se": 0.07465607307313193,
+  "n": 400
+ },
+ "direct_cos_min_stats": {
+  "mean": 0.9974791028158633,
+  "sd": 0.0034954320121318647,
+  "se": 0.00017477160060659324,
+  "3se": 0.0005243148018197797,
+  "n": 400
+ },
+ "direct_cos_mean_stats": {
+  "mean": 0.9984963135485063,
+  "sd": 0.002088578059713951,
+  "se": 0.00010442890298569755,
+  "3se": 0.00031328670895709265,
+  "n": 400
+ },
+ "rho_negative_frac": 0.51,
+ "seed0": 20261111,
+ "impl_xcheck": {
+  "outcome": {
+   "mine": "NOT-ADDRESSING",
+   "impl": "NOT-ADDRESSING",
+   "same": true
+  },
+  "counted": {
+   "mine": false,
+   "impl": false,
+   "same": true
+  },
+  "primary_label": {
+   "mine": "NULL",
+   "impl": "NULL",
+   "same": true
+  },
+  "secondary_label": {
+   "mine": "NULL",
+   "impl": "NULL",
+   "same": true
+  },
+  "P1": {
+   "mine": false,
+   "impl": false,
+   "same": true
+  },
+  "P1b": {
+   "mine": false,
+   "impl": false,
+   "same": true
+  },
+  "P2": {
+   "mine": false,
+   "impl": false,
+   "same": true
+  },
+  "P3": {
+   "mine": true,
+   "impl": true,
+   "same": true
+  },
+  "rho_mean": {
+   "mine": -0.011750211280198883,
+   "impl": -0.011750211280198883,
+   "same": true
+  },
+  "rho_3se": {
+   "mine": 0.05361338338298283,
+   "impl": 0.05361338338298283,
+   "same": true
+  },
+  "rho_diff_mean": {
+   "mine": 0.009085040847956874,
+   "impl": 0.009085040847956874,
+   "same": true
+  },
+  "direct_mean": {
+   "mine": 0.9984963135485063,
+   "impl": 0.9984963135485063,
+   "same": true
+  }
+ }
+}

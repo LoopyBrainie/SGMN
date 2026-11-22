@@ -1,0 +1,171 @@
+{
+ "A1_gamma0_bitwise_keys": {
+  "ok": true,
+  "dW1": 0.0,
+  "dW2": 0.0,
+  "steps": 500
+ },
+ "A1b_step72_eq_ref70_keys": {
+  "ok": true,
+  "dW": 0.0,
+  "steps": 500
+ },
+ "A5_gamma0_block_triangular_keys": {
+  "ok": true,
+  "max_abs_J_upper": 0.0
+ },
+ "A2_fp_residual_g3": {
+  "ok": true,
+  "res": 7.243714441777344e-16,
+  "steps": 1210,
+  "eta_warm": 0.036
+ },
+ "A3_h_convergence_g3": {
+  "ok": true,
+  "rel": 5.5601912491688666e-11,
+  "normF": 6.5305965530640835
+ },
+ "A4_directional_g3": {
+  "ok": true,
+  "rel": 1.2737826712330925e-10
+ },
+ "A6_neutral_modes_g3": {
+  "ok": true,
+  "n_neutral": 8,
+  "dim": 48,
+  "nonneutral_max": 0.9983676709349065
+ },
+ "A9_spectral_scan_g3": {
+  "ok": true,
+  "rho": 0.2485339614345618,
+  "rnn_half": 0.9943654276539862,
+  "rnn_lo": 0.9898577697771752,
+  "rnn_hi": 1.2011333716834676,
+  "nev": 13,
+  "cap_hit": false
+ },
+ "A2_fp_residual_g10": {
+  "ok": true,
+  "res": 4.559303619397638e-16,
+  "steps": 1,
+  "eta_warm": 0.0045
+ },
+ "A3_h_convergence_g10": {
+  "ok": true,
+  "rel": 5.5522601774513953e-11,
+  "normF": 6.804199995784625
+ },
+ "A4_directional_g10": {
+  "ok": true,
+  "rel": 1.0069332270769184e-10
+ },
+ "A6_neutral_modes_g10": {
+  "ok": true,
+  "n_neutral": 8,
+  "dim": 48,
+  "nonneutral_max": 0.9997937688907345
+ },
+ "A9_spectral_scan_g10": {
+  "ok": true,
+  "rho": 0.08290469035325404,
+  "rnn_half": 0.9981002748605481,
+  "rnn_lo": 0.9965804947489854,
+  "rnn_hi": 1.1991781821591272,
+  "nev": 13,
+  "cap_hit": false
+ },
+ "A2_fp_residual_g20": {
+  "ok": true,
+  "res": 6.94512162006927e-16,
+  "steps": 95252,
+  "eta_warm": 0.0012
+ },
+ "A3_h_convergence_g20": {
+  "ok": true,
+  "rel": 1.1102690652257019e-10,
+  "normF": 6.863463626272144
+ },
+ "A4_directional_g20": {
+  "ok": true,
+  "rel": 1.1225038475913566e-10
+ },
+ "A6_neutral_modes_g20": {
+  "ok": true,
+  "n_neutral": 8,
+  "dim": 48,
+  "nonneutral_max": 0.9999586749078293
+ },
+ "A9_spectral_scan_g20": {
+  "ok": true,
+  "rho": 0.03835856084086703,
+  "rnn_half": 0.9993395120573383,
+  "rnn_lo": 0.9988111217032098,
+  "rnn_hi": 1.2017242539461697,
+  "nev": 13,
+  "cap_hit": false
+ },
+ "A2_fp_residual_g30": {
+  "ok": true,
+  "res": 6.999305686704787e-16,
+  "steps": 1966981,
+  "eta_warm": 0.00045
+ },
+ "A3_h_convergence_g30": {
+  "ok": true,
+  "rel": 1.1102329055311381e-10,
+  "normF": 6.890119743580435
+ },
+ "A4_directional_g30": {
+  "ok": true,
+  "rel": 1.6423077830631318e-10
+ },
+ "A6_neutral_modes_g30": {
+  "ok": true,
+  "n_neutral": 8,
+  "dim": 48,
+  "nonneutral_max": 0.9999911509881809
+ },
+ "A9_spectral_scan_g30": {
+  "ok": true,
+  "rho": 0.02297238333729833,
+  "rnn_half": 0.9997741301203653,
+  "rnn_lo": 0.9995934342166505,
+  "rnn_hi": 1.1998737662556298,
+  "nev": 13,
+  "cap_hit": false
+ },
+ "A7_bisect_brackets_g3": {
+  "ok": true,
+  "brackets": [
+   false,
+   true
+  ],
+  "nev": 12,
+  "cap_hit": false,
+  "width": 0.003372927382315538,
+  "eta": 0.1931473134936032
+ },
+ "A8_bisect_terminates_g3": {
+  "ok": true,
+  "cap_hit": false,
+  "width": 0.003372927382315538,
+  "nev": 12
+ },
+ "A7_bisect_brackets_g10": {
+  "ok": true,
+  "brackets": [
+   false,
+   true
+  ],
+  "nev": 12,
+  "cap_hit": false,
+  "width": 0.003372927382315538,
+  "eta": 0.027032409992084817
+ },
+ "A8_bisect_terminates_g10": {
+  "ok": true,
+  "cap_hit": false,
+  "width": 0.003372927382315538,
+  "nev": 12
+ }
+}

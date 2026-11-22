@@ -1,0 +1,61 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:03,  4.55it/s]Loading weights:  76%|███████▌  | 220/290 [00:00<00:00, 860.30it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 746.25it/s]
+[setup] facts=32 chunks=600 distinct_vals=27 Σ|S_i|=42 E_random=1.3125 configs=[('intact', 1), ('intact', 10), ('center', 1), ('white', 1), ('white', 10)]
+  ✓ A98-10  手算算例 π=0.7449(≈0.745) N_hit^v=3(3) N_hit^s=2(2) E_random=1.6667(5/3) π(ΔW=0)=0.0e+00(0)
+[seed 20261028 L8] 采集: maxcos_raw=0.9986 σ1/σ32=259.5 s_center=19.7498 s_white=10.6994
+[seed 20261028 L12] 采集: maxcos_raw=0.9985 σ1/σ32=224.2 s_center=17.4702 s_white=10.6936
+[seed 20261028 L16] 采集: maxcos_raw=0.9961 σ1/σ32=163.2 s_center=12.1041 s_white=11.4066
+[seed 20261028 intact@1 L8] π=+0.9299 need=1.004 moved=3.631e-02 sr=1.0005 N_hit^v=1 | maxcos=0.9986 nrank=32 | or=32 orpi=0 W0=1
+[seed 20261028 intact@1 L12] π=+0.9249 need=1.004 moved=3.704e-02 sr=1.0007 N_hit^v=1 | maxcos=0.9985 nrank=32 | or=32 orpi=0 W0=1
+[seed 20261028 intact@1 L16] π=+0.8863 need=1.004 moved=3.706e-02 sr=1.0034 N_hit^v=1 | maxcos=0.9961 nrank=32 | or=32 orpi=0 W0=2
+[seed 20261028 intact@10 L8] π=+0.9323 need=1.004 moved=3.703e-02 sr=1.0411 N_hit^v=1 | maxcos=0.9986 nrank=32 | or=32 orpi=0 W0=1
+[seed 20261028 intact@10 L12] π=+0.9280 need=1.004 moved=3.811e-02 sr=1.0604 N_hit^v=1 | maxcos=0.9985 nrank=32 | or=32 orpi=0 W0=1
+[seed 20261028 intact@10 L16] π=+0.8966 need=1.004 moved=4.181e-02 sr=1.2805 N_hit^v=1 | maxcos=0.9961 nrank=32 | or=32 orpi=0 W0=2
+[seed 20261028 center@1 L8] π=+0.1977 need=1.000 moved=1.380e+00 sr=1.0143 N_hit^v=4 | maxcos=0.3810 nrank=31 | or=32 orpi=0 W0=0
+[seed 20261028 center@1 L12] π=+0.2952 need=1.000 moved=1.100e+00 sr=1.0212 N_hit^v=13 | maxcos=0.4184 nrank=31 | or=32 orpi=0 W0=1
+[seed 20261028 center@1 L16] π=+0.3714 need=1.000 moved=6.152e-01 sr=1.0751 N_hit^v=15 | maxcos=0.3844 nrank=31 | or=32 orpi=0 W0=1
+[seed 20261028 white@1 L8] π=+0.8862 need=1.004 moved=1.849e-01 sr=4.9414 N_hit^v=32 | maxcos=0.0000 nrank=32 | or=32 orpi=0 W0=1
+[seed 20261028 white@1 L12] π=+0.8859 need=1.003 moved=1.821e-01 sr=5.4527 N_hit^v=32 | maxcos=0.0000 nrank=32 | or=32 orpi=0 W0=3
+[seed 20261028 white@1 L16] π=+0.9168 need=1.004 moved=1.909e-01 sr=4.9758 N_hit^v=32 | maxcos=0.0000 nrank=32 | or=32 orpi=0 W0=0
+[seed 20261028 white@10 L8] π=+0.9964 need=1.004 moved=2.085e-01 sr=4.9412 N_hit^v=32 | maxcos=0.0000 nrank=32 | or=32 orpi=0 W0=1
+[seed 20261028 white@10 L12] π=+0.9959 need=1.003 moved=2.054e-01 sr=5.4532 N_hit^v=32 | maxcos=0.0000 nrank=32 | or=32 orpi=0 W0=3
+[seed 20261028 white@10 L16] π=+0.9936 need=1.004 moved=2.081e-01 sr=4.9744 N_hit^v=32 | maxcos=0.0000 nrank=32 | or=32 orpi=0 W0=0
+[seed 20261028] 完成，用时 451s
+[seed 7777 L8] 采集: maxcos_raw=0.9987 σ1/σ32=248.8 s_center=19.5024 s_white=10.6436
+[seed 7777 L12] 采集: maxcos_raw=0.9986 σ1/σ32=250.7 s_center=18.2887 s_white=11.1960
+[seed 7777 L16] 采集: maxcos_raw=0.9967 σ1/σ32=166.3 s_center=12.8618 s_white=11.9881
+[seed 7777 intact@1 L8] π=+0.9305 need=1.004 moved=3.727e-02 sr=1.0005 N_hit^v=1 | maxcos=0.9987 nrank=32 | or=32 orpi=0 W0=1
+[seed 7777 intact@1 L12] π=+0.9254 need=1.004 moved=3.663e-02 sr=1.0007 N_hit^v=1 | maxcos=0.9986 nrank=32 | or=32 orpi=0 W0=1
+[seed 7777 intact@1 L16] π=+0.8972 need=1.004 moved=3.716e-02 sr=1.0029 N_hit^v=1 | maxcos=0.9967 nrank=32 | or=32 orpi=0 W0=1
+[seed 7777 intact@10 L8] π=+0.9329 need=1.004 moved=3.797e-02 sr=1.0384 N_hit^v=1 | maxcos=0.9987 nrank=32 | or=32 orpi=0 W0=1
+[seed 7777 intact@10 L12] π=+0.9283 need=1.004 moved=3.764e-02 sr=1.0571 N_hit^v=1 | maxcos=0.9986 nrank=32 | or=32 orpi=0 W0=1
+[seed 7777 intact@10 L16] π=+0.9053 need=1.004 moved=4.138e-02 sr=1.2455 N_hit^v=1 | maxcos=0.9967 nrank=32 | or=32 orpi=0 W0=1
+[seed 7777 center@1 L8] π=+0.2074 need=1.000 moved=1.364e+00 sr=1.0145 N_hit^v=3 | maxcos=0.3740 nrank=31 | or=32 orpi=0 W0=1
+[seed 7777 center@1 L12] π=+0.2540 need=1.000 moved=1.314e+00 sr=1.0155 N_hit^v=11 | maxcos=0.4187 nrank=31 | or=32 orpi=0 W0=1
+[seed 7777 center@1 L16] π=+0.3300 need=1.000 moved=7.728e-01 sr=1.0489 N_hit^v=13 | maxcos=0.3962 nrank=31 | or=32 orpi=0 W0=0
+[seed 7777 white@1 L8] π=+0.8834 need=1.004 moved=1.839e-01 sr=5.0456 N_hit^v=31 | maxcos=0.0000 nrank=32 | or=32 orpi=0 W0=1
+[seed 7777 white@1 L12] π=+0.9086 need=1.003 moved=1.864e-01 sr=5.5074 N_hit^v=32 | maxcos=0.0000 nrank=32 | or=32 orpi=0 W0=1
+[seed 7777 white@1 L16] π=+0.9369 need=1.004 moved=1.952e-01 sr=5.2836 N_hit^v=32 | maxcos=0.0000 nrank=32 | or=32 orpi=0 W0=0
+[seed 7777 white@10 L8] π=+0.9964 need=1.004 moved=2.080e-01 sr=5.0457 N_hit^v=32 | maxcos=0.0000 nrank=32 | or=32 orpi=0 W0=1
+[seed 7777 white@10 L12] π=+0.9958 need=1.003 moved=2.050e-01 sr=5.5064 N_hit^v=32 | maxcos=0.0000 nrank=32 | or=32 orpi=0 W0=1
+[seed 7777 white@10 L16] π=+0.9935 need=1.004 moved=2.082e-01 sr=5.2819 N_hit^v=32 | maxcos=0.0000 nrank=32 | or=32 orpi=0 W0=0
+[seed 7777] 完成，用时 453s
+  ✓ A98-7  E_random=1.3125==1.3125 · Σ|S_i|=42==Σm_v² · 不同值=27==27
+  ✓ A98-0  intact@1: max sr=1.0034(≤1.05) max N_hit^v=1(≤8) moved∈[3.631e-02,3.727e-02]([2e-2,6e-2])
+  ✓ A98-1  去相关臂 (maxcos<0.90 且 nrank≥24)：18/18 通过；intact maxcos∈[0.9961,0.9987](>0.98)
+  ✓ A98-2  max‖K'(arm) − T(K_raw)‖ = 0.000e+00 (<1e-9)
+  ✓ A98-3  max 采集遍 |mean‖s·T(k)‖/mean‖k‖ − 1| = 2.034e-05 (<1e-3)；写相后范数比仅披露 ∈[1.000,1.000]
+  ✓ A98-4  min N_hit^v(oracle) = 32/32 (≥30)
+  ✓ A98-5  max N_hit^v(oracle^π) = 0/32 (≤3)
+  ✓ A98-6  max N_hit^v(W⁰) = 3/32 (≤4.312)
+  ✓ A98-11  ΔW=0 ⇒ max|π| = 1.118e-08 (<1e-6，逐格实算)
+  ✓ A98-8  center 因果：首调用 μ=0 成立 6/6（逐层实记）
+  ✓ A98-9  γ=0 ⇒ intact@1 写相后键与 K_raw 逐位相同：max|Δ| = 0.000e+00 (<1e-9)
+
+[A98] π(P=1) = {'center@1': 0.1976664662361145, 'white@1': 0.8834237456321716}
+[A98] π(P=10) = {'white@10': 0.9934730529785156}
+[A98] π(intact@1) = 0.8863  π(intact@10) = 0.8966
+⇒ 判决 = CONFIRM
+
+[Stage A] 全部通过 → /mnt/sgmn/home/ec2-user/sgmn-loop/dir98/out/stage_formal.json

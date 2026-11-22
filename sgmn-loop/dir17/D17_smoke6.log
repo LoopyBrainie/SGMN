@@ -1,0 +1,20 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-17 R1（脚本 v1.1 · 卡片 rev 1.3 任务构造）：可寻址读取 + 读侧训练 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:05,  4.41it/s]Loading weights:  68%|██████▊   | 197/290 [00:00<00:00, 734.45it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 671.73it/s]
+
+[Stage A]
+[PASS] A1' Freeze C（读梯度非零 / 写梯度精确 0 / 基座逐位不变 / 阴性对照泄漏）: 读梯度非零 6/9；写梯度精确0 12/12；基座逐位不变 True；阴性对照泄漏 3/12
+[PASS] A1' 句柄数 = 2×层数: handles=6 mems=3
+Traceback (most recent call last):
+  File "/home/ec2-user/sgmn-loop/dir17/R1_train.py", line 552, in <module>
+    main()
+    ~~~~^^
+  File "/home/ec2-user/sgmn-loop/dir17/R1_train.py", line 377, in main
+    tr, ev = build_docs(tok, SEEDS[0], 4, 2)
+             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ec2-user/sgmn-loop/dir17/R1_train.py", line 130, in build_docs
+    code_id = rng.choice(code_pool)
+  File "/usr/lib64/python3.13/random.py", line 351, in choice
+    raise IndexError('Cannot choose from an empty sequence')
+IndexError: Cannot choose from an empty sequence

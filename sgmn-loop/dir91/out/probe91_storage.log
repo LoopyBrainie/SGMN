@@ -1,0 +1,24 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:44,  6.43it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 759.03it/s]Loading weights:  91%|█████████ | 263/290 [00:00<00:00, 821.51it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 732.68it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/probe91_storage.py:58: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  HIST[li].append((float(kt.norm()), float(vt.norm()),
+写入次数/层 = 599
+ L8: ||k||=60.5 ||v||=28.7
+   写入瞬间       首 rel=2.9542 cos=+0.0695 | 末 rel=2.9198 cos=+0.0690
+   末10次均值     rel=2.9198 cos=+0.0690 | 全程最小 rel=2.9116
+ L12: ||k||=60.4 ||v||=26.3
+   写入瞬间       首 rel=2.9260 cos=+0.0059 | 末 rel=2.9496 cos=+0.0070
+   末10次均值     rel=2.9495 cos=+0.0070 | 全程最小 rel=2.9167
+ L16: ||k||=64.8 ||v||=29.8
+   写入瞬间       首 rel=2.9259 cos=+0.0015 | 末 rel=2.9739 cos=-0.0062
+   末10次均值     rel=2.9739 cos=-0.0062 | 全程最小 rel=2.9074
+ [key_matrices 口径] L8: rel=2.9514 cos=+0.0692
+ [key_matrices 口径] L12: rel=2.9453 cos=+0.0066
+ [key_matrices 口径] L16: rel=2.9751 cos=+0.0010
+ [收敛条件] L8: lr*alpha*||k||^2 = None
+ [收敛条件] L12: lr*alpha*||k||^2 = None
+ [收敛条件] L16: lr*alpha*||k||^2 = None
+
+★ 诊断完成

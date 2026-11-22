@@ -1,0 +1,18 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  20283211/oracle   L_eval=26.820212 L_full=57.515024 cos=1.0000 Wmax=1.2481 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir42/R1_task42.py:151: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  q_fp = q_fp + float(q.sum())
+  20283211/rand     L_eval=32.066531 L_full=66.588691 cos=-0.3872 Wmax=1.2481 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  20283211/learned  L_eval=31.072169 L_full=65.064044 cos=-0.1341 Wmax=1.2481 c_eq_h=0.0e+00 |Wq-init|=8.724e-01
+  20283212/oracle   L_eval=3.907105 L_full=8.529300 cos=1.0000 Wmax=2.0185 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  20283212/rand     L_eval=2.729853 L_full=5.948075 cos=-0.2103 Wmax=2.0185 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  20283212/learned  L_eval=2.589493 L_full=5.674913 cos=-0.2172 Wmax=2.0185 c_eq_h=0.0e+00 |Wq-init|=7.109e-01
+  20283213/oracle   L_eval=16.228148 L_full=33.355567 cos=1.0000 Wmax=1.4923 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  20283213/rand     L_eval=15.551177 L_full=31.936372 cos=0.2942 Wmax=1.4923 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  20283213/learned  L_eval=14.077378 L_full=28.684892 cos=0.1871 Wmax=1.4923 c_eq_h=0.0e+00 |Wq-init|=9.299e-01
+  20283214/oracle   L_eval=19.460056 L_full=39.710258 cos=1.0000 Wmax=1.7410 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  20283214/rand     L_eval=19.734377 L_full=40.002329 cos=0.3886 Wmax=1.7410 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  20283214/learned  L_eval=18.722389 L_full=38.168450 cos=0.2126 Wmax=1.7410 c_eq_h=0.0e+00 |Wq-init|=9.179e-01
+smoke 完成（**无判据裁决**）

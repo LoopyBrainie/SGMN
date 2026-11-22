@@ -1,0 +1,46 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:40,  7.05it/s]Loading weights:  51%|█████     | 148/290 [00:00<00:00, 724.49it/s]Loading weights:  84%|████████▍ | 243/290 [00:00<00:00, 802.52it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 733.73it/s]
+事实 32；块 600；训练键 16；留出键 16；n_q=16（chance=0.25）
+
+===== Stage A 守卫 =====
+
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/probe91_womap.py:248: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  d = max(float((m.injection - m_orig[li]).abs().max()) for li, m in st.mems.items())
+[PASS] A91-40: 打补丁的读通路在**无替换**时与原生**逐位相同**：max|Δm|=0.0e+00（须 ==0）
+[PASS] A91-41: ★ `DEF-91-33` 修复被实测断言（哨兵 "readout" ⇒ 行 62）：**只读出位**替换时该位 max|Δm|=3.95e+00（须 >0）、**其余位置 max|Δm|=0.0e+00（须 ==0）**；对照「全位置替换」下其余位置 max|Δm|=2.23e+02（须 >0，证明上一条的 0 非无信息量）
+[PASS] A91-42: M2 通路天花板：**one-hot（每类都在训练集）⇒ 留出 top-1=1.000000000000（须 ==1.0）**；随机置换标签 ⇒ 0.000（须 ≤0.25）
+[PASS] A91-43: `acc_by_question` 已算例：构造 3/8 题全对 ⇒ 返回 0.375000（须 == 0.375000）、n_q=8（须 ==8）
+[PASS] A91-44: 键划分：train∩held=0（须 0）、|train|=16、|held|=16、并集=32（须 32）
+[PASS] A91-45: ★ 4 选 1 打分通路天花板：**答案明写在上下文里** ⇒ 命中 7/8=0.875（须 ≥0.75）⇒ 证明该通路**能**达到 0.50 以上的门（`CORR-10`）
+[PASS] A91-46: 同一份权重：`fit` 与 `gen` 两次评测之间 W/Wq/Wo/γ **逐位不变** max|Δ|=0.0e+00（须 ==0）
+[PASS] A91-47: M3 参与比已算例：秩 1 ⇒ PR=1.000000000（须 ==1）；各向同性随机 896×896 ⇒ PR=645.1（须落在 (538,762) = Marchenko–Pastur 理论 0.7203·n≈645）
+
+★ Stage A 全部 PASS
+
+===== seed 20261028 =====
+  [real] acc_train=0.875 acc_held=0.062 margin(tr/ho)=+7.59/-5.11 γ=-0.0234 viol=0 div=False 48.3s
+  [oracleP1] acc_train=0.812 acc_held=0.062 margin(tr/ho)=+5.11/-5.91 γ=-0.0145 viol=0 div=False 48.4s
+  [oracleALL] acc_train=0.875 acc_held=0.000 margin(tr/ho)=+6.84/-6.37 γ=+0.0183 viol=0 div=False 47.6s
+  [M3] Wo 参与比(real 臂终值) = L8:596.0 L12:587.7 L16:575.0（随机基线≈645，MP 理论）
+  [M2] V→答案类 L8: held=0.000 loo=0.031 | L12: held=0.000 loo=0.062 | L16: held=0.000 loo=0.031
+  [M4] 恒等读出命中 L8:0.031 L12:0.031 L16:0.031
+
+===== seed 7777 =====
+  [real] acc_train=0.938 acc_held=0.000 margin(tr/ho)=+7.89/-5.00 γ=+0.0170 viol=0 div=False 48.4s
+  [oracleP1] acc_train=0.812 acc_held=0.000 margin(tr/ho)=+5.64/-4.56 γ=+0.0182 viol=0 div=False 48.7s
+  [oracleALL] acc_train=0.938 acc_held=0.062 margin(tr/ho)=+6.85/-5.43 γ=+0.0175 viol=0 div=False 47.6s
+  [M3] Wo 参与比(real 臂终值) = L8:602.6 L12:595.0 L16:583.2（随机基线≈645，MP 理论）
+  [M2] V→答案类 L8: held=0.000 loo=0.031 | L12: held=0.000 loo=0.031 | L16: held=0.000 loo=0.062
+  [M4] 恒等读出命中 L8:0.031 L12:0.031 L16:0.031
+
+========================================================================================
+★ seed 20261028: acc_train=0.812 acc_held=0.062 ⇒ **FIT_ONLY**
+★ seed 7777: acc_train=0.812 acc_held=0.000 ⇒ **FIT_ONLY**
+
+★ 判决 = **FIT_ONLY**；H1(fit-but-not-generalizable) 确认
+  [对照] seed 20261028 oracleALL: acc_train=0.875 acc_held=0.000 loss=4.897102379572971e-06
+  [对照] seed 7777 oracleALL: acc_train=0.938 acc_held=0.062 loss=5.545597100535815e-06
+
+★ 完成 ⇒ out/probe91_womap.json

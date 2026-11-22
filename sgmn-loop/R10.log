@@ -1,0 +1,76 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-10：读取侧联合训练下的前向任务收益 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:50,  5.71it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 762.23it/s]Loading weights:  93%|█████████▎| 270/290 [00:00<00:00, 748.68it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 698.70it/s]
+    写阶段 600 块 × 64 token；评测 60 篇 × 512 token
+
+[Stage A] 装置校验门
+[PASS] A0' Freeze C 契约在【联合训练】下复检（②读梯度 ③写入梯度 ④基座 + 阴性对照）: ②读梯度 9/9 非零，最小 4.784e-02；③写入梯度精确 0：15/15；④基座逐位不变：True；阴性对照泄漏 9/15
+[PASS] A4' 同一时刻只允许一个装置挂在被测模型上: 挂载句柄 6（每层 2 个），记忆数 3
+[FAIL] A3' 写阶段中写通道确实发生（write_calls == 前向次数）: 20 块前视 ⇒ write_calls={8: 19, 12: 19, 16: 19}
+  [学习率探针]
+/home/ec2-user/sgmn-loop/R1_joint_read.py:217: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+    lr=0.0001   前10%−后10% 损失下降 = +1.00734（步数 40）
+    lr=0.001    前10%−后10% 损失下降 = +1.12499（步数 40）
+    lr=0.01     前10%−后10% 损失下降 = -5.74099（步数 40）
+[PASS] A5' 学习率探针（至少一个 lr 使训练损失下降）: lr=0.0001: 下降 +1.00734；lr=0.001: 下降 +1.12499；lr=0.01: 下降 -5.74099 ⇒ 取 LR=0.001
+
+[R1] 主扫描：每种子 × 各臂
+
+  [种子 20261028]
+    base           NLL=2.70746
+    frozen_nowrite NLL=2.77251
+    joint_nowrite  NLL=2.46118  γ 0.05→0.0050 ΔWq=3.693e-01 ΔWo=3.560e-01 viol=0 loss 4.124→3.391
+    eta=1e-07    frozen NLL=2.77280 | joint NLL=2.47332 γ→0.0043 ΔWq=3.769e-01 viol=0 mem_same=True (94s)
+    eta=1e-06    frozen NLL=2.77266 | joint NLL=2.47197 γ→0.0041 ΔWq=3.817e-01 viol=0 mem_same=True (101s)
+    eta=1e-05    frozen NLL=2.76709 | joint NLL=2.45859 γ→0.0050 ΔWq=3.717e-01 viol=0 mem_same=True (99s)
+    eta=0.0001   frozen NLL=nan | joint NLL=nan γ→nan ΔWq=nan viol=0 mem_same=False (54s)
+
+  [种子 20261104]
+    base           NLL=2.70746
+    frozen_nowrite NLL=2.74935
+    joint_nowrite  NLL=2.46689  γ 0.05→0.0057 ΔWq=3.871e-01 ΔWo=3.652e-01 viol=0 loss 4.158→3.361
+    eta=1e-07    frozen NLL=2.74938 | joint NLL=2.45518 γ→0.0048 ΔWq=3.792e-01 viol=0 mem_same=True (101s)
+    eta=1e-06    frozen NLL=2.74942 | joint NLL=2.46299 γ→0.0055 ΔWq=3.894e-01 viol=0 mem_same=True (92s)
+    eta=1e-05    frozen NLL=2.74932 | joint NLL=2.48534 γ→0.0063 ΔWq=3.945e-01 viol=0 mem_same=True (92s)
+    eta=0.0001   frozen NLL=nan | joint NLL=nan γ→nan ΔWq=nan viol=0 mem_same=False (54s)
+
+  [种子 7]
+    base           NLL=2.70746
+    frozen_nowrite NLL=2.73363
+    joint_nowrite  NLL=2.46075  γ 0.05→0.0047 ΔWq=3.861e-01 ΔWo=3.682e-01 viol=0 loss 4.138→3.427
+    eta=1e-07    frozen NLL=2.73354 | joint NLL=2.46432 γ→0.0040 ΔWq=3.897e-01 viol=0 mem_same=True (90s)
+    eta=1e-06    frozen NLL=2.73354 | joint NLL=2.45395 γ→0.0046 ΔWq=3.858e-01 viol=0 mem_same=True (91s)
+    eta=1e-05    frozen NLL=2.73356 | joint NLL=2.44566 γ→0.0054 ΔWq=3.932e-01 viol=0 mem_same=True (91s)
+    eta=0.0001   frozen NLL=nan | joint NLL=nan γ→nan ΔWq=nan viol=0 mem_same=False (54s)
+
+[R2] 分析与判据（跨 3 种子，文档级配对）
+  各臂平均 NLL（跨种子）：
+    base             NLL=2.70746  acc=47.69%  γ=0.0500  注入相对幅度=0.000e+00  ΔWq=0.00e+00 viol=0
+    frozen_nowrite   NLL=2.75183  acc=47.28%  γ=0.0500  注入相对幅度=6.372e-02  ΔWq=0.00e+00 viol=0
+    joint_nowrite    NLL=2.46294  acc=49.77%  γ=0.0051  注入相对幅度=4.222e-02  ΔWq=3.81e-01 viol=0
+    frozen_1e-07     NLL=2.75191  acc=47.27%  γ=0.0500  注入相对幅度=6.370e-02  ΔWq=0.00e+00 viol=0
+    joint_1e-07      NLL=2.46427  acc=49.80%  γ=0.0044  注入相对幅度=3.795e-02  ΔWq=3.82e-01 viol=0
+    frozen_1e-06     NLL=2.75187  acc=47.27%  γ=0.0500  注入相对幅度=6.367e-02  ΔWq=0.00e+00 viol=0
+    joint_1e-06      NLL=2.46297  acc=49.82%  γ=0.0047  注入相对幅度=4.065e-02  ΔWq=3.86e-01 viol=0
+    frozen_1e-05     NLL=2.74999  acc=47.25%  γ=0.0500  注入相对幅度=6.335e-02  ΔWq=0.00e+00 viol=0
+    joint_1e-05      NLL=2.46320  acc=49.80%  γ=0.0056  注入相对幅度=4.509e-02  ΔWq=3.86e-01 viol=0
+    frozen_0.0001    NLL=nan  acc=0.00%  γ=0.0500  注入相对幅度=nan  ΔWq=0.00e+00 viol=0
+    joint_0.0001     NLL=nan  acc=0.00%  γ=nan  注入相对幅度=nan  ΔWq=nan viol=0
+[FAIL] A1' 联合训练确实发生（读侧参数改变 且 训练损失下降）: joint_nowrite: ΔWq=3.809e-01 ΔWo=3.631e-01 γ 0.05→0.0051；joint_1e-07: ΔWq=3.819e-01 ΔWo=3.626e-01 γ 0.05→0.0044；joint_1e-06: ΔWq=3.856e-01 ΔWo=3.665e-01 γ 0.05→0.0047；joint_1e-05: ΔWq=3.865e-01 ΔWo=3.696e-01 γ 0.05→0.0056；joint_0.0001: ΔWq=nan ΔWo=nan γ 0.05→nan
+[PASS] H1 〔主判据〕联合训练使写通道产生任务级收益（NLL(joint) < NLL(frozen)，同 η）: joint_1e-07: 配对差均值 -0.28763 (σ=0.05689, t=-67.83, 符号检验 p=1.25e-12, 负向 180/180) 跨种子均值 -0.29948 -0.29420 -0.26922；joint_1e-06: 配对差均值 -0.28890 (σ=0.05566, t=-69.64, 符号检验 p=1.25e-12, 负向 180/180) 跨种子均值 -0.30069 -0.28643 -0.27959；joint_1e-05: 配对差均值 -0.28679 (σ=0.06071, t=-63.38, 符号检验 p=1.25e-12, 负向 180/180) 跨种子均值 -0.30849 -0.26397 -0.28790；joint_0.0001: 配对差均值 +nan (σ=nan, t=+nan, 符号检验 p=1, 负向 0/0) 跨种子均值 
+[PASS] H2 联合训练后 SGMN 不损害基座（NLL(joint) < NLL(base)）: 最优 joint 臂 joint_1e-06：配对差均值 -0.24449 (σ=0.05622, t=-58.35, 符号检验 p=1.25e-12, 负向 180/180) 跨种子均值 -0.23548 -0.24447 -0.25351
+[FAIL] H3 写通道在联合训练下有独立贡献（NLL(joint+write) < NLL(joint 无写)）: 配对差均值 +0.00003 (σ=0.01458, t=+0.03, 符号检验 p=0.0206) 跨种子均值 +0.01080 -0.00390 -0.00680
+[FAIL] H4 非退化：联合训练不得退化为「把 SGMN 关掉」: 最优 joint 臂 joint_1e-06：γ 0.05 → 0.0047；评测时注入相对幅度 γ||m||/||h|| = 4.065e-02
+[PASS] H5 Freeze C 回归：联合训练全程写入侧梯度恒为精确 0: joint_nowrite: 违规抽检 0 次；joint_1e-07: 违规抽检 0 次；joint_1e-06: 违规抽检 0 次；joint_1e-05: 违规抽检 0 次；joint_0.0001: 违规抽检 0 次
+  联合训练的 η 响应：
+    joint_1e-07    NLL=2.46427
+    joint_1e-06    NLL=2.46297
+    joint_1e-05    NLL=2.46320
+    joint_0.0001   NLL=nan
+[PASS] H7 读路径是否改变写通道的最优 η（报告项）: joint_1e-07:2.46427；joint_1e-06:2.46297；joint_1e-05:2.46320；joint_0.0001:nan；DIR-09（未联合训练）的最优 η ≈ 1e-6
+[PASS] A2' 评测阶段记忆逐位不变（写被冻结）: 4 篇评测文档后记忆相对差 0.000e+00
+
+=== DIR-10 R1：8/12 通过 ===

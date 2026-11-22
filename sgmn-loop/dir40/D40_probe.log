@@ -1,0 +1,28 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+══ 探针甲 · 可表达性（per-instance 读控制器；头冻结） ══
+[甲] 训头（oracle 臂，n_rep=16）n=64 ...
+[甲] 头完成 345s  梯度 {'g1': 17.8599, 'Wo1': 14.4166, 'bo1': 2.0087}
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir40/probe40.py:151: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  acc["q_norm"] += float(q.norm())
+  甲 8/48: L_o=0.5773 L_r=14.8441 L_l=0.2580 cos_l=0.5520 |Wq-Pk|=4.9806  [439s]
+  甲 16/48: L_o=0.8884 L_r=4.5391 L_l=0.2979 cos_l=0.3598 |Wq-Pk|=4.5053  [532s]
+  甲 24/48: L_o=3.3563 L_r=15.1565 L_l=2.6318 cos_l=0.5865 |Wq-Pk|=5.2178  [625s]
+  甲 32/48: L_o=1.0972 L_r=2.1863 L_l=0.1467 cos_l=0.5385 |Wq-Pk|=4.4849  [719s]
+  甲 40/48: L_o=0.9632 L_r=15.3033 L_l=0.3515 cos_l=0.4612 |Wq-Pk|=5.1167  [813s]
+  甲 48/48: L_o=1.8979 L_r=43.3153 L_l=1.2033 cos_l=0.3499 |Wq-Pk|=5.4428  [907s]
+[甲] 完成 907s  L_o=1.897360 L_r=18.416203 L_l=1.251064  cos: o=1.0000 r=0.0050 l=0.4046  |Wq-Pk|: r=4.2979 l=4.9380
+[甲] 配对 rand−learned: mean=17.165139 3se=6.813511
+[甲] 配对 oracle−learned: mean=0.646296 3se=0.272639
+
+══ 探针乙 · 真正的 §8（Pk1 跨实例共享；控制器仍共享；分臂联合训练头） ══
+[乙] 训臂 oracle（qsrc=oracle, 控制器冻）n=64 ...
+  乙 oracle   L=2.189777 (sd 1.2078) cos=1.0000 |Wq-Pk|=4.3465 |Wq-init|=0.000e+00  [331s]
+[乙] 训臂 rand（qsrc=rand, 控制器冻）n=64 ...
+  乙 rand     L=19.014361 (sd 7.9314) cos=-0.0150 |Wq-Pk|=4.3465 |Wq-init|=0.000e+00  [620s]
+[乙] 训臂 learned（qsrc=learned, 控制器训）n=64 ...
+  乙 learned  L=3.068388 (sd 1.5875) cos=-0.7619 |Wq-Pk|=7.3711 |Wq-init|=5.874e+00  [895s]
+[乙] 完成 895s  R=16.824584  配对 rand−learned mean=15.945972 3se=2.860782  功效参考 3se@400=1.144313
+
+探针完成，用时 1802s → dir40/out/DIR40_probe.json

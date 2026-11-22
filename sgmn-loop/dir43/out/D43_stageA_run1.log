@@ -1,0 +1,24 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/ec2-user/sgmn-loop/dir42/R1_task42.py:151: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  q_fp = q_fp + float(q.sum())
+[learned/shard0] 完成 1 个实例，20s
+Stage A：★ 全部通过
+  A43-10_ok                  True
+  A43-11_ok                  True
+  A43-12_ok                  True
+  A43-13_ok                  True
+  A43-14_ok                  True
+  A43-15_ok                  True
+  A43-1_md5                  {'dir31/R1_grad.py': '8fa40f708600bec7e6c484727d2180c7', 'dir33/R1_task33.py': '96ef89e87ec61556b52e0e464850087e', 'dir37/R1_task37.py': '9236ac0490be9c413f1e8af163289207', 'dir38/R1_task38.py': 'd725da6d80bd072f9068a51857abf744', 'dir39/R1_task39.py': '795563cb6212f228f8463ed418f8ce8c', 'dir40/R1_task40.py': 'baab3566891591944efb60a5b6dc9623', 'dir41/R1_task41.py': 'af8f001fe4237b998830a430f9293379', 'dir42/R1_task42.py': 'b500304b74928a791577e71e4e88eeeb'}
+  A43-1_ok                   True
+  A43-2_ok                   True
+  A43-3_card_md5             9a9a8998a0dff9c3645fb6dc0ec981a1
+  A43-3_ok                   True
+  A43-4_ok                   True
+  A43-5_ok                   True
+  A43-6_ok                   True
+  A43-7_ok                   True
+  A43-8_ok                   True
+  A43-9_ok                   True

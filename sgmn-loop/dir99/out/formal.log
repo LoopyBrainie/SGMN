@@ -1,0 +1,26 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:57,  5.04it/s]Loading weights:  67%|██████▋   | 195/290 [00:00<00:00, 805.18it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 729.28it/s]
+[setup] facts=32 chunks=600 tr=16 he=16 arms=['intact', 'center_fixed', 'white', 'permneg', 'w_oracle']
+  ✓ A99-9a     Δ(3/4,1/4)=0.5
+  ✓ A99-9b     Δ(2/4,2/4)=0
+  ✓ A99-9c     W_or 解算：max|W_or·K−V| = 0.00e+00 (<1e-6)，shape=(2, 2)
+/home/ec2-user/sgmn-loop/dir91/R2_task91.py:323: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+[20261028 intact] d_tr=+0.0000 d_ho=+0.0000 | acc_tr w=0.8125 W0=0.8125 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.1250 | maxcos=0.9986 dWrel=0.0e+00 104.1s
+[20261028 center_fixed] d_tr=+0.0000 d_ho=+0.0000 | acc_tr w=0.1875 W0=0.1875 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.1250 | maxcos=0.3790 dWrel=0.0e+00 104.2s
+[20261028 white] d_tr=+0.6250 d_ho=+0.0000 | acc_tr w=0.8125 W0=0.1875 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.0625 | maxcos=0.0000 dWrel=0.0e+00 105.4s
+[20261028 permneg] d_tr=+0.0000 d_ho=+0.0000 | acc_tr w=0.8750 W0=0.8750 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.1250 | maxcos=0.9986 dWrel=0.0e+00 105.2s
+[20261028 w_oracle] d_tr=+0.8750 d_ho=-0.1250 | acc_tr w=0.9375 W0=0.0625 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.1250 z=0.1250 or=0.1250 | maxcos=0.0000 dWrel=0.0e+00 85.8s
+[7777 intact] d_tr=+0.0000 d_ho=+0.0000 | acc_tr w=0.8750 W0=0.8750 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.1250 | maxcos=0.9987 dWrel=0.0e+00 104.8s
+[7777 center_fixed] d_tr=+0.0000 d_ho=+0.0000 | acc_tr w=0.4375 W0=0.4375 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.1250 | maxcos=0.3736 dWrel=0.0e+00 105.4s
+[7777 white] d_tr=+0.5000 d_ho=+0.0000 | acc_tr w=0.7500 W0=0.2500 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.0625 | maxcos=0.0000 dWrel=0.0e+00 106.0s
+[7777 permneg] d_tr=+0.0000 d_ho=+0.0000 | acc_tr w=0.6875 W0=0.6875 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.1250 | maxcos=0.9987 dWrel=0.0e+00 105.1s
+[7777 w_oracle] d_tr=+0.7500 d_ho=-0.0625 | acc_tr w=0.8750 W0=0.1250 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0625 z=0.1250 or=0.1250 | maxcos=0.0000 dWrel=0.0e+00 86.0s
+  ✗ A99-3      可达性：ceiling acc_held(读侧对 W_or 训练) = 0.0000 < 0.125 ⇒ 判据 UNREACHABLE（不得记 FAIL）
+[DIR-99] d_ho 六格均值 = {'intact': 0.0, 'center_fixed': 0.0, 'white': 0.0, 'permneg': 0.0, 'w_oracle': -0.09375}
+[DIR-99] d_tr 六格均值 = {'intact': 0.0, 'center_fixed': 0.0, 'white': 0.5625, 'permneg': 0.0, 'w_oracle': 0.8125}
+[DIR-99] ceiling acc_held(w_oracle) = 0.0000
+[DIR-99] 判决 = UNREACHABLE
+[Stage A] 有 FAIL

@@ -1,0 +1,22 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:01,  4.71it/s]Loading weights:  63%|██████▎   | 184/290 [00:00<00:00, 735.37it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 682.33it/s]
+
+### g0_write  (gamma=0.0, no_write=False, writes=599)
+  L8 prompt_last z=+0.01 cos=+0.1992 rel=1.185 | answer_last z=+15.28
+  L12 prompt_last z=-0.64 cos=+0.1943 rel=1.173 | answer_last z=+15.59
+  L16 prompt_last z=+0.14 cos=+0.2053 rel=1.177 | answer_last z=+14.69
+
+### g0_nowrite  (gamma=0.0, no_write=True, writes=0)
+  L8 prompt_last z=+0.01 cos=+0.1992 rel=1.185 | answer_last z=+15.28
+  L12 prompt_last z=-0.64 cos=+0.1943 rel=1.173 | answer_last z=+15.59
+  L16 prompt_last z=+0.14 cos=+0.2053 rel=1.177 | answer_last z=+14.69
+
+### g05_write  (gamma=0.05, no_write=False, writes=599)
+  L8 prompt_last z=+0.01 cos=+0.1992 rel=1.185 | answer_last z=+15.28
+  L12 prompt_last z=-0.70 cos=+0.1917 rel=1.176 | answer_last z=+15.58
+  L16 prompt_last z=+0.30 cos=+0.2062 rel=1.182 | answer_last z=+14.55
+
+★ 守卫 γ=0 write v.s. no_write 隐态 max|Δ| = 0.000e+00 => PASS（漂移≡0 端到端成立）
+
+★ 完成

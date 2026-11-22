@@ -1,0 +1,30 @@
+{
+ "ok": true,
+ "a": {
+  "A36-1_rel_max": 0.0,
+  "A36-2_rel_max": 0.0,
+  "A36-3_solver_gap": 2.220446049250313e-16,
+  "A36-4_worked_1": 1.0,
+  "A36-4_worked_2": 0.0,
+  "A36-4_exact_1": 1.0,
+  "A36-4_exact_2": 0.0,
+  "A36-5_violations": 0.0,
+  "A36-6_device_md5": "8fa40f708600bec7e6c484727d2180c7",
+  "A36-6_device_diff": 0.0,
+  "A36-7_task_md5": "96ef89e87ec61556b52e0e464850087e",
+  "A36-7_task_diff": 0.0,
+  "A36-8_hist_hits": "none",
+  "A36-8_seed_disjoint": 0.0,
+  "A36-8_train_eval_overlap": 0.0,
+  "A36-9_train_bitwise": 0.0,
+  "A36-10_rank_O": 4,
+  "A36-10_free_resid": 7.888609052210118e-31,
+  "A36-11_card_md5": "1c21e3ac8188f71d8e32cd8639357995",
+  "A36-11_card_diff": 0.0,
+  "A36-11_threshold_set": 0.0,
+  "A36-12_LD_ccd": 0.13989871420312028,
+  "A36-12_LD_exact": 0.13989871420312103,
+  "A36-12_LD_gap": 7.494005416219807e-16,
+  "A36-12_floor_le_actual": 0.0
+ }
+}

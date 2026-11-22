@@ -1,0 +1,37 @@
+{
+  "SPLIT": {
+    "class_seen_frac_held": 1.0,
+    "held_seen": 16,
+    "n_held": 16,
+    "held_distinct_values_unseen": 0,
+    "n_items": 48,
+    "item_has_val_field": false,
+    "items_correct_val_seen": 48,
+    "items_correct_val_unseen": 0,
+    "items_all4_candidates_seen": 48,
+    "items_0_candidates_seen": 0,
+    "cand_seen_count_hist": {
+      "4": 48
+    },
+    "train_vals": 16
+  },
+  "COLOCATED": {
+    "class_seen_frac_held": 0.0,
+    "held_seen": 0,
+    "n_held": 16,
+    "held_distinct_values_unseen": 8,
+    "n_items": 48,
+    "item_has_val_field": false,
+    "items_correct_val_seen": 0,
+    "items_correct_val_unseen": 48,
+    "items_all4_candidates_seen": 0,
+    "items_0_candidates_seen": 2,
+    "cand_seen_count_hist": {
+      "0": 2,
+      "1": 23,
+      "2": 20,
+      "3": 3
+    },
+    "train_vals": 8
+  }
+}

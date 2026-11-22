@@ -1,0 +1,84 @@
+{
+ "n_inst": 400,
+ "n_rep": 16,
+ "steps": 250,
+ "sig_k": 3.0,
+ "frac_headroom": 0.2,
+ "cos_signature": 0.5,
+ "train_win": [
+  1,
+  8
+ ],
+ "eval_win": [
+  9,
+  15
+ ],
+ "missing": [],
+ "source": {
+  "oracle": [
+   "shard0:jsonl",
+   "shard1:jsonl",
+   "shard2:jsonl",
+   "shard3:jsonl"
+  ],
+  "rand": [
+   "shard0:jsonl",
+   "shard1:jsonl",
+   "shard2:jsonl",
+   "shard3:jsonl"
+  ],
+  "learned": [
+   "shard0:jsonl",
+   "shard1:jsonl",
+   "shard2:jsonl",
+   "shard3:jsonl"
+  ]
+ },
+ "bad_n": [],
+ "means": {
+  "L_oracle": 0.02223537515114241,
+  "L_rand": 0.0284426154101732,
+  "L_learned": 0.06389628111262281,
+  "L_learned_rc": 3.284915823287655,
+  "L_seen_oracle": 0.02480964094415659,
+  "L_seen_rand": 0.01749235172608845,
+  "L_seen_learned": 0.04742373851907085,
+  "L_full_learned": 0.11132001963169368
+ },
+ "R": 0.006207240259030787,
+ "floor_0.2R": 0.0012414480518061575,
+ "delta_out": {
+  "mean": -0.035453665702449615,
+  "sd": 0.11407699154105132,
+  "se": 0.005703849577052566,
+  "3se": 0.017111548731157698,
+  "n": 400
+ },
+ "delta_in_sample": {
+  "mean": -0.029931386792982403,
+  "sd": 0.12767538275969825,
+  "se": 0.006383769137984913,
+  "3se": 0.019151307413954738,
+  "n": 400
+ },
+ "content_C": {
+  "mean": 3.2210195421750325,
+  "sd": 5.047858569028795,
+  "se": 0.2523929284514398,
+  "3se": 0.7571787853543194,
+  "n": 400
+ },
+ "P1_signif": false,
+ "P2_floor": false,
+ "P3_content": true,
+ "cos": {
+  "oracle": 1.0,
+  "rand": 0.001537330802354466,
+  "learned": -0.012734172268679268
+ },
+ "abs_cos_learned": 0.012734172268679268,
+ "alignment_signature_present": false,
+ "finite": true,
+ "outcome": "NO-OUT-OF-SAMPLE-GAIN",
+ "counted": false
+}

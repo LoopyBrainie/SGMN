@@ -1,0 +1,67 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir47/probe47c.py:72: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  num = float(W @ K[t] @ Vv[t])
+{
+ "ctx": 4,
+ "S": 8,
+ "R": 2,
+ "n": 200,
+ "seed0": 24960,
+ "n_div": 41,
+ "cens": 0.205,
+ "dup_picks_mean": 0.12578616352201258,
+ "levels": {
+  "on_hit": {
+   "mean": 0.7605459401389446,
+   "sd": 0.303062042667309,
+   "n": 159,
+   "3se": 0.07210315005248678
+  },
+  "on_rest": {
+   "mean": 0.0787805850434935,
+   "sd": 0.3072164285109029,
+   "n": 159,
+   "3se": 0.07309154273677093
+  },
+  "nor_hit": {
+   "mean": 0.05780303175957182,
+   "sd": 0.48654769646074464,
+   "n": 159,
+   "3se": 0.11575722666171114
+  },
+  "nor_rest": {
+   "mean": 0.0698475789952464,
+   "sd": 0.30015779049323543,
+   "n": 159,
+   "3se": 0.07141218351489445
+  },
+  "on_all": {
+   "mean": 0.2583221606906406,
+   "sd": 0.2518833749540298,
+   "n": 159,
+   "3se": 0.059926952976999355
+  },
+  "nor_all": {
+   "mean": 0.0649126187141621,
+   "sd": 0.2618360384125364,
+   "n": 159,
+   "3se": 0.06229484563836566
+  }
+ },
+ "d_hit": {
+  "mean": 0.7027429083793728,
+  "sd": 0.5683957283107394,
+  "n": 159,
+  "3se": 0.13523014009567538
+ },
+ "d_rest": {
+  "mean": 0.008933006048247098,
+  "sd": 0.4048862988886952,
+  "n": 159,
+  "3se": 0.09632871641076905
+ },
+ "wall_s": 8.20557427406311
+}
+DONE → dir47/out/DIR47_probe_d.json  墙钟 8.2s

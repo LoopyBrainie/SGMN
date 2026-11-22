@@ -1,0 +1,115 @@
+{
+ "A1_gamma0_bitwise": {
+  "ok": true,
+  "dW1": 0.0,
+  "dW2": 0.0,
+  "steps": 500
+ },
+ "A1b_step72_eq_ref70": {
+  "ok": true,
+  "dW": 0.0,
+  "steps": 500
+ },
+ "A2_fp_residual_g0": {
+  "ok": true,
+  "res": 9.782291887380401e-16,
+  "steps": 349
+ },
+ "A2_fp_residual_g3": {
+  "ok": true,
+  "res": 9.991270852096574e-16,
+  "steps": 2323
+ },
+ "A2_fp_residual_g10": {
+  "ok": true,
+  "res": 6.571894240402267e-16,
+  "steps": 1
+ },
+ "A2_fp_residual_g20": {
+  "ok": true,
+  "res": 9.999638295908601e-16,
+  "steps": 540529
+ },
+ "A2_fp_residual_g30": {
+  "ok": true,
+  "res": 9.999791002757375e-16,
+  "steps": 1393075
+ },
+ "A3_hconv_g0": {
+  "ok": true,
+  "rel": 8.421211572123883e-11,
+  "Jmax": 0.9887737190040262,
+  "normF": 5.566375692277243
+ },
+ "A3_hconv_g3": {
+  "ok": true,
+  "rel": 2.2220342029997584e-10,
+  "Jmax": 0.9992852703404379,
+  "normF": 6.299879453851258
+ },
+ "A3_hconv_g10": {
+  "ok": true,
+  "rel": 2.2206063436586144e-10,
+  "Jmax": 0.9999278150272969,
+  "normF": 6.5348460211351584
+ },
+ "A3_hconv_g20": {
+  "ok": true,
+  "rel": 4.4409883734683287e-10,
+  "Jmax": 0.9999783212745438,
+  "normF": 6.530758049210776
+ },
+ "A3_hconv_g30": {
+  "ok": true,
+  "rel": 4.4409434635689703e-10,
+  "Jmax": 0.999988433748647,
+  "normF": 6.487406899873162
+ },
+ "A3_worst": {
+  "ok": true,
+  "rel": 4.4409883734683287e-10,
+  "at_g": 20.0
+ },
+ "A4_eigres_g10": {
+  "ok": true,
+  "res": 2.1036675560066127e-15,
+  "lmax": 1.0000000001439566
+ },
+ "A4_eigres_g20": {
+  "ok": true,
+  "res": 2.6532782087161446e-15,
+  "lmax": 1.000000000139819
+ },
+ "A4_eigres_g30": {
+  "ok": true,
+  "res": 2.6632802228268268e-15,
+  "lmax": 1.0000000004263896
+ },
+ "A5_blocktriangular": {
+  "ok": true,
+  "offblock_L1_wrt_L2": 0.0,
+  "nonneutral_all": 0.9887737612285953,
+  "nonneutral_blocks": 0.9887737612285936,
+  "nz_all": 8
+ },
+ "A5b_spec_union": {
+  "ok": true,
+  "n_zero_all": 8,
+  "n_zero_blocks": 8
+ },
+ "A5c_anchor_g0": {
+  "ok": false,
+  "rho": 0.9843559299043118,
+  "ref": 0.876,
+  "diag": "{'ok': True, 'f_lo': False, 'f_hi': True}"
+ },
+ "A6_neutral_modes": {
+  "ok": true,
+  "n_zero": 8,
+  "n": 48
+ },
+ "A7_brackets_precheck": {
+  "ok": true,
+  "detail": "{10.0: (False, True), 20.0: (False, True), 30.0: (False, True)}"
+ }
+}

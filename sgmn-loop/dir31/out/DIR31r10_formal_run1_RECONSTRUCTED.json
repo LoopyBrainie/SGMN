@@ -1,0 +1,30 @@
+{
+ "_note": "★ 重建文件（原首跑 JSON 被 re-run 同名覆盖，见 VERDICT §7 DEF-31-3）。读数为确定性复现，secs/字节与原run不同，不得作为原始产物引用。",
+ "_reconstructed": true,
+ "P1_alive": true,
+ "P2_matrix": true,
+ "P3_rel": 0.40207119908219724,
+ "P3_credible": false,
+ "C": {
+  "C1": 1,
+  "C2": 1,
+  "C3": 1,
+  "C4a": 1,
+  "C4b": 1
+ },
+ "worst_V0": {
+  "rho_min": 0.07505275660460448,
+  "gread_min": 0.04768026894776245,
+  "gwrite_max": 0.0,
+  "gwrite_none_all": true,
+  "gbase_max": 0.0,
+  "gbase_none_all": true,
+  "gin_min": 1.7559955798541895,
+  "read_finite_all": true,
+  "alive_min": 0.04749682932714192,
+  "base_moved_max": 0.0,
+  "read_moved_min": 0.2532364395247713,
+  "L_min": 60.539493978651876
+ },
+ "verdict": "MEASUREMENT-NOT-CREDIBLE"
+}

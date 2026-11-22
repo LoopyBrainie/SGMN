@@ -1,0 +1,302 @@
+{
+ "card": "DIR-91 rev 2.0",
+ "task": "DIR-91-rev2.4",
+ "alpha": 1.0,
+ "lam": 0.05,
+ "eta": 3e-05,
+ "read_steps": 600,
+ "read_lr": 0.001,
+ "n_train_keys": 16,
+ "n_cand": 4,
+ "n_draws": 3,
+ "guards": {
+  "A91-30": {
+   "ok": true,
+   "detail": "打补丁的读通路在**无替换**时与原生**逐位相同**：no_write 下 max|Δm|=0.0e+00（须 ==0）；还原 W 交叉校验 max|Δm|=0.0e+00（须 ==0）",
+   "value": {
+    "d": 0.0,
+    "d_restore": 0.0
+   }
+  },
+  "A91-33": {
+   "ok": true,
+   "detail": "k_i 与 `key_matrices` **逐位相同**（max|Δk|=0.0e+00，须 ==0）；写入数=[599, 599, 599]，期望=599（=块数-1）",
+   "value": {
+    "writes": [
+     599,
+     599,
+     599
+    ]
+   }
+  },
+  "A91-36": {
+   "ok": true,
+   "detail": "γ=0 下「无写」与「写后」的 K,V **逐位相同**：三层 max|Δ|=0.0e+00（须 ==0）",
+   "value": 0.0
+  },
+  "A91-31": {
+   "ok": true,
+   "detail": "q=k_0 时 y 与 W·k_0 **逐位相同**：三层 max|Δy|=0.0e+00（须 ==0）——证明替换确实生效且未被静默忽略",
+   "value": 0.0
+  },
+  "A91-32": {
+   "ok": true,
+   "detail": "share 实现已算例：q=k_0 时 raw share=0.0314 ≥ 下界 0.0313（须成立，≈1/N ⇒ DEF-91-30 退化）；centered share=0.1845 ≥ 下界 0.0663（须成立）；正交合成算例 raw=1.000000000000（须 ==1）",
+   "value": {
+    "share0_raw": 0.03144253941678722,
+    "share0_cen": 0.18453662125771142,
+    "bound_raw": 0.031303877143111954,
+    "bound_cen": 0.06629669969700247
+   }
+  },
+  "A91-34": {
+   "ok": true,
+   "detail": "三臂共用同一 `Random(555)`：n_item=96（须=96）、n_q=32（须=32）",
+   "value": 96
+  },
+  "A91-35@20261028": {
+   "ok": true,
+   "detail": "`oracle_*` 的初值 Wq/Wo/gamma 与 `real` 臂终值**逐位相同**：max|ΔWq|=0.0e+00 max|ΔWo|=0.0e+00 max|Δγ|=0.0e+00（须全 ==0）",
+   "value": 0.0
+  },
+  "A91-35@7777": {
+   "ok": true,
+   "detail": "`oracle_*` 的初值 Wq/Wo/gamma 与 `real` 臂终值**逐位相同**：max|ΔWq|=0.0e+00 max|ΔWo|=0.0e+00 max|Δγ|=0.0e+00（须全 ==0）",
+   "value": 0.0
+  },
+  "A91-30..34,36": {
+   "ok": true,
+   "detail": "六条臂前守卫全部 PASS（明细见上）",
+   "value": null
+  }
+ },
+ "arms": [
+  {
+   "acc_item": 0.125,
+   "acc_q": 0.0625,
+   "n_q": 16,
+   "n_item": 48,
+   "margin_mean": -5.1094125,
+   "margin_pos_frac": 0.125,
+   "arm": "real",
+   "seed": 20261028,
+   "q_src": "Wq c",
+   "trained": true,
+   "final_loss": 2.3722601281406243e-06,
+   "violations": 0,
+   "diverged": false,
+   "rel": {
+    "8": 0.1628006547689438,
+    "12": 0.19139641523361206,
+    "16": 0.27712178230285645
+   }
+  },
+  {
+   "acc_item": 0.2916666666666667,
+   "acc_q": 0.125,
+   "n_q": 16,
+   "n_item": 48,
+   "margin_mean": -1.5147145833333333,
+   "margin_pos_frac": 0.2916666666666667,
+   "arm": "oracle_frozen",
+   "seed": 20261028,
+   "q_src": "k_i",
+   "trained": false
+  },
+  {
+   "acc_item": 0.1875,
+   "acc_q": 0.0,
+   "n_q": 16,
+   "n_item": 48,
+   "margin_mean": -5.2238,
+   "margin_pos_frac": 0.1875,
+   "arm": "oracle_trained",
+   "seed": 20261028,
+   "q_src": "k_i",
+   "trained": true,
+   "final_loss": 9.827553648875664e-06,
+   "violations": 0,
+   "diverged": false
+  },
+  {
+   "acc_item": 0.125,
+   "acc_q": 0.0,
+   "n_q": 16,
+   "n_item": 48,
+   "margin_mean": -5.00283125,
+   "margin_pos_frac": 0.125,
+   "arm": "real",
+   "seed": 7777,
+   "q_src": "Wq c",
+   "trained": true,
+   "final_loss": 1.5521033886045644e-06,
+   "violations": 0,
+   "diverged": false,
+   "rel": {
+    "8": 0.17187005281448364,
+    "12": 0.19347988069057465,
+    "16": 0.26042911410331726
+   }
+  },
+  {
+   "acc_item": 0.2708333333333333,
+   "acc_q": 0.1875,
+   "n_q": 16,
+   "n_item": 48,
+   "margin_mean": -1.4223895833333333,
+   "margin_pos_frac": 0.2708333333333333,
+   "arm": "oracle_frozen",
+   "seed": 7777,
+   "q_src": "k_i",
+   "trained": false
+  },
+  {
+   "acc_item": 0.0,
+   "acc_q": 0.0,
+   "n_q": 16,
+   "n_item": 48,
+   "margin_mean": -5.374974999999999,
+   "margin_pos_frac": 0.0,
+   "arm": "oracle_trained",
+   "seed": 7777,
+   "q_src": "k_i",
+   "trained": true,
+   "final_loss": 8.964485659817001e-06,
+   "violations": 0,
+   "diverged": false
+  }
+ ],
+ "share": {
+  "20261028": {
+   "8": {
+    "share_raw_median_eval": 0.03113397117704153,
+    "share_raw_median_train": 0.0314947497099638,
+    "share_raw_oracle_median_eval": 0.03138243965804577,
+    "share_cen_median_eval": 0.03037176188081503,
+    "share_cen_median_train": 0.02598977740854025,
+    "share_cen_oracle_median_eval": 0.05820260941982269,
+    "cos_qk_median_eval": 0.04429800249636173,
+    "cos_yv_median_eval": 0.010152126662433147,
+    "relyv_median_eval": 1.4448977708816528
+   },
+   "12": {
+    "share_raw_median_eval": 0.033079441636800766,
+    "share_raw_median_train": 0.02536874357610941,
+    "share_raw_oracle_median_eval": 0.03136071749031544,
+    "share_cen_median_eval": 0.017108021304011345,
+    "share_cen_median_train": 0.022564017213881016,
+    "share_cen_oracle_median_eval": 0.03815197013318539,
+    "cos_qk_median_eval": 0.003520372323691845,
+    "cos_yv_median_eval": 0.011631284840404987,
+    "relyv_median_eval": 1.6157274842262268
+   },
+   "16": {
+    "share_raw_median_eval": 0.030399879440665245,
+    "share_raw_median_train": 0.03196242265403271,
+    "share_raw_oracle_median_eval": 0.031522100791335106,
+    "share_cen_median_eval": 0.028224825859069824,
+    "share_cen_median_train": 0.01876539457589388,
+    "share_cen_oracle_median_eval": 0.048923319205641747,
+    "cos_qk_median_eval": 0.029426224529743195,
+    "cos_yv_median_eval": 0.023472853004932404,
+    "relyv_median_eval": 2.001969575881958
+   }
+  },
+  "7777": {
+   "8": {
+    "share_raw_median_eval": 0.030278324149549007,
+    "share_raw_median_train": 0.031608015298843384,
+    "share_raw_oracle_median_eval": 0.0313236378133297,
+    "share_cen_median_eval": 0.034059242345392704,
+    "share_cen_median_train": 0.02054028119891882,
+    "share_cen_oracle_median_eval": 0.04010251350700855,
+    "cos_qk_median_eval": 0.022877764888107777,
+    "cos_yv_median_eval": -0.021005291491746902,
+    "relyv_median_eval": 1.4274882674217224
+   },
+   "12": {
+    "share_raw_median_eval": 0.028638996183872223,
+    "share_raw_median_train": 0.021750940941274166,
+    "share_raw_oracle_median_eval": 0.03136141411960125,
+    "share_cen_median_eval": 0.027789123356342316,
+    "share_cen_median_train": 0.024845538660883904,
+    "share_cen_oracle_median_eval": 0.061092521995306015,
+    "cos_qk_median_eval": 0.0005853632465004921,
+    "cos_yv_median_eval": 0.014960335101932287,
+    "relyv_median_eval": 1.6280543804168701
+   },
+   "16": {
+    "share_raw_median_eval": 0.030457082204520702,
+    "share_raw_median_train": 0.030934324488043785,
+    "share_raw_oracle_median_eval": 0.031611280515789986,
+    "share_cen_median_eval": 0.024644573219120502,
+    "share_cen_median_train": 0.02203202061355114,
+    "share_cen_oracle_median_eval": 0.05750506557524204,
+    "cos_qk_median_eval": 0.03916727378964424,
+    "cos_yv_median_eval": -0.0016308792401105165,
+    "relyv_median_eval": 1.7583630084991455
+   }
+  }
+ },
+ "train_keys": [
+  26,
+  6,
+  15,
+  22,
+  25,
+  2,
+  7,
+  4,
+  27,
+  20,
+  0,
+  13,
+  5,
+  23,
+  28,
+  16
+ ],
+ "eval_keys": [
+  3,
+  9,
+  12,
+  24,
+  19,
+  21,
+  29,
+  1,
+  17,
+  10,
+  8,
+  18,
+  11,
+  30,
+  31,
+  14
+ ],
+ "verdicts": {
+  "20261028": {
+   "real": 0.0625,
+   "oracle_trained": 0.0,
+   "oracle_frozen": 0.125,
+   "delta": -0.0625,
+   "share_cen_eval_median": 0.028224825859069824,
+   "share_cen_ceiling": 0.048923319205641747,
+   "rho": 0.5769196840555942,
+   "share_raw_eval_median": 0.03113397117704153,
+   "branch": "A"
+  },
+  "7777": {
+   "real": 0.0,
+   "oracle_trained": 0.0,
+   "oracle_frozen": 0.1875,
+   "delta": 0.0,
+   "share_cen_eval_median": 0.027789123356342316,
+   "share_cen_ceiling": 0.05750506557524204,
+   "rho": 0.4832465292989164,
+   "share_raw_eval_median": 0.030278324149549007,
+   "branch": "A"
+  }
+ },
+ "branch_final": "A"
+}

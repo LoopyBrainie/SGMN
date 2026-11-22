@@ -1,0 +1,30 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:20,  3.58it/s]Loading weights:  80%|████████  | 233/290 [00:00<00:00, 768.73it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 663.74it/s]
+/home/ec2-user/sgmn-loop/dir91/R2_task91.py:316: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+
+=== T_baseline：γ=可训练，LR=0.01 ===
+  γ 训后 = 0.0441/0.2276/0.0301
+  ‖γ·injection‖ = {'L8': '6.31e+03', 'L12': '8.10e+05', 'L16': '1.94e+08'}  max=2.13e+07
+  loss 首 10 步=4.6386 末 10 步=0.0121 峰值=39.6829  步数=600  W发散=False
+  ★ CEIL 按题 acc=0.375（按项 0.479，n题=16）
+
+=== F_freeze_gamma：γ=冻结 0.05，LR=0.01 ===
+  γ 训后 = 0.0500/0.0500/0.0500
+  ‖γ·injection‖ = {'L8': '7.62e+03', 'L12': '1.74e+05', 'L16': '5.11e+07'}  max=6.46e+06
+  loss 首 10 步=5.3533 末 10 步=0.0078 峰值=28.4161  步数=600  W发散=False
+  ★ CEIL 按题 acc=0.375（按项 0.479，n题=16）
+
+=== L_lower_lr：γ=可训练，LR=0.001 ===
+  γ 训后 = 0.0483/0.0464/0.0420
+  ‖γ·injection‖ = {'L8': '3.03e+02', 'L12': '3.22e+02', 'L16': '2.93e+02'}  max=3.33e+01
+  loss 首 10 步=1.9221 末 10 步=0.0000 峰值=4.5896  步数=600  W发散=False
+  ★ CEIL 按题 acc=0.875（按项 0.938，n题=16）
+
+=== 汇总 ===
+臂               γ       LR      CEIL(题)   max‖γm‖     loss 末    W发散    
+T_baseline      训练      0.01    0.375     2.13e+07    0.0121    False  
+F_freeze_gamma  冻结      0.01    0.375     6.46e+06    0.0078    False  
+L_lower_lr      训练      0.001   0.875     3.33e+01    0.0000    False  

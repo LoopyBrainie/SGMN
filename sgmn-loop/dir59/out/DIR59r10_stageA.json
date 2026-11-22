@@ -1,0 +1,117 @@
+{
+ "A59-1": {
+  "dir31/R1_grad.py": "8fa40f708600bec7e6c484727d2180c7",
+  "dir33/R1_task33.py": "96ef89e87ec61556b52e0e464850087e",
+  "dir37/R1_task37.py": "9236ac0490be9c413f1e8af163289207",
+  "dir40/R1_task40.py": "baab3566891591944efb60a5b6dc9623",
+  "pass": true
+ },
+ "A59-2": {
+  "card_md5": "339ddd7545d96f6398c9d17f9cd59270",
+  "driver_expected": "339ddd7545d96f6398c9d17f9cd59270",
+  "pass": true
+ },
+ "A59-3": {
+  "n_params": 5,
+  "keys": [
+   "Wo1",
+   "Wq1",
+   "bo1",
+   "bq1",
+   "g1"
+  ],
+  "sha1": {
+   "Wo1": "47056a7ebc8861af",
+   "Wq1": "8555b6dca2123e4b",
+   "bo1": "6fe1f402209af18d",
+   "bq1": "0ae4f711ef5d6e9d",
+   "g1": "78e7013ffb07fc54"
+  },
+  "pass": true
+ },
+ "A59-4": {
+  "shas": {
+   "1": [
+    "87d107e235330d5e",
+    "5ec48b3a1b652f6f"
+   ],
+   "2": [
+    "1f5a641a00d371a7",
+    "bf18cc4f6dd7dda4"
+   ],
+   "3": [
+    "ddbeabb4aaa0bb30",
+    "49f49ebbcff67c9c"
+   ],
+   "4": [
+    "a895ddaadec3ea61",
+    "b3da2cbc2cf856cf"
+   ],
+   "5": [
+    "d48615b5376e5dd4",
+    "8b24b87fe9e55298"
+   ]
+  },
+  "shape": [
+   8,
+   4
+  ],
+  "n_distinct": 10,
+  "pass": true
+ },
+ "A59-9": {
+  "max_abs_cos": 0.32556295444761046,
+  "pass": true
+ },
+ "A59-5": {
+  "sha1": {
+   "1": "a06bf2e50bdc71bd",
+   "2": "27dea8f76cc92fa9",
+   "3": "054a075cef07efaa",
+   "4": "1af74fdfcd27c900",
+   "5": "096ca21375ea630b"
+  },
+  "n_distinct": 5,
+  "pass": true
+ },
+ "A59-6": {
+  "L": {
+   "AA": 40.21070984326905,
+   "AB": 41.15467394082003,
+   "BA": 40.287553629266974,
+   "BB": 41.41484363148874
+  },
+  "AA_ne_AB": true,
+  "BA_ne_BB": true,
+  "AA_ne_BA": true,
+  "pass": true
+ },
+ "A59-7": {
+  "L_none": 46.76703012291264,
+  "L_shared": 50.47892880028657,
+  "sha_match": true,
+  "pass": true
+ },
+ "A59-8": {
+  "train_eval_overlap": 0,
+  "hits": {
+   "train": [],
+   "eval": [],
+   "pk1": [],
+   "pvA": [],
+   "pvB": []
+  },
+  "pass": true
+ },
+ "A59-10": {
+  "finite": {
+   "AA": true,
+   "AB": true,
+   "BA": true,
+   "BB": true
+  },
+  "A59D_all_pass": true,
+  "pass": true
+ },
+ "all_pass": true
+}

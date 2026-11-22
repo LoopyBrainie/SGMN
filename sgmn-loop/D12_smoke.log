@@ -1,0 +1,66 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-12：读取侧的检索算子、键一致性与自指诊断 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:55,  5.20it/s]Loading weights:  59%|█████▉    | 172/290 [00:00<00:00, 696.30it/s]Loading weights:  92%|█████████▏| 268/290 [00:00<00:00, 766.69it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 679.68it/s]
+
+[Stage A] 装置校验门
+  [A1'] Freeze C 逐臂复检
+    Q1_linear_aligned        读梯度 9/9 写入梯度精确0 18/18 基座不变 True 阴性泄漏 3/18 [PASS]
+    Q2_attn_l10              读梯度 9/9 写入梯度精确0 18/18 基座不变 True 阴性泄漏 3/18 [PASS]
+    Q3_linear_oracle_key     读梯度 9/9 写入梯度精确0 18/18 基座不变 True 阴性泄漏 3/18 [PASS]
+    Q5_attn_l10_nowrite      读梯度 9/9 写入梯度精确0 18/18 基座不变 True 阴性泄漏 3/18 [PASS]
+    Q6_attn_l10_random_q     读梯度 9/9 写入梯度精确0 18/18 基座不变 True 阴性泄漏 3/18 [PASS]
+[PASS] A1' Freeze C 逐臂复检（③写入梯度精确0 ②读梯度非零有限 ④基座逐位不变 + 阴性对照）: Q1_linear_aligned: read=True write=True base=True leak=3；Q2_attn_l10: read=True write=True base=True leak=3；Q3_linear_oracle_key: read=True write=True base=True leak=3；Q5_attn_l10_nowrite: read=True write=True base=True leak=3；Q6_attn_l10_random_q: read=True write=True base=True leak=3
+[PASS] A2' 装置等价性（双边：λ=1e-8 与 λ=0 的差 <1e-4，且 λ=0.5 与 λ=0 的差 >1e-4）: |Δ(λ=1e-8, λ=0)|码logp 6.676e-06（须 <1e-4），命中 0.000e+00；|Δ(λ=0.5, λ=0)|码logp 2.197e-01（须 >1e-4）
+[PASS] A4' 单一装置（句柄 2×层数）+ 读阶段记忆逐位不变（写关）/ 写开时必须变化: 句柄 6（每层 2 个），记忆数 3；写关时两次前视相对差 0.000e+00（须 <1e-12）；写开时相对差 1.134e+02（须 >1e-9，证明装置确实在写）
+
+  [诊断] 键基列共线性（写入后 vs 初始 W0 vs 随机）
+    W_written    平均列间余弦 = +0.00113
+    W0_init      平均列间余弦 = -0.00002
+    random       平均列间余弦 = +0.00003
+
+[R1] 主测量（8 篇 × 2 种子）
+
+  [种子 20261028]
+    Q0_base            码 logp -2.1794
+    Q1_linear_aligned        码 logp -2.5674 命中 0.0000 cos_true -0.0431 自指cos 0.9785 注意力max 0.0000
+    Q2_attn_l025             码 logp -2.4956 命中 0.0000 cos_true -0.0434 自指cos 0.9834 注意力max 0.0043
+    Q2_attn_l05              码 logp -2.4434 命中 0.0000 cos_true -0.0436 自指cos 0.9869 注意力max 0.0043
+    Q2_attn_l10              码 logp -2.3711 命中 0.0000 cos_true -0.0374 自指cos 0.9899 注意力max 0.0043
+    Q3_linear_oracle_key     码 logp -2.3745 命中 0.0000 cos_true +0.0019 自指cos 0.9861 注意力max 0.0000
+    Q4_attn_l10_oracle_key   码 logp -2.3723 命中 0.0000 cos_true +0.0015 自指cos 0.9865 注意力max 0.0043
+    Q5_attn_l10_nowrite      码 logp -2.1788 命中 0.0000 cos_true -0.0209 自指cos 1.0000 注意力max 0.0063
+    Q6_attn_l10_random_q     码 logp -2.4222 命中 0.0222 cos_true +0.0330 自指cos 0.0127 注意力max 0.0041
+    Q7_linear_nowrite        码 logp -1.9673 命中 0.0000 cos_true -0.0134 自指cos 1.0000 注意力max 0.0000
+
+  [种子 20261104]
+    Q0_base            码 logp -1.9526
+    Q1_linear_aligned        码 logp -2.2370 命中 0.1167 cos_true +0.0116 自指cos 0.9498 注意力max 0.0000
+    Q2_attn_l025             码 logp -2.1507 命中 0.1167 cos_true +0.0118 自指cos 0.9707 注意力max 0.0039
+    Q2_attn_l05              码 logp -2.0836 命中 0.1111 cos_true +0.0119 自指cos 0.9868 注意力max 0.0039
+    Q2_attn_l10              码 logp -1.9761 命中 0.0056 cos_true -0.0001 自指cos 1.0000 注意力max 0.0038
+    Q3_linear_oracle_key     码 logp -1.9616 命中 0.0778 cos_true +0.0119 自指cos 0.9916 注意力max 0.0000
+    Q4_attn_l10_oracle_key   码 logp -1.9811 命中 0.0722 cos_true +0.0136 自指cos 0.9920 注意力max 0.0038
+    Q5_attn_l10_nowrite      码 logp -1.9530 命中 0.0889 cos_true +0.0265 自指cos 1.0000 注意力max 0.0049
+    Q6_attn_l10_random_q     码 logp -1.9245 命中 0.0056 cos_true +0.0075 自指cos -0.0184 注意力max 0.0042
+    Q7_linear_nowrite        码 logp -1.7867 命中 0.0000 cos_true +0.0249 自指cos 1.0000 注意力max 0.0000
+
+[R2] 分析与判据
+  各臂（跨种子均值）：
+    Q0_base                  码logp -2.0660  命中 0.0000  cos_true +0.0000  自指cos 0.0000  注意力max 0.0000
+    Q1_linear_aligned        码logp -2.4022  命中 0.0583  cos_true -0.0157  自指cos 0.9642  注意力max 0.0000
+    Q2_attn_l025             码logp -2.3231  命中 0.0583  cos_true -0.0158  自指cos 0.9770  注意力max 0.0041
+    Q2_attn_l05              码logp -2.2635  命中 0.0556  cos_true -0.0158  自指cos 0.9868  注意力max 0.0041
+    Q2_attn_l10              码logp -2.1736  命中 0.0028  cos_true -0.0187  自指cos 0.9949  注意力max 0.0041
+    Q3_linear_oracle_key     码logp -2.1680  命中 0.0389  cos_true +0.0069  自指cos 0.9889  注意力max 0.0000
+    Q4_attn_l10_oracle_key   码logp -2.1767  命中 0.0361  cos_true +0.0075  自指cos 0.9893  注意力max 0.0041
+    Q5_attn_l10_nowrite      码logp -2.0659  命中 0.0444  cos_true +0.0028  自指cos 1.0000  注意力max 0.0056
+    Q6_attn_l10_random_q     码logp -2.1734  命中 0.0139  cos_true +0.0203  自指cos -0.0029  注意力max 0.0042
+    Q7_linear_nowrite        码logp -1.8770  命中 0.0000  cos_true +0.0058  自指cos 1.0000  注意力max 0.0000
+[FAIL] H1 〔对齐是必要条件〕检索算子下键对齐臂命中 > 随机 W_q 臂（Q2(l=1) vs Q6）: 命中配对差 -0.0111（sd 0.0601, t=-2.03, p=0.125, 正向 0/4）跨种子 -0.0222 +0.0000
+[FAIL] H2 〔存在性·检索算子〕检索确实可实现（最佳 β 臂命中 ≥ 0.9）: 最佳 β 臂 = Q2_attn_l025，命中 0.0583（逐种子 0.000, 0.117）；随机基线 1/41=0.0244
+[FAIL] H3 〔自指诊断〕oracle 键使检索显著改善（Q3>Q1 或 Q4>Q2）: Q3-Q1 = -0.0194（t=-1.71, p=0.1435，跨种子 +0.0000 -0.0389）；Q4-Q2 = +0.0333（t=+3.34, p=0.001831）
+[FAIL] H4 〔任务层·合成回忆〕记忆内容因果改变输出（Q2(l=1) 码 logp > base）: 配对差 -0.1076（sd 1.0375, t=-1.14, p=5.733e-06, 正向 35/120）跨种子 -0.1917 -0.0236
+[FAIL] H5 〔严格对照〕增益来自记忆内容而非注入结构（Q2(l=1) > Q5 写关）: 配对差 -0.1077（t=-1.14, p=1.39e-05）跨种子 -0.1922 -0.0231
+
+=== DIR-12 R1：3/8 通过 ===

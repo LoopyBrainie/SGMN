@@ -1,0 +1,45 @@
+{
+ "guards": {
+  "A39-3_device_md5": "8fa40f708600bec7e6c484727d2180c7",
+  "A39-3_task_md5": "96ef89e87ec61556b52e0e464850087e",
+  "A39-3_dir38_md5": "d725da6d80bd072f9068a51857abf744",
+  "A39-3_ok": true,
+  "A39-4_card_md5": "f0390a5077f1f98a41d7f7f0322e32c5",
+  "A39-4_ok": true,
+  "A39-5_train_hist": 0,
+  "A39-5_train_eval": 0,
+  "A39-5_eval_hist": 0,
+  "A39-5_ok": true,
+  "A39-1_max_abs_diff": 0.0,
+  "A39-1_ok": true,
+  "A39-2_max_abs_diff": 0.0,
+  "A39-2_Wmax_39": 2.0245505350719655,
+  "A39-2_Wmax_38": 2.0245505350719655,
+  "A39-2_ok": true,
+  "A39-6_c1_is_h": {
+   "oracle": true,
+   "rand": true,
+   "learned": true,
+   "learned_rc": true
+  },
+  "A39-6_ok": true,
+  "A39-8_init_deterministic": true,
+  "A39-7_dWq1": 1.2178396859150191,
+  "A39-7_dbq1": 0.4140342226428993,
+  "A39-7_gradnorm_Wq1": 1.359805457739774,
+  "A39-7_gradnorm_bq1": 0.8241300404108757,
+  "A39-7_ok": true,
+  "A39-8_rand_frozen": 0.0,
+  "A39-8_ok": true,
+  "A39-9_Wmax": {
+   "oracle": 1.934383351220411,
+   "rand": 1.934383351220411,
+   "learned": 1.934383351220411,
+   "learned_rc": 1.934383351220411
+  },
+  "A39-9_ok": true,
+  "A39-10_dW_perm": 4.669449497571876,
+  "A39-10_ok": true
+ },
+ "ok": true
+}

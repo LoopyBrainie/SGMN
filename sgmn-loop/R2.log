@@ -1,0 +1,8 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:59,  4.83it/s]Loading weights:  59%|█████▉    | 171/290 [00:00<00:00, 689.97it/s]Loading weights:  93%|█████████▎| 269/290 [00:00<00:00, 751.31it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 674.99it/s]
+写阶段文档 2 篇 × 1024 token
+[PASS] A1'' write_calls == 前向调用总数 − 1（每次写阶段独立建栈并立即卸载）: 前向调用总数 2018；write_calls={8: 2017, 12: 2017, 16: 2017} ⇒ 关系 write_calls = 前向 − 1 （整个写阶段的第一次预填没有 k_{l,0}，故不能写；此后每次前视都写一次，包括每篇文档的预填）
+[PASS] A3'' 两次写阶段逐位可重复（严格单一装置：建栈→测→卸载→再建栈）: 两次写阶段（2018 次前视）后的 W 最大逐位差 0.000e+00
+
+=== DIR-09 R2 重检：2/2 通过 ===

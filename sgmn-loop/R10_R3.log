@@ -1,0 +1,34 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:03,  4.55it/s]Loading weights:  64%|██████▍   | 185/290 [00:00<00:00, 715.49it/s]Loading weights: 100%|█████████▉| 289/290 [00:00<00:00, 797.63it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 664.99it/s]
+=== DIR-10 R3（探索性）：适配器对照，LR=0.001（取自 R1 探针）===
+/home/ec2-user/sgmn-loop/R3_adapter_control.py:219: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  rank=8    种子 20261028: NLL=2.53035 γ→0.07146 注入相对幅度=7.342e-02 loss 3.749→3.186
+  rank=8    种子 20261104: NLL=2.52696 γ→0.06354 注入相对幅度=6.623e-02 loss 3.782→3.177
+  rank=8    种子 7: NLL=2.53230 γ→0.06932 注入相对幅度=6.335e-02 loss 3.769→3.212
+  rank=64   种子 20261028: NLL=2.46399 γ→0.04755 注入相对幅度=5.986e-02 loss 3.744→3.072
+  rank=64   种子 20261104: NLL=2.46486 γ→0.04720 注入相对幅度=5.545e-02 loss 3.723→3.096
+  rank=64   种子 7: NLL=2.46693 γ→0.04828 注入相对幅度=5.904e-02 loss 3.702→3.127
+  rank=896  种子 20261028: NLL=2.45362 γ→0.01384 注入相对幅度=5.028e-02 loss 3.745→3.130
+  rank=896  种子 20261104: NLL=2.45879 γ→0.01415 注入相对幅度=4.972e-02 loss 3.764→3.111
+  rank=896  种子 7: NLL=2.45869 γ→0.01530 注入相对幅度=5.901e-02 loss 3.724→3.126
+
+  【对照表】平均 NLL（跨 3 种子，60 篇 valid）
+    adapter_rank896            NLL=2.45703
+    [R1] joint_nowrite         NLL=2.46294
+    [R1] joint_1e-06           NLL=2.46297
+    [R1] joint_1e-05           NLL=2.46320
+    [R1] joint_1e-07           NLL=2.46427
+    adapter_rank64             NLL=2.46526
+    adapter_rank8              NLL=2.52987
+    [R1] base                  NLL=2.70746
+    [R1] frozen_1e-06          NLL=2.75187
+
+  【对照差值】（非配对，跨种子均值之差，负向=更好）
+    adapter_rank8          vs joint_1e-06: +0.06690 | vs joint_nowrite: +0.06693 | vs base: -0.17759
+    adapter_rank64         vs joint_1e-06: +0.00229 | vs joint_nowrite: +0.00232 | vs base: -0.24220
+    adapter_rank896        vs joint_1e-06: -0.00594 | vs joint_nowrite: -0.00590 | vs base: -0.25042
+
+=== DIR-10 R3 完成（探索性，不进入判据）===

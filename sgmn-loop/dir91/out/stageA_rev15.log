@@ -1,0 +1,29 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:57,  4.98it/s]Loading weights:  71%|███████▏  | 207/290 [00:00<00:00, 817.16it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 729.59it/s]
+事实 32 条；块 600×64；值池 27；γ_run=0.05
+★ Stage A 开始
+[PASS] A91-1: 32 个 nonce 键互不相同（distinct=32）
+[PASS] A91-2: 值池 27 词全为单 token（坏 0）；每事实 val_ids 长度 1（坏 0）
+[PASS] A91-3: 句长≥8（坏 0）；每句含**自己的**话题锚点=True；话题互不相同=True（32 个）；句子互不相同=True ｜诊断：词面 Jaccard V3=0.449 vs V0=0.436（**不过门**：与去均值余弦不共变，见 §0）
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/R2_task91.py:454: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  gs = [float(m.gamma) for m in st0.mems.values()]
+[PASS] A91-4: γ=0：三层 γ=[0.0, 0.0, 0.0]（须同值 0）；γ·injection max|·|=0.0e+00（须 0）；∂L/∂Wq max|·|=0.0e+00（须 0）⇒ BASE 不可训练
+[PASS] A91-5: B=600（须 600）；事实数 32（须 32）
+[PASS] A91-6: 相邻块同事实 568/599=0.948（须 >0.9；写规则配对相邻块）
+[PASS] A91-7: 值池 27 词互不相同
+[PASS] A91-8: rank(W−W0)={8: 32, 12: 32, 16: 32} 全部 > r=8 ⇒ 全矩阵参考分支确实生效
+[PASS] A91-12: 训练键 16 / 评测键 16，交集 0
+[PASS] A91-9: 三桩：正确桩 acc(题)=1.000（须 1.000）、互换桩 0.000（须 0.000）、半对桩 0.500（须 0.500）⇒ 评测入口**有分辨力**
+[PASS] A91-10: no_write 跑 40 块：W max|Δ|=0.0e+00（须 0）、write_calls={8: 0, 12: 0, 16: 0}（须全 0）
+[PASS] A91-13: **去均值** max|cos| = {'L8': 0.379, 'L12': 0.417, 'L16': 0.421} < 0.5（三层全部）｜原始余弦（**仅诊断**）= {'L8': 0.999, 'L12': 0.998, 'L16': 0.996}
+[PASS] A91-14: ridge 最优 W 的 rel.err 中位数 = {'L8': '3.78e-04', 'L12': '2.21e-04', 'L16': '6.90e-05'} < 1e-2 ⇒ 任务原理上可精确实现
+[PASS] A91-11a: FLOOR（γ=0、不写、不训）按题计 acc=0.125（须 ≤0.40）
+[PASS] A91-11b-guard: CEIL 臂通路【双边】：三层 γ=[0.042012, 0.046426, 0.048325]（须各自≠0；rev1.5 起不要求同值——γ 逐层可训练）；max|γ·injection|=3.330e+01（须 >0 且 ≤10×max|h|）；max|h|=1.701e+03；比值=1.958e-02（须 ≤10）｜分层 ‖γ·injection‖={'L8': '3.03e+02', 'L12': '3.21e+02', 'L16': '2.92e+02'}
+[PASS] A91-11b: CEIL（γ=0.05【rev1.3：原为 γ=0，DEF-91-3 起改】+ LR=0.001【rev1.4】 + 写入 + 读侧训练，在**训练键**上）按题计 acc=0.875（须 ≥0.75）⇒ 任务可答、链路通
+[PASS] A91-16: 写入 600 块后 W 全有限（须 True）
+[PASS] A91-17: S91 **γ=0 口径**：written=0.1914 ≤0.5、基线=2.3811、改善=12.44× ≥2× ⇒ 内容确实写入
+[PASS] A91-18: 本 Stage A 每个 `SGMNStack` 均在 finally 中 `remove()`；model._forward_hooks 残留=0（GDN 自带 hook 不计）
+
+★ Stage A: 19/19 PASS

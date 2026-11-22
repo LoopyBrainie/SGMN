@@ -1,0 +1,34 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:51,  5.61it/s]Loading weights:  55%|█████▍    | 159/290 [00:00<00:00, 706.02it/s]Loading weights:  87%|████████▋ | 253/290 [00:00<00:00, 787.15it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 695.74it/s]
+
+===== seed 20261028 =====
+
+===== Stage A 守卫 =====
+
+[PASS] A92-01: ★ 天花板在真实划分上算出：ncls=27；重数分布={2: 5, 1: 22}（须 {1:22, 2:5}）；可预测事实=10（须 10）；**LOO-32 天花板=0.3125**（须 0.3125）、**LOO-10 天花板=1.0**；chance=1/27≈0.0370
+[PASS] A92-00: 栈的 gamma 初值=0.0（须 ==0 ⇒ 注入 gamma*m=0 ⇒ _hs_in 为基座隐态）
+[PASS] A92-02: ★ 值 token 位定位：|V_i|∈[2,2]（须 [2,5]）；值 token 在每个周期内**只出现一次**=True；定位位置上的 token id 全部等于 offset-mapping 给出的值 token=True；**非值位均值不等于块均值**（退化计数=0，须 0）
+[PASS] A92-03: ★ 逐位置分解与装置**逐位一致**：由 z_t 重建的 mean_all 与 key_matrices 的 V 的 max|Δ|/max|V| = 3.03e-07（须 ≤1e-5）
+[PASS] A92-06: 尺度审计（逐维 rms）：min=0.465 max=1.020 比值=2.19（须 ≤4 ⇒ 固定 lam=1.0 公平）
+[PASS] A92-07: ★ `P_v` 保持可辨识：rank(P_v)=896（须 ==896，方阵满秩 ⇒ 线性双射）；值 token 位上 LOO-10(h) 与 LOO-10(hP_v) 之差 max=0.000（须 ≤0.20）⇒ **P_v 不是凶手**
+[PASS] A92-04: ★ LOO 通路天花板（合成 one-hot，每类重数>=2）：**LOO-10=1.000000000000**（须 ==1.0）
+[PASS] A92-05: 置乱标签对照（vt_pos, L8, **5 次置换取均值**）：LOO-32=0.000（须 ≤0.10；五次 [0.0, 0.0, 0.0, 0.0, 0.0]；chance 1/27≈0.037）⇒ 无信息泄漏
+[PASS] A92-08: 延续性：mean_all 的 LOO-32 = L8:0.031 L12:0.062 L16:0.031（须全部 ≤0.10；D-105 实测 0.031–0.062）
+  L8: mean_all loo10=0.100 loo32=0.031 ins=1.000 | vt_pos loo10=1.000 loo32=0.312 ins=1.000 | nonvt loo10=0.100 loo32=0.031 ins=1.000 || vt_on_h loo10=1.000
+  L12: mean_all loo10=0.200 loo32=0.062 ins=1.000 | vt_pos loo10=1.000 loo32=0.312 ins=1.000 | nonvt loo10=0.100 loo32=0.031 ins=1.000 || vt_on_h loo10=1.000
+  L16: mean_all loo10=0.100 loo32=0.031 ins=1.000 | vt_pos loo10=1.000 loo32=0.312 ins=1.000 | nonvt loo10=0.100 loo32=0.031 ins=1.000 || vt_on_h loo10=1.000
+
+★ Stage A 全部 PASS
+
+========================================================================================
+  ✓ P1_mean_all_loo10_le_0.20
+  ✓ P2_vt_pos_ge_0.70
+  ✓ P3_nonvt_le_0.50
+  ✓ P4_gap_vt_minus_nonvt_ge_0.40
+  ✓ P5_vt_pos_ge_0.70_all_layers
+  ✓ P6_pv_gap_le_0.20
+  ✓ P7_mean_all_loo32_le_0.10
+
+★ 判决 = **POOLING**  (gates={'n_pool': 3, 'n_both': 0, 'n_weak': 0, 'n_none': 0, 'n_contra': 0, 'total': 3})
+★ 用时 8s

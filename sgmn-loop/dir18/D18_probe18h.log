@@ -1,0 +1,32 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<02:01,  2.38it/s]Loading weights:  72%|███████▏  | 209/290 [00:00<00:00, 526.19it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 437.89it/s]
+[W1105 02:02:17.759639891 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 16580608, total: 15637086208).
+[W1105 02:02:17.783540587 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 20774912, total: 15637086208).
+[W1105 02:02:17.800625117 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+[W1105 02:02:17.800712665 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 3997696, total: 15637086208).
+Traceback (most recent call last):
+  File "/home/ec2-user/sgmn-loop/dir18/probe18h[probe18h] n_train= 40 dirty17  n_eval=60 hit=0.9944 addr=0.0000 nll=11.5269 nll_ctrl=11.5576 n_stale=60 n_entries=68
+[probe18h] n_train=200 clean    n_eval=12 hit=0.3611 addr=0.3611 nll=9.5650 nll_ctrl=12.2729 n_stale=0 n_entries=68
+[probe18h] n_train=200 clean    n_eval=60 hit=0.3722 addr=0.3722 nll=9.6287 nll_ctrl=11.9380 n_stale=0 n_entries=68
+[probe18h] n_train=200 dirty17  n_eval=12 hit=0.8333 addr=0.0000 nll=9.6746 nll_ctrl=12.2694 n_stale=60 n_entries=68
+[probe18h] n_train=200 dirty17  n_eval=60 hit=0.8833 addr=0.0000 nll=9.5782 nll_ctrl=11.9665 n_stale=60 n_entries=68
+[probe18h] done -> /home/ec2-user/sgmn-loop/dir18/probe18h_out.json
+grad/__init__.py", line 395, in backward
+    _engine_run_backward(
+    ~~~~~~~~~~~~~~~~~~~~^
+        tensors,
+        ^^^^^^^^
+    ...<5 lines>...
+        accumulate_grad=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/autograd/graph.py", line 1072, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        t_outputs, *args, **kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )  # Calls into the C++ engine to run the backward pass
+    ^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 18.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 3.81 MiB is free. Process 70544 has 5.05 GiB memory in use. Process 70989 has 6.05 GiB memory in use. Including non-PyTorch memory, this process has 3.45 GiB memory in use. Of the allocated memory 3.28 GiB is allocated by PyTorch, and 32.10 MiB is reserved by PyTorch but unallocated.

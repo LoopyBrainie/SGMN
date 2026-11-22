@@ -1,0 +1,149 @@
+{
+  "dir": "DIR-04",
+  "round": "R2",
+  "stage": "B",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "checks": [
+    {
+      "name": "①a 记忆扰动引起非零输出变化",
+      "passed": true,
+      "detail": "所有 seed × eps 的 |dlogits| 均 > 0（共 15 点）",
+      "tolerance": "全部 > 0",
+      "value": null
+    },
+    {
+      "name": "①b 输出变化随扰动幅度严格单调递增（所有 seed 一致）",
+      "passed": true,
+      "detail": "每个 seed 的 eps=1e-3<1e-2<1e-1 序列严格递增: True",
+      "tolerance": "全部严格递增",
+      "value": null
+    },
+    {
+      "name": "①c 小 eps 区间近似线性（|dlogits|/eps 相对变化 <= 30%）",
+      "passed": true,
+      "detail": "各 seed 在 eps=1e-3 vs 1e-2 的比值相对变化最大 27.2%",
+      "tolerance": "<=30%",
+      "value": 0.272109325269825
+    },
+    {
+      "name": "H3a 退化点 gamma=0：记忆扰动不改变输出（逐位相同）",
+      "passed": true,
+      "detail": "|dlogits| = 0.000e+00（应为 0）",
+      "tolerance": "精确 0",
+      "value": 0.0
+    },
+    {
+      "name": "H3b 退化点 U=V=0：记忆扰动不改变输出（逐位相同）",
+      "passed": true,
+      "detail": "|dlogits| = 0.000e+00（应为 0）",
+      "tolerance": "精确 0",
+      "value": 0.0
+    }
+  ],
+  "per_seed": [
+    {
+      "seed": 1,
+      "eps": [
+        {
+          "eps": 0.001,
+          "delta_logits_norm": 0.062397196888923645,
+          "ratio_over_eps": 62.397196888923645
+        },
+        {
+          "eps": 0.01,
+          "delta_logits_norm": 0.6744190454483032,
+          "ratio_over_eps": 67.44190454483032
+        },
+        {
+          "eps": 0.1,
+          "delta_logits_norm": 5.873338222503662,
+          "ratio_over_eps": 58.73338222503662
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "eps": [
+        {
+          "eps": 0.001,
+          "delta_logits_norm": 0.06621678918600082,
+          "ratio_over_eps": 66.21678918600082
+        },
+        {
+          "eps": 0.01,
+          "delta_logits_norm": 0.7220835089683533,
+          "ratio_over_eps": 72.20835089683533
+        },
+        {
+          "eps": 0.1,
+          "delta_logits_norm": 5.659928321838379,
+          "ratio_over_eps": 56.59928321838379
+        }
+      ]
+    },
+    {
+      "seed": 3,
+      "eps": [
+        {
+          "eps": 0.001,
+          "delta_logits_norm": 0.10868991911411285,
+          "ratio_over_eps": 108.68991911411285
+        },
+        {
+          "eps": 0.01,
+          "delta_logits_norm": 0.9782272577285767,
+          "ratio_over_eps": 97.82272577285767
+        },
+        {
+          "eps": 0.1,
+          "delta_logits_norm": 8.795313835144043,
+          "ratio_over_eps": 87.95313835144043
+        }
+      ]
+    },
+    {
+      "seed": 4,
+      "eps": [
+        {
+          "eps": 0.001,
+          "delta_logits_norm": 0.15171627700328827,
+          "ratio_over_eps": 151.71627700328827
+        },
+        {
+          "eps": 0.01,
+          "delta_logits_norm": 1.1043286323547363,
+          "ratio_over_eps": 110.43286323547363
+        },
+        {
+          "eps": 0.1,
+          "delta_logits_norm": 10.024141311645508,
+          "ratio_over_eps": 100.24141311645508
+        }
+      ]
+    },
+    {
+      "seed": 5,
+      "eps": [
+        {
+          "eps": 0.001,
+          "delta_logits_norm": 0.1313919872045517,
+          "ratio_over_eps": 131.3919872045517
+        },
+        {
+          "eps": 0.01,
+          "delta_logits_norm": 0.9990308284759521,
+          "ratio_over_eps": 99.90308284759521
+        },
+        {
+          "eps": 0.1,
+          "delta_logits_norm": 10.898075103759766,
+          "ratio_over_eps": 108.98075103759766
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "n_checks": 5,
+    "passed": 5
+  }
+}

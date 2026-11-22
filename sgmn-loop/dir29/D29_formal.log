@@ -1,0 +1,512 @@
+formal · DIR-29
+  full γ=0.0: η_c=0.49331056103257254 (bracket [0.49255743898100846, 0.4940636830841367])
+  full γ=0.5: η_c=0.18799491692492837 (bracket [0.18774190256389917, 0.18824793128595757])
+  full γ=1.0: η_c=0.14830641690319923 (bracket [0.14809546093965031, 0.14851737286674818])
+  full γ=2.0: η_c=0.10896474603059747 (bracket [0.1088180950144817, 0.10911139704671324])
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+  fac γ=0.0: η_c=0.17686228503964302 (bracket [0.1766092706786138, 0.17711529940067222])
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+  fac γ=0.5: η_c=0.1440872976322205 (bracket [0.14387634166867158, 0.14429825359576945])
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+  fac γ=1.0: η_c=0.10955135009506059 (bracket [0.1094046990789448, 0.10969800111117636])
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+  fac γ=2.0: η_c=0.06840916466832317 (bracket [0.06830721675385806, 0.06851111258278827])
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+  one: η_c=0.49331056103257254
+  P1: shift=0.16654977712457825 (need ≥0.02) PASS
+  P2: |R_full−1|=0.6189116313840373 (need ≥0.1) PASS
+  H29: R_fac=0.814686396254147 ≤ R_full−0.10=0.28108836861596265 → False
+  report fac σ0=0.5 γ=0.0: η_c=0.18799491692492837
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+  report fac σ0=0.5 γ=0.5: η_c=0.17989845737199356
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+  report fac σ0=2.0 γ=0.0: η_c=0.10720493383720814
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+  report fac σ0=2.0 γ=0.5: η_c=0.021332288405219134
+  report full init-B γ=0.0: η_c=0.49331056103257254
+  report full init-B γ=0.5: η_c=0.18799491692492837
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+  report fac init-B γ=0.0: η_c=0.07391435204943869
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+  report fac init-B γ=0.5: η_c=0.059757595748992066
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:69: RuntimeWarning: overflow encountered in multiply
+  return (u1 - eta * G1 * v1, v1 - eta * G1 * u1,
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:70: RuntimeWarning: overflow encountered in multiply
+  u2 - eta * G2 * v2, v2 - eta * G2 * u2, k2, G1, G2)
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:68: RuntimeWarning: overflow encountered in multiply
+  G2 = (W2 * k2 - vb) * k2 + LAM * W2
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:100: RuntimeWarning: invalid value encountered in multiply
+  M0 = J11 * q[..., 0] + J12 * q[..., 1]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir29/R1_tangent.py:101: RuntimeWarning: invalid value encountered in multiply
+  M1 = J12 * q[..., 0] + J22 * q[..., 1]
+formal: 231.7s → /home/ec2-user/sgmn-loop/dir29/out/DIR29r10_formal.json

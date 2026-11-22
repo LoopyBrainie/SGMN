@@ -1,0 +1,5 @@
+[10:15:22] ===== DIR-19 正式轮（200/60/3 种子 · 11 臂）=====
+[10:15:22] 日志：D19_R3_reeval.log
+[10:15:27] 正式轮已在后台启动
+ec2-user   19891   19890  0 10:15 ?        00:00:00 bash -c cd ~/sgmn-loop/dir19 && md5sum R1_protect.py && mv -f D19_R3_reeval.log D19_R3_reeval_D82.log 2>/dev/null; setsid nohup bash .ops/run_dir19_formal.sh D19_R3_reeval.log > D19_run3.log 2>&1 < /dev/null & sleep 8; echo 重跑; date -u
+ec2-user   19923   19919 99 10:15 ?        00:00:05 /opt/pytorch/bin/python -u R1_protect.py

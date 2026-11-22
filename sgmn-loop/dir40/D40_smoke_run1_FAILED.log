@@ -1,0 +1,14 @@
+=== DIR-40 · smoke 失败轮 run 1（★ 留档） ===
+时间：2026-11-13 · 主机：trainer
+命令：/opt/pytorch/bin/python dir40/R1_task40.py smoke
+★ 缺陷 **DEF-40-5**：smoke 的读数字典引用了 `e["Wmax"]`，而 `eval_arm40` **没有返回** `Wmax` ⇒ `KeyError`。
+★ **工程错误，与结论无关**（smoke 本就不产生判据）。修法：`eval_arm40` 增补 `Wmax`（写侧 `max‖W‖`）读数。
+--- 终端输出（逐字，节选） ---
+Traceback (most recent call last):
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir40/R1_task40.py", line 525, in <module>
+    json.dump(smoke(), open(os.path.join(OUT, "DIR40r10_smoke.json"), "w"),
+              ~~~~~
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir40/R1_task40.py", line 403, in smoke
+    out[name] = {"mean_L": e["mean_L"], "cos_q_k": e["cos_q_k"], "Wmax": e["Wmax"],
+                                                                         ~^^^^^^^^
+KeyError: 'Wmax'

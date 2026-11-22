@@ -1,0 +1,737 @@
+{
+  "dir": "DIR-04",
+  "round": "R4+R5",
+  "stage": "B",
+  "checks": [
+    {
+      "name": "H4 primary 模型 Qwen2.5-0.5B-Instruct：①②③④ 全部复现",
+      "passed": true,
+      "detail": "②非零:True ②有限:True ③零:True ④基座零:True ④基座不变:True ④写入不变:True",
+      "tolerance": "全部成立",
+      "value": null
+    },
+    {
+      "name": "H4 transfer 模型 TinyLlama-1.1B-Chat-v1.0：①②③④ 全部复现",
+      "passed": true,
+      "detail": "②非零:True ②有限:True ③零:True ④基座零:True ④基座不变:True ④写入不变:True",
+      "tolerance": "全部成立",
+      "value": null
+    },
+    {
+      "name": "R5 因子化同步步 (v2.4 §3.3)：①②③④ 全部成立",
+      "passed": true,
+      "detail": "②非零:True ②有限:True ③零:True ④基座零:True ④基座不变:True ④写入不变:True",
+      "tolerance": "全部成立",
+      "value": null
+    },
+    {
+      "name": "R5 全矩阵参考步 (v2.4 §3.2)：①②③④ 全部成立",
+      "passed": true,
+      "detail": "②非零:True ②有限:True ③零:True ④基座零:True ④基座不变:True ④写入不变:True",
+      "tolerance": "全部成立",
+      "value": null
+    }
+  ],
+  "transfer": [
+    {
+      "tag": "primary",
+      "model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "use_factorized": true,
+      "n_layers": 24,
+      "hidden": 896,
+      "mount": [
+        8,
+        12,
+        16
+      ],
+      "loss": 13.244730949401855,
+      "read_grads": [
+        [
+          "L8.Wq",
+          1.2591699361801147,
+          false,
+          false
+        ],
+        [
+          "L8.Wo",
+          0.21569158136844635,
+          false,
+          false
+        ],
+        [
+          "L8.gamma",
+          13.572940826416016,
+          false,
+          false
+        ],
+        [
+          "L12.Wq",
+          1.0508873462677002,
+          false,
+          false
+        ],
+        [
+          "L12.Wo",
+          0.2635685205459595,
+          false,
+          false
+        ],
+        [
+          "L12.gamma",
+          8.26129150390625,
+          false,
+          false
+        ],
+        [
+          "L16.Wq",
+          1.0365163087844849,
+          false,
+          false
+        ],
+        [
+          "L16.Wo",
+          0.2978789508342743,
+          false,
+          false
+        ],
+        [
+          "L16.gamma",
+          3.5397467613220215,
+          false,
+          false
+        ]
+      ],
+      "write_grads": [
+        [
+          "L8.U",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.V",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.W0",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.Pk",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.Pv",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.U",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.V",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.W0",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.Pk",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.Pv",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.U",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.V",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.W0",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.Pk",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.Pv",
+          0.0,
+          true,
+          false
+        ]
+      ],
+      "read_min_grad": 0.21569158136844635,
+      "write_max_grad": 0.0,
+      "r_nonzero": true,
+      "r_finite": true,
+      "w_zero": true,
+      "b_zero": true,
+      "base_same_after_step": true,
+      "write_same_after_step": true
+    },
+    {
+      "tag": "transfer",
+      "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+      "use_factorized": true,
+      "n_layers": 22,
+      "hidden": 2048,
+      "mount": [
+        7,
+        11,
+        14
+      ],
+      "loss": 2.9821529388427734,
+      "read_grads": [
+        [
+          "L7.Wq",
+          0.8261664509773254,
+          false,
+          false
+        ],
+        [
+          "L7.Wo",
+          0.10345376282930374,
+          false,
+          false
+        ],
+        [
+          "L7.gamma",
+          7.8620924949646,
+          false,
+          false
+        ],
+        [
+          "L11.Wq",
+          0.8538735508918762,
+          false,
+          false
+        ],
+        [
+          "L11.Wo",
+          0.08953557908535004,
+          false,
+          false
+        ],
+        [
+          "L11.gamma",
+          5.332744121551514,
+          false,
+          false
+        ],
+        [
+          "L14.Wq",
+          0.5387171506881714,
+          false,
+          false
+        ],
+        [
+          "L14.Wo",
+          0.09652544558048248,
+          false,
+          false
+        ],
+        [
+          "L14.gamma",
+          6.524406433105469,
+          false,
+          false
+        ]
+      ],
+      "write_grads": [
+        [
+          "L7.U",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L7.V",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L7.W0",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L7.Pk",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L7.Pv",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L11.U",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L11.V",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L11.W0",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L11.Pk",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L11.Pv",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L14.U",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L14.V",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L14.W0",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L14.Pk",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L14.Pv",
+          0.0,
+          true,
+          false
+        ]
+      ],
+      "read_min_grad": 0.08953557908535004,
+      "write_max_grad": 0.0,
+      "r_nonzero": true,
+      "r_finite": true,
+      "w_zero": true,
+      "b_zero": true,
+      "base_same_after_step": true,
+      "write_same_after_step": true
+    }
+  ],
+  "write_dynamics": [
+    {
+      "tag": "因子化同步步 (v2.4 §3.3)",
+      "model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "use_factorized": true,
+      "n_layers": 24,
+      "hidden": 896,
+      "mount": [
+        8,
+        12,
+        16
+      ],
+      "loss": 13.244730949401855,
+      "read_grads": [
+        [
+          "L8.Wq",
+          1.2591699361801147,
+          false,
+          false
+        ],
+        [
+          "L8.Wo",
+          0.21569158136844635,
+          false,
+          false
+        ],
+        [
+          "L8.gamma",
+          13.572940826416016,
+          false,
+          false
+        ],
+        [
+          "L12.Wq",
+          1.0508873462677002,
+          false,
+          false
+        ],
+        [
+          "L12.Wo",
+          0.2635685205459595,
+          false,
+          false
+        ],
+        [
+          "L12.gamma",
+          8.26129150390625,
+          false,
+          false
+        ],
+        [
+          "L16.Wq",
+          1.0365163087844849,
+          false,
+          false
+        ],
+        [
+          "L16.Wo",
+          0.2978789508342743,
+          false,
+          false
+        ],
+        [
+          "L16.gamma",
+          3.5397467613220215,
+          false,
+          false
+        ]
+      ],
+      "write_grads": [
+        [
+          "L8.U",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.V",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.W0",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.Pk",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.Pv",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.U",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.V",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.W0",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.Pk",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.Pv",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.U",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.V",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.W0",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.Pk",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.Pv",
+          0.0,
+          true,
+          false
+        ]
+      ],
+      "read_min_grad": 0.21569158136844635,
+      "write_max_grad": 0.0,
+      "r_nonzero": true,
+      "r_finite": true,
+      "w_zero": true,
+      "b_zero": true,
+      "base_same_after_step": true,
+      "write_same_after_step": true
+    },
+    {
+      "tag": "全矩阵参考步 (v2.4 §3.2)",
+      "model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "use_factorized": false,
+      "n_layers": 24,
+      "hidden": 896,
+      "mount": [
+        8,
+        12,
+        16
+      ],
+      "loss": 12.982329368591309,
+      "read_grads": [
+        [
+          "L8.Wq",
+          1.099563717842102,
+          false,
+          false
+        ],
+        [
+          "L8.Wo",
+          0.26048415899276733,
+          false,
+          false
+        ],
+        [
+          "L8.gamma",
+          11.315349578857422,
+          false,
+          false
+        ],
+        [
+          "L12.Wq",
+          1.087027668952942,
+          false,
+          false
+        ],
+        [
+          "L12.Wo",
+          0.34386733174324036,
+          false,
+          false
+        ],
+        [
+          "L12.gamma",
+          4.953763484954834,
+          false,
+          false
+        ],
+        [
+          "L16.Wq",
+          1.0506924390792847,
+          false,
+          false
+        ],
+        [
+          "L16.Wo",
+          0.3118804395198822,
+          false,
+          false
+        ],
+        [
+          "L16.gamma",
+          6.377188682556152,
+          false,
+          false
+        ]
+      ],
+      "write_grads": [
+        [
+          "L8.U",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.V",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.W0",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.Pk",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.Pv",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L8.Wfull",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.U",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.V",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.W0",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.Pk",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.Pv",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L12.Wfull",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.U",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.V",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.W0",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.Pk",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.Pv",
+          0.0,
+          true,
+          false
+        ],
+        [
+          "L16.Wfull",
+          0.0,
+          true,
+          false
+        ]
+      ],
+      "read_min_grad": 0.26048415899276733,
+      "write_max_grad": 0.0,
+      "r_nonzero": true,
+      "r_finite": true,
+      "w_zero": true,
+      "b_zero": true,
+      "base_same_after_step": true,
+      "write_same_after_step": true
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "total": 4
+  }
+}

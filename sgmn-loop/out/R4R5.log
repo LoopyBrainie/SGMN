@@ -1,0 +1,22 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-04 R4：模型迁移检查 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:55,  5.23it/s]Loading weights:  63%|██████▎   | 184/290 [00:00<00:00, 770.73it/s]Loading weights:  99%|█████████▉| 288/290 [00:00<00:00, 862.62it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 727.12it/s]
+/home/ec2-user/sgmn-loop/R4R5_transfer_and_writes.py:94: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  "mount": mount, "loss": float(loss),
+  · primary Qwen/Qwen2.5-0.5B-Instruct: ②非零=True ②有限=True ③零=True ④基座零=True 基座不变=True 写入不变=True  读梯度最小 2.157e-01
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights:   0%|          | 1/201 [00:00<00:33,  5.99it/s]Loading weights:  20%|█▉        | 40/201 [00:00<00:00, 178.87it/s]Loading weights:  33%|███▎      | 67/201 [00:00<00:00, 205.61it/s]Loading weights:  45%|████▌     | 91/201 [00:00<00:00, 212.12it/s]Loading weights:  57%|█████▋    | 114/201 [00:00<00:00, 213.68it/s]Loading weights:  69%|██████▉   | 139/201 [00:00<00:00, 216.15it/s]Loading weights:  81%|████████  | 162/201 [00:00<00:00, 214.22it/s]Loading weights:  96%|█████████▌| 193/201 [00:00<00:00, 226.68it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 210.48it/s]
+  · transfer TinyLlama/TinyLlama-1.1B-Chat-v1.0: ②非零=True ②有限=True ③零=True ④基座零=True 基座不变=True 写入不变=True  读梯度最小 8.954e-02
+[PASS] H4 primary 模型 Qwen2.5-0.5B-Instruct：①②③④ 全部复现: ②非零:True ②有限:True ③零:True ④基座零:True ④基座不变:True ④写入不变:True
+[PASS] H4 transfer 模型 TinyLlama-1.1B-Chat-v1.0：①②③④ 全部复现: ②非零:True ②有限:True ③零:True ④基座零:True ④基座不变:True ④写入不变:True
+
+=== DIR-04 R5：因子化写 vs 全矩阵参考写 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:32,  3.14it/s]Loading weights:  96%|█████████▌| 279/290 [00:00<00:00, 861.30it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 688.61it/s]
+  · 因子化同步步 (v2.4 §3.3): ②非零=True ②有限=True ③零=True ④基座零=True ④基座不变=True ④写入不变=True  读梯度最小 2.157e-01
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:08,  4.22it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1170.26it/s]
+  · 全矩阵参考步 (v2.4 §3.2): ②非零=True ②有限=True ③零=True ④基座零=True ④基座不变=True ④写入不变=True  读梯度最小 2.605e-01
+[PASS] R5 因子化同步步 (v2.4 §3.3)：①②③④ 全部成立: ②非零:True ②有限:True ③零:True ④基座零:True ④基座不变:True ④写入不变:True
+[PASS] R5 全矩阵参考步 (v2.4 §3.2)：①②③④ 全部成立: ②非零:True ②有限:True ③零:True ④基座零:True ④基座不变:True ④写入不变:True
+
+=== DIR-04 R4+R5：4/4 通过 ===

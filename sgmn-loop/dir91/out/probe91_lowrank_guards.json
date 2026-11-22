@@ -1,0 +1,313 @@
+{
+ "card": "DIR-91 rev 2.9",
+ "file": "probe91_lowrank.py",
+ "gates": {
+  "G_gen": 0.5,
+  "G_low": 0.25,
+  "G_delta": 0.125,
+  "chance": 0.25,
+  "res_null_ratio": 0.9
+ },
+ "consts": {
+  "r_grid": [
+   1,
+   2,
+   4,
+   8,
+   12,
+   16
+  ],
+  "r_witness": [
+   1,
+   2,
+   4,
+   8
+  ],
+  "r_control": 16,
+  "ridge_rel": 0.001,
+  "steps_free": 120,
+  "lr_free": 0.05,
+  "n_train_keys": 16,
+  "n_facts": 32,
+  "n_cand": 4,
+  "n_draws": 3,
+  "n_chunk": 600,
+  "mount": [
+   8,
+   12,
+   16
+  ]
+ },
+ "guards": {
+  "A95-00a": {
+   "ok": true,
+   "detail": "MOUNT=[8, 12, 16] CHUNK=64 B=600 n_q=16 r_grid=[1, 2, 4, 8, 12, 16] chance=0.250",
+   "value": {
+    "mount": [
+     8,
+     12,
+     16
+    ],
+    "chunk": 64,
+    "n_chunk": 600,
+    "n_facts": 32,
+    "n_train_keys": 16,
+    "r_grid": [
+     1,
+     2,
+     4,
+     8,
+     12,
+     16
+    ],
+    "steps_free": 120,
+    "lr_free": 0.05
+   }
+  },
+  "A95-00": {
+   "ok": true,
+   "detail": "worked: rank1 目标下 r=1 残差=2.48e-16(须<1e-10)、rank(M)=1(须=1)；rank2 目标下 r=1 残差=0.553(须>0.2)、r=2 残差=3.79e-16(须<1e-10)",
+   "value": {
+    "rank1_target_res_r1": 2.483108349996737e-16,
+    "rank1_target_rank_M": 1,
+    "rank1_target_res_fullrank": 2.219151766995225e-16,
+    "rank2_target_res_r1": 0.5526025127379901,
+    "rank2_target_res_r2": 3.792387115886907e-16
+   }
+  },
+  "A95-02": {
+   "ok": true,
+   "detail": "r≥rank(Y) 时 rel(M_r, M_λ)=1.26e-13(须<1e-10) ⇒ 闭式解与 ridge_closed 恒等；(r,q,r_eff,rank(M))=[(8, 8, 8, 8), (12, 8, 8, 8)]",
+   "value": {
+    "gaps": [
+     1.2571803390158743e-13,
+     1.2571803390158743e-13
+    ],
+    "ranks": [
+     [
+      8,
+      8,
+      8,
+      8
+     ],
+     [
+      12,
+      8,
+      8,
+      8
+     ]
+    ]
+   }
+  },
+  "A95-01": {
+   "ok": true,
+   "detail": "逐 r 断言 rank(M_r)==min(r,rank(M_λ))：[{'r': 1, 'rank_num': 1, 'want': 1, 'r_eff': 1}, {'r': 2, 'rank_num': 2, 'want': 2, 'r_eff': 2}, {'r': 3, 'rank_num': 3, 'want': 3, 'r_eff': 3}, {'r': 4, 'rank_num': 4, 'want': 4, 'r_eff': 4}, {'r': 6, 'rank_num': 6, 'want': 6, 'r_eff': 6}, {'r': 8, 'rank_num': 8, 'want': 8, 'r_eff': 8}]",
+   "value": {
+    "rows": [
+     {
+      "r": 1,
+      "rank_num": 1,
+      "want": 1,
+      "r_eff": 1
+     },
+     {
+      "r": 2,
+      "rank_num": 2,
+      "want": 2,
+      "r_eff": 2
+     },
+     {
+      "r": 3,
+      "rank_num": 3,
+      "want": 3,
+      "r_eff": 3
+     },
+     {
+      "r": 4,
+      "rank_num": 4,
+      "want": 4,
+      "r_eff": 4
+     },
+     {
+      "r": 6,
+      "rank_num": 6,
+      "want": 6,
+      "r_eff": 6
+     },
+     {
+      "r": 8,
+      "rank_num": 8,
+      "want": 8,
+      "r_eff": 8
+     }
+    ]
+   }
+  },
+  "A95-03": {
+   "ok": true,
+   "detail": "rel_res 随 r 单调不增=True；‖M_r−M_λ‖_F 单调不增=True；rel_res=[0.84832, 0.697184, 0.574734, 0.442565, 0.257453, 0.002186, 0.002186, 0.002186]",
+   "value": {
+    "rel_res": [
+     0.8483196371937359,
+     0.6971837782515624,
+     0.5747337744564042,
+     0.44256548809502294,
+     0.2574529549484067,
+     0.0021859410449077076,
+     0.0021859410449077076,
+     0.0021859410449077076
+    ],
+    "dist_to_full": [
+     0.8893851107321914,
+     0.7463416266088881,
+     0.6840725356055541,
+     0.4332834608924144,
+     0.2621301437496423,
+     1.2571803390158743e-13,
+     1.2571803390158743e-13,
+     1.2571803390158743e-13
+    ]
+   }
+  },
+  "A95-04": {
+   "ok": true,
+   "detail": "λ(每个 r) 与 ridge_closed 的 λ 逐位相同=True；λ=2.687734244331e-02",
+   "value": {
+    "lam_ref": 0.026877342443305186,
+    "lams": [
+     0.026877342443305186,
+     0.026877342443305186,
+     0.026877342443305186,
+     0.026877342443305186,
+     0.026877342443305186,
+     0.026877342443305186
+    ]
+   }
+  },
+  "A95-08": {
+   "ok": true,
+   "detail": "同参数两次闭式拟合 M 逐位相同=True",
+   "value": null
+  },
+  "A95-11": {
+   "ok": true,
+   "detail": "λ=0、r≥n 时 rel(M_r, lstsq)=2.95e-15(须<1e-8，纯代数)",
+   "value": null
+  },
+  "A95-05": {
+   "ok": true,
+   "detail": "投毒留出列后重拟合 M 逐位不变=True(须True)；而把全部 8 列都放进拟合会变 (rel=7.31e+00，须>1e-3) ⇒ 守卫有牙齿",
+   "value": {
+    "same": true,
+    "leak_rel": 7.314595741451747
+   }
+  },
+  "A95-07": {
+   "ok": true,
+   "detail": "count_mounted: 建前=0(须0)、挂上=3(须3)、卸后=0(须0) ⇒ 不得有两个 stack 并存",
+   "value": {
+    "before": 0,
+    "mounted": 3,
+    "after": 0
+   }
+  },
+  "A95-06": {
+   "ok": true,
+   "detail": "无 override 与原生逐位差=0.0e+00(须=0)；B=1 逐行偏差=[0.0]、B=4 逐行偏差=[0.0, 0.0, 0.0, 0.0]、B=4 行间 spread=0.0e+00(须=0)；非读出位未被泄漏(other_dev>1e-3)=[1.9, 1.9]",
+   "value": {
+    "B1": {
+     "row_dev": [
+      0.0
+     ],
+     "spread": 0.0,
+     "other_dev": 1.9000542163848877
+    },
+    "B4": {
+     "row_dev": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "spread": 0.0,
+     "other_dev": 1.9000540971755981
+    }
+   }
+  },
+  "A95-10": {
+   "ok": true,
+   "detail": "真实 Y 上 rank(M_λ) ≤ n_fit(16) 且 r=n_fit 时 rel(M_r,M_λ)<1e-10 [L8:rank=16,gap=2.8e-12, L12:rank=16,gap=2.7e-12, L16:rank=16,gap=2.6e-12]",
+   "value": {
+    "rows": [
+     {
+      "layer": 8,
+      "rank(M_lam)": 16,
+      "q": 16,
+      "rank(M_r)": 16,
+      "rel_gap": 2.813930127635218e-12
+     },
+     {
+      "layer": 12,
+      "rank(M_lam)": 16,
+      "q": 16,
+      "rank(M_r)": 16,
+      "rel_gap": 2.73892126269863e-12
+     },
+     {
+      "layer": 16,
+      "rank(M_lam)": 16,
+      "q": 16,
+      "rank(M_r)": 16,
+      "rel_gap": 2.575413984832311e-12
+     }
+    ],
+    "write_calls": {
+     "8": 599,
+     "12": 599,
+     "16": 599
+    }
+   }
+  },
+  "A95-09": {
+   "ok": true,
+   "detail": "n_q=16(须16) n_item=48(须48) n_cand=4 每题恰一正确项=True 每题draws=3(True) 候选互异且干扰≠正确=True chance=0.250(须0.25)",
+   "value": {
+    "n_q": 16,
+    "n_item": 48,
+    "draws_ok": true,
+    "dist_ok": true
+   }
+  }
+ },
+ "arms": [],
+ "branch": {},
+ "worked": {
+  "rank1_target_res_r1": 2.483108349996737e-16,
+  "rank1_target_rank_M": 1,
+  "rank1_target_res_fullrank": 2.219151766995225e-16,
+  "rank2_target_res_r1": 0.5526025127379901,
+  "rank2_target_res_r2": 3.792387115886907e-16
+ },
+ "config": {
+  "mount": [
+   8,
+   12,
+   16
+  ],
+  "chunk": 64,
+  "n_chunk": 600,
+  "n_facts": 32,
+  "n_train_keys": 16,
+  "r_grid": [
+   1,
+   2,
+   4,
+   8,
+   12,
+   16
+  ],
+  "steps_free": 120,
+  "lr_free": 0.05
+ },
+ "stage_a_ok": true
+}

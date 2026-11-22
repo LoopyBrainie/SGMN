@@ -1,0 +1,25 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:50,  5.75it/s]Loading weights:  67%|██████▋   | 195/290 [00:00<00:00, 851.73it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 757.59it/s]
+===== seed 20261028 =====
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/probe91_woform.py:276: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  ls.append(float(loss))
+  [zero] acc_train=0.062 acc_held=0.125 margin(tr/ho)=-2.54/-0.71
+  [free] acc_train=1.000 acc_held=1.000 margin(tr/ho)=+12.68/+11.08
+  [ridge16] acc_train=1.000 acc_held=0.062 margin(tr/ho)=+12.63/-2.05 n_fit=16
+  [ridge32] acc_train=1.000 acc_held=1.000 margin(tr/ho)=+12.60/+11.12 n_fit=32
+  [adam16] acc_train=0.875 acc_held=0.000 margin(tr/ho)=+7.66/-6.55 γ=-0.0212 viol=0 41.4s
+  [adam16_g1] acc_train=0.250 acc_held=0.000 margin(tr/ho)=-0.72/-15.91 γ=+1.0384 viol=0 41.0s
+===== seed 7777 =====
+  [zero] acc_train=0.000 acc_held=0.000 margin(tr/ho)=-1.75/-2.92
+  [free] acc_train=1.000 acc_held=1.000 margin(tr/ho)=+12.34/+10.53
+  [ridge16] acc_train=1.000 acc_held=0.188 margin(tr/ho)=+12.32/-3.04 n_fit=16
+  [ridge32] acc_train=1.000 acc_held=1.000 margin(tr/ho)=+12.32/+10.45 n_fit=32
+  [adam16] acc_train=0.812 acc_held=0.000 margin(tr/ho)=+8.97/-8.61 γ=-0.0144 viol=0 41.3s
+  [adam16_g1] acc_train=0.312 acc_held=0.000 margin(tr/ho)=-1.76/-23.19 γ=+1.0173 viol=0 41.0s
+  -> /mnt/sgmn/home/ec2-user/sgmn-loop/dir91/out/probe91_woform.json
+  seed 20261028: free=1.000 ridge16=0.062 ridge32=1.000 -> SAMPLE_LIMIT
+  seed 7777: free=1.000 ridge16=0.188 ridge32=1.000 -> SAMPLE_LIMIT
+
+* 分支 = SAMPLE_LIMIT

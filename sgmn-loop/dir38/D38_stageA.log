@@ -1,0 +1,33 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir38/R1_task38.py:255: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  dW[nr] = float((W1 - W0).norm())
+Stage A：★ 全部通过
+  A38-1_max_abs_diff         0.0
+  A38-1_ok                   True
+  A38-2_device_md5           8fa40f708600bec7e6c484727d2180c7
+  A38-2_ok                   True
+  A38-2_task_md5             96ef89e87ec61556b52e0e464850087e
+  A38-3_ok                   True
+  A38-3_train_eval_overlap   0
+  A38-3_train_hist_overlap   0
+  A38-4_card_md5             98848374e1a367580d5c8c89eb6029a5
+  A38-4_ok                   True
+  A38-5_Wmax1                3.3345387804796967
+  A38-5_Wmax16               1.7324012907267674
+  A38-5_finite16             True
+  A38-5_ok                   True
+  A38-5_ratio                0.5195325065248002
+  A38-6_G_norm_rel           5.86755884299265e-17
+  A38-6_Wstar_k_rel          2.4242200051119276e-17
+  A38-6_ok                   True
+  A38-6_read_rel             2.4242200051119276e-17
+  A38-7_gamma                0.9192893741525239
+  A38-7_ok                   True
+  A38-7_phi_keys             ['Wo1', 'bo1', 'g1']
+  A38-8_dW                   {1: 2.8924956646079307, 4: 3.5743599229549203, 16: 3.278596522633291}
+  A38-8_ok                   True
+  A38-8_sep_1_16             1.3166976414811178
+  A38-8_sep_1_4              1.1748994481727604
+  A38-8_sep_4_16             0.8156685813223357

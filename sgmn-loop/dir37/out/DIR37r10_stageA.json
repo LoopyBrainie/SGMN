@@ -1,0 +1,31 @@
+{
+ "ok": true,
+ "a": {
+  "A37-1_rel_max": 0.0,
+  "A37-1b_train_bitwise": 0.0,
+  "A37-2_ls_resid": 6.994405055138486e-15,
+  "A37-3_pinv_gap": 1.8474111129762605e-13,
+  "A37-4_max_rank": 2,
+  "A37-5_solver_gap": 2.220446049250313e-16,
+  "A37-6_worked_1": 1.0,
+  "A37-6_worked_2": 0.0,
+  "A37-6_exact_1": 1.0,
+  "A37-6_exact_2": 0.0,
+  "A37-7_rell_dev": 0.7315940685894811,
+  "A37-7_rell_ref": 0.06666666666666707,
+  "A37-7_fair_ok": 1.0,
+  "A37-8_device_diff": 0.0,
+  "A37-8_task_diff": 0.0,
+  "A37-9_hist_hits": "none",
+  "A37-9_seed_disjoint": 0.0,
+  "A37-9_train_eval_overlap": 0.0,
+  "A37-10_train_bitwise": 0.0,
+  "A37-11_card_md5": "3ce25d5b590ee8745ac903ee4d34a474",
+  "A37-11_card_diff": 0.0,
+  "A37-11_threshold_set": 0.0,
+  "A37-12_probe_head_gap": 0.0,
+  "A37-12_probe_dev_rel": 0.0,
+  "A37-13_identity_rel": 0.0,
+  "A37-14_violations": 0.0
+ }
+}

@@ -1,0 +1,211 @@
+{
+ "stage": "A55",
+ "card": "rev2.0",
+ "card_md5": "f5e39a2237272580b565d9e96e830f1f",
+ "gate": "median",
+ "seeds": {
+  "n": 96,
+  "first": 57000,
+  "last": 57095
+ },
+ "secs": 35.25740575790405,
+ "checks": {
+  "A55-1_dev_md5": {
+   "dir31/R1_grad.py": {
+    "want": "8fa40f708600bec7e6c484727d2180c7",
+    "got": "8fa40f708600bec7e6c484727d2180c7"
+   },
+   "dir33/R1_task33.py": {
+    "want": "96ef89e87ec61556b52e0e464850087e",
+    "got": "96ef89e87ec61556b52e0e464850087e"
+   },
+   "dir46/R1_task46.py": {
+    "want": "d66c849692d93bc5b24a91f9a445e0ef",
+    "got": "d66c849692d93bc5b24a91f9a445e0ef"
+   },
+   "dir47/R1_task47.py": {
+    "want": "fd03c70c6490cfd726489714b9c2c80f",
+    "got": "fd03c70c6490cfd726489714b9c2c80f"
+   },
+   "dir48/R1_task48.py": {
+    "want": "bb6154687a48d4ea33f0ebd9bc0cb393",
+    "got": "bb6154687a48d4ea33f0ebd9bc0cb393"
+   }
+  },
+  "A55-1_dev_ok": true,
+  "A55-1_card_md5": {
+   "want": "f5e39a2237272580b565d9e96e830f1f",
+   "got": "f5e39a2237272580b565d9e96e830f1f"
+  },
+  "A55-1_ok": true,
+  "A55-12_consts": {
+   "parsed_from_card": {
+    "T_A": 0.2,
+    "T_B1": 0.5,
+    "T_B2": 0.9,
+    "T_C": 0.4,
+    "T_C_ABS": 0.9,
+    "SURV": 0.5,
+    "STORE": 64.0,
+    "R_NAT": 8.0,
+    "K_MIN": 0.25
+   },
+   "device": {
+    "T_A": 0.2,
+    "T_B1": 0.5,
+    "T_B2": 0.9,
+    "T_C": 0.4,
+    "T_C_ABS": 0.9,
+    "SURV": 0.5,
+    "STORE": 64.0,
+    "R_NAT": 8.0,
+    "K_MIN": 0.25
+   },
+   "adjudicator": {
+    "T_A": 0.2,
+    "T_B1": 0.5,
+    "T_B2": 0.9,
+    "T_C": 0.4,
+    "T_C_ABS": 0.9,
+    "SURV": 0.5,
+    "STORE": 64.0,
+    "R_NAT": 8.0,
+    "K_MIN": 0.25
+   }
+  },
+  "A55-12_ok": true,
+  "A55-2_bad": [],
+  "A55-2_n_bad": 0,
+  "A55-2_ok": true,
+  "A55-3": {
+   "n_seeds": 96,
+   "min_diag": 0.891924931288172,
+   "max_off": 0.4521834991976049,
+   "median_diag": 0.9941982813181229,
+   "median_off": 0.10752761807010143
+  },
+  "A55-3_ok": true,
+  "A55-4_det": 0.0,
+  "A55-4_ok": true,
+  "A55-5": {
+   "same_init": true,
+   "same_store_none_order012": true
+  },
+  "A55-5_ok": true,
+  "A55-6": {
+   "natural_pair_norm_k": 1.1293621831370133,
+   "diff_kv_l1max": 1.7809773287635446,
+   "writes_natural": 1,
+   "writes_reinforce": 1
+  },
+  "A55-6_ok": true,
+  "A55-7": {
+   "multiset_equal": true,
+   "sequence_different": true
+  },
+  "A55-7_ok": true,
+  "A55-8": {
+   "C_hand": 0.9767926860556915,
+   "C_code": 0.9767926860556915,
+   "abs_diff": 0.0
+  },
+  "A55-8_ok": true,
+  "A55-9_ok": true,
+  "A55-10": {
+   "denominator": 11,
+   "hits": 11,
+   "rate": 1.0
+  },
+  "A55-10_ok": true,
+  "A55-11": {
+   "n": 96,
+   "first": 57000,
+   "last": 57095,
+   "n_unique": 96,
+   "overlap_probe": 0,
+   "card_segments": [
+    [
+     57000,
+     57095
+    ],
+    [
+     56000,
+     56095
+    ],
+    [
+     55000,
+     55023
+    ],
+    [
+     56000,
+     56007
+    ],
+    [
+     57000,
+     57095
+    ],
+    [
+     55000,
+     55023
+    ],
+    [
+     56000,
+     56095
+    ],
+    [
+     57000,
+     57095
+    ],
+    [
+     56000,
+     56095
+    ]
+   ],
+   "foreign_segments": [
+    [
+     56000,
+     56095
+    ],
+    [
+     55000,
+     55023
+    ],
+    [
+     56000,
+     56007
+    ],
+    [
+     55000,
+     55023
+    ],
+    [
+     56000,
+     56095
+    ],
+    [
+     56000,
+     56095
+    ]
+   ],
+   "clash": [],
+   "cur": [
+    57000,
+    57095
+   ]
+  },
+  "A55-11_ok": true,
+  "A55-13": {
+   "min_k_norm": 0.7017397285407558,
+   "n": 72
+  },
+  "A55-13_ok": true,
+  "A55-14": {
+   "recompute_r5_maxdiff": 0.0,
+   "n_distinct_content_keys": 8
+  },
+  "A55-14_ok": true
+ },
+ "n_passed": 15,
+ "n_total": 15,
+ "all_ok": true
+}

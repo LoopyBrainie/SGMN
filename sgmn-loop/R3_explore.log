@@ -1,0 +1,19 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:49,  5.85it/s]Loading weights:  55%|█████▍    | 159/290 [00:00<00:00, 700.93it/s]Loading weights:  85%|████████▌ | 247/290 [00:00<00:00, 658.76it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 623.62it/s]
+
+[R3b] 四种协议的 E||k||^2（同一装置、同一代码）
+    P1_teacher_b1    E||k||^2 = 53973.3  (sd 505933.8, n=600)
+    P2_teacher_b4    E||k||^2 = 8697.2  (sd 80092.6, n=600)
+    P3_greedy_b4     E||k||^2 = 773.2  (sd 825.0, n=1800)
+    P4_greedy_b1     E||k||^2 = 773.2  (sd 825.0, n=1800)
+[FAIL] R3b 尺度律解释了两个协议间的最优步长位移（探索性）: μ(P1 teacher-forced b1) = 53973.3，μ(P3 greedy b4) = 773.2 ⇒ 比值 69.80；实测最优 η 的比值 = 10×（DIR-08 1e-5 vs DIR-09 1e-6）⇒ 尺度律预测 η*∝1/μ ⇒ 预期 μ 比值 ≈10，实测 69.80（另：P2 teacher b4 = 8697.2、P4 greedy b1 = 773.2，⇒ batch 平均是 μ 的主要来源之一）
+
+[R3a] 读路径对齐臂（探索性）
+    base           NLL=2.70746
+    align+randW0   NLL=2.76018
+    align+learnedW NLL=2.75962
+    rand+learnedW  NLL=2.77419
+[PASS] R3a 读路径对齐后写通道是否有任务级收益（探索性）: base=2.70746；对齐读路径+随机W0=2.76018；对齐读路径+学到的W=2.75962；随机读路径+学到的W=2.77419。⇒ 对齐后【学到的 W 优于随机 W0】+0.00056 nats/token ⇒ 写通道有任务级收益，缺的是读取侧对齐（v2.4 §4 的联合训练）
+
+=== DIR-09 R3（探索性）：1/2 通过 ===

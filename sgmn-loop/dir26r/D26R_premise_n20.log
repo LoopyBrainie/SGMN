@@ -1,0 +1,36 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+标定：c_tau = 0.0950
+=== R-1 / R-2（纯流统计，描述性）===
+  （--r3-only：跳过）
+  ✓ R-1a 刚体重瞄后 ρ_u 最大变化 0.00e+00 ≤1e-5
+  ✓ R-1b 条目内成对余弦最大偏差 0.00e+00 ≤1e-5
+  ✓ R-1c 键确实被改写：最小平均|ΔK| 1.0000 >1e-3
+  ✓ R-2 逐轮独立 Haar 后 |ρ_u| ≤ 0.00e+00（→iid 档）
+=== R-3（装置 E0 臂，描述性；无裁决）===
+  R-3 种子数 n=20（预登记口径：|mean| ≥ 3se 且同号 ⇒ 效应成立）
+  seed=20261028: ret1 id=0.8125 → iso=0.8812  Δ=+0.0687
+  seed=20261104: ret1 id=0.7875 → iso=0.8187  Δ=+0.0312
+  seed=7: ret1 id=0.8125 → iso=0.7812  Δ=-0.0312
+  seed=20261111: ret1 id=0.8562 → iso=0.8562  Δ=+0.0000
+  seed=20261118: ret1 id=0.8063 → iso=0.8313  Δ=+0.0250
+  seed=20261125: ret1 id=0.7688 → iso=0.6687  Δ=-0.1000
+  seed=20261202: ret1 id=0.6125 → iso=0.7312  Δ=+0.1187
+  seed=20261209: ret1 id=0.8625 → iso=0.8000  Δ=-0.0625
+  seed=20261216: ret1 id=0.7375 → iso=0.7812  Δ=+0.0437
+  seed=20261223: ret1 id=0.8063 → iso=0.7812  Δ=-0.0250
+  seed=20261230: ret1 id=0.7812 → iso=0.8562  Δ=+0.0750
+  seed=20270106: ret1 id=0.7625 → iso=0.7312  Δ=-0.0312
+  seed=20270113: ret1 id=0.7937 → iso=0.8250  Δ=+0.0312
+  seed=20270120: ret1 id=0.8000 → iso=0.8250  Δ=+0.0250
+  seed=20270127: ret1 id=0.8812 → iso=0.8938  Δ=+0.0125
+  seed=20270203: ret1 id=0.8625 → iso=0.8063  Δ=-0.0563
+  seed=20270210: ret1 id=0.8063 → iso=0.8375  Δ=+0.0312
+  seed=20270217: ret1 id=0.8313 → iso=0.7875  Δ=-0.0438
+  seed=20270224: ret1 id=0.8812 → iso=0.8812  Δ=+0.0000
+  seed=20270303: ret1 id=0.8375 → iso=0.8625  Δ=+0.0250
+  Δret1 配对均值 +0.0069、3se=0.0351、正/负 11/7
+  ⇒ 无可检出的效应（描述性）
+=== 前提检查 PASS（4/4） 2649.2s ===
+EXITCODE=0

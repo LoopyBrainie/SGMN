@@ -1,0 +1,75 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir46/probe46a.py:94: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  "wnorm": (float(W.norm()) if finite else None),
+
+########## mode = period2 ##########
+    C(1)                       = (无有效值)
+      ‖W‖(1)                   = +1.31244  (sd 0.3227, se 0.0931, n=12)  ★3se=0.2794
+      发散 0/12   有效读槽均值 0.00/0
+    C(2)                       = +0.99816  (sd 0.0029, se 0.0008, n=12)  ★3se=0.0025
+      ‖W‖(2)                   = +1.58436  (sd 0.3097, se 0.0894, n=12)  ★3se=0.2682
+      发散 0/12   有效读槽均值 1.00/1
+    C(4)                       = +0.95115  (sd 0.0542, se 0.0157, n=12)  ★3se=0.0470
+      ‖W‖(4)                   = +1.36439  (sd 0.2609, se 0.0753, n=12)  ★3se=0.2259
+      发散 0/12   有效读槽均值 3.00/3
+    C(8)                       = +0.95800  (sd 0.0561, se 0.0162, n=12)  ★3se=0.0485
+      ‖W‖(8)                   = +1.24201  (sd 0.2198, se 0.0634, n=12)  ★3se=0.1903
+      发散 0/12   有效读槽均值 7.00/7
+    C(16)                      = +0.95788  (sd 0.0577, se 0.0167, n=12)  ★3se=0.0500
+      ‖W‖(16)                  = +1.16548  (sd 0.2305, se 0.0665, n=12)  ★3se=0.1996
+      发散 0/12   有效读槽均值 15.00/15
+    C(32)                      = +0.97013  (sd 0.0335, se 0.0106, n=10)  ★3se=0.0318
+      ‖W‖(32)                  = +1.15963  (sd 0.2526, se 0.0799, n=10)  ★3se=0.2396
+      发散 2/12   有效读槽均值 31.00/31
+    C(64)                      = +0.96840  (sd 0.0465, se 0.0155, n=9)  ★3se=0.0465
+      ‖W‖(64)                  = +1.12125  (sd 0.3003, se 0.1001, n=9)  ★3se=0.3003
+      发散 3/12   有效读槽均值 63.00/63
+    C(128)                     = +0.98252  (sd 0.0208, se 0.0104, n=4)  ★3se=0.0312
+      ‖W‖(128)                 = +1.14014  (sd 0.4048, se 0.2024, n=4)  ★3se=0.6072
+      发散 8/12   有效读槽均值 127.00/127
+  ① 判据非空：`C(1)` **不存在**（`k_0 = 0` ⇒ 首次写入的键是零向量 ⇒ `W·k_0 = 0` ⇒ 该槽**永不可读**；且 `G = ALPHA·(W·0 − v)·0ᵀ + LAM·W = LAM·W` ⇒ 第 0 步只**衰减**、不写值）⇒ 锚点改用 `C(2)`：
+      C(2) = [0.9981567571609765]
+  ③ N_w=  2: sd=0.0029 ⇒ 使 3se≤0.05 需 n≈1
+  ③ N_w=  4: sd=0.0542 ⇒ 使 3se≤0.05 需 n≈11
+  ③ N_w=  8: sd=0.0561 ⇒ 使 3se≤0.05 需 n≈12
+  ③ N_w= 16: sd=0.0577 ⇒ 使 3se≤0.05 需 n≈13
+  ③ N_w= 32: sd=0.0335 ⇒ 使 3se≤0.05 需 n≈5
+  ③ N_w= 64: sd=0.0465 ⇒ 使 3se≤0.05 需 n≈8
+  ③ N_w=128: sd=0.0208 ⇒ 使 3se≤0.05 需 n≈2
+  ④ `N_div`（首个出现发散的 N_w）= 32   发散占比： {32: '2/12', 64: '3/12', 128: '8/12'}
+  ⑤ `C(N_w)` 曲线（均值±sd，n=有限实例数）：
+       1:('-', '-')(12)  2:(0.9982, 0.0029)(12)  4:(0.9511, 0.0542)(12)  8:(0.958, 0.0561)(12)  16:(0.9579, 0.0577)(12)  32:(0.9701, 0.0335)(10)  64:(0.9684, 0.0465)(9)  128:(0.9825, 0.0208)(4)
+
+########## mode = perstep ##########
+    C(1)                       = (无有效值)
+      ‖W‖(1)                   = +1.31244  (sd 0.3227, se 0.0931, n=12)  ★3se=0.2794
+      发散 0/12   有效读槽均值 0.00/0
+    C(2)                       = +0.99816  (sd 0.0029, se 0.0008, n=12)  ★3se=0.0025
+      ‖W‖(2)                   = +1.58436  (sd 0.3097, se 0.0894, n=12)  ★3se=0.2682
+      发散 0/12   有效读槽均值 1.00/1
+    C(4)                       = +0.59974  (sd 0.2240, se 0.0647, n=12)  ★3se=0.1940
+      ‖W‖(4)                   = +1.42382  (sd 0.4321, se 0.1247, n=12)  ★3se=0.3742
+      发散 0/12   有效读槽均值 3.00/3
+    C(8)                       = +0.38269  (sd 0.1448, se 0.0437, n=11)  ★3se=0.1310
+      ‖W‖(8)                   = +1.26023  (sd 0.4957, se 0.1494, n=11)  ★3se=0.4483
+      发散 1/12   有效读槽均值 7.00/7
+    C(16)                      = +0.07306  (sd 0.1796, se 0.0599, n=9)   3se=0.1796
+      ‖W‖(16)                  = +1.07602  (sd 0.4306, se 0.1435, n=9)  ★3se=0.4306
+      发散 3/12   有效读槽均值 15.00/15
+    C(32)                      = +0.10590  (sd 0.0768, se 0.0384, n=4)   3se=0.1153
+      ‖W‖(32)                  = +1.06812  (sd 0.2772, se 0.1386, n=4)  ★3se=0.4157
+      发散 8/12   有效读槽均值 31.00/31
+    C(64)                      = (无有效值)
+      ‖W‖(64)                  = (无有效值)
+Traceback (most recent call last):
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir46/probe46a.py", line 159, in <module>
+    main()
+    ~~~~^^
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir46/probe46a.py", line 128, in main
+    f"{statistics.fmean([c['n_read'] for c in fin]):.2f}/{n_w-1}")
+       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/statistics.py", line 516, in fmean
+    raise StatisticsError('fmean requires at least one data point')
+statistics.StatisticsError: fmean requires at least one data point

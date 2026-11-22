@@ -1,0 +1,15 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:01,  4.70it/s]Loading weights:  64%|██████▍   | 185/290 [00:00<00:00, 720.55it/s]Loading weights:  99%|█████████▊| 286/290 [00:00<00:00, 802.27it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 677.39it/s]
+事实 32 条；块 600×64；值池 27；γ 网格 (0.005, 0.02, 0.05, 0.2)
+格计划 5 格
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir90/R1_task90.py:191: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  return float(-lp[cand_ids[0]])
+  [BASE g=0.0 seed=20261028] acc_item=0.2917 acc_q=0.1250 g_end=[0.0, 0.0, 0.0] 6.4s
+  [INJ g=0.05 seed=20261028] acc_item=0.0417 acc_q=0.0000 g_end=[0.05000000074505806, 0.05000000074505806, 0.05000000074505806] 41.5s
+  [MEM g=0.05 seed=20261028] acc_item=0.0208 acc_q=0.0000 g_end=[0.05000000074505806, 0.05000000074505806, 0.05000000074505806] 61.3s
+  [PERM g=0.05 seed=20261028] acc_item=0.0208 acc_q=0.0000 g_end=[0.05000000074505806, 0.05000000074505806, 0.05000000074505806] 60.0s
+  [CEIL g=0.05 seed=20261028] acc_item=0.2917 acc_q=0.1250 g_end=[0.05000000074505806, 0.05000000074505806, 0.05000000074505806] 22.6s
+
+★ smoke 完成（不出判据）

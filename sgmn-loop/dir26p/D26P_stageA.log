@@ -1,0 +1,29 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  [PASS] A26P-1  装置 md5 1a242d02c530307f6c76646ca13469ef
+  [PASS] A26P-2  参照脚本 `dir26o/R1_ar1.py`（档案最终版）md5=a3c0981bbf8e09a92b2b5411742d76f1（须等于 a3c0981bbf8e09a92b2b5411742d76f1）
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+  [PASS] A26P-3  AR(1) 标定 gate_ok：φ0.0:True(τ=0.0950), φ0.3:True(τ=0.0973), φ0.6:True(τ=0.1012), φ0.9:True(τ=0.1045)
+  [PASS] A26P-4  φ=0 的 τ_AR=0.094970 == cal_at(60)=0.094970
+  [PASS] A26P-5  φ=0.9 的 τ_AR 两口径逐位相等（0.104485 == 0.104485）
+  [PASS] A26P-6  配对性：φ=0 的 tau_iid 与 DIR-26-O 的 tau 比较 15 项，坏 0 []
+  [PASS] A26P-7  位级锚点（E0 复用成立；全 30 种子在正式轮 crit 复核）
+  [PASS] A26P-8  同 (seed,φ,τ) 跑两次逐位相同
+  [PASS] A26P-9  每单元 μ/精度口径一致
+  [PASS] A26P-10  τ_AR/τ_iid 比值（诊断）：φ0.0:1.000, φ0.3:1.024, φ0.6:1.066, φ0.9:1.100
+  [PASS] A26P-12  本地测量层 ≡ `RA.run_unit` 的 tau 臂（逐位比较 0 项漂移 []）
+  [PASS] A26P-11  断言集合非空（11 条）且逐条 PASS（纪律 51：空断言集不得记 PASS）
+  ✓ A26P-1 装置 md5 1a242d02c530307f6c76646ca13469ef
+  ✓ A26P-2 参照脚本 `dir26o/R1_ar1.py`（档案最终版）md5=a3c0981bbf8e09a92b2b5411742d76f1（须等于 a3c0981bbf8e09a92b2b5411742d76f1）
+  ✓ A26P-3 AR(1) 标定 gate_ok：φ0.0:True(τ=0.0950), φ0.3:True(τ=0.0973), φ0.6:True(τ=0.1012), φ0.9:True(τ=0.1045)
+  ✓ A26P-4 φ=0 的 τ_AR=0.094970 == cal_at(60)=0.094970
+  ✓ A26P-5 φ=0.9 的 τ_AR 两口径逐位相等（0.104485 == 0.104485）
+  ✓ A26P-6 配对性：φ=0 的 tau_iid 与 DIR-26-O 的 tau 比较 15 项，坏 0 []
+  ✓ A26P-7 位级锚点（E0 复用成立；全 30 种子在正式轮 crit 复核）
+  ✓ A26P-8 同 (seed,φ,τ) 跑两次逐位相同
+  ✓ A26P-9 每单元 μ/精度口径一致
+  ✓ A26P-10 τ_AR/τ_iid 比值（诊断）：φ0.0:1.000, φ0.3:1.024, φ0.6:1.066, φ0.9:1.100
+  ✓ A26P-12 本地测量层 ≡ `RA.run_unit` 的 tau 臂（逐位比较 0 项漂移 []）
+  ✓ A26P-11 断言集合非空（11 条）且逐条 PASS（纪律 51：空断言集不得记 PASS）
+=== Stage A PASS（12/12） 533.6s ===
+STAGEA_EXIT=0

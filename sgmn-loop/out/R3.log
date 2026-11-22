@@ -1,0 +1,42 @@
+=== DIR-07 R3：信噪比维度 —— 窗口是窄还是空 ===
+  mu=5       SNR=1    : 稳定 9  学到 3  窗口 3  eta_learn>=0.001  eta_stable<=0.1  
+/home/ec2-user/sgmn-loop/R3_snr.py:61: RuntimeWarning: overflow encountered in scalar multiply
+  W = U * V
+  mu=5       SNR=0.5  : 稳定 8  学到 2  窗口 2  eta_learn>=0.001  eta_stable<=0.01  
+  mu=5       SNR=0.2  : 稳定 8  学到 1  窗口 1  eta_learn>=0.001  eta_stable<=0.01  
+  mu=5       SNR=0.1  : 稳定 9  学到 2  窗口 2  eta_learn>=0.0001  eta_stable<=0.1  
+  mu=5       SNR=0.05 : 稳定 9  学到 0  窗口 0  eta_learn>=None  eta_stable<=0.1  【窗口空】
+  mu=5       SNR=0.02 : 稳定 9  学到 0  窗口 0  eta_learn>=None  eta_stable<=0.1  【窗口空】
+  mu=5       SNR=0.01 : 稳定 9  学到 0  窗口 0  eta_learn>=None  eta_stable<=0.1  【窗口空】
+/home/ec2-user/sgmn-loop/R3_snr.py:63: RuntimeWarning: overflow encountered in scalar multiply
+  Un = U - eta * G * V
+/home/ec2-user/sgmn-loop/R3_snr.py:64: RuntimeWarning: overflow encountered in scalar multiply
+  Vn = V - eta * G * U
+  mu=50      SNR=1    : 稳定 8  学到 3  窗口 3  eta_learn>=0.0001  eta_stable<=0.01  
+  mu=50      SNR=0.5  : 稳定 7  学到 2  窗口 2  eta_learn>=0.0001  eta_stable<=0.001  
+  mu=50      SNR=0.2  : 稳定 7  学到 1  窗口 1  eta_learn>=0.0001  eta_stable<=0.001  
+  mu=50      SNR=0.1  : 稳定 8  学到 2  窗口 2  eta_learn>=1e-05  eta_stable<=0.01  
+  mu=50      SNR=0.05 : 稳定 8  学到 0  窗口 0  eta_learn>=None  eta_stable<=0.01  【窗口空】
+  mu=50      SNR=0.02 : 稳定 8  学到 0  窗口 0  eta_learn>=None  eta_stable<=0.01  【窗口空】
+  mu=50      SNR=0.01 : 稳定 8  学到 0  窗口 0  eta_learn>=None  eta_stable<=0.01  【窗口空】
+  mu=500     SNR=1    : 稳定 7  学到 3  窗口 3  eta_learn>=1e-05  eta_stable<=0.001  
+  mu=500     SNR=0.5  : 稳定 6  学到 2  窗口 2  eta_learn>=1e-05  eta_stable<=0.0001  
+  mu=500     SNR=0.2  : 稳定 6  学到 1  窗口 1  eta_learn>=1e-05  eta_stable<=0.0001  
+  mu=500     SNR=0.1  : 稳定 7  学到 2  窗口 2  eta_learn>=1e-06  eta_stable<=0.001  
+  mu=500     SNR=0.05 : 稳定 7  学到 0  窗口 0  eta_learn>=None  eta_stable<=0.001  【窗口空】
+  mu=500     SNR=0.02 : 稳定 7  学到 0  窗口 0  eta_learn>=None  eta_stable<=0.001  【窗口空】
+  mu=500     SNR=0.01 : 稳定 7  学到 0  窗口 0  eta_learn>=None  eta_stable<=0.001  【窗口空】
+  mu=5000    SNR=1    : 稳定 6  学到 3  窗口 3  eta_learn>=1e-06  eta_stable<=0.0001  
+  mu=5000    SNR=0.5  : 稳定 5  学到 2  窗口 2  eta_learn>=1e-06  eta_stable<=1e-05  
+  mu=5000    SNR=0.2  : 稳定 5  学到 1  窗口 1  eta_learn>=1e-06  eta_stable<=1e-05  
+  mu=5000    SNR=0.1  : 稳定 6  学到 2  窗口 2  eta_learn>=1e-07  eta_stable<=0.0001  
+  mu=5000    SNR=0.05 : 稳定 6  学到 0  窗口 0  eta_learn>=None  eta_stable<=0.0001  【窗口空】
+  mu=5000    SNR=0.02 : 稳定 6  学到 0  窗口 0  eta_learn>=None  eta_stable<=0.0001  【窗口空】
+  mu=5000    SNR=0.01 : 稳定 6  学到 0  窗口 0  eta_learn>=None  eta_stable<=0.0001  【窗口空】
+    mu=5      : 空窗口的 SNR = [0.05, 0.02, 0.01]；非空的 SNR = [1.0, 0.5, 0.2, 0.1]
+    mu=50     : 空窗口的 SNR = [0.05, 0.02, 0.01]；非空的 SNR = [1.0, 0.5, 0.2, 0.1]
+    mu=500    : 空窗口的 SNR = [0.05, 0.02, 0.01]；非空的 SNR = [1.0, 0.5, 0.2, 0.1]
+    mu=5000   : 空窗口的 SNR = [0.05, 0.02, 0.01]；非空的 SNR = [1.0, 0.5, 0.2, 0.1]
+[PASS] H3 存在「窗口由非空变为空」的临界信噪比: 逐 mu 的空窗口 SNR 集合：{5.0: [0.05, 0.02, 0.01], 50.0: [0.05, 0.02, 0.01], 500.0: [0.05, 0.02, 0.01], 5000.0: [0.05, 0.02, 0.01]}
+
+=== DIR-07 R3：1/1 通过 ===

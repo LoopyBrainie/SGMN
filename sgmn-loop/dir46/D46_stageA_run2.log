@@ -1,0 +1,12 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/ec2-user/sgmn-loop/dir46/R1_task46.py:79: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  num = float(W @ K[s] @ Vv[s])
+  ✓ A46-1: 24 实例（2 模式 × 12）× N_w=8：不一致 0，最大|Δ| 1.110e-16 ≤ ATOL 1e-12
+  ✓ A46-2: 独立实现 36/36 一致（最大|Δ|2.220e-16）
+  ✓ A46-3: period2: C(2)=+0.99816(n=12) perstep: C(2)=+0.99816(n=12)
+  ✓ A46-4: ALPHA=0 vs 只写 k=0 对：max|ΔW|=0.000e+00 ≤ 1e-12；附 v→−v 不变性 max|ΔW|=0.000e+00
+  ✓ A46-5: 计数恒等式 n_read+n_skip=N_w−1：违规 0 处
+  ✓ A46-6: 正式段 offsets 24000..24399 与既往 14 段交集：空
+★ Stage A 全过 → /home/ec2-user/sgmn-loop/dir46/out/DIR46r10_stageA.json

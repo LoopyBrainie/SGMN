@@ -1,0 +1,78 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-09：写通道的前向任务收益（真实 LLM + wikitext-2）===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:53,  5.45it/s]Loading weights:  55%|█████▍    | 159/290 [00:00<00:00, 691.43it/s]Loading weights:  87%|████████▋ | 252/290 [00:00<00:00, 771.40it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 682.48it/s]
+    写阶段文档 2 篇 × 1024 token；评测文档 60 篇 × 512 token（valid split，文档级留出）
+
+[Stage A] 装置校验门
+[PASS] A0' 复用资产的契约复检（Freeze C ①②③④ + 阴性对照）: ②读梯度 9/9 非零，最小 3.544e-02；③写入梯度精确 0：15/15；④基座逐位不变：True；阴性对照泄漏 9/15
+[PASS] A4' 评测阶段记忆逐位不变（写被冻结）: 6 篇评测文档后记忆相对差 0.000e+00
+[FAIL] A1' 写阶段确实发生（write_calls == 在线步数）: 在线步数 2016；write_calls={8: 2017, 12: 2017, 16: 2017}
+[FAIL] A3' 写阶段前视可重复（逐位相同）: 两次写阶段（2016 步）后的 W 最大逐位差 7.175e-02
+[PASS] A5' 基座模型健全性（A0 的 NLL 落在合理区间）: 基座（写关闭、读开启=随机记忆）在 60 篇 valid 文档上的平均 NLL = 2.7725 nats/token，top-1 = 47.21%
+[PASS] A6' 同一时刻只允许一个装置挂在被测模型上: 挂载句柄 6（每层 2 个），记忆数 3
+
+[R1] 主扫描：每种子 × 各臂
+
+  [种子 20261028]
+    eta_1e-08    eta=1e-08 c=1 步=2016 NLL=2.7726 acc=47.21% R2 -252.980->-250.855 rel_imp=+0.0088 (68s)
+    eta_1e-07    eta=1e-07 c=1 步=2016 NLL=2.7732 acc=47.19% R2 -252.980->-234.721 rel_imp=+0.0736 (68s)
+    eta_1e-06    eta=1e-06 c=1 步=2016 NLL=2.7742 acc=47.18% R2 -252.980->-160.622 rel_imp=+0.3649 (68s)
+    eta_1e-05    eta=1e-05 c=1 步=2016 NLL=2.7759 acc=47.21% R2 -252.980->-877.744 rel_imp=-2.4210 (69s)
+    eta_0.0001   eta=0.0001 c=1 步=576 **记忆发散（非有限）** (19s)
+    eta_0.001    eta=0.001 c=1 步=64 **记忆发散（非有限）** (3s)
+    c0.1         eta=1e-06 c=0.1 步=2016 NLL=2.7746 acc=47.32% R2 -252.980->-111.035 rel_imp=+0.5338 (83s)
+    c10          eta=1e-06 c=10 步=1024 **记忆发散（非有限）** (33s)
+    diverge_eta1e-05_c10 eta=1e-05 c=10 步=64 **记忆发散（非有限）** (3s)
+
+  [种子 20261104]
+    eta_1e-08    eta=1e-08 c=1 步=2016 NLL=2.7494 acc=47.33% R2 -252.586->-249.802 rel_imp=+0.0119 (83s)
+    eta_1e-07    eta=1e-07 c=1 步=2016 NLL=2.7494 acc=47.32% R2 -252.586->-230.759 rel_imp=+0.0904 (83s)
+    eta_1e-06    eta=1e-06 c=1 步=2016 NLL=2.7491 acc=47.29% R2 -252.586->-159.801 rel_imp=+0.3823 (69s)
+    eta_1e-05    eta=1e-05 c=1 步=2016 NLL=2.7478 acc=47.27% R2 -252.586->-728.562 rel_imp=-1.5753 (68s)
+    eta_0.0001   eta=0.0001 c=1 步=512 **记忆发散（非有限）** (13s)
+    eta_0.001    eta=0.001 c=1 步=64 **记忆发散（非有限）** (2s)
+    c0.1         eta=1e-06 c=0.1 步=2016 NLL=2.7429 acc=47.28% R2 -252.586->-127.376 rel_imp=+0.5204 (68s)
+    c10          eta=1e-06 c=10 步=1088 **记忆发散（非有限）** (28s)
+    diverge_eta1e-05_c10 eta=1e-05 c=10 步=64 **记忆发散（非有限）** (2s)
+
+  [种子 7]
+    eta_1e-08    eta=1e-08 c=1 步=2016 NLL=2.7337 acc=47.31% R2 -238.089->-236.124 rel_imp=+0.0092 (83s)
+    eta_1e-07    eta=1e-07 c=1 步=2016 NLL=2.7340 acc=47.33% R2 -238.089->-222.345 rel_imp=+0.0692 (83s)
+    eta_1e-06    eta=1e-06 c=1 步=2016 NLL=2.7337 acc=47.33% R2 -238.089->-155.306 rel_imp=+0.3458 (83s)
+    eta_1e-05    eta=1e-05 c=1 步=2016 NLL=2.7313 acc=47.35% R2 -238.089->-857.630 rel_imp=-2.4281 (83s)
+    eta_0.0001   eta=0.0001 c=1 步=704 **记忆发散（非有限）** (18s)
+    eta_0.001    eta=0.001 c=1 步=64 **记忆发散（非有限）** (2s)
+    c0.1         eta=1e-06 c=0.1 步=2016 NLL=2.7222 acc=47.51% R2 -238.089->-116.020 rel_imp=+0.5124 (68s)
+    c10          eta=1e-06 c=10 步=1088 **记忆发散（非有限）** (27s)
+    diverge_eta1e-05_c10 eta=1e-05 c=10 步=64 **记忆发散（非有限）** (2s)
+
+[R2] 分析与判据（跨 3 种子，文档级配对）
+/home/ec2-user/sgmn-loop/R1_task_gain.py:504: RuntimeWarning: Mean of empty slice
+  per_seed = {str(s): float(np.nanmean(arms[s][arm]["nll"])) for s in seeds}
+/home/ec2-user/sgmn-loop/R1_task_gain.py:494: RuntimeWarning: Mean of empty slice
+  per_seed = np.nanmean(M, axis=1)
+/home/ec2-user/sgmn-loop/R1_task_gain.py:495: RuntimeWarning: Mean of empty slice
+  return np.nanmean(M, axis=0), (np.nanstd(per_seed, ddof=1)
+  各臂平均 NLL（跨种子）：
+    base         NLL=2.70746 ±(seed 0.00000)  acc=47.69%  per_seed=2.7075 2.7075 2.7075
+    randmem      NLL=2.75183 ±(seed 0.01956)  acc=47.28%  per_seed=2.7725 2.7494 2.7336
+    eta_1e-08    NLL=2.75191 ±(seed 0.01959)  acc=47.28%  per_seed=2.7726 2.7494 2.7337
+    eta_1e-07    NLL=2.75221 ±(seed 0.01974)  acc=47.28%  per_seed=2.7732 2.7494 2.7340
+    eta_1e-06    NLL=2.75232 ±(seed 0.02044)  acc=47.27%  per_seed=2.7742 2.7491 2.7337
+    eta_1e-05    NLL=2.75168 ±(seed 0.02257)  acc=47.27%  per_seed=2.7759 2.7478 2.7313
+    eta_0.0001   NLL=nan ±(seed 0.00000)  acc=0.00%  per_seed=nan nan nan
+    eta_0.001    NLL=nan ±(seed 0.00000)  acc=0.00%  per_seed=nan nan nan
+    c0.1         NLL=2.74656 ±(seed 0.02639)  acc=47.37%  per_seed=2.7746 2.7429 2.7222
+    c10          NLL=nan ±(seed 0.00000)  acc=0.00%  per_seed=nan nan nan
+    diverge_eta1e-05_c10 NLL=nan ±(seed 0.00000)  acc=0.00%  per_seed=nan nan nan
+[FAIL] E1 写相对随机记忆有功能收益（NLL 更低）: NLL(eta=1e-05) - NLL(randmem) 配对差均值 -0.00015 nats/token（σ=0.00501, t=-0.40, 符号检验 p=0.06211, 负向 77/180）；跨种子均值 +0.00342 -0.00152 -0.00235 ⇒ 方向一致=False
+[FAIL] E2 整体不损害 LM（NLL 低于纯基座）: NLL(eta=1e-05) - NLL(base) 配对差均值 +0.04422（符号检验 p=1.25e-12，负向 174/180）；跨种子均值 +0.06847 +0.04038 +0.02382
+[FAIL] E3 〔预注册预测〕过拟合档在任务级可见（η=1e-4 的 NLL 高于 η=1e-5）: NLL(eta=1e-4) - NLL(eta=1e-5) 配对差均值 +nan（σ=nan, t=+nan, 符号检验 p=1）；跨种子均值 
+[PASS] E4 区分力对照：swap 臂必须复现 randmem（差异只可能来自记忆内容）: swap（学到的 W 换回随机 W0）与 randmem 的逐文档 NLL 最大差 0.000e+00（跨种子 0.00e+00 0.00e+00 0.00e+00）；且 A1 与 A2 除记忆内容外所有参数（seed/W^0/W_q/W_o/γ）完全相同
+[PASS] E5（rev 1.1）归一化 c 是否只是步长 η 的重标定: c0.1_vs_eta1e-4: c0.1(dR2=+129.741, 位移=8.344e-01) vs eta_0.0001(dR2=+nan, 位移=inf) 相对差 dR2=nan 位移=nan ⇒ 不一致(⇒c 是独立自由度)；c10_vs_eta1e-8: c10(dR2=+nan, 位移=inf) vs eta_1e-08(dR2=+2.291, 位移=6.978e-03) 相对差 dR2=nan 位移=nan ⇒ 不一致(⇒c 是独立自由度)。**结论**：c 是独立于步长的功能性自由度 ⇒ v2.4 §7.2 必须规定归一化
+[PASS] E6 〔留出纪律〕效应在留出文档上测得，且与流内指标分离: 全部效应量均在 valid split（文档级留出）上测得；写阶段只用 train split 的 2 篇文档；A2' 用 valid 文本的固定留出探针独立确认「写确实学到了东西」（见 R2' 探针行）
+[FAIL] E7 任务级响应曲线存在内点最优（非单调结构）: η 扫描的 NLL：eta_1e-08:2.75191；eta_1e-07:2.75221；eta_1e-06:2.75232；eta_1e-05:2.75168；eta_0.0001:nan；eta_0.001:nan
+[FAIL] A2'（rev 1.2）装置在【本轮协议】下确实学到了东西（留出探针 rel_improve>0.01 且 记忆确实改变）: eta_1e-05: rel_improve=[-2.421, -1.5753, -2.4281] ΔR²_hold(仅报告)=[-624.764, -475.977, -619.541] 记忆相对改变=['3.39e-01', '4.78e-01', '3.69e-01']；eta_0.0001: rel_improve=[nan, nan, nan] ΔR²_hold(仅报告)=[nan, nan, nan] 记忆相对改变=['inf', 'inf', 'inf']；探针 ss_tot 均值=7.9396e+05（R² 分母，量级退化 ⇒ ΔR² 仅作报告）
+
+=== DIR-09 R1：7/14 通过 ===

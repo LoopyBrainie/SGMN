@@ -1,0 +1,40 @@
+=== DIR-40 探针 · 失败轮 run 1（★ 留档，不删改、不追认） ===
+时间：2026-11-13（本地沙箱实验的一次性运行）· 主机：trainer · 解释器：/opt/pytorch/bin/python
+命令（inline，非文件形式）：
+  /opt/pytorch/bin/python -c "
+  import sys; sys.path.insert(0, '/home/ec2-user/sgmn-loop/dir40')
+  import probe40 as p
+  p.STEPS_JIA = 2; p.STEPS_YI = 2
+  p.SEEDS_JIA = [p.SEED0+17000+i for i in range(2)]
+  p.SEEDS_YI_TRAIN = [p.SEED0+17100+i for i in range(2)]
+  p.SEEDS_YI_EVAL = [p.SEED0+17200+i for i in range(2)]
+  j = p.probe_jia(); y = p.probe_yi()
+  "
+★ 说明：run 1 是**路径自检**（2 步 / 2 实例）⇒ 它的读数**不是**任何结论的依据。
+★ 本文件是**逐字转录**该次 inline 运行的终端输出（当次 stdout 进了操作者的终端，未落盘）；
+   未重新执行、未修改。缺陷编号 **DEF-40-1**。
+
+--- 终端输出（逐字） ---
+══ 探针甲 · 可表达性（per-instance 读控制器；头冻结） ══
+[甲] 训头（oracle 臂，n_rep=16）n=64 ...
+[甲] 头完成 1s  梯度 {'g1': 8.588, 'Wo1': 34.239, 'bo1': 16.6526}
+Traceback (most recent call last):
+  File "<string>", line 8, in <module>
+    j = p.probe_jia(); y = p.probe_yi()
+  File "/home/ec2-user/sgmn-loop/dir40/probe40.py", line 298, in probe_jia
+    phi_ctl, gn = train_per_instance(sd, phi_head)
+                  ~~~~~~~~~~~~~~~~~~^^^^^^^^~~~~~~
+  File "/home/ec2-user/sgmn-loop/dir40/probe40.py", line 241, in train_per_instance
+    opt = torch.optim.Adam([phi["Wq1"], phi["bq1"]], lr=lr)
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/optim/adam.py", line 102, in __init__
+    super().__init__(params, defaults)
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/optim/optimizer.py", line 424, in __init__
+    self.add_param_group(cast(dict[str, Any], param_group))
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/optim/optimizer.py", line 1179, in add_param_group
+    raise ValueError("can't optimize a non-leaf Tensor")
+ValueError: can't optimize a non-leaf Tensor
+
+--- 诊断（DEF-40-1）---
+`init_params()` 里的 `Wq1`/`bq1` 本身 `requires_grad=True` ⇒ `.clone()` 产生的是**非叶子**张量
+⇒ 优化器拒绝接收。修法：`init["Wq1"].detach().clone().requires_grad_(True)`
+⇒ ★ **这是工程错误，与结论无关**（探针的读数当时尚未产生）。

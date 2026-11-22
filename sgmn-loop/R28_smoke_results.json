@@ -1,0 +1,247 @@
+{
+  "dir": "DIR-18",
+  "round": "R2",
+  "checks": [
+    {
+      "name": "A1' Freeze C（读梯度非零 / 写梯度精确 0 / 基座逐位不变 / 阴性对照泄漏）",
+      "passed": true,
+      "detail": "读梯度非零 6/9；写梯度精确0 12/12；基座逐位不变 True；阴性对照泄漏 3/12",
+      "tolerance": "读梯度>0 且 写梯度==0 且 基座不变 且 泄漏>0",
+      "value": {
+        "read": true,
+        "write": true,
+        "base": true,
+        "leak": 3
+      }
+    },
+    {
+      "name": "A1' 句柄数 = 2×层数",
+      "passed": true,
+      "detail": "handles=6 mems=3",
+      "tolerance": 6,
+      "value": 6
+    },
+    {
+      "name": "A2' 训练生效性：Wo/gamma 改变且 gamma 梯度非零；cue 模式下 Wq 梯度恒 0 且不变",
+      "passed": true,
+      "detail": "Δmax|Wo|=0.004012；Δmax|gamma|=0.003742；‖g_gamma‖=4.61；‖g_Wq‖=0；Δ|Wq|=0",
+      "tolerance": null,
+      "value": true
+    },
+    {
+      "name": "A2' ⑩ Hebbian 核自检：写一步后 W 朝 v 移动且不发散",
+      "passed": true,
+      "detail": "‖Wk−v‖：41.8378 → 41.4426（须下降）；‖W‖=29.9（须有限且 < 1e6）",
+      "tolerance": 41.83784103393555,
+      "value": 41.4426383972168
+    },
+    {
+      "name": "A2' ⑪ 梯度隔离：Hebbian 臂中任务梯度不流入核状态 W，且（非 W4 臂）P_v 梯度恒 0",
+      "passed": true,
+      "detail": "核状态 W 的梯度泄漏 0/3（须 0）；P_v 的梯度泄漏 0/3（须 0）",
+      "tolerance": null,
+      "value": {
+        "W_leak": 0,
+        "Pv_leak": 0
+      }
+    },
+    {
+      "name": "A2' ④ 读阶段冻结写 ⇒ 记忆状态逐位不变",
+      "passed": true,
+      "detail": "equal=True",
+      "tolerance": null,
+      "value": true
+    },
+    {
+      "name": "A2' ⑤ 跨方向对照探针：未训练的 cue 臂命中 = 1.0（复现 DIR-16 的 C1）",
+      "passed": true,
+      "detail": "hit=1.0000（DIR-16 的 C1 = 1.0000）；每篇写入条目数=68",
+      "tolerance": 0.9,
+      "value": 1.0
+    },
+    {
+      "name": "A2' ⑥ 槽位不回绕：每篇写入条目数 ≤ N_ENTRIES",
+      "passed": true,
+      "detail": "每篇 68 条（N_ENTRIES=128）",
+      "tolerance": 128,
+      "value": 68
+    },
+    {
+      "name": "A2' ⑦ 评测码留出：训练码与评测码（含干扰码）零重叠",
+      "passed": true,
+      "detail": "目标码重叠 0；与干扰码重叠 0",
+      "tolerance": null,
+      "value": 0
+    },
+    {
+      "name": "A2' ⑧ 干扰项构造：同线索 + 异码 + 异上下文 + 码在文档末尾（唯一持有其身份的条目）",
+      "passed": true,
+      "detail": "线索 = CUE_A（目标与干扰相同）；码不同（全局唯一）；填充切片不同（间隔 ≥ 400 token）⇒ 上下文签名必不同；码为文档最后一个 token ⇒ 邻位条目**不含**码的身份；抽样 4 篇通过=True",
+      "tolerance": null,
+      "value": 1.0
+    },
+    {
+      "name": "A2' ⑨ 目标不可猜中：基座 NLL ≥ 3（否则任务平凡）",
+      "passed": true,
+      "detail": "base NLL = 15.8383（阈值 3.0）；码为稀有单 token 词",
+      "tolerance": 3.0,
+      "value": 15.838349342346191
+    },
+    {
+      "name": "A2' ⑫ 读路径一致性：W0_verbatim 的读出 y 与其来源槽 v_j 的余弦 ≥ 0.999",
+      "passed": true,
+      "detail": "cos(y, v_j) 均值 = 0.999820（阈值 0.999，9 个槽）",
+      "tolerance": 0.999,
+      "value": 0.9998202323913574
+    },
+    {
+      "name": "A2'⑬ 真值槽**精确映射**自洽（D54）+ 槽空间寻址命中（未训练臂）",
+      "passed": true,
+      "detail": "addr(写入序)=1.0000（★ DIR-17 协议下**必然 ≈ 0**（回绕 ⇒ 真值槽≠写入序），非缺陷）；addr(槽空间，精确映射)=1.0000（阈值 0.99）",
+      "tolerance": 0.99,
+      "value": 1.0
+    },
+    {
+      "name": "A2'⑭ 槽表状态**确定性**：陈旧残留数逐篇一致 + 槽号映射 == (写入前 count + j) % N",
+      "passed": true,
+      "detail": "陈旧条目数（逐篇/逐层）= [0, 0, 0, 0, 0, 0, 0, 0, 0]（须**完全一致** ⇒ 确定性）；槽号映射违例 = 0 处（须 0）",
+      "tolerance": 0,
+      "value": 0
+    },
+    {
+      "name": "A2'⑮ P_v 梯度语义：主臂任务损失下 P_v 梯度恒 0；写侧自监督臂 P_v 梯度非零",
+      "passed": true,
+      "detail": "主臂 ‖∂L_task/∂P_v‖ = [None, None, None]（须全 0/None）；pvw 臂 ‖∂L_write/∂P_v‖ = [1.0046374797821045, 0.9982835650444031, 0.9846732020378113]（须有非零）",
+      "tolerance": null,
+      "value": {
+        "main": [
+          null,
+          null,
+          null
+        ],
+        "pvw": [
+          1.0046374797821045,
+          0.9982835650444031,
+          0.9846732020378113
+        ]
+      }
+    },
+    {
+      "name": "A2'⑯ 维度一致：d_k == d_v == model.config.hidden_size（卡片 D49 已订正）",
+      "passed": true,
+      "detail": "d_k = d_v = 896（hidden_size）；脚本传 896，非 64",
+      "tolerance": 896,
+      "value": 896
+    },
+    {
+      "name": "A2'⑯′ 交换性对照可构造：同池、均匀抽样、从未写入的对照 token ≥ 32 个",
+      "passed": true,
+      "detail": "抽到 32 个（须 32）；同池、均匀抽样、从未写入",
+      "tolerance": 32,
+      "value": 32
+    },
+    {
+      "name": "A2'⑰ 键尺度检查：renorm/ortho 的 ‖k‖² ≈ 5（恒定）；linear 的实测 ‖k‖² 远大于 5（D50/D51）",
+      "passed": true,
+      "detail": "linear: E‖k‖²=['380839.2', '407837.4', '427683.1'] max=['13484455.0', '14463882.0', '15189815.0']；renorm: E‖k‖²=['5.000', '5.000', '5.000']；ortho: E‖k‖²=['5.000', '5.000', '5.000']（⇒ 装置的 pk_scale 标定口径错 ⇒ 真实键尺度 ≫ 5 ⇒ η 窗口不相交）",
+      "tolerance": 5.0,
+      "value": 5.0
+    },
+    {
+      "name": "A2'⑱〔★ 修订 68 零效度自检〕「内容置换」钩子只动内容、不动寻址 ⇒ H14 的对照干净",
+      "passed": true,
+      "detail": "键逐位相同=True（置换不动地址 ⇒ H14 的寻址侧干净）；值的配对余弦均值=['-0.0008', '-0.0059', '0.3026', '0.0011', '-0.0086']（须 < 0.99 ⇒ 置换确实换了内容）",
+      "tolerance": 0.99,
+      "value": 0.30258495769771415
+    },
+    {
+      "name": "A4' 训练不发散（损失有限、max|Wo| 有限、gamma 有限）",
+      "passed": true,
+      "detail": "loss 首/末 = 15.8405/14.3603；max|Wo|=0.1631；gamma 终值=[0.0537, 0.0537, 0.0505]",
+      "tolerance": null,
+      "value": 0.1631084531545639
+    },
+    {
+      "name": "A19-1 基座冻结对照：联合训练后基座参数与初始参数**逐位相同**",
+      "passed": true,
+      "detail": "max|θ−θ₀| = 0.000e+00（须精确为 0）",
+      "tolerance": 0.0,
+      "value": 0.0
+    },
+    {
+      "name": "A19-2 基座可训：被训参数集合**非空**且其梯度**非零有限**",
+      "passed": true,
+      "detail": "可训基座参数数 = 290；有梯度的 = 290；梯度范数 min/max = 3.618e-02/3.753e+02；全部有限 = True；存在非零 = True",
+      "tolerance": null,
+      "value": 375.3111877441406
+    },
+    {
+      "name": "A19-3 保护旋钮的生效性检查**双向**：放开/关闭都改变被训集合；低秩投影后残差 ≈ 0",
+      "passed": true,
+      "detail": "none=0 all=290 layers=72 lowrank=169（须 0<layers<all）；低秩残差 投影前=0.000e+00 扰动后=1.167e+01 投影后=7.052e-05（须 投影后 < 1e-4 且 扰动后 > 1e-6 ⇒ 双向可辨）",
+      "tolerance": 0.0001,
+      "value": 7.051956345094368e-05
+    },
+    {
+      "name": "A19-4 训练数据与基座保持评测数据的**文档窗口集合**交集为空（逐位断言）",
+      "passed": true,
+      "detail": "训练窗口数=39827；探针窗口数=4226；**交集=0（须 0）**；两文件前缀不同=True（train.txt vs valid.txt）",
+      "tolerance": 0.0,
+      "value": 0.0
+    },
+    {
+      "name": "A19-5 交换性对照 token 仍从码池**均匀抽样**（D53 教训：不得取最稀有者）",
+      "passed": true,
+      "detail": "抽到 32 个、去重后 32 个（须 32 且互不相同）",
+      "tolerance": 32.0,
+      "value": 32.0
+    },
+    {
+      "name": "A19-6 记忆寻址指标 addr_slot 仍用**精确槽号映射**（D54：写入序 → 槽号可精确预测）",
+      "passed": true,
+      "detail": "写入记录数 == 槽号记录数 ⇒ 精确映射可用",
+      "tolerance": 0.0,
+      "value": 0.0
+    },
+    {
+      "name": "A19-7 基座保持的 NLL 口径在挂记忆 vs 不挂记忆两个对照下**逐位可算**",
+      "passed": true,
+      "detail": "PPL(挂记忆)=2.505492；PPL(不挂记忆)=2.506050；差=-0.000558（须非 0 ⇒ 挂记忆确实改变了基座输出）",
+      "tolerance": 0.0,
+      "value": 0.0005580129187090499
+    },
+    {
+      "name": "A19-8 D_kv 漂移度量在「零训练步」对照下必须为 **0**（度量自检）",
+      "passed": true,
+      "detail": "D_kv(零训练两次采样) = 0.000e+00（须 < 1e-9）",
+      "tolerance": 0.0,
+      "value": 0.0
+    },
+    {
+      "name": "A19-9 〔KL 正则生效性〕该项**非零**且在训练中**可下降**（纪律 ⑭）",
+      "passed": false,
+      "detail": "KL 序列 = [0.0, 0.135441, 0.896017]（须非零、有限且下降）",
+      "tolerance": 0.0,
+      "value": 0.8960173726081848
+    },
+    {
+      "name": "A19-10〔内容置换只动内容、不动寻址〕⇒ H2′★ 的对照干净",
+      "passed": true,
+      "detail": "键逐位相同=True（置换不动地址 ⇒ H2′ 的寻址侧干净）；值的配对余弦均值=['-0.0009', '-0.0074', '0.3026', '0.0007', '-0.0104']（须 < 0.99 ⇒ 置换确实换了内容）",
+      "tolerance": 0.99,
+      "value": 0.30258495769771415
+    }
+  ],
+  "arms": {},
+  "meta": {
+    "a4_loss": {
+      "first": 15.840493202209473,
+      "last": 14.360298156738281
+    }
+  },
+  "aborted": {
+    "stage_a_failed": [
+      "A19-9 〔KL 正则生效性〕该项**非零**且在训练中**可下降**（纪律 ⑭）"
+    ]
+  }
+}

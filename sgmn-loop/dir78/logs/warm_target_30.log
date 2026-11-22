@@ -1,0 +1,23 @@
+REP target γ=30 warm  u*=29.522171/ 0.999943  ‖W1‖=4.175065e+01  ΔW=6.53e-11  warmup 911383 步 res=1.0e-15  ‖Δ‖=1.0e-03
+RHO target γ=30 ρ_λ^warm=0.999954  λ(1.05)=1.100098 λ(1.10)=1.200102  dλ/dρ=1.0001
+/home/ec2-user/sgmn-loop/dir72/step72.py:27: RuntimeWarning: overflow encountered in matmul
+  U1 = U1 - eta * (G1 @ V1); V1 = V1 - eta * (G1.T @ U1)
+/home/ec2-user/sgmn-loop/dir72/step72.py:31: RuntimeWarning: overflow encountered in matmul
+  G2 = (W2 @ C2 - B2) + LAM * W2
+/home/ec2-user/sgmn-loop/dir72/step72.py:32: RuntimeWarning: invalid value encountered in matmul
+  U2 = U2 - eta * (G2 @ V2); V2 = V2 - eta * (G2.T @ U2)
+/home/ec2-user/sgmn-loop/dir72/step72.py:26: RuntimeWarning: invalid value encountered in matmul
+  G1 = (W1 @ C1 - B1) + LAM * W1
+/home/ec2-user/sgmn-loop/dir72/step72.py:28: RuntimeWarning: invalid value encountered in matmul
+  k2 = [W1 @ k for k in kin]
+/home/ec2-user/sgmn-loop/dir72/step72.py:31: RuntimeWarning: invalid value encountered in matmul
+  G2 = (W2 @ C2 - B2) + LAM * W2
+  [near target γ=30] 端检 lo=0.000326616 div=False / hi=0.00163308 div=True
+   试 η=0.000730336 div=False
+   试 η=0.00109211 div=True
+   试 η=0.000893087 div=False
+   试 η=0.000987596 div=False
+   试 η=0.00103854 div=False
+   试 η=0.00106499 div=False
+   试 η=0.00107846 div=False
+DONE warm target γ=30 ρ_div=0.9968 [0.9906,1.0031]·η*_lin n_eval=9 ok=True | ρ_λ=1.0000 | 相对差=-0.31%

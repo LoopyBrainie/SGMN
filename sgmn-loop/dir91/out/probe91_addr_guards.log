@@ -1,0 +1,17 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:43,  6.66it/s]Loading weights:  59%|█████▉    | 172/290 [00:00<00:00, 777.20it/s]Loading weights:  90%|████████▉ | 260/290 [00:00<00:00, 813.30it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 755.04it/s]
+事实 32；块 600；训练键 16；评测键 16；n_q=16（chance=0.25）
+
+===== Stage A 守卫 =====
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/probe91_addr.py:235: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  d = max(float((m.injection - m_orig[li]).abs().max()) for li, m in st.mems.items())
+[PASS] A91-30: 打补丁的读通路在**无替换**时与原生**逐位相同**：no_write 下 max|Δm|=0.0e+00（须 ==0）；还原 W 交叉校验 max|Δm|=0.0e+00（须 ==0）
+[PASS] A91-33: k_i 与 `key_matrices` **逐位相同**（max|Δk|=0.0e+00，须 ==0）；写入数=[599, 599, 599]，期望=599（=块数-1）
+[PASS] A91-36: γ=0 下「无写」与「写后」的 K,V **逐位相同**：三层 max|Δ|=0.0e+00（须 ==0）
+[PASS] A91-31: q=k_0 时 y 与 W·k_0 **逐位相同**：三层 max|Δy|=0.0e+00（须 ==0）——证明替换确实生效且未被静默忽略
+[FAIL] A91-32: share 实现已算例：q=k_0 时 **raw** share=0.0314 ≥ 解析下界 0.0313（须成立；注意 ≈1/N=0.0313 ⇒ DEF-91-30 的退化）；**centered** share=0.0847；正交合成算例 raw=1.000000000000 / centered=0.500000000000（须均 ==1）
+[PASS] A91-34: 三臂共用同一 `Random(555)`：n_item=96（须=96）、n_q=32（须=32）
+
+★ Stage A FAIL: ['A91-32'] ⇒ 阻断正式轮

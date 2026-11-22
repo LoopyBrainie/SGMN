@@ -1,0 +1,14 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+── 探针档 n_train=96 变体 dev,scale,phase,zero,oracle
+    探针 dev    L 9.66567  (824s)
+    探针 scale  L 9.97378  (848s)
+    探针 phase  L 17.55979  (776s)
+    探针 zero   L 17.03013  (692s)
+    探针 oracle L 0.27727  (651s)
+  探针 dev    L 9.66567
+  探针 scale  L 9.97378
+  探针 phase  L 17.55979
+  探针 zero   L 17.03013
+  探针 oracle L 0.27727
+  ⇒ /home/ec2-user/sgmn-loop/dir37/out/DIR37r10_probe_96.dev_scale_phase_zero_oracle.json  (3791s)

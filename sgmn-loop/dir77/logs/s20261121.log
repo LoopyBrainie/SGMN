@@ -1,0 +1,34 @@
+REP keys γ=10 seed=20261121 bal  u1*=0.094983438 u2*=0.952339993  ‖W1‖=1.343269e-01 ‖Δ‖=1.0e-03
+/opt/pytorch/lib64/python3.13/site-packages/numpy/_core/numeric.py:995: RuntimeWarning: overflow encountered in multiply
+  return multiply(a.ravel()[:, newaxis], b.ravel()[newaxis, :], out)
+/home/ec2-user/sgmn-loop/dir72/step72.py:27: RuntimeWarning: invalid value encountered in matmul
+  U1 = U1 - eta * (G1 @ V1); V1 = V1 - eta * (G1.T @ U1)
+/home/ec2-user/sgmn-loop/dir72/step72.py:31: RuntimeWarning: invalid value encountered in subtract
+  G2 = (W2 @ C2 - B2) + LAM * W2
+/home/ec2-user/sgmn-loop/dir72/step72.py:32: RuntimeWarning: invalid value encountered in matmul
+  U2 = U2 - eta * (G2 @ V2); V2 = V2 - eta * (G2.T @ U2)
+/home/ec2-user/sgmn-loop/dir72/step72.py:26: RuntimeWarning: invalid value encountered in matmul
+  G1 = (W1 @ C1 - B1) + LAM * W1
+  [near keys γ=10] 端检 lo=0.0703503 div=False / hi=0.124148 div=True
+   试 η=0.0934548 div=False
+/home/ec2-user/sgmn-loop/dir72/step72.py:28: RuntimeWarning: overflow encountered in matmul
+  k2 = [W1 @ k for k in kin]
+/home/ec2-user/sgmn-loop/dir72/step72.py:30: RuntimeWarning: invalid value encountered in matmul
+  B2 = sum(np.outer(P @ k, k) for k in k2) / D
+   试 η=0.107713 div=True
+/home/ec2-user/sgmn-loop/dir72/step72.py:32: RuntimeWarning: overflow encountered in matmul
+  U2 = U2 - eta * (G2 @ V2); V2 = V2 - eta * (G2.T @ U2)
+/home/ec2-user/sgmn-loop/dir72/step72.py:17: RuntimeWarning: overflow encountered in matmul
+  W1 = U1 @ V1.T; W2 = U2 @ V2.T
+/home/ec2-user/sgmn-loop/dir72/step72.py:23: RuntimeWarning: invalid value encountered in matmul
+  kin = [k + gamma * (W2 @ k) for k in ks]
+/home/ec2-user/sgmn-loop/dir72/step72.py:31: RuntimeWarning: invalid value encountered in matmul
+  G2 = (W2 @ C2 - B2) + LAM * W2
+   试 η=0.100331 div=True
+/home/ec2-user/sgmn-loop/dir72/step72.py:27: RuntimeWarning: overflow encountered in matmul
+  U1 = U1 - eta * (G1 @ V1); V1 = V1 - eta * (G1.T @ U1)
+/home/ec2-user/sgmn-loop/dir72/step72.py:31: RuntimeWarning: overflow encountered in matmul
+  G2 = (W2 @ C2 - B2) + LAM * W2
+   试 η=0.096832 div=True
+   试 η=0.0951284 div=True
+DONE seed=20261121 ρ=1.1392 η_th=9.428792e-02 括号[1.1292,1.1494]·η*_lin n_eval=7 ok=True |cos|=0.069536 λ_max=1.000000

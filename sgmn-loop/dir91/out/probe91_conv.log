@@ -1,0 +1,16 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:57,  5.01it/s]Loading weights:  66%|██████▌   | 191/290 [00:00<00:00, 755.95it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 699.41it/s]
+[Gram] alpha*K^T K 前 8 特征值: ['1.169e+05', '3.873e+01', '2.770e+01', '2.158e+01', '1.862e+01', '1.789e+01', '1.604e+01', '1.563e+01']
+[Gram] 尾部 6: ['0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00', '0.000e+00']
+[Gram] 收缩率 eta*lambda_i 前8: ['3.51e+00', '1.16e-03', '8.31e-04', '6.47e-04', '5.59e-04', '5.37e-04', '4.81e-04', '4.69e-04']
+[Gram] 收缩率 eta*lambda_i 尾部: ['0.00e+00', '0.00e+00', '0.00e+00', '0.00e+00', '0.00e+00', '0.00e+00']
+  n=8   E=400    rel mean=0.09750 max=0.10884
+  n=8   E=2000   rel mean=0.05987 max=0.06400
+  n=8   E=5000   rel mean=0.02813 max=0.03348
+  n=8   E=10000  rel mean=0.01182 max=0.01502
+  n=32  E=400    rel mean=0.09873 max=0.11335
+  n=32  E=2000   rel mean=0.06030 max=0.06672
+  n=32  E=5000   rel mean=0.03683 max=0.04139
+
+★ 诊断完成

@@ -1,0 +1,38 @@
+{
+ "card_md5": "2d928c9c24cda9ffe0e1e7e76fbcfdba",
+ "checks": {
+  "A48-1": {
+   "ok": true,
+   "detail": "写入数逐行符合臂定义：quiet=[4], decay=[35], busy=[19]"
+  },
+  "A48-2": {
+   "ok": true,
+   "detail": "工作例 4×3 臂、256 单元；max|Δc|=0.000e+00 max|Δ‖W‖|=0.000e+00；不一致 0"
+  },
+  "A48-3": {
+   "ok": true,
+   "detail": "三臂 d=0 的 c/‖W‖ 逐位相同=True（max|Δ|=0.000e+00）；同 seed K/V 逐位 max|Δ|=0.000e+00"
+  },
+  "A48-4": {
+   "ok": true,
+   "detail": "quiet 臂 c(d) 与 ‖W_d‖ 全部与 d=0 逐位相同（读数不改状态）"
+  },
+  "A48-5": {
+   "ok": true,
+   "detail": "9 行：L 与 c/ρ 自洽、censored⇔L=W、L 为首个跌破点（违例 0）"
+  },
+  "A48-6": {
+   "ok": true,
+   "detail": "正式段 26200..27199（1000）vs 既往已落盘 seed 1328 个；交集 0 个 []"
+  },
+  "A48-7": {
+   "ok": true,
+   "detail": "卡 md5=2d928c9c24cda9ffe0e1e7e76fbcfdba；N_REP/ALPHA/LAM/ETA/D_H/D_K=16/1.0/0.05/0.2/8/16；τ_ref=100.0 步"
+  },
+  "A48-8": {
+   "ok": false,
+   "detail": "Stage A 种子上 busy 发散 3/4 = 0.750 ≤ 0.20"
+  }
+ },
+ "all_pass": false
+}

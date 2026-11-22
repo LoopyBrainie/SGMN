@@ -1,0 +1,20 @@
+  import pynvml  # type: ignore[import]
+{"seed": 1, "r0": null, "rank_W": 12, "acc": 0.9583333333333334, "proj_resid_max": 4.957135502081655e-07, "margin_mean": -0.09064571311076482, "acc_a_only": 0.9166666666666666, "acc_b_only": 1.0}
+{"seed": 1, "r0": 1, "rank_W": 1, "acc": 0.75, "proj_resid_max": 4.524821406448609e-08, "margin_mean": -0.002562400126407738, "acc_a_only": 0.8333333333333334, "acc_b_only": 0.6666666666666666}
+{"seed": 1, "r0": 2, "rank_W": 2, "acc": 0.7916666666666666, "proj_resid_max": 2.1333896427222498e-07, "margin_mean": -0.0017162713726672034, "acc_a_only": 0.9166666666666666, "acc_b_only": 0.6666666666666666}
+{"seed": 1, "r0": 8, "rank_W": 8, "acc": 1.0, "proj_resid_max": 3.160697303883353e-07, "margin_mean": 0.018459221969048183, "acc_a_only": 1.0, "acc_b_only": 1.0}
+{"seed": 1, "r0": 24, "rank_W": 24, "acc": 1.0, "proj_resid_max": 8.33287572277186e-07, "margin_mean": 0.016538829853137333, "acc_a_only": 1.0, "acc_b_only": 1.0}
+{"seed": 1, "r0": 64, "rank_W": 64, "acc": 1.0, "proj_resid_max": 3.7301058910088614e-05, "margin_mean": -1.6391277313232422e-07, "acc_a_only": 1.0, "acc_b_only": 1.0}
+{"seed": 2, "r0": null, "rank_W": 12, "acc": 0.9583333333333334, "proj_resid_max": 6.739554123669222e-07, "margin_mean": -0.08709501226743062, "acc_a_only": 0.9166666666666666, "acc_b_only": 1.0}
+{"seed": 2, "r0": 1, "rank_W": 1, "acc": 0.8333333333333334, "proj_resid_max": 7.522245226709856e-08, "margin_mean": -0.0010404798934663024, "acc_a_only": 0.75, "acc_b_only": 0.9166666666666666}
+{"seed": 2, "r0": 2, "rank_W": 2, "acc": 0.8333333333333334, "proj_resid_max": 1.232115067750783e-07, "margin_mean": -0.009870298633662363, "acc_a_only": 0.6666666666666666, "acc_b_only": 1.0}
+{"seed": 2, "r0": 8, "rank_W": 8, "acc": 1.0, "proj_resid_max": 4.4908202312399226e-07, "margin_mean": -0.0005089036809901396, "acc_a_only": 1.0, "acc_b_only": 1.0}
+{"seed": 2, "r0": 24, "rank_W": 24, "acc": 1.0, "proj_resid_max": 7.395921102215652e-07, "margin_mean": 0.0189152459303538, "acc_a_only": 1.0, "acc_b_only": 1.0}
+{"seed": 2, "r0": 64, "rank_W": 64, "acc": 1.0, "proj_resid_max": 2.0712463083327748e-05, "margin_mean": 2.409021059672038e-07, "acc_a_only": 1.0, "acc_b_only": 1.0}
+SUMMARY
+  r0=None  rank_W=[12, 12]  acc=[0.958, 0.958]  resid_max=6.74e-07  acc_a=[0.917, 0.917]  acc_b=[1.0, 1.0]
+  r0=1  rank_W=[1, 1]  acc=[0.75, 0.833]  resid_max=7.52e-08  acc_a=[0.833, 0.75]  acc_b=[0.667, 0.917]
+  r0=2  rank_W=[2, 2]  acc=[0.792, 0.833]  resid_max=2.13e-07  acc_a=[0.917, 0.667]  acc_b=[0.667, 1.0]
+  r0=8  rank_W=[8, 8]  acc=[1.0, 1.0]  resid_max=4.49e-07  acc_a=[1.0, 1.0]  acc_b=[1.0, 1.0]
+  r0=24  rank_W=[24, 24]  acc=[1.0, 1.0]  resid_max=8.33e-07  acc_a=[1.0, 1.0]  acc_b=[1.0, 1.0]
+  r0=64  rank_W=[64, 64]  acc=[1.0, 1.0]  resid_max=3.73e-05  acc_a=[1.0, 1.0]  acc_b=[1.0, 1.0]

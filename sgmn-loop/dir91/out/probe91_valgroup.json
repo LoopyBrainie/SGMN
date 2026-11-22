@@ -1,0 +1,53 @@
+{
+ "kind": "supplementary control (class-count confound)",
+ "rows": {
+  "20261028_L8": {
+   "mean_all__verb6": 1.0,
+   "mean_all__vgrp6": 0.21875,
+   "vt_pos__verb6": 0.09375,
+   "vt_pos__vgrp6": 0.375,
+   "nonvt__verb6": 1.0,
+   "nonvt__vgrp6": 0.0625
+  },
+  "20261028_L12": {
+   "mean_all__verb6": 0.9375,
+   "mean_all__vgrp6": 0.09375,
+   "vt_pos__verb6": 0.1875,
+   "vt_pos__vgrp6": 0.40625,
+   "nonvt__verb6": 0.96875,
+   "nonvt__vgrp6": 0.09375
+  },
+  "20261028_L16": {
+   "mean_all__verb6": 0.9375,
+   "mean_all__vgrp6": 0.09375,
+   "vt_pos__verb6": 0.25,
+   "vt_pos__vgrp6": 0.40625,
+   "nonvt__verb6": 0.9375,
+   "nonvt__vgrp6": 0.09375
+  },
+  "7777_L8": {
+   "mean_all__verb6": 0.96875,
+   "mean_all__vgrp6": 0.28125,
+   "vt_pos__verb6": 0.09375,
+   "vt_pos__vgrp6": 0.375,
+   "nonvt__verb6": 0.96875,
+   "nonvt__vgrp6": 0.15625
+  },
+  "7777_L12": {
+   "mean_all__verb6": 0.96875,
+   "mean_all__vgrp6": 0.09375,
+   "vt_pos__verb6": 0.25,
+   "vt_pos__vgrp6": 0.4375,
+   "nonvt__verb6": 0.96875,
+   "nonvt__vgrp6": 0.0625
+  },
+  "7777_L16": {
+   "mean_all__verb6": 0.9375,
+   "mean_all__vgrp6": 0.125,
+   "vt_pos__verb6": 0.1875,
+   "vt_pos__vgrp6": 0.375,
+   "nonvt__verb6": 0.9375,
+   "nonvt__vgrp6": 0.125
+  }
+ }
+}

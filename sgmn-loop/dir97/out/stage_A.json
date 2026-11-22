@@ -1,0 +1,193 @@
+{
+ "stage": "stageA",
+ "n_facts": 32,
+ "n_distinct_vals": 27,
+ "sum_S": 42,
+ "E_random": 1.3125,
+ "seeds": {
+  "20261028": {
+   "8": {
+    "n_hit_v": 1,
+    "n_hit_s": 1,
+    "n_hit_v_L2": 1,
+    "n_hit_v_W0": 1,
+    "n_hit_s_W0": 1,
+    "n_hit_v_oracle": 32,
+    "n_hit_s_oracle": 32,
+    "n_hit_v_oracle_perm": 0,
+    "n_hit_s_oracle_perm": 0,
+    "oracle_resid": 6.772145866307255e-07,
+    "stable_rank": 1.000488804531553,
+    "nu": 0.036313172429800034,
+    "max_pair_cos_v_unique": 0.9986410140991211,
+    "knorm_ratio": 1.0105725526809692,
+    "blocks_min": 18
+   },
+   "12": {
+    "n_hit_v": 1,
+    "n_hit_s": 1,
+    "n_hit_v_L2": 1,
+    "n_hit_v_W0": 1,
+    "n_hit_s_W0": 1,
+    "n_hit_v_oracle": 32,
+    "n_hit_s_oracle": 32,
+    "n_hit_v_oracle_perm": 0,
+    "n_hit_s_oracle_perm": 0,
+    "oracle_resid": 3.6045369711246167e-07,
+    "stable_rank": 1.0006912226449138,
+    "nu": 0.037038404494524,
+    "max_pair_cos_v_unique": 0.9978770613670349,
+    "knorm_ratio": 1.0132147073745728,
+    "blocks_min": 18
+   },
+   "16": {
+    "n_hit_v": 0,
+    "n_hit_s": 0,
+    "n_hit_v_L2": 0,
+    "n_hit_v_W0": 4,
+    "n_hit_s_W0": 2,
+    "n_hit_v_oracle": 32,
+    "n_hit_s_oracle": 32,
+    "n_hit_v_oracle_perm": 0,
+    "n_hit_s_oracle_perm": 0,
+    "oracle_resid": 5.475131956700352e-07,
+    "stable_rank": 1.0034240289665908,
+    "nu": 0.0370599739253521,
+    "max_pair_cos_v_unique": 0.9960497617721558,
+    "knorm_ratio": 1.028580904006958,
+    "blocks_min": 18
+   }
+  },
+  "7777": {
+   "8": {
+    "n_hit_v": 1,
+    "n_hit_s": 1,
+    "n_hit_v_L2": 1,
+    "n_hit_v_W0": 1,
+    "n_hit_s_W0": 1,
+    "n_hit_v_oracle": 32,
+    "n_hit_s_oracle": 32,
+    "n_hit_v_oracle_perm": 0,
+    "n_hit_s_oracle_perm": 0,
+    "oracle_resid": 4.2346096051915083e-07,
+    "stable_rank": 1.0004887338751836,
+    "nu": 0.03726805001497269,
+    "max_pair_cos_v_unique": 0.9986047148704529,
+    "knorm_ratio": 1.0102466344833374,
+    "blocks_min": 18
+   },
+   "12": {
+    "n_hit_v": 1,
+    "n_hit_s": 1,
+    "n_hit_v_L2": 1,
+    "n_hit_v_W0": 1,
+    "n_hit_s_W0": 1,
+    "n_hit_v_oracle": 32,
+    "n_hit_s_oracle": 32,
+    "n_hit_v_oracle_perm": 0,
+    "n_hit_s_oracle_perm": 0,
+    "oracle_resid": 5.574640340455517e-07,
+    "stable_rank": 1.000690806883436,
+    "nu": 0.03663097321987152,
+    "max_pair_cos_v_unique": 0.9980019330978394,
+    "knorm_ratio": 1.010890007019043,
+    "blocks_min": 18
+   },
+   "16": {
+    "n_hit_v": 1,
+    "n_hit_s": 1,
+    "n_hit_v_L2": 1,
+    "n_hit_v_W0": 1,
+    "n_hit_s_W0": 1,
+    "n_hit_v_oracle": 32,
+    "n_hit_s_oracle": 32,
+    "n_hit_v_oracle_perm": 0,
+    "n_hit_s_oracle_perm": 0,
+    "oracle_resid": 7.644907782378141e-07,
+    "stable_rank": 1.0029343091966683,
+    "nu": 0.037163883447647095,
+    "max_pair_cos_v_unique": 0.9958483576774597,
+    "knorm_ratio": 1.0344425439834595,
+    "blocks_min": 18
+   }
+  }
+ },
+ "checks": [
+  {
+   "id": "A97-4/seed20261028",
+   "ok": true,
+   "detail": "‖W_after_read − W_write‖/‖W_write‖ = 0.000e+00 (< 1e-12)"
+  },
+  {
+   "id": "A97-4/seed7777",
+   "ok": true,
+   "detail": "‖W_after_read − W_write‖/‖W_write‖ = 0.000e+00 (< 1e-12)"
+  },
+  {
+   "id": "A97-1",
+   "ok": true,
+   "detail": "解算力 min(oracle − oracle^π) = 32/32 (≥30)"
+  },
+  {
+   "id": "A97-2",
+   "ok": true,
+   "detail": "max ‖k_i‖ 比 = 1.034 (< 10)"
+  },
+  {
+   "id": "A97-3",
+   "ok": true,
+   "detail": "max oracle 残差 = 7.645e-07 (< 1e-6)"
+  },
+  {
+   "id": "A97-6",
+   "ok": true,
+   "detail": "min 每事实块数 = 18 (≥18)"
+  },
+  {
+   "id": "A97-7",
+   "ok": true,
+   "detail": "max stable rank(ΔW) = 1.0034 (≤1.02，复现 D-126)"
+  },
+  {
+   "id": "A97-9",
+   "ok": true,
+   "detail": "Σ|S_i|=42==Σm_v²；不同值=27==27；E_random=1.3125"
+  },
+  {
+   "id": "G97-1",
+   "ok": true,
+   "detail": "min N_hit^v(oracle) = 32/32 (≥30)"
+  },
+  {
+   "id": "G97-2",
+   "ok": true,
+   "detail": "max N_hit^v(oracle^π) = 0/32 (≤3)"
+  },
+  {
+   "id": "A97-5",
+   "ok": true,
+   "detail": "N_hit^v 为同一函数；oracle 与 oracle^π 得分不同"
+  },
+  {
+   "id": "M97-2",
+   "ok": true,
+   "detail": "max N_hit^v(W0) = 4/32 (≤ E_random+3 = 4.312)"
+  }
+ ],
+ "device_max_pair_cos_v_unique": [
+  0.9958483576774597,
+  0.9986410140991211
+ ],
+ "M97-1_reading": {
+  "per_cell_n_hit_v": [
+   1,
+   1,
+   1,
+   1,
+   0,
+   1
+  ],
+  "note": "≥24 确认 / ≤8 否证 / (8,24) AMBIGUOUS —— 判决在 VERDICT.md"
+ },
+ "all_stageA_pass": true
+}

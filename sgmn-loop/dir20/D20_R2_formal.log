@@ -1,0 +1,251 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-20 R1（脚本 v1.0 · 卡片 rev 1.2 跨会话状态语义：两段式会话协议）===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:55,  5.25it/s]Loading weights:  59%|█████▉    | 172/290 [00:00<00:00, 722.51it/s]Loading weights:  93%|█████████▎| 269/290 [00:00<00:00, 776.30it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 695.68it/s]
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (270674 > 131072). Running this sequence through the model will result in indexing errors
+[初始化] ★ 复制 θ₀ 冻结快照到 CPU（KL 参考 + 基座还原源）…
+
+[Stage A]
+[PASS] A1' Freeze C（读梯度非零 / 写梯度精确 0 / 基座逐位不变 / 阴性对照泄漏）: 读梯度非零 6/9；写梯度精确0 12/12；基座逐位不变 True；阴性对照泄漏 3/12
+[PASS] A1' 句柄数 = 2×层数: handles=6 mems=3
+/dev/sdf/home/ec2-user/sgmn-loop/dir20/R1_xsession.py:642: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  traj.append((float(loss), gnorm))
+[PASS] A2' 训练生效性：Wo/gamma 改变且 gamma 梯度非零；cue 模式下 Wq 梯度恒 0 且不变: Δmax|Wo|=0.004012；Δmax|gamma|=0.003742；‖g_gamma‖=4.61；‖g_Wq‖=0；Δ|Wq|=0
+[PASS] A2' ⑩ Hebbian 核自检：写一步后 W 朝 v 移动且不发散: ‖Wk−v‖：41.8378 → 41.4426（须下降）；‖W‖=29.9（须有限且 < 1e6）
+[PASS] A2' ⑪ 梯度隔离：Hebbian 臂中任务梯度不流入核状态 W，且（非 W4 臂）P_v 梯度恒 0: 核状态 W 的梯度泄漏 0/3（须 0）；P_v 的梯度泄漏 0/3（须 0）
+[PASS] A2' ④ 读阶段冻结写 ⇒ 记忆状态逐位不变: equal=True
+[PASS] A2' ⑤ 跨方向对照探针：未训练的 cue 臂命中 = 1.0（复现 DIR-16 的 C1）: hit=1.0000（DIR-16 的 C1 = 1.0000）；每篇写入条目数=68
+[PASS] A2' ⑥ 槽位不回绕：每篇写入条目数 ≤ N_ENTRIES: 每篇 68 条（N_ENTRIES=256）
+[PASS] A2' ⑦ 评测码留出：训练码与评测码（含干扰码）零重叠: 目标码重叠 0；与干扰码重叠 0
+[PASS] A2' ⑧ 干扰项构造：同线索 + 异码 + 异上下文 + 码在文档末尾（唯一持有其身份的条目）: 线索 = CUE_A（目标与干扰相同）；码不同（全局唯一）；填充切片不同（间隔 ≥ 400 token）⇒ 上下文签名必不同；码为文档最后一个 token ⇒ 邻位条目**不含**码的身份；抽样 4 篇通过=True
+[PASS] A2' ⑨ 目标不可猜中：基座 NLL ≥ 3（否则任务平凡）: base NLL = 15.4878（阈值 3.0）；码为稀有单 token 词
+[PASS] A2' ⑫ 读路径一致性：W0_verbatim 的读出 y 与其来源槽 v_j 的余弦 ≥ 0.999: cos(y, v_j) 均值 = 0.999820（阈值 0.999，9 个槽）
+[PASS] A2'⑬ 真值槽**精确映射**自洽（D54）+ 槽空间寻址命中（未训练臂）: addr(写入序)=1.0000（★ DIR-17 协议下**必然 ≈ 0**（回绕 ⇒ 真值槽≠写入序），非缺陷）；addr(槽空间，精确映射)=1.0000（阈值 0.99）
+[PASS] A2'⑭ 槽表状态**确定性**：陈旧残留数逐篇一致 + 槽号映射 == (写入前 count + j) % N: 陈旧条目数（逐篇/逐层）= [0, 0, 0, 0, 0, 0, 0, 0, 0]（须**完全一致** ⇒ 确定性）；槽号映射违例 = 0 处（须 0）
+[PASS] A2'⑮ P_v 梯度语义：主臂任务损失下 P_v 梯度恒 0；写侧自监督臂 P_v 梯度非零: 主臂 ‖∂L_task/∂P_v‖ = [None, None, None]（须全 0/None）；pvw 臂 ‖∂L_write/∂P_v‖ = [1.0046374797821045, 1.0020302534103394, 0.9817663431167603]（须有非零）
+[PASS] A2'⑯ 维度一致：d_k == d_v == model.config.hidden_size（卡片 D49 已订正）: d_k = d_v = 896（hidden_size）；脚本传 896，非 64
+[PASS] A2'⑯′ 交换性对照可构造：同池、均匀抽样、从未写入的对照 token ≥ 32 个: 抽到 32 个（须 32）；同池、均匀抽样、从未写入
+[PASS] A2'⑰ 键尺度检查：renorm/ortho 的 ‖k‖² ≈ 5（恒定）；linear 的实测 ‖k‖² 远大于 5（D50/D51）: linear: E‖k‖²=['380839.2', '407843.4', '427719.8'] max=['13484455.0', '14463688.0', '15190310.0']；renorm: E‖k‖²=['5.000', '5.000', '5.000']；ortho: E‖k‖²=['5.000', '5.000', '5.000']（⇒ 装置的 pk_scale 标定口径错 ⇒ 真实键尺度 ≫ 5 ⇒ η 窗口不相交）
+[PASS] A2'⑱〔★ 修订 68 零效度自检〕「内容置换」钩子只动内容、不动寻址 ⇒ H14 的对照干净: 键逐位相同=True（置换不动地址 ⇒ H14 的寻址侧干净）；值的配对余弦均值=['-0.0008', '-0.0062', '0.3026', '0.0011', '-0.0090']（须 < 0.99 ⇒ 置换确实换了内容）
+[PASS] A4' 训练不发散（损失有限、max|Wo| 有限、gamma 有限）: loss 首/末 = 15.8405/14.3603；max|Wo|=0.1631；gamma 终值=[0.0537, 0.0537, 0.0505]
+[PASS] A19-1 基座冻结对照：联合训练后基座参数与初始参数**逐位相同**: max|θ−θ₀| = 0.000e+00（须精确为 0）
+[PASS] A19-2 基座可训：被训参数集合**非空**且其梯度**非零有限**: 可训基座参数数 = 290；有梯度的 = 290；梯度范数 min/max = 3.618e-02/3.753e+02；全部有限 = True；存在非零 = True
+[PASS] A19-3 保护旋钮的生效性检查**双向**：放开/关闭都改变被训集合；低秩投影后残差 ≈ 0: none=0 all=290 layers=72 lowrank=169（须 0<layers<all）；低秩残差 投影前=0.000e+00 扰动后=1.167e+01 投影后=7.051e-05（须 投影后 < 1e-4 且 扰动后 > 1e-6 ⇒ 双向可辨）
+[PASS] A19-4 训练数据与基座保持评测数据的**文档窗口集合**交集为空（逐位断言）: 训练窗口数=39827；探针窗口数=4226；**交集=0（须 0）**；两文件前缀不同=True（train.txt vs valid.txt）
+[PASS] A19-5 交换性对照 token 仍从码池**均匀抽样**（D53 教训：不得取最稀有者）: 抽到 32 个、去重后 32 个（须 32 且互不相同）
+[PASS] A19-6 记忆寻址指标 addr_slot 仍用**精确槽号映射**（D54：写入序 → 槽号可精确预测）: 写入记录数 == 槽号记录数 ⇒ 精确映射可用
+[PASS] A19-7 基座保持的 NLL 口径在挂记忆 vs 不挂记忆两个对照下**逐位可算**: PPL(挂记忆)=2.505492；PPL(不挂记忆)=2.506668；差=-0.001177（须非 0 ⇒ 挂记忆确实改变了基座输出）
+[PASS] A19-8 D_kv 漂移度量在「零训练步」对照下必须为 **0**（度量自检）: D_kv(零训练两次采样) = 0.000e+00（须 < 1e-9）
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:10,  4.12it/s]Loading weights:  68%|██████▊   | 197/290 [00:00<00:00, 713.82it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 660.20it/s]
+[PASS] A19-9 〔KL 正则生效性 · 双向〕启用 ⇒ 项非零且改变基座梯度；禁用 ⇒ 不贡献该梯度: KL 序列(启用) = [0.0, 0.135443, 0.583149]（须非零、有限）；基座梯度范数 启用=666.342197 vs 禁用=1162.240911（须不同 ⇒ 双向可辨）；★ **KL 是被惩罚项，其本身不要求下降**（原断言的期望写错 ⇒ 缺陷 D69）
+[PASS] A19-10〔内容置换只动内容、不动寻址〕⇒ H2′★ 的对照干净: 键逐位相同=True（置换不动地址 ⇒ H2′ 的寻址侧干净）；值的配对余弦均值=['-0.0009', '-0.0074', '0.3026', '0.0007', '-0.0104']（须 < 0.99 ⇒ 置换确实换了内容）
+
+[Stage A · DIR-20]
+[PASS] A20-0〔★ D86〕继承 Stage A 的遗留显存已释放，基座已重新冻结（供后续断言与主循环）: 释放对象=['_bf0', '_opt9']；清空基座梯度；基座 requires_grad 全部恢复 False；当前 alloc=5511 MiB reserved=6010 MiB
+[PASS] A20-9〔只读评测不写〕评测前后 core.count 与 write_calls 不变（且写权限未被永久关闭）: 评测前 count/write_calls=[(68, 68), (68, 68), (68, 68)]；评测后=[(68, 68), (68, 68), (68, 68)]；评测前写权限开启=True；★ 若评测期间未冻结写，前缀的前向会**自己写入**⇒ count 必增 ⇒ 本项必 FAIL
+[PASS] A20-1〔export → import 往返指纹逐位相同〕: 内存指纹=86e7c185373a90d4b59d07cd84781ed5；导入后重导出指纹=86e7c185373a90d4b59d07cd84781ed5
+[PASS] A20-2〔往返后读出逐位相同〕同一前缀下新旧装置的读出余弦 ≥ 0.999: 逐层余弦=['1.000000', '1.000000', '1.000000']（最小 1.000000）
+[PASS] A20-14〔状态文件往返：落盘后 torch.load 的指纹 == 内存中的指纹〕: 内存指纹=86e7c185373a90d4b59d07cd84781ed5；落盘读回指纹=86e7c185373a90d4b59d07cd84781ed5
+[PASS] A20-3〔import_state(strict=True) 喂错形状必须抛错（不得静默截断）〕: ValueError: 层 8：W 形状不符 (3, 3) vs (896, 896)
+[PASS] A20-4〔include_read_map=False ⇒ W_o / γ 未搬运（导入后仍为随机初值）〕: 导入后 W_o 仍 == 随机初值=True；γ 仍 == 随机初值=True；且 ≠ 源装置（源被扰动 +1.0）=True
+[PASS] A20-5〔include_addr=False ⇒ 地址表未搬运（count == 0、keys 全零）〕: 逐层 count=[0, 0, 0]；keys 全零=[True, True, True]
+[PASS] A20-7〔content_wrong 的置换**是排列且无不动点**〕: 层16: n=34 是排列=True 不动点数=0（★ D62：torch 视图别名会写坏排列 ⇒ 必须先取标量副本）
+[PASS] A20-6′〔内容置换只动**值**、不动**寻址键**；签名**逐层**报告（第一挂载层必须逐位相同）〕: keys 逐位相同=True（全部挂载层）；vals 逐位不同=True（全部挂载层）；sigs 逐层相同={'8': True, '12': False, '16': False}；★ 第一挂载层（层 8）逐位相同=True（下游层不同是**结构事实**：记忆注入会改变下游 hidden state ⇒ 签名携带注入痕迹 ⇒ 非缺陷）
+[PASS] A20-11〔vals 不进读路径（置零 ⇒ 读出逐位不变）；W 进读路径（置零 ⇒ 读出改变）〕: vals 置零后逐层余弦=['1.00000000', '1.00000000', '1.00000012']（须 ≥ 1-1e-6）；W 置零后逐层余弦=['0.000000', '0.000000', '0.000000']（须 < 0.999）
+[PASS] A20-12′〔真值槽精确可预测（= 写前 count + true_idx）且不回绕〕: 写前 count C0=0；逐层 slot_of_write[true_idx] == C0 + true_idx：[True, True, True]；写后 count=[68, 68, 68]；未回绕（≤ N_ENTRIES=256）=True；★ Stage A 中 C0=0（无训练残留）⇒ 退化为 true_slot == true_idx；正式轮里 C0=训练残留 ⇒ **addr（写入序口径）恒为 0，只有 addr_slot 可读**
+[PASS] A20-13〔X8_linear 的键尺度实测 ≫ 5（linear ≫ 100，renorm ≈ 5）〕: linear 逐层 E‖k‖²=['355493.3', '380907.8', '399417.2']；renorm 逐层 E‖k‖²=['5.0000', '5.0000', '5.0000']；★ 复现 D50/D51 ⇒ X8 必须用 η=1e-5（修订 20-C）
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:14,  3.87it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 910.20it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:49,  2.63it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 693.53it/s]
+[PASS] A20-8〔会话 B 的模型实例**确实是新的**（id 不同）；会话 A 的已释放（显存回落）〕: id(会话A)=140476385646928，id(会话B)=140476385644688；显存 9410 MiB → 7526 MiB（回落 1885 MiB）
+[Stage A · DIR-20] 13 项断言完成
+
+[Stage A 闸] 共 44 项，FAIL 0 项 ⇒ 全部通过
+
+[主循环]
+
+[规格] smoke=False  n_train=200  n_eval=60  seeds=[20261028, 20261104, 7]  臂数=11
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:29,  3.24it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 759.65it/s]
+  [会话A] seed=20261028 X0_no_state            状态 60 份  （本臂不导出状态）  磁盘余 22209 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:13,  3.94it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1095.18it/s]
+  [会话A] seed=20261104 X0_no_state            状态 60 份  （本臂不导出状态）  磁盘余 22209 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:18,  3.67it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 824.39it/s]
+  [会话A] seed=7 X0_no_state            状态 60 份  （本臂不导出状态）  磁盘余 22209 MiB
+/dev/sdf/home/ec2-user/sgmn-loop/dir20/R1_xsession.py:2018: RuntimeWarning: Mean of empty slice
+  f"fid_true={np.nanmean([r.get('fid_true', np.nan) for r in rows]):.4f} "
+/dev/sdf/home/ec2-user/sgmn-loop/dir20/R1_xsession.py:2019: RuntimeWarning: Mean of empty slice
+  f"cos_y_vtrue={np.nanmean([r.get('cos_y_vtrue', np.nan) for r in rows]):.4f}"
+  seed=20261028 X0_no_state            nll=15.3138 lp=-15.3138 hit=0.0000 addr=0.0000 addr_slot=0.0000 fid_true=nan cos_y_vtrue=nan  磁盘余 22209 MiB
+  seed=20261104 X0_no_state            nll=14.9349 lp=-14.9349 hit=0.0000 addr=0.0000 addr_slot=0.0000 fid_true=nan cos_y_vtrue=nan  磁盘余 22209 MiB
+  seed=7 X0_no_state            nll=15.2970 lp=-15.2970 hit=0.0000 addr=0.0000 addr_slot=0.0000 fid_true=nan cos_y_vtrue=nan  磁盘余 22209 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:10,  4.08it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1130.38it/s]
+  [会话A] seed=20261028 X1_full_state          状态 60 份  md5[0]=aba02cc4cb  磁盘余 20632 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:22,  3.52it/s]Loading weights:  97%|█████████▋| 280/290 [00:00<00:00, 932.94it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 750.01it/s]
+  [会话A] seed=20261104 X1_full_state          状态 60 份  md5[0]=bf321950df  磁盘余 19056 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:52,  2.56it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 630.94it/s]
+  [会话A] seed=7 X1_full_state          状态 60 份  md5[0]=50018efef3  磁盘余 17480 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:33,  3.10it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 803.54it/s]
+  seed=20261028 X1_full_state          nll=9.8724 lp=-9.8724 hit=0.9111 addr=0.0000 addr_slot=0.9111 fid_true=0.9820 cos_y_vtrue=0.9436  磁盘余 17482 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:09,  4.16it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 945.29it/s]
+  seed=20261104 X1_full_state          nll=9.5056 lp=-9.5056 hit=0.8833 addr=0.0000 addr_slot=0.8833 fid_true=0.9822 cos_y_vtrue=0.9419  磁盘余 17482 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:32,  3.14it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 879.05it/s]
+  seed=7 X1_full_state          nll=9.6363 lp=-9.6363 hit=0.9667 addr=0.0000 addr_slot=0.9667 fid_true=0.9823 cos_y_vtrue=0.9704  磁盘余 17483 MiB
+  [清理] 臂 X1_full_state 的状态文件已删除；磁盘余 21947 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:11,  4.05it/s]Loading weights:  89%|████████▊ | 257/290 [00:00<00:00, 926.59it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 797.41it/s]
+  [会话A] seed=20261028 X2_no_readmap          状态 60 份  md5[0]=b12d672c2f  磁盘余 21184 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:15,  3.84it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 904.06it/s]
+  [会话A] seed=20261104 X2_no_readmap          状态 60 份  md5[0]=9021279b23  磁盘余 20158 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:20,  3.58it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 921.18it/s]
+  [会话A] seed=7 X2_no_readmap          状态 60 份  md5[0]=c61391f5dd  磁盘余 19134 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:16,  3.77it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1049.41it/s]
+  seed=20261028 X2_no_readmap          nll=15.3313 lp=-15.3313 hit=0.7611 addr=0.0722 addr_slot=0.7611 fid_true=0.9820 cos_y_vtrue=0.8649  磁盘余 19136 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:26,  3.34it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 797.62it/s]
+  seed=20261104 X2_no_readmap          nll=14.9749 lp=-14.9749 hit=0.6833 addr=0.3167 addr_slot=0.6833 fid_true=0.9822 cos_y_vtrue=0.8268  磁盘余 19136 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:22,  3.51it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 940.74it/s]
+  seed=7 X2_no_readmap          nll=15.3609 lp=-15.3609 hit=0.6667 addr=0.3222 addr_slot=0.6667 fid_true=0.9823 cos_y_vtrue=0.8294  磁盘余 19136 MiB
+  [清理] 臂 X2_no_readmap 的状态文件已删除；磁盘余 22038 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:24,  3.40it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 782.92it/s]
+  [会话A] seed=20261028 X3_no_addr             状态 60 份  md5[0]=57cd159aac  磁盘余 21105 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:17,  3.72it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 864.89it/s]
+  [会话A] seed=20261104 X3_no_addr             状态 60 份  md5[0]=8f5b538d30  磁盘余 20001 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:18,  3.70it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1030.15it/s]
+  [会话A] seed=7 X3_no_addr             状态 60 份  md5[0]=79c925dfa8  磁盘余 18899 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:10,  4.10it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 912.35it/s]
+  seed=20261028 X3_no_addr             nll=14.0033 lp=-14.0033 hit=0.0000 addr=0.0000 addr_slot=0.0000 fid_true=nan cos_y_vtrue=nan  磁盘余 18899 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:17,  3.71it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1031.66it/s]
+  seed=20261104 X3_no_addr             nll=13.8274 lp=-13.8274 hit=0.0000 addr=0.0000 addr_slot=0.0000 fid_true=nan cos_y_vtrue=nan  磁盘余 18899 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:18,  3.69it/s]Loading weights:  88%|████████▊ | 255/290 [00:00<00:00, 857.51it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 699.82it/s]
+  seed=7 X3_no_addr             nll=13.7109 lp=-13.7109 hit=0.0000 addr=0.0000 addr_slot=0.0000 fid_true=nan cos_y_vtrue=nan  磁盘余 18900 MiB
+  [清理] 臂 X3_no_addr 的状态文件已删除；磁盘余 22191 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:19,  3.65it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 900.89it/s]
+  [会话A] seed=20261028 X4_content_wrong       状态 60 份  md5[0]=be809ea5ab  磁盘余 20632 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:22,  3.51it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 797.80it/s]
+  [会话A] seed=20261104 X4_content_wrong       状态 60 份  md5[0]=ead89ccced  磁盘余 19057 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:28,  3.26it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 910.55it/s]
+  [会话A] seed=7 X4_content_wrong       状态 60 份  md5[0]=d585e35ee6  磁盘余 17481 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:40,  2.88it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 693.82it/s]
+  seed=20261028 X4_content_wrong       nll=11.6235 lp=-11.6235 hit=0.9889 addr=0.0000 addr_slot=0.9889 fid_true=0.9797 cos_y_vtrue=0.9748  磁盘余 17482 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:28,  3.26it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 815.62it/s]
+  seed=20261104 X4_content_wrong       nll=11.2132 lp=-11.2132 hit=0.9944 addr=0.0000 addr_slot=0.9944 fid_true=0.9807 cos_y_vtrue=0.9789  磁盘余 17482 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:24,  3.42it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 852.61it/s]
+  seed=7 X4_content_wrong       nll=11.3344 lp=-11.3344 hit=1.0000 addr=0.0000 addr_slot=1.0000 fid_true=0.9811 cos_y_vtrue=0.9811  磁盘余 17482 MiB
+  [清理] 臂 X4_content_wrong 的状态文件已删除；磁盘余 21946 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:19,  3.62it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 860.38it/s]
+  [会话A] seed=20261028 X5_wrong_session       状态 60 份  md5[0]=6f68ba73ea  磁盘余 20632 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:32,  3.11it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 828.08it/s]
+  [会话A] seed=20261104 X5_wrong_session       状态 60 份  md5[0]=fc9bd809af  磁盘余 19056 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:26,  3.32it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 844.22it/s]
+  [会话A] seed=7 X5_wrong_session       状态 60 份  md5[0]=e8e034c5c5  磁盘余 17480 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:22,  3.51it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 847.94it/s]
+  seed=20261028 X5_wrong_session       nll=11.9328 lp=-11.9328 hit=0.3278 addr=0.0778 addr_slot=0.3278 fid_true=0.9822 cos_y_vtrue=0.6615  磁盘余 17482 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:24,  3.41it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 803.54it/s]
+  seed=20261104 X5_wrong_session       nll=11.6370 lp=-11.6370 hit=0.2889 addr=0.1000 addr_slot=0.2889 fid_true=0.9823 cos_y_vtrue=0.6096  磁盘余 17482 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:35,  3.02it/s]Loading weights:  96%|█████████▌| 279/290 [00:00<00:00, 814.27it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 654.57it/s]
+  seed=7 X5_wrong_session       nll=12.2193 lp=-12.2193 hit=0.2778 addr=0.0000 addr_slot=0.2778 fid_true=0.9820 cos_y_vtrue=0.5831  磁盘余 17482 MiB
+  [清理] 臂 X5_wrong_session 的状态文件已删除；磁盘余 20161 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:16,  3.78it/s]Loading weights:  80%|████████  | 233/290 [00:00<00:00, 814.01it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 695.16it/s]
+  [会话A] seed=20261028 X7_renorm              状态 60 份  md5[0]=58ac4c35af  磁盘余 20631 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:15,  3.81it/s]Loading weights:  98%|█████████▊| 284/290 [00:00<00:00, 1000.54it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 799.66it/s] 
+  [会话A] seed=20261104 X7_renorm              状态 60 份  md5[0]=41101a310e  磁盘余 19057 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:52,  2.57it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 681.17it/s]
+  [会话A] seed=7 X7_renorm              状态 60 份  md5[0]=b9057c017d  磁盘余 17481 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:08,  4.23it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1168.44it/s]
+  seed=20261028 X7_renorm              nll=11.1342 lp=-11.1342 hit=0.0000 addr=0.0000 addr_slot=0.9944 fid_true=0.7135 cos_y_vtrue=0.7135  磁盘余 17482 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<02:00,  2.40it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 667.68it/s]
+  seed=20261104 X7_renorm              nll=10.8894 lp=-10.8894 hit=0.0000 addr=0.0000 addr_slot=0.9944 fid_true=0.7297 cos_y_vtrue=0.7296  磁盘余 17482 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:25,  3.39it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 947.02it/s]
+  seed=7 X7_renorm              nll=11.0029 lp=-11.0029 hit=0.0000 addr=0.0000 addr_slot=1.0000 fid_true=0.7276 cos_y_vtrue=0.7276  磁盘余 17482 MiB
+  [清理] 臂 X7_renorm 的状态文件已删除；磁盘余 21500 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:11,  4.02it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 892.33it/s]
+  [会话A] seed=20261028 X8_linear              状态 60 份  md5[0]=778e859ac6  磁盘余 20631 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:17,  3.74it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 951.31it/s]
+  [会话A] seed=20261104 X8_linear              状态 60 份  md5[0]=95ece0f32f  磁盘余 19055 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:05,  4.40it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1216.17it/s]
+  [会话A] seed=7 X8_linear              状态 60 份  md5[0]=29fe308bf2  磁盘余 17480 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:29,  3.25it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 754.83it/s]
+  seed=20261028 X8_linear              nll=11.1072 lp=-11.1072 hit=0.0000 addr=0.0000 addr_slot=0.7500 fid_true=-0.0074 cos_y_vtrue=-0.0079  磁盘余 17481 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:16,  3.77it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1047.49it/s]
+  seed=20261104 X8_linear              nll=10.7680 lp=-10.7680 hit=0.0056 addr=0.0000 addr_slot=0.8278 fid_true=-0.0068 cos_y_vtrue=-0.0061  磁盘余 17482 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:43,  2.80it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 737.84it/s]
+  seed=7 X8_linear              nll=10.9622 lp=-10.9622 hit=0.0167 addr=0.0000 addr_slot=0.8778 fid_true=0.0056 cos_y_vtrue=0.0061  磁盘余 17482 MiB
+  [清理] 臂 X8_linear 的状态文件已删除；磁盘余 21946 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:20,  3.60it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 984.75it/s]
+  [会话A] seed=20261028 X6_verbatim            状态 60 份  md5[0]=810c1caa68  磁盘余 21182 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:17,  3.73it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 793.70it/s]
+  [会话A] seed=20261104 X6_verbatim            状态 60 份  md5[0]=8bb54e6dc0  磁盘余 20158 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:05,  4.41it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1217.97it/s]
+  [会话A] seed=7 X6_verbatim            状态 60 份  md5[0]=cc480bd21f  磁盘余 19134 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:24,  3.41it/s]Loading weights:  88%|████████▊ | 255/290 [00:00<00:00, 815.05it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 708.92it/s]
+  seed=20261028 X6_verbatim            nll=9.5143 lp=-9.5143 hit=0.8389 addr=0.0000 addr_slot=0.8389 fid_true=nan cos_y_vtrue=0.9233  磁盘余 19134 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:29,  3.24it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 839.70it/s]
+  seed=20261104 X6_verbatim            nll=9.1110 lp=-9.1110 hit=0.8389 addr=0.0000 addr_slot=0.8389 fid_true=nan cos_y_vtrue=0.9452  磁盘余 19134 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:13,  3.94it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1094.84it/s]
+  seed=7 X6_verbatim            nll=9.5282 lp=-9.5282 hit=0.9111 addr=0.0000 addr_slot=0.9111 fid_true=nan cos_y_vtrue=0.9627  磁盘余 19134 MiB
+  [清理] 臂 X6_verbatim 的状态文件已删除；磁盘余 22037 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:34,  3.05it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 701.65it/s]
+  [会话A] seed=20261028 X10_same_session       状态 60 份  （本臂不导出状态）  磁盘余 22209 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:16,  3.79it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 890.78it/s]
+  [会话A] seed=20261104 X10_same_session       状态 60 份  （本臂不导出状态）  磁盘余 22209 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:34,  3.07it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 753.10it/s]
+  [会话A] seed=7 X10_same_session       状态 60 份  （本臂不导出状态）  磁盘余 22209 MiB
+  seed=20261028 X10_same_session       nll=9.8724 lp=-9.8724 hit=0.9111 addr=0.0000 addr_slot=0.9111 fid_true=0.9820 cos_y_vtrue=0.9436  磁盘余 22209 MiB
+  seed=20261104 X10_same_session       nll=9.5056 lp=-9.5056 hit=0.8833 addr=0.0000 addr_slot=0.8833 fid_true=0.9822 cos_y_vtrue=0.9419  磁盘余 22209 MiB
+  seed=7 X10_same_session       nll=9.6363 lp=-9.6363 hit=0.9667 addr=0.0000 addr_slot=0.9667 fid_true=0.9823 cos_y_vtrue=0.9704  磁盘余 22209 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:25,  3.37it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 848.73it/s]
+  [会话A] seed=20261028 X11_newinst_noexport   状态 60 份  （本臂不导出状态）  磁盘余 22209 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:17,  3.75it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 979.62it/s]
+  [会话A] seed=20261104 X11_newinst_noexport   状态 60 份  （本臂不导出状态）  磁盘余 22209 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:38,  2.93it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 820.92it/s]
+  [会话A] seed=7 X11_newinst_noexport   状态 60 份  （本臂不导出状态）  磁盘余 22209 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:19,  3.62it/s]Loading weights:  88%|████████▊ | 256/290 [00:00<00:00, 841.57it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 743.03it/s]
+  seed=20261028 X11_newinst_noexport   nll=15.3138 lp=-15.3138 hit=0.0000 addr=0.0000 addr_slot=0.0000 fid_true=nan cos_y_vtrue=nan  磁盘余 22209 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:31,  3.15it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 834.41it/s]
+  seed=20261104 X11_newinst_noexport   nll=14.9349 lp=-14.9349 hit=0.0000 addr=0.0000 addr_slot=0.0000 fid_true=nan cos_y_vtrue=nan  磁盘余 22209 MiB
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:23,  3.44it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 961.39it/s]
+  seed=7 X11_newinst_noexport   nll=15.2970 lp=-15.2970 hit=0.0000 addr=0.0000 addr_slot=0.0000 fid_true=nan cos_y_vtrue=nan  磁盘余 22209 MiB
+
+[汇总与判据]
+/dev/sdf/home/ec2-user/sgmn-loop/dir20/R1_xsession.py:2050: RuntimeWarning: Mean of empty slice
+  "fid": (float(np.nanmean(fids)) if fids else None),
+/dev/sdf/home/ec2-user/sgmn-loop/dir20/R1_xsession.py:2051: RuntimeWarning: Mean of empty slice
+  "fid_true": (float(np.nanmean(fidt)) if fidt else None),
+/dev/sdf/home/ec2-user/sgmn-loop/dir20/R1_xsession.py:2052: RuntimeWarning: Mean of empty slice
+  "cos_y_vtrue": (float(np.nanmean(cyv)) if cyv else None),
+  X0_no_state                nll=15.1819 lp=-15.1819 hit=0.0 addr=0.0 addr_slot=0.0 fid=nan fid_true=nan cos_y_vtrue=nan ctrl=14.377451435724895
+  X1_full_state              nll=9.6714 lp=-9.6714 hit=0.9203703703703705 addr=0.0 addr_slot=0.9203703703703705 fid=0.9817426914418184 fid_true=0.9821766614913939 cos_y_vtrue=0.9519608731623048 ctrl=11.518142504162258
+  X2_no_readmap              nll=15.2223 lp=-15.2223 hit=0.7037037037037036 addr=0.23703703703703702 addr_slot=0.7037037037037036 fid=0.9718382640017403 fid_true=0.9821766614913939 cos_y_vtrue=0.8403931872160345 ctrl=14.415834267934164
+  X3_no_addr                 nll=13.8472 lp=-13.8472 hit=0.0 addr=0.0 addr_slot=0.0 fid=nan fid_true=nan cos_y_vtrue=nan ctrl=13.44418905046251
+  X4_content_wrong           nll=11.3904 lp=-11.3904 hit=0.9944444444444445 addr=0.0 addr_slot=0.9944444444444445 fid=0.9805615462638713 fid_true=0.980488959175569 cos_y_vtrue=0.9782537745104896 ctrl=11.016424173778958
+  X5_wrong_session           nll=11.9297 lp=-11.9297 hit=0.29814814814814816 addr=0.05925925925925925 addr_slot=0.29814814814814816 fid=0.9675255807461564 fid_true=0.982176661491394 cos_y_vtrue=0.6180604478275334 ctrl=11.71207037501865
+  X7_renorm                  nll=11.0088 lp=-11.0088 hit=0.0 addr=0.0 addr_slot=0.9962962962962962 fid=0.7238315221888048 fid_true=0.7236082931911503 cos_y_vtrue=0.7235736717228535 ctrl=10.79057306183709
+  X8_linear                  nll=10.9458 lp=-10.9458 hit=0.007407407407407407 addr=0.0 addr_slot=0.8185185185185188 fid=-0.004222343211916234 fid_true=-0.002861110031712828 cos_y_vtrue=-0.002636908379348892 ctrl=10.76152974764506
+  X6_verbatim                nll=9.3845 lp=-9.3845 hit=0.8629629629629628 addr=0.0 addr_slot=0.8629629629629628 fid=nan fid_true=nan cos_y_vtrue=0.94371088080936 ctrl=11.787575313780042
+  X10_same_session           nll=9.6714 lp=-9.6714 hit=0.9203703703703705 addr=0.0 addr_slot=0.9203703703703705 fid=0.9817426914418184 fid_true=0.9821766614913939 cos_y_vtrue=0.9519608731623048 ctrl=11.518142504162258
+  X11_newinst_noexport       nll=15.1819 lp=-15.1819 hit=0.0 addr=0.0 addr_slot=0.0 fid=nan fid_true=nan cos_y_vtrue=nan ctrl=14.377451435724895
+[PASS] H1″ 〔跨会话可用〕X1_full_state 相对 X11_newinst_noexport（同一「新实例」，唯一差别=有没有状态）有显著收益: Δ(Δnll)=+5.510448（阈值 > 0.5） t=34.53 p=1.25e-12 pos=178/180 逐种子=['+5.4414', '+5.4293', '+5.6607'] （nll: X1_full_state=9.6714 vs X11_newinst_noexport=15.1819）
+[PASS] H2″ 〔★ 内容特异 · 记忆内对照〕X1_full_state 显著优于 X4_content_wrong（只差内容，地址逐位相同）: Δ(Δnll)=+1.718927（阈值 > 0.5） t=19.54 p=1.25e-12 pos=167/180 逐种子=['+1.7510', '+1.7077', '+1.6981'] （nll: X1_full_state=9.6714 vs X4_content_wrong=11.3904）
+[PASS] H3″ 〔★ 跨会话折损有界〕X1_full_state 相对 X10_same_session 的收益折损 ≤ 事先声明的界 1.0 nats: 折损 = nll(X1) − nll(X10) = 9.6714 − 9.6714 = +0.0000 nats（阈值 ≤ 1.0）逐种子=['+0.0000', '+0.0000', '+0.0000']；benefit(X1)=+5.5104，benefit(X10)=+5.5104
+[PASS] H4″ 〔★ 键尺度归一 ⇒ 跨会话寻址稳定〕X1_full_state(ortho) 显著优于 X8_linear（原尺度）: Δ(Δnll)=+1.274396（阈值 > 0.5） t=14.06 p=1.25e-12 pos=155/180 逐种子=['+1.2348', '+1.2625', '+1.3259'] （nll: X1_full_state=9.6714 vs X8_linear=10.9458）
+[PASS] H5″ 〔★ 会话归属〕X1_full_state 显著优于 X5_wrong_session（导入另一个种子的状态）: Δ(Δnll)=+2.258251（阈值 > 0.5） t=15.40 p=1.25e-12 pos=162/180 逐种子=['+2.0604', '+2.1314', '+2.5830'] （nll: X1_full_state=9.6714 vs X5_wrong_session=11.9297）
+[PASS] H6″ 〔★ 零效度门槛〕X6_verbatim（按构造内容正确）的跨会话收益显著 > 0（参照 X11）: Δ(Δnll)=+5.797380（阈值 > 0.5） t=34.17 p=1.25e-12 pos=179/180 逐种子=['+5.7995', '+5.8238', '+5.7688'] （nll: X6_verbatim=9.3845 vs X11_newinst_noexport=15.1819）
+[PASS] H7″ 〔状态成分的必要性〕至少一个成分缺失（X2_no_readmap / X3_no_addr）显著降低跨会话收益: X2_no_readmap: Δ(Δnll)=+5.5509(t=34.95,p≈1.25e-12,n=180) 逐种子=['+5.4588', '+5.4694', '+5.7245'] ⇒ PASS；X3_no_addr: Δ(Δnll)=+4.1758(t=17.47,p≈1.25e-12,n=180) 逐种子=['+4.1309', '+4.3219', '+4.0746'] ⇒ PASS
+[PASS] R-1 〔报告项〕X1_full_state 跨会话后的寻址/内容读数: hit=0.9204 addr_slot=0.9204 fid_true=0.9822 cos_y_vtrue=0.9520 （★ 寻址是否幸存 + 是否取回内容）
+[PASS] R-2 〔报告项〕X8_linear（原尺度）的寻址/内容读数: hit=0.0074 addr_slot=0.8185 fid_true=-0.0029 cos_y_vtrue=-0.0026
+[PASS] R-3 〔报告项〕X11_newinst_noexport 相对 X0_no_state 的差（「新实例」与「状态搬运」的分解）: nll(X11)=15.1819  nll(X0)=15.1819  差=+0.0000 nats （★ 基座冻结 ⇒ 参数逐位相同 ⇒ 预期 ≈ 0 ⇒ 检验「重建模型实例本身」是否改变读数）
+[PASS] R-4 〔报告项〕X7_renorm vs X8_linear（第二个归一配置的读数）: Δ(Δnll)=-0.0630 t=-1.51 p≈0.602 n=180 逐种子=['-0.0270', '-0.1213', '-0.0407']
+[PASS] R-5 〔报告项〕X1（跨会话）vs X10（同会话）的寻址读数对照: hit: X1=0.9204 vs X10=0.9204；addr_slot: X1=0.9204 vs X10=0.9204；fid_true: X1=0.9822 vs X10=0.9822
+\n【DIR-20 汇总】
+  X0_no_state          nll=15.1819 benefit=+0.0000 hit=0.0 addr_slot=0.0 fid_true=nan cos_y_vtrue=nan
+  X10_same_session     nll=9.6714 benefit=+5.5104 hit=0.9203703703703705 addr_slot=0.9203703703703705 fid_true=0.9821766614913939 cos_y_vtrue=0.9519608731623048
+  X11_newinst_noexport nll=15.1819 benefit=+0.0000 hit=0.0 addr_slot=0.0 fid_true=nan cos_y_vtrue=nan
+  X1_full_state        nll=9.6714 benefit=+5.5104 hit=0.9203703703703705 addr_slot=0.9203703703703705 fid_true=0.9821766614913939 cos_y_vtrue=0.9519608731623048
+  X2_no_readmap        nll=15.2223 benefit=-0.0405 hit=0.7037037037037036 addr_slot=0.7037037037037036 fid_true=0.9821766614913939 cos_y_vtrue=0.8403931872160345
+  X3_no_addr           nll=13.8472 benefit=+1.3347 hit=0.0 addr_slot=0.0 fid_true=nan cos_y_vtrue=nan
+  X4_content_wrong     nll=11.3904 benefit=+3.7915 hit=0.9944444444444445 addr_slot=0.9944444444444445 fid_true=0.980488959175569 cos_y_vtrue=0.9782537745104896
+  X5_wrong_session     nll=11.9297 benefit=+3.2522 hit=0.29814814814814816 addr_slot=0.29814814814814816 fid_true=0.982176661491394 cos_y_vtrue=0.6180604478275334
+  X6_verbatim          nll=9.3845 benefit=+5.7974 hit=0.8629629629629628 addr_slot=0.8629629629629628 fid_true=nan cos_y_vtrue=0.94371088080936
+  X7_renorm            nll=11.0088 benefit=+4.1731 hit=0.0 addr_slot=0.9962962962962962 fid_true=0.7236082931911503 cos_y_vtrue=0.7235736717228535
+  X8_linear            nll=10.9458 benefit=+4.2361 hit=0.007407407407407407 addr_slot=0.8185185185185188 fid_true=-0.002861110031712828 cos_y_vtrue=-0.002636908379348892
+
+=== 判据通过 56/56 ===
+写出 /dev/sdf/home/ec2-user/sgmn-loop/R20_results.json

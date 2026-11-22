@@ -1,0 +1,28 @@
+=== wave 1/3: rand ===
+wave done: rand shard1 rc=0
+wave done: rand shard3 rc=0
+wave done: rand shard0 rc=0
+wave done: rand shard2 rc=0
+=== wave 2/3: learned ===
+wave done: learned shard2 rc=0
+wave done: learned shard0 rc=0
+wave done: learned shard3 rc=0
+wave done: learned shard1 rc=0
+=== wave 3/3: oracle ===
+wave done: oracle shard3 rc=0
+wave done: oracle shard1 rc=0
+wave done: oracle shard0 rc=0
+wave done: oracle shard2 rc=0
+=== formal 全部完成 ===
+-rw-rw-r--. 1 ec2-user ec2-user 66819 Nov 14 12:17 dir42/out/DIR42r10_arm_learned_shard0.json
+-rw-rw-r--. 1 ec2-user ec2-user 66837 Nov 14 12:18 dir42/out/DIR42r10_arm_learned_shard1.json
+-rw-rw-r--. 1 ec2-user ec2-user 66859 Nov 14 12:17 dir42/out/DIR42r10_arm_learned_shard2.json
+-rw-rw-r--. 1 ec2-user ec2-user 66907 Nov 14 12:17 dir42/out/DIR42r10_arm_learned_shard3.json
+-rw-rw-r--. 1 ec2-user ec2-user 60112 Nov 14 12:54 dir42/out/DIR42r10_arm_oracle_shard0.json
+-rw-rw-r--. 1 ec2-user ec2-user 60200 Nov 14 12:54 dir42/out/DIR42r10_arm_oracle_shard1.json
+-rw-rw-r--. 1 ec2-user ec2-user 60229 Nov 14 12:54 dir42/out/DIR42r10_arm_oracle_shard2.json
+-rw-rw-r--. 1 ec2-user ec2-user 60321 Nov 14 12:53 dir42/out/DIR42r10_arm_oracle_shard3.json
+-rw-rw-r--. 1 ec2-user ec2-user 61075 Nov 14 11:41 dir42/out/DIR42r10_arm_rand_shard0.json
+-rw-rw-r--. 1 ec2-user ec2-user 61058 Nov 14 11:41 dir42/out/DIR42r10_arm_rand_shard1.json
+-rw-rw-r--. 1 ec2-user ec2-user 61126 Nov 14 11:41 dir42/out/DIR42r10_arm_rand_shard2.json
+-rw-rw-r--. 1 ec2-user ec2-user 61134 Nov 14 11:41 dir42/out/DIR42r10_arm_rand_shard3.json

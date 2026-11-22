@@ -1,0 +1,52 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== formal（40 次运行） ===
+  r=  2 λ=0.05 seed=20261028 A_oracle(280)=0.8071 A_content(280)=0.0000 c0(2)=+0.0102 half=25.0 (65s)
+  r=  2 λ=0.05 seed=20261104 A_oracle(280)=0.8214 A_content(280)=0.0000 c0(2)=+0.0305 half=25.0 (50s)
+  r=  2 λ=0.05 seed=7 A_oracle(280)=0.8107 A_content(280)=0.0000 c0(2)=+0.0362 half=25.0 (50s)
+  r=  2 λ=0.05 seed=20261111 A_oracle(280)=0.8071 A_content(280)=0.0000 c0(2)=+0.0765 half=26.0 (50s)
+  r=  2 λ=0.05 seed=20261118 A_oracle(280)=0.7143 A_content(280)=0.0000 c0(2)=+0.0653 half=26.0 (50s)
+  r=  2 λ=0.50 seed=20261028 A_oracle(280)=0.7893 A_content(280)=0.0000 c0(2)=+0.0070 half=4.0 (50s)
+  r=  2 λ=0.50 seed=20261104 A_oracle(280)=0.7750 A_content(280)=0.0000 c0(2)=+0.0302 half=4.0 (50s)
+  r=  2 λ=0.50 seed=7 A_oracle(280)=0.8179 A_content(280)=0.0000 c0(2)=+0.0338 half=4.0 (50s)
+  r=  2 λ=0.50 seed=20261111 A_oracle(280)=0.8179 A_content(280)=0.0000 c0(2)=+0.0754 half=4.0 (50s)
+  r=  2 λ=0.50 seed=20261118 A_oracle(280)=0.7571 A_content(280)=0.0000 c0(2)=+0.0648 half=4.0 (50s)
+  r=  8 λ=0.05 seed=20261028 A_oracle(280)=0.9679 A_content(280)=0.0000 c0(2)=+0.1345 half=26.0 (49s)
+  r=  8 λ=0.05 seed=20261104 A_oracle(280)=0.9893 A_content(280)=0.0000 c0(2)=+0.0962 half=26.0 (46s)
+  r=  8 λ=0.05 seed=7 A_oracle(280)=0.9679 A_content(280)=0.0000 c0(2)=+0.0715 half=26.0 (46s)
+  r=  8 λ=0.05 seed=20261111 A_oracle(280)=0.9464 A_content(280)=0.0000 c0(2)=+0.1076 half=26.0 (46s)
+  r=  8 λ=0.05 seed=20261118 A_oracle(280)=0.9536 A_content(280)=0.0000 c0(2)=+0.0929 half=25.0 (46s)
+  r=  8 λ=0.50 seed=20261028 A_oracle(280)=0.9464 A_content(280)=0.0000 c0(2)=+0.1372 half=4.0 (46s)
+  r=  8 λ=0.50 seed=20261104 A_oracle(280)=0.9786 A_content(280)=0.0000 c0(2)=+0.0938 half=4.0 (48s)
+  r=  8 λ=0.50 seed=7 A_oracle(280)=0.9464 A_content(280)=0.0000 c0(2)=+0.0554 half=4.0 (48s)
+  r=  8 λ=0.50 seed=20261111 A_oracle(280)=0.9464 A_content(280)=0.0000 c0(2)=+0.1072 half=4.0 (50s)
+  r=  8 λ=0.50 seed=20261118 A_oracle(280)=0.9321 A_content(280)=0.0000 c0(2)=+0.0924 half=4.0 (50s)
+  r= 35 λ=0.05 seed=20261028 A_oracle(280)=1.0000 A_content(280)=0.0000 c0(2)=+0.2346 half=24.0 (51s)
+  r= 35 λ=0.05 seed=20261104 A_oracle(280)=1.0000 A_content(280)=0.0000 c0(2)=+0.2123 half=27.0 (51s)
+  r= 35 λ=0.05 seed=7 A_oracle(280)=1.0000 A_content(280)=0.0000 c0(2)=+0.1915 half=25.0 (51s)
+  r= 35 λ=0.05 seed=20261111 A_oracle(280)=1.0000 A_content(280)=0.0000 c0(2)=+0.1865 half=25.0 (51s)
+  r= 35 λ=0.05 seed=20261118 A_oracle(280)=1.0000 A_content(280)=0.0000 c0(2)=+0.1828 half=26.0 (48s)
+  r= 35 λ=0.50 seed=20261028 A_oracle(280)=0.9857 A_content(280)=0.0000 c0(2)=+0.2349 half=4.0 (47s)
+  r= 35 λ=0.50 seed=20261104 A_oracle(280)=0.9821 A_content(280)=0.0000 c0(2)=+0.2098 half=4.0 (47s)
+  r= 35 λ=0.50 seed=7 A_oracle(280)=0.9714 A_content(280)=0.0000 c0(2)=+0.1817 half=4.0 (48s)
+  r= 35 λ=0.50 seed=20261111 A_oracle(280)=0.9786 A_content(280)=0.0000 c0(2)=+0.1868 half=4.0 (49s)
+  r= 35 λ=0.50 seed=20261118 A_oracle(280)=0.9714 A_content(280)=0.0000 c0(2)=+0.1774 half=4.0 (50s)
+  r=896 λ=0.05 seed=20261028 A_oracle(280)=1.0000 A_content(280)=0.3321 c0(2)=+0.6186 half=12.0 (48s)
+  r=896 λ=0.05 seed=20261104 A_oracle(280)=1.0000 A_content(280)=0.3250 c0(2)=+0.6781 half=14.0 (48s)
+  r=896 λ=0.05 seed=7 A_oracle(280)=1.0000 A_content(280)=0.3107 c0(2)=+0.5882 half=11.0 (49s)
+  r=896 λ=0.05 seed=20261111 A_oracle(280)=1.0000 A_content(280)=0.3214 c0(2)=+0.6228 half=12.0 (50s)
+  r=896 λ=0.05 seed=20261118 A_oracle(280)=1.0000 A_content(280)=0.3250 c0(2)=+0.7127 half=13.0 (50s)
+  r=896 λ=0.50 seed=20261028 A_oracle(280)=1.0000 A_content(280)=0.0643 c0(2)=+0.6213 half=1.0 (59s)
+  r=896 λ=0.50 seed=20261104 A_oracle(280)=1.0000 A_content(280)=0.0750 c0(2)=+0.7126 half=2.0 (59s)
+  r=896 λ=0.50 seed=7 A_oracle(280)=1.0000 A_content(280)=0.0607 c0(2)=+0.6355 half=1.0 (58s)
+  r=896 λ=0.50 seed=20261111 A_oracle(280)=1.0000 A_content(280)=0.0643 c0(2)=+0.6714 half=1.0 (58s)
+  r=896 λ=0.50 seed=20261118 A_oracle(280)=1.0000 A_content(280)=0.0643 c0(2)=+0.7461 half=2.0 (54s)
+=== 判据（rev 1.0，阈值一字未改） ===
+  [PASS] a_amplitude_law: (a)-1 不删失：删失 0 个 [] | (a)-2 λ=0.05: w_half(r=2,8,35,896) 写步=[25.4, 25.8, 25.4, 12.4] | (a)-2 λ=0.5: w_half(r=2,8,35,896) 写步=[4.0, 4.0, 4.0, 1.4] | (a)-3 λ 比值 w_half(.05)/w_half(.5) = [6.35, 6.45, 6.35, 8.86]（要求全部 ∈[3,30]） | (a)-4 绝对常数不核（D-11 因子化步因子依赖 ‖U‖,‖V‖）
+  [PASS] b_oracle_rank: A_oracle(r=2,N=280)=0.7921 ≤ A_oracle(r=896,N=280)=1.0000 − 0.10 ⇒ 差 +0.2079（阈值 ≥0.10）；N* 描述性：{"(2, 0.05, 'content')": 2, "(2, 0.05, 'oracle')": 2, "(8, 0.05, 'content')": 2, "(8, 0.05, 'oracle')": None, "(35, 0.05, 'content')": 2, "(35, 0.05, 'oracle')": None, "(896, 0.05, 'content')": 70, "(896, 0.05, 'oracle')": None, "(2, 0.5, 'content')": 2, "(2, 0.5, 'oracle')": 2, "(8, 0.5, 'content')": 2, "(8, 0.5, 'oracle')": None, "(35, 0.5, 'content')": 2, "(35, 0.5, 'oracle')": None, "(896, 0.5, 'content')": 8, "(896, 0.5, 'oracle')": None}
+  [FAIL] c_decay_axis: N=8：内容通道 A(λ=.05)=1.0000 − A(λ=.5)=0.8500 = +0.1500（阈值 ≥0.30）；求解读 |1.0000 − 1.0000| = 0.0000（阈值 ≤0.10）
+  [PASS] d_bottleneck_swap: r=896,N=280：A_content=0.3229 ≤ A_oracle=1.0000 − 0.20 ⇒ 差 +0.6771（阈值 ≥0.20）
+  [----] e_replay_report: 报告项：见 rows 的 replay 列（本轮不判）
+  ⇒ 主判据 (a)∧(b)∧(c)∧(d) = False
+
+→ /home/ec2-user/sgmn-loop/dir25/out/DIR25r10_formal.json  (2016.6s)

@@ -1,0 +1,45 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-17 R1：可寻址读取 + 读侧训练 ⇒ 记忆内容能否产生任务收益？ ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:55,  5.18it/s]Loading weights:  60%|█████▉    | 173/290 [00:00<00:00, 732.16it/s]Loading weights:  94%|█████████▍| 274/290 [00:00<00:00, 783.92it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 679.00it/s]
+
+[Stage A]
+[PASS] A1' Freeze C（读梯度非零 / 写梯度精确 0 / 基座逐位不变 / 阴性对照泄漏）: 读梯度非零 6/9；写梯度精确0 12/12；基座逐位不变 True；阴性对照泄漏 3/12
+[PASS] A1' 句柄数 = 2×层数: handles=6 mems=3
+/home/ec2-user/sgmn-loop/dir17/R1_train.py:190: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  traj.append((float(loss), gnorm))
+[FAIL] A2' 训练生效性：Wo/gamma 改变且 gamma 梯度非零；cue 模式下 Wq 梯度恒 0 且不变: Δmax|Wo|=0.002612；Δmax|gamma|=0.002612；‖g_gamma‖=0；‖g_Wq‖=0；Δ|Wq|=0
+[FAIL] A2' ③ ctx 模式下 Wq 梯度非零（否则 E3 不可训）: ‖g_Wq(ctx)‖=0
+[PASS] A2' ④ 读阶段冻结写 ⇒ 记忆状态逐位不变: equal=True
+[FAIL] A2' ⑤ 跨方向对照探针：未训练的 cue 臂命中 = 1.0（复现 DIR-16 的 C1）: hit=0.1667（DIR-16 的 C1 = 1.0000）
+[PASS] A4' 训练不发散（损失有限、max|Wo| 有限、gamma 有限）: loss 首/末 = 1.3237/2.2253；max|Wo|=0.1674；gamma 终值=[0.0526, 0.0474, 0.0526]
+
+[主循环]
+  seed=20261028 E1_cue_train     lp=-1.7496 hit=0.1250
+  seed=20261028 E2_misaddr_train lp=-1.7502 hit=0.0000
+  seed=20261028 E3_ctx_train     lp=-1.7595 hit=0.0000
+  seed=20261028 E4_cue_notrain   lp=-1.9923 hit=0.1250
+  seed=20261028 E5_base          lp=-2.0146 hit=nan
+  seed=20261104 E1_cue_train     lp=-1.7808 hit=0.1250
+  seed=20261104 E2_misaddr_train lp=-1.7843 hit=0.0000
+  seed=20261104 E3_ctx_train     lp=-1.7899 hit=0.0000
+  seed=20261104 E4_cue_notrain   lp=-1.9099 hit=0.1250
+  seed=20261104 E5_base          lp=-1.9148 hit=nan
+
+[汇总与判据]
+  E1_cue_train     lp=-1.7652 hit=0.125
+  E2_misaddr_train lp=-1.7673 hit=0.0
+  E3_ctx_train     lp=-1.7747 hit=0.0
+  E4_cue_notrain   lp=-1.9511 hit=0.125
+  E5_base          lp=-1.9647 hit=None
+[FAIL] H1 〔训练有效〕E1 显著优于 E4（未训练）: Δ(Δlp)=-0.185945 t=-1.39 p=0.5 pos=0/2 逐种子=['-0.2427', '-0.1292']
+[FAIL] H2 〔★ 内容贡献〕E1 显著优于 E2（同装置同训练，内容对 vs 内容错）: Δ(Δlp)=-0.002087 t=-1.19 p=0.5 pos=0/2 逐种子=['-0.0007', '-0.0035']
+[FAIL] H3 〔★ 可寻址性的价值〕E1 显著优于 E3（可寻址 vs 现状读取，同训练）: Δ(Δlp)=-0.009551 t=-1.46 p=0.5 pos=0/2 逐种子=['-0.0100', '-0.0091']
+[FAIL] H4 〔绝对收益〕E1 显著优于 base: Δ(Δlp)=-0.199560 t=-1.38 p=0.5 pos=0/2 逐种子=['-0.2651', '-0.1341']
+  [H5 报告] E2_misaddr_train − base Δlp=-0.197473 p=0.5 逐种子=['-0.2644', '-0.1306']
+  [H5 报告] E3_ctx_train     − base Δlp=-0.190009 p=0.5 逐种子=['-0.2551', '-0.1249']
+  [H5 报告] E4_cue_notrain   − base Δlp=-0.013616 p=0.5 逐种子=['-0.0224', '-0.0049']
+
+=== 判据通过 4/11 ===
+写出 /home/ec2-user/sgmn-loop/R1_smoke_results.json

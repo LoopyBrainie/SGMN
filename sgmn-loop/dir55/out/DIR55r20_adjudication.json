@@ -1,0 +1,43 @@
+{
+ "dir": "DIR-55",
+ "card": "rev2.0",
+ "gate": "median",
+ "prefix": "DIR55r20",
+ "readings": {
+  "a": {
+   "n_seeds": 96,
+   "M8_mean": -0.13707748315713414,
+   "M8_sd": 0.38448340659079333,
+   "M8_3se": 0.11772352008931031,
+   "cbar_after": [
+    0.3200028088934028,
+    0.47069369944377987
+   ]
+  },
+  "b": {
+   "n_cells": 192,
+   "P_one_survivor": 0.6979166666666666,
+   "n_unique": 134,
+   "n_recency": 134,
+   "P_recency": 1.0
+  },
+  "c": {
+   "P_dir": 1.0,
+   "P_nat": 0.16666666666666666,
+   "D_c": 0.8333333333333334
+  },
+  "validity": {
+   "n_seeds": 96,
+   "n2_diag_min": 0.891924931288172,
+   "n2_off_max": 0.4521834991976049,
+   "n2_diag_median": 0.9941982813181229,
+   "n2_off_median": 0.10752761807010143
+  },
+  "stage_a_all_ok": true
+ },
+ "decision": {
+  "row": "PERSONA-SET-NOT-CONSERVED",
+  "reason": "三段全部成立",
+  "counted": true
+ }
+}

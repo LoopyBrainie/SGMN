@@ -1,0 +1,24 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  SH1/oracle   L=29.842364 cos=1.0000 Wmax=1.9292 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+/home/ec2-user/sgmn-loop/dir40/R1_task40.py:118: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  q_fp = q_fp + float(q.sum())
+  SH1/rand     L=40.387687 cos=0.1254 Wmax=1.9292 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  SH1/learned  L=41.534875 cos=0.0869 Wmax=1.9292 c_eq_h=0.0e+00 |Wq-init|=9.462e-01
+  SH2/oracle   L=29.241917 cos=1.0000 Wmax=1.7441 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  SH2/rand     L=36.577034 cos=0.1712 Wmax=1.7441 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  SH2/learned  L=36.463342 cos=0.1526 Wmax=1.7441 c_eq_h=0.0e+00 |Wq-init|=9.582e-01
+  SH3/oracle   L=29.755375 cos=1.0000 Wmax=1.9301 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  SH3/rand     L=43.316399 cos=-0.0656 Wmax=1.9301 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  SH3/learned  L=44.294645 cos=-0.1239 Wmax=1.9301 c_eq_h=0.0e+00 |Wq-init|=9.540e-01
+  SH4/oracle   L=29.866834 cos=1.0000 Wmax=1.8771 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  SH4/rand     L=33.579722 cos=0.0064 Wmax=1.8771 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  SH4/learned  L=33.410591 cos=0.0602 Wmax=1.8771 c_eq_h=0.0e+00 |Wq-init|=9.301e-01
+  SH5/oracle   L=29.574693 cos=1.0000 Wmax=1.7832 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  SH5/rand     L=37.674213 cos=0.0452 Wmax=1.7832 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  SH5/learned  L=38.237029 cos=0.0669 Wmax=1.7832 c_eq_h=0.0e+00 |Wq-init|=9.755e-01
+  PI/oracle   L=29.588715 cos=1.0000 Wmax=1.8862 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  PI/rand     L=35.459117 cos=-0.0636 Wmax=1.8862 c_eq_h=0.0e+00 |Wq-init|=0.000e+00
+  PI/learned  L=36.386709 cos=-0.0646 Wmax=1.8862 c_eq_h=0.0e+00 |Wq-init|=9.454e-01
+smoke 完成（**无判据裁决**）

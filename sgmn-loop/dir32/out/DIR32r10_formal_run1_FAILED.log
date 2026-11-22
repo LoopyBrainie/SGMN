@@ -1,0 +1,22 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir32/R1_task32.py:276: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  rows[n].append({"cos": float((Wn @ k * v).sum() / (Wn @ k).norm() / v.norm()),
+P1 rank-2 上界 +0.6508（阈 0.5）  P2 未训练实际检索 +0.0150（阈 >0.2）
+  device G0 L*  18.40478  (38s)
+  device N  L*  18.30076  (36s)
+  device S  L*  16.89747  (40s)
+  device T  L*  16.95377  (36s)
+  ⇒ L*(G0) 18.4048 · Δchan +0.10401 · Δrand +1.40330 · **Δcontent -0.05631** (sd 2.80302, 3se 1.71649, 阈 0.92024) ⇒ INFEASIBLE-POWER
+Traceback (most recent call last):
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir32/R1_task32.py", line 323, in <module>
+    phi = train_arm(addr, arm, learned=learned)
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir32/R1_task32.py", line 128, in train_arm
+    opt = torch.optim.Adam(list(phi.values()), lr=lr)
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/optim/adam.py", line 102, in __init__
+    super().__init__(params, defaults)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/optim/optimizer.py", line 419, in __init__
+    raise ValueError("optimizer got an empty parameter list")
+ValueError: optimizer got an empty parameter list

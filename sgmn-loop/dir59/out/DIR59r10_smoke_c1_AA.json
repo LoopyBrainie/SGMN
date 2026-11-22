@@ -1,0 +1,9 @@
+{
+ "smoke": true,
+ "arm": "AA",
+ "mean_L": 39.09818507999501,
+ "n_eval": 5,
+ "steps": 4,
+ "n_train": 3,
+ "card_md5": "339ddd7545d96f6398c9d17f9cd59270"
+}

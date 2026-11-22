@@ -1,0 +1,33 @@
+REP target γ=3 warm  u*=3.799663/ 0.996549  ‖W1‖=5.373535e+00  ΔW=1.41e-12  warmup 2083 步 res=1.0e-15  ‖Δ‖=1.0e-03
+RHO target γ=3 ρ_λ^warm=1.000000  λ(1.05)=1.100001 λ(1.10)=1.200001  dλ/dρ=1.0000
+/home/ec2-user/sgmn-loop/dir72/step72.py:27: RuntimeWarning: overflow encountered in matmul
+  U1 = U1 - eta * (G1 @ V1); V1 = V1 - eta * (G1.T @ U1)
+/home/ec2-user/sgmn-loop/dir72/step72.py:27: RuntimeWarning: invalid value encountered in matmul
+  U1 = U1 - eta * (G1 @ V1); V1 = V1 - eta * (G1.T @ U1)
+/home/ec2-user/sgmn-loop/dir72/step72.py:31: RuntimeWarning: overflow encountered in matmul
+  G2 = (W2 @ C2 - B2) + LAM * W2
+/home/ec2-user/sgmn-loop/dir72/step72.py:32: RuntimeWarning: invalid value encountered in matmul
+  U2 = U2 - eta * (G2 @ V2); V2 = V2 - eta * (G2.T @ U2)
+/home/ec2-user/sgmn-loop/dir72/step72.py:26: RuntimeWarning: invalid value encountered in matmul
+  G1 = (W1 @ C1 - B1) + LAM * W1
+/home/ec2-user/sgmn-loop/dir72/step72.py:28: RuntimeWarning: invalid value encountered in matmul
+  k2 = [W1 @ k for k in kin]
+/home/ec2-user/sgmn-loop/dir72/step72.py:31: RuntimeWarning: invalid value encountered in matmul
+  G2 = (W2 @ C2 - B2) + LAM * W2
+  [near target γ=3] 端检 lo=0.0196914 div=False / hi=0.0984568 div=True
+   试 η=0.0440312 div=False
+/home/ec2-user/sgmn-loop/dir72/step72.py:32: RuntimeWarning: overflow encountered in matmul
+  U2 = U2 - eta * (G2 @ V2); V2 = V2 - eta * (G2.T @ U2)
+/home/ec2-user/sgmn-loop/dir72/step72.py:17: RuntimeWarning: overflow encountered in matmul
+  W1 = U1 @ V1.T; W2 = U2 @ V2.T
+/home/ec2-user/sgmn-loop/dir72/step72.py:17: RuntimeWarning: invalid value encountered in matmul
+  W1 = U1 @ V1.T; W2 = U2 @ V2.T
+/opt/pytorch/lib64/python3.13/site-packages/numpy/_core/numeric.py:995: RuntimeWarning: overflow encountered in multiply
+  return multiply(a.ravel()[:, newaxis], b.ravel()[newaxis, :], out)
+   试 η=0.0658421 div=True
+   试 η=0.0538434 div=False
+   试 η=0.0595412 div=False
+   试 η=0.0626124 div=False
+   试 η=0.0642069 div=False
+   试 η=0.0650194 div=False
+DONE warm target γ=3 ρ_div=0.9968 [0.9906,1.0031]·η*_lin n_eval=9 ok=True | ρ_λ=1.0000 | 相对差=-0.32%

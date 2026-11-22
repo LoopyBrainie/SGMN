@@ -1,0 +1,17 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:07,  4.29it/s]Loading weights:  72%|███████▏  | 208/290 [00:00<00:00, 779.53it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 672.65it/s]
+[setup] facts=32 chunks=600 tr=16 he=16 arms=['wq_train', 'wq_solved', 'wq_solved_init', 'wq_oracle', 'wq_oracle_id']
+  ✓ A99-9a     Δ(3/4,1/4)=0.5
+  ✓ A99-9b     Δ(2/4,2/4)=0
+  ✓ A99-9c     W_or 解算：max|W_or·K−V| = 0.00e+00 (<1e-6)，shape=(2, 2)
+  ✓ A100-9a    ridge 精确解：shape=(2, 2)（应 (d,d_k)=(2,2)）· max|C·A−K|=0.00e+00
+  ✓ A100-9b    逐行余弦：shape=(2,)（应 (2,)）· cos=[1.0, 1.0]
+  ✓ A100-9c    同向目标：cos=[1.0, 1.0] ⇒ cos 不承担判别（判据只有 acc）
+  ✓ A100-9d    Wq=Aᵀ 约定：max|(Wq·cᵀ)ᵀ−K|=0.00e+00
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir100/R1_task100.py:343: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+[20261028 wq_oracle_id] d_tr=+0.5000 d_ho=+0.0000 | acc_tr w=0.8125 W0=0.3125 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.1250 | maxcos=0.0000 dWrel=0.0e+00 103.5s
+[7777 wq_oracle_id] d_tr=+0.4375 d_ho=-0.0625 | acc_tr w=0.9375 W0=0.5000 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0625 z=0.1250 or=0.1250 | maxcos=0.0000 dWrel=0.0e+00 103.9s
+[完成

@@ -1,0 +1,38 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:12,  4.01it/s]Loading weights:  76%|███████▌  | 219/290 [00:00<00:00, 793.95it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 694.81it/s]
+[值污染] 池 27 词 / 32 事实 ⇒ 去重后仅 27 个不同值
+  重复值 = {'olive': [10, 29], 'rust': [2, 15], 'violet': [0, 14], 'amber': [24, 31], 'teal': [3, 12]}
+  留出键中「值已在训练键出现」= [14]（1/16）
+  A91-7 只查池唯一性 = True
+
+[终层 norm g] 均值=7.1393 标准差=1.1043 范围=[-0.0114, 16.7500]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/probe91_align2.py:103: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  ANAL[li][ki] = ((m.Pv.detach() @ (W @ q)) * float(m.gamma))
+
+ L8: ||h||=13.1 ||Δ||/||h||=0.0489  (同 q 的 tie 臂 0.3112)
+   实测 vs 解析 rel.err 最大 = 1.08e+00
+   旧口径 cos(Δ, e_ans)          = -0.0051
+   ★修正 cos(Δ, g⊙e_ans)        = -0.0030
+   ★修正 cos(Δ_⊥h, g⊙e_ans)     = -0.0035
+   ★配对边际 m(Δ_⊥h)            = -0.0002  零分布 +0.0007±0.0016  z=-0.62
+   仅未见值 (n=15) 边际     = -0.0019598595332354306
+
+ L12: ||h||=14.2 ||Δ||/||h||=0.0520  (同 q 的 tie 臂 0.2504)
+   实测 vs 解析 rel.err 最大 = 1.08e+00
+   旧口径 cos(Δ, e_ans)          = +0.0092
+   ★修正 cos(Δ, g⊙e_ans)        = +0.0013
+   ★修正 cos(Δ_⊥h, g⊙e_ans)     = +0.0018
+   ★配对边际 m(Δ_⊥h)            = +0.0007  零分布 -0.0012±0.0019  z=+0.98
+   仅未见值 (n=15) 边际     = 0.0005332472409160497
+
+ L16: ||h||=21.3 ||Δ||/||h||=0.0544  (同 q 的 tie 臂 0.2014)
+   实测 vs 解析 rel.err 最大 = 1.09e+00
+   旧口径 cos(Δ, e_ans)          = -0.0030
+   ★修正 cos(Δ, g⊙e_ans)        = -0.0026
+   ★修正 cos(Δ_⊥h, g⊙e_ans)     = -0.0028
+   ★配对边际 m(Δ_⊥h)            = +0.0009  零分布 +0.0019±0.0020  z=-0.53
+   仅未见值 (n=15) 边际     = 0.0010477911089158928
+
+★ 诊断完成（不产生裁决）

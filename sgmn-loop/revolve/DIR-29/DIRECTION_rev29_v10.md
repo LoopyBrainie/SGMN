@@ -1,0 +1,127 @@
+# DIRECTION rev 1.0（**冻结**）· DIR-29 —— 因子化 × 跨层耦合：**切线空间 Lyapunov 估计量 + 恢复加性噪声**（DIR-28 的第二版装置）
+
+- **方向出处（非自造）**：`framework/SGMN_v2.4_架构设计.md` §7.2「稳定性推广」行的「**跨层耦合稳定**」+ §6.2「整机动力学：尚未闭合（跨层反馈…）」+ §8「跨层耦合必须分别证明」。与 DIR-28 同一个开放格（**因子化 × 耦合**，D-09 边界行点名未测）；DIR-28（D-52）判 `MECHANISM-NOT-REALIZED` 的原因是**估计量与装置两个极端互相排斥**：$v\equiv0$ 时耦合自衰、带噪声时端点幅值比测瞬态。**本卡是同一方向的第二版装置**：动力学公式逐字沿用 DIR-28（v2.4 §3.1 的局部目标与梯度），**只换测量层（切线空间 Lyapunov 指数）并恢复外生噪声 $v\neq0$**。
+- **谱系**：脚本派生自 `dir28/R1_couple.py`（md5 `dc64a1921e4f6645299357f06a2cc382`）；改动仅限：① 噪声流（`v≡0` → 三路 iid 高斯）② 判据量（端点幅值比 → 雅可比 QR 累加）③ 相应早停/锚点。装置常数（$\mu,\lambda,\sigma_0,d,r,\alpha$、耦合形式 $k_2=a(1+\gamma W_1)$、同步更新）**逐字不动**。
+- **动机（D-52 §3 的机制结论）**：$v\equiv0$ 使 $W_1$ 在稳定侧指数衰减 ⇒ $k_2\to a$、耦合自衰；恢复噪声后 $W_1$ 被噪声撑在平稳涨落上 ⇒ **耦合持续存在**；切线 Lyapunov 指数沿实际轨迹累加 $\log|\partial x_{t+1}/\partial x_t|$，**既不带瞬态污染（DEF-28-10 的对立面）、也不删除耦合（DEF-28-10 本身的对立面）**。
+- **状态**：**rev 1.0** 冻结于 2026-11-11。此后任何阈值/文字修改只能新开 revision，旧版留档。
+
+## §1 假设与判据（全部数值**冻结**）
+
+### §1.1 主假设
+
+- **H29（方向性不等式）**：在**带加性噪声**的最小两层实例中，键通道耦合 $\gamma{=}0.5$ 对**稳定性门槛**的削弱，因子化臂**显著大于**全矩阵臂：
+$$\mathcal R^{\rm tan}_{\rm fac}(0.5)\ \le\ \mathcal R^{\rm tan}_{\rm full}(0.5)-0.10,\qquad
+  \mathcal R^{\rm tan}_{\rm arm}(\gamma)\equiv\frac{\eta_c^{\rm tan,arm}(\gamma)}{\eta_c^{\rm tan,arm}(0)}$$
+  其中 $\eta_c^{\rm tan,arm}(\gamma)$ 是该臂**最大切线 Lyapunov 指数**过零的 $\eta$（定义见 §3.4）。
+- **证伪条款**：若 $\mathcal R^{\rm tan}_{\rm fac}(0.5) > \mathcal R^{\rm tan}_{\rm full}(0.5)-0.10$（含 $\mathcal R_{\rm fac}>\mathcal R_{\rm full}$ 的反向序）且前置 1、2 全过 ⇒ **H29 被否证**（方向关闭、不计数）。
+- **两个计数前置（不过 ⇒ `MECHANISM-NOT-REALIZED`，不写 H29 真假）**：
+  - **P1（操纵检查，纪律 58）**：在**临界点下方** $\eta_{\rm ref}\equiv0.25\,\eta_c^{\rm one}$（$\eta_c^{\rm one}$ 见 §3.4，**不是**被判据自身的临界点）处，全矩阵臂第 2 块指数的耦合位移
+    $\bigl|\hat\lambda^{\rm full}_2(\eta_{\rm ref},0.5)-\hat\lambda^{\rm full}_2(\eta_{\rm ref},0)\bigr|\ \ge\ 0.02$（nats/step）。
+    机制含义：噪声撑住的 $W_1$ 涨落确实经 $k_2=a(1+\gamma W_1)$ 传到第 2 块。**在 $\eta_c$ 处测是 DEF-28-19 的退化重演，禁止。**
+  - **P2（对比地板，同 D-52 T10 语义）**：$\bigl|\mathcal R^{\rm tan}_{\rm full}(0.5)-1\bigr|\ \ge\ 0.10$ —— 全矩阵臂自身的耦合效应必须大到可分辨，比较才有支点。
+
+### §1.2 判定表（机械执行）
+
+| 前置 1 | 前置 2 | H29 不等式 | 判定 | SUCCEEDED |
+|---|---|---|---|---|
+| PASS | PASS | 成立 | **COMPLETE / SUCCEEDED** | **24/24** |
+| PASS | PASS | 不成立（含反向序） | **COMPLETE / FALSIFIED** | 23/23 |
+| 任一 FAIL | — | （不判） | **COMPLETE / `MECHANISM-NOT-REALIZED`** | 23/23 |
+
+「判据从未计算」是独立状态，不记 PASS/FAIL；逐列早停的列按 $t_{\rm dead}$ 归一后**全部**进中位数（同 DEF-28-16，其无偏性由 Stage A 工作例背书）。
+
+## §2 与 DIR-28 的差异表（改动仅限此表）
+
+| 项 | DIR-28（D-52） | DIR-29（本卡） |
+|---|---|---|
+| 外生噪声 | $v^{(1)}\equiv v^{(2)}\equiv0$（DEF-28-10） | **$v^{(l)}_t=b^{(l)}_t\sim\mathcal N(0,\mu)$ iid**（三路独立流 $a,b^{(1)},b^{(2)}$；同一 rng 约定：第 $j$ 列=第 $j$ 个种子） |
+| 判据量 | 端点幅值比 $\frac1T\log|W_T/W_0|$ | **切线 Lyapunov 指数**：沿实际轨迹累加 $\log|\partial x_{t+1}/\partial x_t|$（§3.3） |
+| 早停 | 同左 | 沿用（$RS$ 按形式分档，§6） |
+| 装置其余全部（实例、耦合、同步更新、初始化、$\gamma$ 集、网格、列数、主 init） | — | **逐字不动** |
+
+## §3 装置（公式逐字取自 v2.4 §3.1 的局部目标与梯度，同 DIR-28 §3）
+
+### §3.1 实例（与 DIR-28 相同的最小两层 $M_2^r$）
+
+全标量 $d_k{=}d_v{=}1$、$r{=}1$、$\alpha\equiv1$、$\lambda{=}0.05$、$\mu{=}5$、$W^0=1$。
+$k_1=a_t$；**耦合只走键通道**：$k_2=a_t(1+\gamma W_{1,t})$（无回边；$\gamma\in\{0,0.5,1,2\}$，确认格 $\gamma{=}0.5$）。
+$G_l=(W_lk_l-v_l)k_l+\lambda W_l$；全矩阵 $W_l\leftarrow W_l-\eta G_l$；
+因子化（**同步**：$G$ 用旧 $U,V$）$U_l\leftarrow U_l-\eta G_lV_l,\;V_l\leftarrow V_l-\eta G_l^{\top}U_l$，$W_l=U_lV_l^{\top}$。
+
+### §3.2 噪声（本卡唯一的动力学改动）
+
+$a_t,b^{(1)}_t,b^{(2)}_t$ 三路 iid $\mathcal N(0,\mu)$，独立；`default_rng(20261111).normal(0,√μ,(3,T,S))` 一次性抽出（列=种子约定）。目标点仍为 $W^*{=}0$（$\mathbb E G_l=0$），对称噪声。
+**为什么可以恢复噪声**：DEF-28-10 删噪声是为了救端点幅值比（它测瞬态）；切线指数**只依赖雅可比、不依赖状态幅值**，瞬态与噪声底都不进入 ⇒ 噪声不再需要被删除。
+
+### §3.3 切线系统与 Lyapunov 指数（测量对象，**逐式冻结**）
+
+- **全矩阵臂**（状态 $(W_1,W_2)$）：一步映射的雅可比**下三角**（$\partial W_1^+/\partial W_2=0$）：
+  $J_{11}=1-\eta(a^2+\lambda)$，$J_{22}=1-\eta(k_2^2+\lambda)$，$J_{21}=-\eta\,\partial_{W_1}\big[(W_2k_2-v_2)k_2\big]=-\eta\big(2\gamma a k_2 W_2-\gamma a\,v_2\big)$。
+  三角上三角 cocycle 的指数谱 = 对角块指数谱之并 ⇒ **本臂无需 QR**：
+  $$\hat\lambda^{\rm full}_1=\tfrac1T\textstyle\sum_t\log|J_{11,t}|,\qquad
+    \hat\lambda^{\rm full}_2=\tfrac1T\textstyle\sum_t\log|J_{22,t}|,\qquad
+    \hat\lambda^{\rm full}_{\rm top}=\max(\hat\lambda^{\rm full}_1,\hat\lambda^{\rm full}_2)$$
+- **因子化臂**（状态 $(u_1,v_1,u_2,v_2)$，$W_l=u_lv_l$）：块下三角（块 1 $=(u_1,v_1)$ 自闭合；块 2 $=(u_2,v_2)$ 只经 $k_2$ 依赖块 1）。对 $G=(uva-b)a+\lambda uv$（略写下标）：
+  $\partial_uG=vA,\ \partial_vG=uA$，$A\equiv a^2+\lambda$。块雅可比
+  $$J=\begin{pmatrix}1-\eta v^2A & -\eta(uvA+G)\\ -\eta(uvA+G) & 1-\eta u^2A\end{pmatrix}$$
+  每步对两块各做一次 QR（$Q\leftarrow{\rm qr}(J_tQ).\!Q$，$\text{acc}_i+=\log|R_{ii}|$），$\hat\lambda_{i}=\text{acc}_i/T$；臂顶指数 $\hat\lambda^{\rm fac}_{\rm top}=\max(\hat\lambda^{(1)}_1,\hat\lambda^{(1)}_2,\hat\lambda^{(2)}_1,\hat\lambda^{(2)}_2)$。
+- **arm "one"**（$W_1$ 单层，锚定臂）：$\hat\lambda^{\rm one}=\frac1T\sum_t\log|1-\eta(a^2+\lambda)|$ —— **与噪声无关**（雅可比不含 $b$），且等于 DIR-28 的判据对象 ⇒ 跨装置锚点（§5 A29-3）。
+- **早停列处理**：列死（见 §6）后**冻结该列的雅可比累加**，$\hat\lambda$ 用实际步数 $t_{\rm dead}$ 除；死列不进中位数。
+
+### §3.4 门槛与比率
+
+- $\eta_c^{\rm tan,arm}(\gamma)$：在 40 点对数网格 $\eta\in[10^{-3},1.2]$ 上算 $\mathrm{median}_{\text{活列}}\hat\lambda^{\rm arm}_{\rm top}(\eta)$，取首个 $+\to-$ 区间，6 次算术二分 ⇒ 分辨率 $\approx1.8\%/64\approx0.03\%$（远优于需要的 $8\%$ 对比分辨率）。
+- $\eta_c^{\rm one}$：arm one 同法（其 $\hat\lambda$ 与 $\gamma$ 无关，$\eta_c^{\rm one}$ 亦然）⇒ P1 的 $\eta_{\rm ref}=0.25\,\eta_c^{\rm one}$ 是良定义的**单一**数。
+- **预期锚**：$\eta_c^{\rm one}=\eta_c^{\rm full}(0)=$ DIR-28 锚 $0.49091$（解析：$\mathbb E\log|1-\eta(a^2+\lambda)|=0$ 的根；$\gamma{=}0$ 时 $k_2\equiv a$，两块同分布）。**若 smoke 复现不到 $\pm3\%$ ⇒ 装置或实现有错，停止。**
+
+## §4 测量对象的工作例（冻结，Stage A 逐位复核）
+
+取 $(u,v,a,b,\eta,\gamma)=(1,1,2,0.5,0.3,0.5)$（因子化块 1；$\lambda=0.05$）：
+$A=a^2+\lambda=4.05$，$W=uv=1$，$G=(W a-b)a+\lambda W=(2-0.5)\cdot2+0.05=3.05$，
+$J_{11}=1-\eta v^2A=1-0.3\cdot4.05=-0.215$，$J_{22}=1-\eta u^2A=-0.215$，$J_{12}=J_{21}=-\eta(uvA+G)=-0.3\cdot(4.05+3.05)=-2.13$，
+$\det J=(-0.215)^2-2.13^2=-4.490725$。
+Stage A 断言代码的 `jacobian_fac` 在该点**逐位**返回此四数（容差 $10^{-12}$）。
+
+## §5 Stage A 断言（**任一 FAIL ⇒ 阻断正式轮**）
+
+| # | 断言 | 容差/形式 |
+|---|---|---|
+| A29-1 | 工作例 §4 逐位 | $\lvert\cdot\rvert\le10^{-12}$ |
+| A29-2 | **雅可比有限差分**：`step_fac`/`step_full` 在 3 个随机状态 $\times$ $(\eta,\gamma)\in\{0.1,0.3,0.9\}\times\{0,0.5,2\}$ 处，解析 $J$ vs 中心差分（$h{=}10^{-6}$） | 相对 $\le10^{-5}$ |
+| A29-3 | **跨装置锚**：$\eta_c^{\rm full}(\gamma{=}0)\in[0.48091,\,0.50091]$（$0.49091\pm0.01$；$T{=}2\times10^4$ 快二分） | 区间 |
+| A29-4 | **三角分解**：全臂 $2\times2$ 完整 QR 顶指数 == $\max(\hat\lambda_1,\hat\lambda_2)$；fac $4\times4$ 完整 QR == 两块 QR 之并（$\gamma{=}0.5,\eta{=}0.3,T{=}3000$） | $\le0.02$ |
+| A29-5 | **噪声确实在场**：$\eta{=}0.1,T{=}2\times10^4$，arm one 含噪 run 的 $\mathrm{median}|W_T|$ > $10\times$ 无噪 run（$b\equiv0$，衰减向 0） | $>10\times$ |
+| A29-6 | 确定性：同参数两次运行 $\hat\lambda$ 前 12 位相同 | 逐位 |
+| A29-7 | 列=种子可复算：第 $j$ 列单跑 == 全阵第 $j$ 列 | 逐位 |
+
+## §5.5 规模与成本
+
+$T{=}10^4$/种子（指数估计的列内 se $\approx\mathrm{sd}(\log|J|)/\sqrt{T}\approx0.01$；中位数 over 64 列再除 $\sqrt{64}$ ⇒ $\mathrm{se}_{\rm med}\approx0.002\ll0.02$ 的 P1 分辨率与 $0.03\%$ 的门槛分辨率）、$S{=}64$ 列、网格 40 点、二分 6 次。
+成本估计：arm one / full 各格 $\approx$ DIR-28 同量级（秒级）；fac 每步 2 次分块 QR ⇒ 每（臂,γ）≈ 30–60 s；全正式轮（3 臂 × 4 γ + σ0 扫描 2 格 + init-B 抽查）**预算 20 min**（trainer CPU）。
+
+## §6 坑表（本轮新加；沿用 DIR-28 的教训）
+
+| # | 坑 | 对策 |
+|---|---|---|
+| 1 | **三角结构不能靠"感觉"**：若实现把 $J_{21}$ 也算进 QR 或漏掉块间耦合，指数会错 | A29-2/A29-4 双保险；full 臂不用 QR（对角时间平均**是**指数，A29-4 验证此声明） |
+| 2 | QR 的符号约定：$\log|R_{ii}|$ 与 $Q$ 的正交规范化必须每步做，否则向量共线 ⇒ 第二个指数估不准 | 标准 Gram–Schmidt QR；A29-4 用完整 QR 对照 |
+| 3 | **早停阈值沿用 DEF-28-17/18 的分档**：$RS_{\rm W}{=}10^{250}$（full/one）、$RS_{\rm fac}{=}10^{150}$（递推含 $u^2,v^2$）；NaN/inf 即判死 + 有限哨兵 | 同 DIR-28 最终实现 |
+| 4 | 死列的 $\hat\lambda$ 必须**冻结累加**并按 $t_{\rm dead}$ 归一（否则长寿列与早停列混除） | 逐列 $t_{\rm dead}$，同 DEF-28-16 |
+| 5 | $\log|x|$ 的 $x=0$：$J$ 的元可精确过零（测度零但浮点会碰到） | $\log\max(|x|,10^{-300})$ |
+| 6 | P1 放在 $\eta_{\rm ref}{=}0.25\eta_c^{\rm one}$（**不是** $\eta_c$，DEF-28-19/纪律 58） | 判据文字已锁 |
+| 7 | fac 的 $u^2,v^2$ 敏感（DEF-28-20）⇒ **门槛不是数而是 $(\sigma_0)$ 的函数**：主判据只用主 init $\sigma_0{=}1$（init-A），$\sigma_0\in\{0.5,2\}$ 与 init-B 只作**报告格** | 卡 §7 边界 4 |
+| 8 | $b$ 的流不能与 $a$ 相关（否则会引入 DIR-28 没有的相关结构） | 三路同一 rng 独立切片，Stage A 断言 $\widehat{\mathrm{corr}}(a,b)<0.05$（$T{\cdot}S$ 池） |
+
+## §7 证据边界（不得外推）
+
+1. 不得外推到：值通道耦合 · 回边 · $r>1$ · 时序/AR(1) 输入 · 真实模型（同 DIR-28 §7）。
+2. 不得说"切线指数取代幅值比"作为一般结论——本卡只在**线性-乘性 + 加性噪声**的装置族内比较两臂；两者各测不同的东西（D-52 的幅值比测瞬态，本卡测局部指数率）。
+3. **不得把 DIR-28 的读数（0.5067/0.9320）当作本卡的判据或先验**（task.md 纪律；两装置噪声不同，$\eta_c$ 不可比，只有 $\eta_c^{\rm one}$ 锚共享）。
+4. $\sigma_0$ 扫描格只报告"门槛随初始化尺度变化"这一**定性函数关系**，不得外推到具体数值。
+5. 若 H29 成立，表述必须是「**在本最小实例中**、键通道耦合、γ=0.5、init-A 下，耦合对因子化臂稳定性门槛的削弱 ≥ 全矩阵臂 + 0.10」；不得写成对 D-07/D-09 的复现或补强。
+
+## §8 观测与归档（跑后填）
+
+- 脚本：`dir29/R1_tangent.py`（派生声明见 §0）。
+- 结果：`dir29/out/DIR29r10_{s1,stageA,smoke,formal}.json`；日志 `dir29/D29_formal.log`。
+- VERDICT：`revolve/DIR-29/VERDICT.md`；证据行 **D-53**；决定写 `decisions/DECISIONS.md`。

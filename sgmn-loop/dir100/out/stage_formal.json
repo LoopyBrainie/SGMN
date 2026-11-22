@@ -1,0 +1,212 @@
+{
+ "stage": "formal",
+ "cells": [
+  {
+   "seed": 20261028,
+   "arm": "wq_oracle_id",
+   "gamma_final": 0.034590136259794235,
+   "dW_rel_read": 0.0,
+   "write_calls": {
+    "8": 600,
+    "12": 600,
+    "16": 600
+   },
+   "geo": {
+    "8": {
+     "maxcos": 1.730397343635559e-06,
+     "cos_median": -1.4435499906539917e-08
+    },
+    "12": {
+     "maxcos": 1.9855797290802e-06,
+     "cos_median": 7.450580596923828e-09
+    },
+    "16": {
+     "maxcos": 1.7741695046424866e-06,
+     "cos_median": -4.842877388000488e-08
+    }
+   },
+   "acc": {
+    "written": {
+     "acc_train": 0.8125,
+     "acc_held": 0.0,
+     "margin_train": 6.176285416666666,
+     "margin_held": -6.121568749999999
+    },
+    "W0": {
+     "acc_train": 0.3125,
+     "acc_held": 0.0,
+     "margin_train": -1.041366666666667,
+     "margin_held": -7.44405
+    },
+    "zero": {
+     "acc_train": 0.0625,
+     "acc_held": 0.125,
+     "margin_train": -1.8685854166666669,
+     "margin_held": -0.63905
+    },
+    "Wor": {
+     "acc_train": 0.0625,
+     "acc_held": 0.125,
+     "margin_train": -1.6870937499999998,
+     "margin_held": -0.7155479166666664
+    }
+   },
+   "Mchk": {
+    "8": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9985290765762329,
+     "cos_he_all": 1.0,
+     "cos_eff_he": -2.0079549756246706e-07,
+     "cos_id_he": 1.0
+    },
+    "12": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9982401132583618,
+     "cos_he_all": 1.0,
+     "cos_eff_he": 1.3697501799470047e-07,
+     "cos_id_he": 1.0
+    },
+    "16": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9964532852172852,
+     "cos_he_all": 1.0,
+     "cos_eff_he": -8.142444585246267e-08,
+     "cos_id_he": 1.0
+    }
+   },
+   "Wq_drift": 0.0,
+   "key_arm": "white",
+   "d_tr": 0.5,
+   "d_ho": 0.0,
+   "sec": 103.5,
+   "violations": 0,
+   "diverged": false,
+   "final_loss": 1.79813215345348e-05
+  },
+  {
+   "seed": 7777,
+   "arm": "wq_oracle_id",
+   "gamma_final": -0.025779621675610542,
+   "dW_rel_read": 0.0,
+   "write_calls": {
+    "8": 600,
+    "12": 600,
+    "16": 600
+   },
+   "geo": {
+    "8": {
+     "maxcos": 2.244953066110611e-06,
+     "cos_median": 3.91155481338501e-08
+    },
+    "12": {
+     "maxcos": 2.168118953704834e-06,
+     "cos_median": -1.30385160446167e-08
+    },
+    "16": {
+     "maxcos": 2.8889626264572144e-06,
+     "cos_median": 6.332993507385254e-08
+    }
+   },
+   "acc": {
+    "written": {
+     "acc_train": 0.9375,
+     "acc_held": 0.0,
+     "margin_train": 7.413514583333334,
+     "margin_held": -6.608787500000001
+    },
+    "W0": {
+     "acc_train": 0.5,
+     "acc_held": 0.0625,
+     "margin_train": 0.27162916666666703,
+     "margin_held": -4.705589583333333
+    },
+    "zero": {
+     "acc_train": 0.0625,
+     "acc_held": 0.125,
+     "margin_train": -1.8685854166666669,
+     "margin_held": -0.63905
+    },
+    "Wor": {
+     "acc_train": 0.0625,
+     "acc_held": 0.125,
+     "margin_train": -1.4924291666666665,
+     "margin_held": -0.8501770833333334
+    }
+   },
+   "Mchk": {
+    "8": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9984756112098694,
+     "cos_he_all": 1.0,
+     "cos_eff_he": 6.753283798843768e-08,
+     "cos_id_he": 1.0
+    },
+    "12": {
+     "cos_tr": 1.0,
+     "cos_he": 0.9983881115913391,
+     "cos_he_all": 1.0,
+     "cos_eff_he": -4.758025085038753e-09,
+     "cos_id_he": 1.0
+    },
+    "16": {
+     "cos_tr": 1.0,
+     "cos_he": 0.996835470199585,
+     "cos_he_all": 0.9999998807907104,
+     "cos_eff_he": 3.065507598876138e-07,
+     "cos_id_he": 1.0
+    }
+   },
+   "Wq_drift": 0.0,
+   "key_arm": "white",
+   "d_tr": 0.4375,
+   "d_ho": -0.0625,
+   "sec": 103.9,
+   "violations": 0,
+   "diverged": false,
+   "final_loss": 1.493439815021702e-05
+  }
+ ],
+ "checks": [
+  {
+   "id": "A99-9a",
+   "ok": true,
+   "detail": "Δ(3/4,1/4)=0.5"
+  },
+  {
+   "id": "A99-9b",
+   "ok": true,
+   "detail": "Δ(2/4,2/4)=0"
+  },
+  {
+   "id": "A99-9c",
+   "ok": true,
+   "detail": "W_or 解算：max|W_or·K−V| = 0.00e+00 (<1e-6)，shape=(2, 2)"
+  },
+  {
+   "id": "A100-9a",
+   "ok": true,
+   "detail": "ridge 精确解：shape=(2, 2)（应 (d,d_k)=(2,2)）· max|C·A−K|=0.00e+00"
+  },
+  {
+   "id": "A100-9b",
+   "ok": true,
+   "detail": "逐行余弦：shape=(2,)（应 (2,)）· cos=[1.0, 1.0]"
+  },
+  {
+   "id": "A100-9c",
+   "ok": true,
+   "detail": "同向目标：cos=[1.0, 1.0] ⇒ cos 不承担判别（判据只有 acc）"
+  },
+  {
+   "id": "A100-9d",
+   "ok": true,
+   "detail": "Wq=Aᵀ 约定：max|(Wq·cᵀ)ᵀ−K|=0.00e+00"
+  }
+ ],
+ "d_ho_mean": {
+  "wq_oracle_id": -0.03125
+ },
+ "d_tr_mean": {
+  "wq_oracle_id": 0.46875
+ }
+}

@@ -1,0 +1,103 @@
+{
+  "probe": "probe18h",
+  "kind": "exploratory",
+  "seed": 20261028,
+  "cells": [
+    {
+      "n_train": 40,
+      "protocol": "clean",
+      "n_eval": 12,
+      "hit": 0.5555555555555556,
+      "addr": 0.5555555555555556,
+      "nll": 12.323799928029379,
+      "nll_ctrl": 11.567419449488321,
+      "n_stale": 0,
+      "n_entries": 68,
+      "n_docs": 12
+    },
+    {
+      "n_train": 40,
+      "protocol": "clean",
+      "n_eval": 60,
+      "hit": 0.55,
+      "addr": 0.55,
+      "nll": 11.66035980383555,
+      "nll_ctrl": 11.541454569498699,
+      "n_stale": 0,
+      "n_entries": 68,
+      "n_docs": 60
+    },
+    {
+      "n_train": 40,
+      "protocol": "dirty17",
+      "n_eval": 12,
+      "hit": 1.0,
+      "addr": 0.0,
+      "nll": 12.251334190368652,
+      "nll_ctrl": 11.597578684488932,
+      "n_stale": 60,
+      "n_entries": 68,
+      "n_docs": 12
+    },
+    {
+      "n_train": 40,
+      "protocol": "dirty17",
+      "n_eval": 60,
+      "hit": 0.9944444444444444,
+      "addr": 0.0,
+      "nll": 11.526920302708943,
+      "nll_ctrl": 11.557620080312093,
+      "n_stale": 60,
+      "n_entries": 68,
+      "n_docs": 60
+    },
+    {
+      "n_train": 200,
+      "protocol": "clean",
+      "n_eval": 12,
+      "hit": 0.3611111111111111,
+      "addr": 0.3611111111111111,
+      "nll": 9.56499175230662,
+      "nll_ctrl": 12.272881666819254,
+      "n_stale": 0,
+      "n_entries": 68,
+      "n_docs": 12
+    },
+    {
+      "n_train": 200,
+      "protocol": "clean",
+      "n_eval": 60,
+      "hit": 0.3722222222222221,
+      "addr": 0.3722222222222221,
+      "nll": 9.628739595413208,
+      "nll_ctrl": 11.937954250971476,
+      "n_stale": 0,
+      "n_entries": 68,
+      "n_docs": 60
+    },
+    {
+      "n_train": 200,
+      "protocol": "dirty17",
+      "n_eval": 12,
+      "hit": 0.8333333333333334,
+      "addr": 0.0,
+      "nll": 9.674624760945639,
+      "nll_ctrl": 12.269376277923584,
+      "n_stale": 60,
+      "n_entries": 68,
+      "n_docs": 12
+    },
+    {
+      "n_train": 200,
+      "protocol": "dirty17",
+      "n_eval": 60,
+      "hit": 0.8833333333333333,
+      "addr": 0.0,
+      "nll": 9.578221313158672,
+      "nll_ctrl": 11.966528367996215,
+      "n_stale": 60,
+      "n_entries": 68,
+      "n_docs": 60
+    }
+  ]
+}

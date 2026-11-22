@@ -1,0 +1,39 @@
+{
+ "dir": "DIR24r10",
+ "device": {
+  "file": "sgmn_module_hebb_v7.py",
+  "md5": "1a242d02c530307f6c76646ca13469ef",
+  "copied_from": "dir22/sgmn_module_hebb_v7.py",
+  "copy_is_byte_identical": true
+ },
+ "script": {
+  "file": "R1_rank.py",
+  "md5": "7ae5644a15dbf7e4189f281df2babb61",
+  "lines": 356,
+  "verbatim_funcs_from": "dir23/R1_scope.py",
+  "verbatim_funcs": [
+   "_norm_cdf",
+   "sign_test_p",
+   "unit",
+   "item_z",
+   "best_q"
+  ],
+  "derived_changes": [
+   "build_A：去掉 S 字段 u；d 与 N_pair 从常量改为参数（卡片 §6 允许）",
+   "make_core → make_core(d, seed, r0)：首 r0 列支撑施加秩约束（DEC-15，装置零改动）",
+   "ARMS（六臂）→ R0_LEVELS（7 个秩水平）+ D_LEVELS（2 个维度轴）",
+   "新增 rank_W / proj_resid_max / rank_snaps 三个机制读数"
+  ]
+ },
+ "decisions": [
+  "DEC-09（装置零改动）",
+  "DEC-15（零改动施秩）",
+  "DEC-16（可辨识性）",
+  "DEC-17（草案订正）",
+  "DEC-18（d=64 的水平裁剪）"
+ ],
+ "checks": {
+  "V01": true,
+  "V02": true
+ }
+}

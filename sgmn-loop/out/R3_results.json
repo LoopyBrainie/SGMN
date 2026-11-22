@@ -1,0 +1,483 @@
+{
+  "dir": "DIR-07",
+  "round": "R3",
+  "stage": "B",
+  "checks": [
+    {
+      "name": "H3 存在「窗口由非空变为空」的临界信噪比",
+      "passed": true,
+      "detail": "逐 mu 的空窗口 SNR 集合：{5.0: [0.05, 0.02, 0.01], 50.0: [0.05, 0.02, 0.01], 500.0: [0.05, 0.02, 0.01], 5000.0: [0.05, 0.02, 0.01]}",
+      "tolerance": "至少一个 mu 上存在",
+      "value": {
+        "5.0": {
+          "empty_at_snr": [
+            0.05,
+            0.02,
+            0.01
+          ],
+          "nonempty_at_snr": [
+            1.0,
+            0.5,
+            0.2,
+            0.1
+          ]
+        },
+        "50.0": {
+          "empty_at_snr": [
+            0.05,
+            0.02,
+            0.01
+          ],
+          "nonempty_at_snr": [
+            1.0,
+            0.5,
+            0.2,
+            0.1
+          ]
+        },
+        "500.0": {
+          "empty_at_snr": [
+            0.05,
+            0.02,
+            0.01
+          ],
+          "nonempty_at_snr": [
+            1.0,
+            0.5,
+            0.2,
+            0.1
+          ]
+        },
+        "5000.0": {
+          "empty_at_snr": [
+            0.05,
+            0.02,
+            0.01
+          ],
+          "nonempty_at_snr": [
+            1.0,
+            0.5,
+            0.2,
+            0.1
+          ]
+        }
+      }
+    }
+  ],
+  "snr_grid": [
+    {
+      "mu": 5.0,
+      "snr": 1.0,
+      "n_stable": 9,
+      "n_learned": 3,
+      "n_window": 3,
+      "eta_learn_min": 0.001,
+      "eta_stable_max": 0.1,
+      "window_empty": false,
+      "window_etas": [
+        0.001,
+        0.01,
+        0.1
+      ]
+    },
+    {
+      "mu": 5.0,
+      "snr": 0.5,
+      "n_stable": 8,
+      "n_learned": 2,
+      "n_window": 2,
+      "eta_learn_min": 0.001,
+      "eta_stable_max": 0.01,
+      "window_empty": false,
+      "window_etas": [
+        0.001,
+        0.01
+      ]
+    },
+    {
+      "mu": 5.0,
+      "snr": 0.2,
+      "n_stable": 8,
+      "n_learned": 1,
+      "n_window": 1,
+      "eta_learn_min": 0.001,
+      "eta_stable_max": 0.01,
+      "window_empty": false,
+      "window_etas": [
+        0.001
+      ]
+    },
+    {
+      "mu": 5.0,
+      "snr": 0.1,
+      "n_stable": 9,
+      "n_learned": 2,
+      "n_window": 2,
+      "eta_learn_min": 0.0001,
+      "eta_stable_max": 0.1,
+      "window_empty": false,
+      "window_etas": [
+        0.0001,
+        0.001
+      ]
+    },
+    {
+      "mu": 5.0,
+      "snr": 0.05,
+      "n_stable": 9,
+      "n_learned": 0,
+      "n_window": 0,
+      "eta_learn_min": null,
+      "eta_stable_max": 0.1,
+      "window_empty": true,
+      "window_etas": []
+    },
+    {
+      "mu": 5.0,
+      "snr": 0.02,
+      "n_stable": 9,
+      "n_learned": 0,
+      "n_window": 0,
+      "eta_learn_min": null,
+      "eta_stable_max": 0.1,
+      "window_empty": true,
+      "window_etas": []
+    },
+    {
+      "mu": 5.0,
+      "snr": 0.01,
+      "n_stable": 9,
+      "n_learned": 0,
+      "n_window": 0,
+      "eta_learn_min": null,
+      "eta_stable_max": 0.1,
+      "window_empty": true,
+      "window_etas": []
+    },
+    {
+      "mu": 50.0,
+      "snr": 1.0,
+      "n_stable": 8,
+      "n_learned": 3,
+      "n_window": 3,
+      "eta_learn_min": 0.0001,
+      "eta_stable_max": 0.01,
+      "window_empty": false,
+      "window_etas": [
+        0.0001,
+        0.001,
+        0.01
+      ]
+    },
+    {
+      "mu": 50.0,
+      "snr": 0.5,
+      "n_stable": 7,
+      "n_learned": 2,
+      "n_window": 2,
+      "eta_learn_min": 0.0001,
+      "eta_stable_max": 0.001,
+      "window_empty": false,
+      "window_etas": [
+        0.0001,
+        0.001
+      ]
+    },
+    {
+      "mu": 50.0,
+      "snr": 0.2,
+      "n_stable": 7,
+      "n_learned": 1,
+      "n_window": 1,
+      "eta_learn_min": 0.0001,
+      "eta_stable_max": 0.001,
+      "window_empty": false,
+      "window_etas": [
+        0.0001
+      ]
+    },
+    {
+      "mu": 50.0,
+      "snr": 0.1,
+      "n_stable": 8,
+      "n_learned": 2,
+      "n_window": 2,
+      "eta_learn_min": 1e-05,
+      "eta_stable_max": 0.01,
+      "window_empty": false,
+      "window_etas": [
+        1e-05,
+        0.0001
+      ]
+    },
+    {
+      "mu": 50.0,
+      "snr": 0.05,
+      "n_stable": 8,
+      "n_learned": 0,
+      "n_window": 0,
+      "eta_learn_min": null,
+      "eta_stable_max": 0.01,
+      "window_empty": true,
+      "window_etas": []
+    },
+    {
+      "mu": 50.0,
+      "snr": 0.02,
+      "n_stable": 8,
+      "n_learned": 0,
+      "n_window": 0,
+      "eta_learn_min": null,
+      "eta_stable_max": 0.01,
+      "window_empty": true,
+      "window_etas": []
+    },
+    {
+      "mu": 50.0,
+      "snr": 0.01,
+      "n_stable": 8,
+      "n_learned": 0,
+      "n_window": 0,
+      "eta_learn_min": null,
+      "eta_stable_max": 0.01,
+      "window_empty": true,
+      "window_etas": []
+    },
+    {
+      "mu": 500.0,
+      "snr": 1.0,
+      "n_stable": 7,
+      "n_learned": 3,
+      "n_window": 3,
+      "eta_learn_min": 1e-05,
+      "eta_stable_max": 0.001,
+      "window_empty": false,
+      "window_etas": [
+        1e-05,
+        0.0001,
+        0.001
+      ]
+    },
+    {
+      "mu": 500.0,
+      "snr": 0.5,
+      "n_stable": 6,
+      "n_learned": 2,
+      "n_window": 2,
+      "eta_learn_min": 1e-05,
+      "eta_stable_max": 0.0001,
+      "window_empty": false,
+      "window_etas": [
+        1e-05,
+        0.0001
+      ]
+    },
+    {
+      "mu": 500.0,
+      "snr": 0.2,
+      "n_stable": 6,
+      "n_learned": 1,
+      "n_window": 1,
+      "eta_learn_min": 1e-05,
+      "eta_stable_max": 0.0001,
+      "window_empty": false,
+      "window_etas": [
+        1e-05
+      ]
+    },
+    {
+      "mu": 500.0,
+      "snr": 0.1,
+      "n_stable": 7,
+      "n_learned": 2,
+      "n_window": 2,
+      "eta_learn_min": 1e-06,
+      "eta_stable_max": 0.001,
+      "window_empty": false,
+      "window_etas": [
+        1e-06,
+        1e-05
+      ]
+    },
+    {
+      "mu": 500.0,
+      "snr": 0.05,
+      "n_stable": 7,
+      "n_learned": 0,
+      "n_window": 0,
+      "eta_learn_min": null,
+      "eta_stable_max": 0.001,
+      "window_empty": true,
+      "window_etas": []
+    },
+    {
+      "mu": 500.0,
+      "snr": 0.02,
+      "n_stable": 7,
+      "n_learned": 0,
+      "n_window": 0,
+      "eta_learn_min": null,
+      "eta_stable_max": 0.001,
+      "window_empty": true,
+      "window_etas": []
+    },
+    {
+      "mu": 500.0,
+      "snr": 0.01,
+      "n_stable": 7,
+      "n_learned": 0,
+      "n_window": 0,
+      "eta_learn_min": null,
+      "eta_stable_max": 0.001,
+      "window_empty": true,
+      "window_etas": []
+    },
+    {
+      "mu": 5000.0,
+      "snr": 1.0,
+      "n_stable": 6,
+      "n_learned": 3,
+      "n_window": 3,
+      "eta_learn_min": 1e-06,
+      "eta_stable_max": 0.0001,
+      "window_empty": false,
+      "window_etas": [
+        1e-06,
+        1e-05,
+        0.0001
+      ]
+    },
+    {
+      "mu": 5000.0,
+      "snr": 0.5,
+      "n_stable": 5,
+      "n_learned": 2,
+      "n_window": 2,
+      "eta_learn_min": 1e-06,
+      "eta_stable_max": 1e-05,
+      "window_empty": false,
+      "window_etas": [
+        1e-06,
+        1e-05
+      ]
+    },
+    {
+      "mu": 5000.0,
+      "snr": 0.2,
+      "n_stable": 5,
+      "n_learned": 1,
+      "n_window": 1,
+      "eta_learn_min": 1e-06,
+      "eta_stable_max": 1e-05,
+      "window_empty": false,
+      "window_etas": [
+        1e-06
+      ]
+    },
+    {
+      "mu": 5000.0,
+      "snr": 0.1,
+      "n_stable": 6,
+      "n_learned": 2,
+      "n_window": 2,
+      "eta_learn_min": 1e-07,
+      "eta_stable_max": 0.0001,
+      "window_empty": false,
+      "window_etas": [
+        1e-07,
+        1e-06
+      ]
+    },
+    {
+      "mu": 5000.0,
+      "snr": 0.05,
+      "n_stable": 6,
+      "n_learned": 0,
+      "n_window": 0,
+      "eta_learn_min": null,
+      "eta_stable_max": 0.0001,
+      "window_empty": true,
+      "window_etas": []
+    },
+    {
+      "mu": 5000.0,
+      "snr": 0.02,
+      "n_stable": 6,
+      "n_learned": 0,
+      "n_window": 0,
+      "eta_learn_min": null,
+      "eta_stable_max": 0.0001,
+      "window_empty": true,
+      "window_etas": []
+    },
+    {
+      "mu": 5000.0,
+      "snr": 0.01,
+      "n_stable": 6,
+      "n_learned": 0,
+      "n_window": 0,
+      "eta_learn_min": null,
+      "eta_stable_max": 0.0001,
+      "window_empty": true,
+      "window_etas": []
+    }
+  ],
+  "critical_snr": {
+    "5.0": {
+      "empty_at_snr": [
+        0.05,
+        0.02,
+        0.01
+      ],
+      "nonempty_at_snr": [
+        1.0,
+        0.5,
+        0.2,
+        0.1
+      ]
+    },
+    "50.0": {
+      "empty_at_snr": [
+        0.05,
+        0.02,
+        0.01
+      ],
+      "nonempty_at_snr": [
+        1.0,
+        0.5,
+        0.2,
+        0.1
+      ]
+    },
+    "500.0": {
+      "empty_at_snr": [
+        0.05,
+        0.02,
+        0.01
+      ],
+      "nonempty_at_snr": [
+        1.0,
+        0.5,
+        0.2,
+        0.1
+      ]
+    },
+    "5000.0": {
+      "empty_at_snr": [
+        0.05,
+        0.02,
+        0.01
+      ],
+      "nonempty_at_snr": [
+        1.0,
+        0.5,
+        0.2,
+        0.1
+      ]
+    }
+  },
+  "summary": {
+    "passed": 1,
+    "total": 1
+  }
+}

@@ -1,0 +1,96 @@
+{
+ "probe": "56c",
+ "steps": 250,
+ "lr": 0.03,
+ "n_instances": 32,
+ "baseline": {
+  "L_off_true": 22.242562206689314,
+  "L_ideal_true": 0.035190628289464884
+ },
+ "C2a_pooled": {
+  "n_pairs": 512,
+  "L_off_first20": 31.025683101668427,
+  "L_off_last20": 0.17453736677579829,
+  "pv_norm_ratio": 0.02398620096581289,
+  "L_ideal_before": 0.035190628289464884,
+  "L_ideal_after": 0.1923094618796414,
+  "v_norm_mean_after": 0.022831956787242823
+ },
+ "C2b_per_instance_split": {
+  "L_train_first20": {
+   "median": 2.874609668942486,
+   "min": 0.06545216358069897,
+   "max": 26.939098239219184
+  },
+  "L_train_last20": {
+   "median": 1.1184075174099357e-10,
+   "min": 2.647459059222769e-12,
+   "max": 7.996851233134602e-10
+  },
+  "L_test_before": {
+   "median": 13.322899049393044,
+   "min": 0.10268358574134681,
+   "max": 63.53624002853826
+  },
+  "L_test_after": {
+   "median": 10.561791333733199,
+   "min": 0.18797990384434243,
+   "max": 56.40101103826366
+  },
+  "pv_norm_ratio": {
+   "median": 0.9547743486762658,
+   "min": 0.8646566932519283,
+   "max": 1.0164904217696888
+  },
+  "rel_dPv": {
+   "median": 0.32588638819913324,
+   "min": 0.1304296107560294,
+   "max": 0.4799621235065735
+  },
+  "n_train_gap_closed": 32,
+  "n_test_worse_than_before": 15,
+  "L_ideal_after_global": 0.12043238937941209,
+  "L_ideal_before_global": 0.035190628289464884
+ },
+ "C3_per_instance_split_projected": {
+  "L_train_first20": {
+   "median": 3.0869148707494474,
+   "min": 0.06790924731828908,
+   "max": 36.82713669263924
+  },
+  "L_train_last20": {
+   "median": 1.1445536648387678e-10,
+   "min": 2.6105102144742455e-12,
+   "max": 1.0343040383769114e-09
+  },
+  "L_test_before": {
+   "median": 13.322899049393044,
+   "min": 0.10268358574134681,
+   "max": 63.53624002853826
+  },
+  "L_test_after": {
+   "median": 12.251601799291642,
+   "min": 0.18324181686208854,
+   "max": 65.28087300805831
+  },
+  "pv_norm_ratio": {
+   "median": 1.0,
+   "min": 0.9999999999999998,
+   "max": 1.0000000000000002
+  },
+  "rel_dPv": {
+   "median": 0.3904558827676401,
+   "min": 0.1774656604179531,
+   "max": 0.6770295321603949
+  },
+  "n_train_gap_closed": 32,
+  "n_test_worse_than_before": 16,
+  "L_ideal_after_global": 0.1184292912310774,
+  "L_ideal_before_global": 0.035190628289464884
+ },
+ "C4_freeze_c": {
+  "task_grad_pv_writes_live": 150.27591152262318,
+  "task_grad_pv_writes_detached": 0.0,
+  "detached_loss_has_grad_fn": false
+ }
+}

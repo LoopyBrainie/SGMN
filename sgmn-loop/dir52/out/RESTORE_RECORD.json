@@ -1,0 +1,17 @@
+{
+ "restored_from": "dir52/out/FDSNAP/009",
+ "n_rows": 196,
+ "shortfall": [
+  62049,
+  62099,
+  62149,
+  62199
+ ],
+ "note": "DEF-52-5 \u88c5\u7f6e\u4e8b\u6545\uff1a\u5757\u5c3e 4 \u884c\u968f\u5199\u624b\u8fdb\u7a0b\u9000\u51fa\u800c\u4e22\u5931\uff08\u5b88\u62a4\u76f2\u533a\uff09\uff0c\u8865\u7b97\u95e8\uff08ctrl85 \u590d\u73b0\u5bf9\u7167\uff09FAIL \u21d2 \u4e0d\u8865\u7b97\u3001\u5982\u5b9e\u62ab\u9732",
+ "sha256_16": {
+  "0": "9c835c8224062031",
+  "1": "e28efe1cc3fda00f",
+  "2": "5bd7686912ec9a5e",
+  "3": "fbfdb05c6b4e6181"
+ }
+}

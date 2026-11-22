@@ -1,0 +1,31 @@
+{
+ "ok": true,
+ "a": {
+  "A35-1_write_block_bitwise": 0.0,
+  "A35-2_align_min": 0.9999999999999998,
+  "A35-2_sep_absmax": 0.8342484210969023,
+  "A35-3_magnitude_match": 4.440892098500626e-16,
+  "A35-4_determinism": 0.0,
+  "A35-5_G0_no_injection_rel": 1.4285506661641055e-16,
+  "A35-8_worked_example": 1.1102230246251565e-16,
+  "A35-8_seq": "1.00000000 → 0.64000000 → 0.48664576",
+  "A35-6_inst_mean": 0.5111266726445701,
+  "A35-6_inst_p95": 0.9471080962130478,
+  "A35-6_inst_max_diag": 0.9931931391472408,
+  "A35-6_pooled_max_diag": 0.9931931391472408,
+  "A35-7_device_md5_diff": 0.0,
+  "A35-7_device_md5": "8fa40f708600bec7e6c484727d2180c7",
+  "A35-10_task_md5_diff": 0.0,
+  "A35-10_task_md5": "96ef89e87ec61556b52e0e464850087e",
+  "A35-9_own_segments": "train35:5000-5383,eval35:6000-6399,calibtrain35:3000-3095,calibeval35:4000-4199",
+  "A35-9_seed_disjoint": 0.0,
+  "A35-9_hist_hits": "none",
+  "A35-9_train_bitwise": 0.0,
+  "A35-11_card_md5": "b043d73e4bdbb5f8f17b064f0fe8d789",
+  "A35-11_card_md5_diff": 0.0,
+  "A35-11_threshold_set": 0.0,
+  "A35-12_worked_dZ": -1.8573229025650289,
+  "A35-12_worked_Z": 8.908791534685868,
+  "A35-12_worked_L": 10.766114437250897
+ }
+}

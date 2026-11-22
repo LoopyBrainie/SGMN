@@ -1,0 +1,63 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+
+══ DIR-41 正式轮（汇总裁决） ══
+
+── 格 SH1 ──
+   L[oracle     ] =     1.542497   cos = +1.0000
+   L[rand       ] =    16.069108   cos = +0.1070
+   L[learned    ] =     1.801829   cos = +0.9022
+   L[learned_rc ] =    16.401359   cos = +0.9022
+   R = 14.526611   地板 0.20R = 2.905322   Δ = 14.267279   3se = 1.200946
+   P1 显著 True · P2 效应 True · P3 内容 True  ⇒ 该格 PASS
+
+── 格 SH2 ──
+   L[oracle     ] =     1.493090   cos = +1.0000
+   L[rand       ] =    17.970266   cos = +0.0641
+   L[learned    ] =     2.073907   cos = +0.8622
+   L[learned_rc ] =    16.950206   cos = +0.8622
+   R = 16.477176   地板 0.20R = 3.295435   Δ = 15.896359   3se = 1.190145
+   P1 显著 True · P2 效应 True · P3 内容 True  ⇒ 该格 PASS
+
+── 格 SH3 ──
+   L[oracle     ] =     1.528512   cos = +1.0000
+   L[rand       ] =    17.977335   cos = -0.0409
+   L[learned    ] =     1.988195   cos = -0.8867
+   L[learned_rc ] =    16.472991   cos = -0.8867
+   R = 16.448822   地板 0.20R = 3.289764   Δ = 15.989140   3se = 1.178222
+   P1 显著 True · P2 效应 True · P3 内容 True  ⇒ 该格 PASS
+
+── 格 SH4 ──
+   L[oracle     ] =     1.497018   cos = +1.0000
+   L[rand       ] =    18.316054   cos = -0.0128
+   L[learned    ] =     1.911407   cos = +0.8806
+   L[learned_rc ] =    16.798507   cos = +0.8806
+   R = 16.819036   地板 0.20R = 3.363807   Δ = 16.404647   3se = 1.304452
+   P1 显著 True · P2 效应 True · P3 内容 True  ⇒ 该格 PASS
+
+── 格 SH5 ──
+   L[oracle     ] =     1.492300   cos = +1.0000
+   L[rand       ] =    16.977543   cos = -0.0951
+   L[learned    ] =     1.791752   cos = -0.9023
+   L[learned_rc ] =    16.855215   cos = -0.9023
+   R = 15.485243   地板 0.20R = 3.097049   Δ = 15.185792   3se = 1.130766
+   P1 显著 True · P2 效应 True · P3 内容 True  ⇒ 该格 PASS
+
+── 格 PI ──
+   L[oracle     ] =     1.479192   cos = +1.0000
+   L[rand       ] =    17.178805   cos = -0.0046
+   L[learned    ] =    22.168785   cos = -0.0040
+   L[learned_rc ] =    22.099860   cos = -0.0040
+   R = 15.699613   地板 0.20R = 3.139923   Δ = -4.989980   3se = 2.062446
+   P1 显著 False · P2 效应 False · P3 内容 False  ⇒ 该格 不 PASS
+
+── 对比检验（逐图） ──
+   SH1: mean=19.257258 3se=2.286069 ⇒ 通过
+   SH2: mean=20.886339 3se=2.338516 ⇒ 通过
+   SH3: mean=20.979120 3se=2.309297 ⇒ 通过
+   SH4: mean=21.394627 3se=2.428624 ⇒ 通过
+   SH5: mean=20.175771 3se=2.349283 ⇒ 通过
+
+  共享格通过数 = 5/5   对比检验通过数 = 5/5
+  PI: Δ=-4.989980 3se=2.062446 地板=3.139923 内容差=-0.068924 3se=2.155754 ⇒ 完整 PASS=False
+  ★ 结局 = PASS · 计入 SUCCEEDED = True

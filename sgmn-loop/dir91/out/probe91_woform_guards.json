@@ -1,0 +1,136 @@
+{
+ "card": "DIR-91 rev 2.8",
+ "file": "probe91_woform.py",
+ "gates": {
+  "G_gen": 0.5,
+  "G_low": 0.25,
+  "G_delta": 0.125,
+  "chance": 0.25
+ },
+ "consts": {
+  "alpha": 1.0,
+  "lam": 0.05,
+  "eta": 3e-05,
+  "read_steps": 600,
+  "read_lr": 0.001,
+  "n_chunk": 600,
+  "n_facts": 32,
+  "n_train_keys": 16,
+  "n_cand": 4,
+  "n_draws": 3,
+  "steps_free": 120,
+  "lr_free": 0.05,
+  "ridge_rel": 0.001
+ },
+ "guards": {
+  "A94-00": {
+   "ok": true,
+   "detail": "MOUNT=[8, 12, 16] CHUNK=64 B=600 n_q=16 n_draws=3",
+   "value": null
+  },
+  "A94-05": {
+   "ok": true,
+   "detail": "换 dummy token 的 y 逐位差=0.0e+00(须=0，因果性)；与手算 W·Wq·c 差=0.00e+00(须<1e-5)",
+   "value": {
+    "d_dummy": 0.0,
+    "manual": 0.0
+   }
+  },
+  "A94-00b": {
+   "ok": true,
+   "detail": "worked: 层8 事实0 ‖y0‖=13.128 ‖m_free‖=9.6825",
+   "value": {
+    "y_norm": 13.127735137939453,
+    "m_free_norm": 9.682527542114258
+   }
+  },
+  "A94-01": {
+   "ok": true,
+   "detail": "无替换时 patched 与原生 injection 逐位差=0.0e+00(须=0)",
+   "value": null
+  },
+  "A94-02": {
+   "ok": true,
+   "detail": "读出位行=0.0e+00(须=0)；其余 17 行逐位差=0.0e+00(须=0)",
+   "value": {
+    "d_idx": 0.0,
+    "d_oth": 0.0
+   }
+  },
+  "A94-03": {
+   "ok": true,
+   "detail": "m≠0 与 m=0 在读出位 logits 差=15.993(须>1e-3) ⇒ 注入真被用上；（m=0 与 native 差=13.389，仅供参考）",
+   "value": {
+    "d_big": 15.992721557617188,
+    "d_nat": 13.389345169067383
+   }
+  },
+  "A94-04": {
+   "ok": true,
+   "detail": "闭式/free/zero 臂的实际 γ=1.000(须=1.0，否则注入被 γ 缩放或归零)",
+   "value": null
+  },
+  "A94-06": {
+   "ok": true,
+   "detail": "λ=0 时 rel(M, lstsq)=8.38e-16(须<1e-4，纯代数)；相容解残差=3.1e-04(须<1e-2 —— λ>0 时残差本就是 O(λ/σ²)，要求更小等于要求正则化不生效)；冻结 λ 的偏移=4.39e-04(须<1e-2，即 λ 只是小扰动)",
+   "value": {
+    "d_syn_l0": 8.376528287468822e-16,
+    "res": 0.00030553451104489146,
+    "d_lam": 0.0004386125593795938
+   }
+  },
+  "A94-08": {
+   "ok": true,
+   "detail": "臂×变量表(结构检查，拟合集 4 vs 8 条)：zero 恒=0.0e+00(须=0)；{free,ridge16,ridge32} 两两最小 max|Δm|=1.724e-02(须>1e-3)",
+   "value": {
+    "zero": 0.0,
+    "dmin": 0.01723635196685791
+   }
+  },
+  "A94-09": {
+   "ok": true,
+   "detail": "free 事实0 loss 首/尾=0.168/0.000(须 tail<0.2·head)；‖m‖=9.1351(须>0)",
+   "value": {
+    "head": 0.16806903952092397,
+    "tail": 4.2647746158763764e-05,
+    "m_norm": 9.135058403015137
+   }
+  },
+  "A94-11": {
+   "ok": true,
+   "detail": "n_q=16(须16) n_item=48(须48) chance=0.250 正确项必在候选=True",
+   "value": null
+  },
+  "A94-07": {
+   "ok": true,
+   "detail": "闭式机器在 8 条拟合事实上的 acc_q=1.000(须≥0.75) ⇒ 闭式解能拟合",
+   "value": {
+    "acc_q": 1.0
+   }
+  },
+  "A94-10": {
+   "ok": true,
+   "detail": "挂载计数 0→0(须都是 0：不得有两个 stack 同时挂载)；同初始 W 连写两遍逐位差=0.0e+00(须=0，写路径可复现)；γ=0 下挂非零 override 后与基线差=0.0e+00(须=0，读侧不得污染写侧)；write_calls={8: 599, 12: 599, 16: 599}",
+   "value": {
+    "d_rep": 0.0,
+    "d_override": 0.0,
+    "write_calls": {
+     "8": 599,
+     "12": 599,
+     "16": 599
+    },
+    "n_mounted_before": 0,
+    "n_mounted_after": 0
+   }
+  }
+ },
+ "arms": [],
+ "branch": {},
+ "worked": {
+  "layer": 8,
+  "fact": 0,
+  "y_norm": 13.127735137939453,
+  "m_free_norm": 9.682527542114258
+ },
+ "stage_a_ok": true
+}

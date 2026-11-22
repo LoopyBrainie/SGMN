@@ -1,0 +1,42 @@
+{
+ "card_md5": "62022454dcefd936b000a347f709b18b",
+ "checks": {
+  "A48-1": {
+   "ok": true,
+   "detail": "写入数逐行符合臂定义：quiet=[4], decay=[35], busy=[11]"
+  },
+  "A48-2": {
+   "ok": true,
+   "detail": "工作例 40×3 臂、2240 单元；max|Δc|=0.000e+00 max|Δ‖W‖|=0.000e+00；不一致 0"
+  },
+  "A48-3": {
+   "ok": true,
+   "detail": "三臂 d=0 的 c/‖W‖ 逐位相同=True（max|Δ|=0.000e+00）；跨窗口长度 K/V 前缀逐位 max|Δ|=0.000e+00（★ 对照：若按各自长度生成则前缀差 max|Δ|=3.909e+00 ⇒ `DEF-48-4` 为真、已用固定 `NMARK` 修掉）"
+  },
+  "A48-4": {
+   "ok": true,
+   "detail": "quiet 臂 c(d) 与 ‖W_d‖ 全部与 d=0 逐位相同（读数不改状态）"
+  },
+  "A48-5": {
+   "ok": true,
+   "detail": "115 行：L 与 c/ρ 自洽、censored⇔L=W、L 为首个跌破点（违例 0）"
+  },
+  "A48-6": {
+   "ok": true,
+   "detail": "正式段 27400..28399（1000）vs 既往已落盘 seed 1328 个；交集 0 个 []"
+  },
+  "A48-7": {
+   "ok": true,
+   "detail": "卡 md5=62022454dcefd936b000a347f709b18b；N_REP/ALPHA/LAM/ETA/D_H/D_K=16/1.0/0.05/0.2/8/16；τ_ref=100.0 步"
+  },
+  "A48-8": {
+   "ok": true,
+   "detail": "Stage A 40 个横跨正式段的种子上 busy 发散 5/40 = 0.125 ≤ 0.20"
+  },
+  "A48-9": {
+   "ok": true,
+   "detail": "跨窗口长度（CTX+8 vs CTX+32）K/V 前缀 max|Δ|=0.000e+00；★ 反例（按各自长度生成）max|Δ|=3.909e+00 > 0 ⇒ DEF-48-4 为真且已被 NMARK 修掉"
+  }
+ },
+ "all_pass": true
+}

@@ -1,0 +1,76 @@
+{
+ "n_facts": 32,
+ "n_distinct_vals": 16,
+ "mult_hist": {
+  "2": 16
+ },
+ "m_v_hist": {
+  "amber": 2,
+  "azure": 2,
+  "beige": 2,
+  "coral": 2,
+  "crimson": 2,
+  "ivory": 2,
+  "lemon": 2,
+  "olive": 2,
+  "peach": 2,
+  "plum": 2,
+  "rose": 2,
+  "ruby": 2,
+  "rust": 2,
+  "tan": 2,
+  "teal": 2,
+  "violet": 2
+ },
+ "E_random_Nhit": 2.0,
+ "E_random_Nhit_frac": 0.0625,
+ "const_argmax_ceiling": 2,
+ "N_CAND": 4,
+ "arms": {
+  "SPLIT": {
+   "n_tr": 16,
+   "n_ev": 16,
+   "n_train_vals": 16,
+   "n_unseen_vals": 0,
+   "n_unseen_dev_field": 0,
+   "unseen_vals": [],
+   "pool_size_for_item": null,
+   "pool_size_min": 15,
+   "pool_size_max": 15,
+   "n_ev_items": 16,
+   "items_can_have_all_unseen_distractors": 0,
+   "items_can_have_ge1_unseen_distractor": 0
+  },
+  "COLOCATED": {
+   "n_tr": 16,
+   "n_ev": 16,
+   "n_train_vals": 8,
+   "n_unseen_vals": 8,
+   "n_unseen_dev_field": 8,
+   "unseen_vals": [
+    "crimson",
+    "ivory",
+    "olive",
+    "peach",
+    "plum",
+    "rust",
+    "teal",
+    "violet"
+   ],
+   "pool_size_for_item": null,
+   "pool_size_min": 15,
+   "pool_size_max": 15,
+   "n_ev_items": 16,
+   "items_can_have_all_unseen_distractors": 16,
+   "items_can_have_ge1_unseen_distractor": 16
+  }
+ },
+ "power": {
+  "n_item": 48,
+  "p0": 0.25,
+  "p1": 0.4,
+  "se_at_p1": 0.07071067811865475,
+  "z_vs_p0": 2.121320343559643,
+  "n_for_3se_abs": 96
+ }
+}

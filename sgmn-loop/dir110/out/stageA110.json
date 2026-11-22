@@ -1,0 +1,67 @@
+{
+ "dir": "DIR-110",
+ "cards": [
+  "rev110_v10",
+  "rev110_v11"
+ ],
+ "source": "/mnt/sgmn/home/ec2-user/sgmn-loop/dir109/out/stage_verdict.json",
+ "src_md5": "a20a7222450217bc1eb6717368fc5036",
+ "guards": [
+  {
+   "id": "A110-1",
+   "ok": true,
+   "detail": "cells=24 plan_n=24 finite_params 全真=True eval_writes 全0=True"
+  },
+  {
+   "id": "A110-3",
+   "ok": true,
+   "detail": "seeds=[20261028, 20261104, 7] 三 seed 齐全=True"
+  },
+  {
+   "id": "A110-4",
+   "ok": true,
+   "detail": "指向 DIR-109=True device_md5={'sgmn_module.py"
+  },
+  {
+   "id": "A110-5",
+   "ok": true,
+   "detail": "read_lr=0.01（dir90 系必须 0.01）"
+  },
+  {
+   "id": "A110-2",
+   "ok": true,
+   "detail": "重算 vs 冻结 crit 最大绝对差 = 2.776e-17（阈值 1e-12）；逐位一致"
+  },
+  {
+   "id": "A110-6",
+   "ok": true,
+   "detail": "27 个 state 字段有限且方向正确；违例 0 []"
+  },
+  {
+   "id": "A110-7",
+   "ok": true,
+   "detail": "c@L8 跨四臂×三 seed 的 max−min = 0.000e+00 < 1e-6 ⇒ L8 在任何注入之前"
+  },
+  {
+   "id": "A110-8",
+   "ok": true,
+   "detail": "被测点 = 4 量 × 2 层 = 8 个，每个在 2 个 γ 上求值（16 行），无按结果筛除"
+  },
+  {
+   "id": "A110-9",
+   "ok": false,
+   "detail": "rev1.0：12 组合全产出；总体码唯一=False ⇒ C110-MIXED（**不唯一 ⇒ 按 §4 阻断 rev1.0**）"
+  },
+  {
+   "id": "A110-10",
+   "ok": true,
+   "detail": "rev1.1：4 个 TAU_ADD 组合全产出；总体码唯一=False ⇒ 判据**不稳（记 C110-CRITERION-UNSTABLE）**"
+  }
+ ],
+ "n_pass": 9,
+ "n_total": 10,
+ "rev10_blocked_by_A110_9": true,
+ "all_pass_under_rev11": true,
+ "c_L8_control_max_minus_min": 0.0,
+ "crit_identity_max_abs_diff": 2.7755575615628914e-17
+}

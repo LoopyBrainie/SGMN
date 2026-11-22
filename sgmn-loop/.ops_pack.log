@@ -1,0 +1,61 @@
+[03:05:18] ===== DIR-18 打包开始 =====
+[03:05:18] DIR-18_artifacts.zip =  B
+[03:05:18] DIR-19_artifacts.zip = 25243 B
+[03:05:18] DIR-20_artifacts.zip = 222671 B
+[03:05:18] MANIFEST.md = 63 行
+[03:05:18] MANIFEST 校验：OK=49  FAILED=0
+[03:05:18] ===== 打包结束 =====
+[03:05:54] ===== DIR-18 打包开始 =====
+[03:05:54] DIR-18_artifacts.zip = 244736 B
+[03:05:54] DIR-19_artifacts.zip = 25243 B
+[03:05:54] DIR-20_artifacts.zip = 222671 B
+[03:05:54] MANIFEST.md = 136 行
+[03:05:54] MANIFEST 校验：OK=122  FAILED=3
+./dir18/D18_R1_formal_v1_D48protocol_FAILED.log: OK
+./dir18/D18_R2_smoke2_v1_adrsNameError_FAILED.log: OK
+./dir18/D18_R2_smoke2_v2_gatekey_FAILED.log: OK
+[03:05:54] ===== 完整包重建（自足版 · 暂存区 /dev/sdf/home/ec2-user/.pkg/SGMN_LOOP_PACKAGE）=====
+[03:05:54] 源文件数（全部内容根）= 186
+[03:05:56] 全包文件数 = 210
+[03:05:56] ★★ 完整包文件数 210 < 下限 250 ⇒ **打包不完整**（暂存区被清空？）⇒ 中止
+[03:05:56] ===== 打包结束 =====
+[03:06:14] ===== DIR-18 打包开始 =====
+[03:06:14] DIR-18_artifacts.zip = 244736 B
+[03:06:14] DIR-19_artifacts.zip = 25243 B
+[03:06:14] DIR-20_artifacts.zip = 222671 B
+[03:06:14] MANIFEST.md = 136 行
+[03:06:14] MANIFEST 校验：OK=122  FAILED=0
+[03:06:14] ===== 完整包重建（自足版 · 暂存区 /dev/sdf/home/ec2-user/.pkg/SGMN_LOOP_PACKAGE）=====
+[03:06:14] 源文件数（全部内容根）= 186
+[03:06:17] 全包文件数 = 210（源文件数 = 186）
+[03:06:17] SGMN_LOOP_full.zip = 2778009 B  md5=7c28f614ecc1dbff01669612cce65b63
+[03:06:17] 全包 md5 复核：OK=210  FAILED=0
+[03:06:17] ===== 完整包重建结束 =====
+[03:06:17] ===== 打包结束 =====
+[03:08:02] ===== DIR-18 打包开始 =====
+[03:08:02] DIR-18_artifacts.zip = 244736 B
+[03:08:02] DIR-19_artifacts.zip = 25243 B
+[03:08:02] DIR-20_artifacts.zip = 222671 B
+[03:08:02] MANIFEST.md = 137 行
+[03:08:02] MANIFEST 校验：OK=123  FAILED=0
+[03:08:02] ===== 完整包重建（自足版 · 暂存区 /dev/sdf/home/ec2-user/.pkg/SGMN_LOOP_PACKAGE）=====
+[03:08:02] 源文件数（全部内容根）= 187
+[03:08:04] 全包文件数 = 211（源文件数 = 187）
+[03:08:05] SGMN_LOOP_full.zip = 2784038 B  md5=b3c26567c63cb74bd18b88695d61d0bf
+[03:08:05] 全包 md5 复核：OK=211  FAILED=0
+[03:08:05] ===== 完整包重建结束 =====
+[03:08:05] ===== 打包结束 =====
+[15:21:55] ===== DIR-18 打包开始 =====
+[15:21:55] DIR-18_artifacts.zip = 244736 B
+[15:21:55] DIR-19_artifacts.zip = 25243 B
+[15:21:55] DIR-20_artifacts.zip = 222671 B
+[15:21:55] DIR-21_artifacts.zip = 47149 B
+[15:21:56] MANIFEST.md = 572 行
+[15:21:56] MANIFEST 校验：OK=462  FAILED=0
+[15:21:56] ===== 完整包重建（自足版 · 暂存区 /dev/sdf/home/ec2-user/.pkg/SGMN_LOOP_PACKAGE）=====
+[15:21:56] 源文件数（全部内容根）= 396
+[15:22:01] 全包文件数 = 573（源文件数 = 396）
+[15:22:01] SGMN_LOOP_full.zip =  B  md5=
+[15:22:01] 全包 md5 复核：OK=570  FAILED=1
+[15:22:01] ===== 完整包重建结束 =====
+[15:22:01] ===== 打包结束 =====

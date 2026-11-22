@@ -1,0 +1,109 @@
+{
+  "arms": {
+    "hebb_eta7_cue_train": {
+      "nll": 11.001666386922201,
+      "addr_writeorder": 0.0,
+      "addr_slotspace": 0.6666666666666666,
+      "true_slot_eq_writeorder": 0.0,
+      "rank_true_slot_mean": 1.0277777777777777,
+      "n_searched_mean": 128.0,
+      "n_stale_mean": 60.0,
+      "cos_y_vtrue": 0.0015011037790423466,
+      "fid_true_slot": -0.004730008167421652,
+      "fid_selected": -0.0072294494182440555
+    },
+    "hebb_eta7_cue_notrain": {
+      "nll": 14.230112473169962,
+      "addr_writeorder": 1.0,
+      "addr_slotspace": 1.0,
+      "true_slot_eq_writeorder": 1.0,
+      "rank_true_slot_mean": 0.0,
+      "n_searched_mean": 68.0,
+      "n_stale_mean": 0.0,
+      "cos_y_vtrue": -0.0027852022968646553,
+      "fid_true_slot": -0.0027852022063194048,
+      "fid_selected": -0.0027852022063194048
+    },
+    "verbatim_cue_train": {
+      "nll": 10.463764150937399,
+      "addr_writeorder": 0.0,
+      "addr_slotspace": 1.0,
+      "true_slot_eq_writeorder": 0.0,
+      "rank_true_slot_mean": 0.0,
+      "n_searched_mean": 128.0,
+      "n_stale_mean": 60.0,
+      "cos_y_vtrue": 0.999919679429796,
+      "fid_true_slot": NaN,
+      "fid_selected": NaN
+    },
+    "verbatim_cue_notrain": {
+      "nll": 14.12722134590149,
+      "addr_writeorder": 1.0,
+      "addr_slotspace": 1.0,
+      "true_slot_eq_writeorder": 1.0,
+      "rank_true_slot_mean": 0.0,
+      "n_searched_mean": 68.0,
+      "n_stale_mean": 0.0,
+      "cos_y_vtrue": 0.9999628679619895,
+      "fid_true_slot": NaN,
+      "fid_selected": NaN
+    },
+    "hebb_eta7_misaddr_train": {
+      "nll": 12.383749763170878,
+      "addr_writeorder": 0.05555555555555555,
+      "addr_slotspace": 0.9444444444444444,
+      "true_slot_eq_writeorder": 0.0,
+      "rank_true_slot_mean": 0.1111111111111111,
+      "n_searched_mean": 128.0,
+      "n_stale_mean": 60.0,
+      "cos_y_vtrue": 0.10789556201133463,
+      "fid_true_slot": -0.003997542243370036,
+      "fid_selected": -0.0032239078557015294
+    },
+    "hebb_eta7_nowrite_train": {
+      "nll": 11.023909409840902,
+      "addr_writeorder": 0.0,
+      "addr_slotspace": 0.6388888888888888,
+      "true_slot_eq_writeorder": 0.0,
+      "rank_true_slot_mean": 1.0277777777777777,
+      "n_searched_mean": 128.0,
+      "n_stale_mean": 60.0,
+      "cos_y_vtrue": 0.0007802567561157048,
+      "fid_true_slot": -0.005748937088355888,
+      "fid_selected": -0.00783868188995661
+    },
+    "hebb_eta7_shuffle_train": {
+      "nll": 11.095070679982504,
+      "addr_writeorder": 0.0,
+      "addr_slotspace": 0.5,
+      "true_slot_eq_writeorder": 0.0,
+      "rank_true_slot_mean": 1.3055555555555556,
+      "n_searched_mean": 128.0,
+      "n_stale_mean": 60.0,
+      "cos_y_vtrue": 0.0032212817265341678,
+      "fid_true_slot": -0.0055057640282838195,
+      "fid_selected": -0.000145240605989885
+    },
+    "base": {
+      "nll": 14.168702681859335
+    }
+  },
+  "notes": [],
+  "pv_grad": [
+    {
+      "layer": 8,
+      "pv_grad": null,
+      "pv_requires_grad": true
+    },
+    {
+      "layer": 12,
+      "pv_grad": null,
+      "pv_requires_grad": true
+    },
+    {
+      "layer": 16,
+      "pv_grad": null,
+      "pv_requires_grad": true
+    }
+  ]
+}

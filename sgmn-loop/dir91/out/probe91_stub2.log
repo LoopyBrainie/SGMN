@@ -1,0 +1,16 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:07,  4.27it/s]Loading weights:  68%|██████▊   | 197/290 [00:00<00:00, 744.80it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 676.20it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/probe91_stub.py:84: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  ref = float(hs_in[0, i, :].norm())
+  A_ans   rho=0.13  L=(16,)       acc(项)=0.521 acc(题)=0.438
+  A_ans   rho=0.13  L=(8, 12, 16) acc(项)=0.625 acc(题)=0.438
+  B_rand  rho=0.13  L=(16,)       acc(项)=0.167 acc(题)=0.062
+  B_rand  rho=0.13  L=(8, 12, 16) acc(项)=0.146 acc(题)=0.000
+  C_ans   rho=0.25  L=(16,)       acc(项)=0.771 acc(题)=0.688
+  C_ans   rho=0.25  L=(8, 12, 16) acc(项)=0.854 acc(题)=0.812
+  D_ans   rho=0.35  L=(16,)       acc(项)=0.854 acc(题)=0.812
+  D_ans   rho=0.35  L=(8, 12, 16) acc(项)=0.896 acc(题)=0.875
+
+★ 诊断完成（不产生裁决）

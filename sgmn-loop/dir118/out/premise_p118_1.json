@@ -1,0 +1,33 @@
+{
+ "SPLIT": {
+  "n": 48,
+  "pos_hist": {
+   "0": 15,
+   "1": 16,
+   "2": 6,
+   "3": 11
+  },
+  "n_seen_cand_hist": {
+   "4": 48
+  },
+  "correct_is_seen": 48,
+  "fixed_pos_max_acc": 0.3333333333333333
+ },
+ "COLOCATED": {
+  "n": 48,
+  "pos_hist": {
+   "0": 15,
+   "1": 16,
+   "2": 6,
+   "3": 11
+  },
+  "n_seen_cand_hist": {
+   "0": 2,
+   "1": 23,
+   "2": 20,
+   "3": 3
+  },
+  "correct_is_seen": 0,
+  "fixed_pos_max_acc": 0.3333333333333333
+ }
+}

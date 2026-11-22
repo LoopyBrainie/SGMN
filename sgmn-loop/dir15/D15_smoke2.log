@@ -1,0 +1,72 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-15 R1：内容寻址式的读取 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:54,  5.27it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 742.43it/s]Loading weights:  96%|█████████▌| 278/290 [00:00<00:00, 804.13it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 699.79it/s]
+
+[Stage A]
+[PASS] A1' Freeze C（读梯度非零 / 写梯度精确 0 / 基座逐位不变 / 阴性对照泄漏）: 读梯度非零 9/9；写梯度精确0 12/12；基座逐位不变 True；阴性对照泄漏 3/12
+[PASS] A1' 句柄数 = 2×层数: handles=6 mems=3
+[PASS] A3' 写关时两次前视记忆相对差 < 1e-12: diff_off=0
+[PASS] A3' 写开时两次前视记忆变化 > 1e-9: diff_on=2.88
+
+[主循环]
+/home/ec2-user/sgmn-loop/dir15/R1_content_address.py:352: RuntimeWarning: Mean of empty slice
+  f"cue_ok={np.nanmean([r['cue_ok'] for r in rows]):.4f} "
+  seed=20261028 B1_ctx             hit=0.0000 ahit=0.0000 cue_ok=nan tgt_w=0.0204 lp=-1.6189
+Traceback (most recent call last):
+  File "/home/ec2-user/sgmn-loop/dir15/R1_content_address.py", line 460, in <module>
+    main()
+    ~~~~^^
+  File "/home/ec2-user/sgmn-loop/dir15/R1_content_address.py", line 347, in main
+    rows = run_arm(st, docs, gamma_on=gamma_on)
+  File "/home/ec2-user/sgmn-loop/dir15/R1_content_address.py", line 171, in run_arm
+    st.model(input_ids=ids)
+    ~~~~~~~~^^^^^^^^^^^^^^^
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/opt/pytorch/lib64/python3.13/site-packages/transformers/utils/generic.py", line 943, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/opt/pytorch/lib64/python3.13/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 444, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+                                       ~~~~~~~~~~^
+        input_ids=input_ids,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/opt/pytorch/lib64/python3.13/site-packages/transformers/utils/generic.py", line 1081, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/opt/pytorch/lib64/python3.13/site-packages/transformers/utils/output_capturing.py", line 287, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/opt/pytorch/lib64/python3.13/site-packages/transformers/models/qwen2/modeling_qwen2.py", line 380, in forward
+    hidden_states = decoder_layer(
+        hidden_states,
+    ...<5 lines>...
+        **kwargs,
+    )
+  File "/opt/pytorch/lib64/python3.13/site-packages/transformers/modeling_layers.py", line 111, in __call__
+    return super().__call__(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1889, in _call_impl
+    return inner()
+  File "/opt/pytorch/lib64/python3.13/site-packages/torch/nn/modules/module.py", line 1848, in inner
+    hook_result = hook(self, args, kwargs, result)
+  File "/home/ec2-user/sgmn-loop/dir15/sgmn_module_cue.py", line 455, in fwd_hook
+    m = mem.read(hs_in, self.drop_sg)
+  File "/home/ec2-user/sgmn-loop/dir15/sgmn_module_cue.py", line 281, in read
+    assert self.oracle_q is not None, "oracle 模式必须提供 oracle_q"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: oracle 模式必须提供 oracle_q

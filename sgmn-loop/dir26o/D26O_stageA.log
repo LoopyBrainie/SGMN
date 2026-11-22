@@ -1,0 +1,25 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  [PASS] A26O-1  装置 md5 1a242d02c530307f6c76646ca13469ef（期望 1a242d02c530307f6c76646ca13469ef）
+  [PASS] A26O-2  参照脚本 `dir26n/R1_gating15.py` md5=a4de914d277df1ace1e52a78bae4d84d（须等于 MANIFEST 存档 a4de914d277df1ace1e52a78bae4d84d；导入链逐字沿用）
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+  [PASS] A26O-3  边缘不变（5 种子 × 4 档）：键矩相对极差最大 0.0001 ≤ 0.02（k2:0.0000; cosp:0.0000; k4:0.0000; kd:0.0001）
+  [PASS] A26O-4  抖动相关 ρ_u（-0.000→0.299→0.599→0.900）严格递增=True、跨度 0.900 ≥ 0.25；键相关 ρ_k（0.810→0.867→0.924→0.981）只作报告
+  [PASS] A26O-5  工作例 W1：E‖g‖²（φ=0 1.000000 / φ=0.9 0.999262）相对差 0.0007 ≤ 0.02
+  [PASS] A26O-6  工作例 W2：proto/va/vb 逐位相同=True；K 不同=True
+  [PASS] A26O-7  工作例 W3（位级锚点，Stage A 的 5 种子预演；全 30 种子复核在正式轮 `crit`）：φ=0 的 E0/tau 臂与 DIR-26-N 正式轮 b=40 比较 40 项，坏 0 项 []
+  [PASS] A26O-8  同 (seed, φ) 跑两次：两臂的 issued/ret1/mu/wsig 逐位相同
+  [PASS] A26O-9  每单元 μ/精度口径一致（mu_ret1_consistent）
+  [PASS] A26O-10  量程：φ=0 的 ret1(E0)=0.8067∈(0.7, 0.9)、ret1(τ)=0.8727∈(0.8, 0.95)
+  ✓ A26O-1 装置 md5 1a242d02c530307f6c76646ca13469ef（期望 1a242d02c530307f6c76646ca13469ef）
+  ✓ A26O-2 参照脚本 `dir26n/R1_gating15.py` md5=a4de914d277df1ace1e52a78bae4d84d（须等于 MANIFEST 存档 a4de914d277df1ace1e52a78bae4d84d；导入链逐字沿用）
+  ✓ A26O-3 边缘不变（5 种子 × 4 档）：键矩相对极差最大 0.0001 ≤ 0.02（k2:0.0000; cosp:0.0000; k4:0.0000; kd:0.0001）
+  ✓ A26O-4 抖动相关 ρ_u（-0.000→0.299→0.599→0.900）严格递增=True、跨度 0.900 ≥ 0.25；键相关 ρ_k（0.810→0.867→0.924→0.981）只作报告
+  ✓ A26O-5 工作例 W1：E‖g‖²（φ=0 1.000000 / φ=0.9 0.999262）相对差 0.0007 ≤ 0.02
+  ✓ A26O-6 工作例 W2：proto/va/vb 逐位相同=True；K 不同=True
+  ✓ A26O-7 工作例 W3（位级锚点，Stage A 的 5 种子预演；全 30 种子复核在正式轮 `crit`）：φ=0 的 E0/tau 臂与 DIR-26-N 正式轮 b=40 比较 40 项，坏 0 项 []
+  ✓ A26O-8 同 (seed, φ) 跑两次：两臂的 issued/ret1/mu/wsig 逐位相同
+  ✓ A26O-9 每单元 μ/精度口径一致（mu_ret1_consistent）
+  ✓ A26O-10 量程：φ=0 的 ret1(E0)=0.8067∈(0.7, 0.9)、ret1(τ)=0.8727∈(0.8, 0.95)
+=== Stage A PASS（10/10） 351.4s ===
+STAGEA_EXIT=0

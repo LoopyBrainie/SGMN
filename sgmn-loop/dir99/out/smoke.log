@@ -1,0 +1,13 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:59,  4.89it/s]Loading weights:  68%|██████▊   | 197/290 [00:00<00:00, 784.32it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 715.60it/s]
+[setup] facts=32 chunks=600 tr=16 he=16 arms=['intact', 'center_fixed', 'white', 'permneg']
+  ✓ A99-9a     Δ(3/4,1/4)=0.5
+  ✓ A99-9b     Δ(2/4,2/4)=0
+  ✓ A99-9c     W_or 解算：max|W_or·K−V| = 0.00e+00 (<1e-6)，shape=(2, 2)
+/home/ec2-user/sgmn-loop/dir91/R2_task91.py:323: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+[20261028 intact] d_tr=+0.0000 d_ho=+0.0000 | acc_tr w=0.8125 W0=0.8125 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.1250 | maxcos=0.9986 dWrel=0.0e+00 102.8s
+[20261028 center_fixed] d_tr=+0.0000 d_ho=+0.0000 | acc_tr w=0.1875 W0=0.1875 z=0.0625 or=0.0625 | acc_ho w=0.0000 W0=0.0000 z=0.1250 or=0.1250 | maxcos=0.3790 dWrel=0.0e+00 102.9s
+[完成

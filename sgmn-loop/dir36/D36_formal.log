@@ -1,0 +1,31 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/ec2-user/sgmn-loop/dir33/R1_task33.py:203: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  tot += float(L) / len(seeds)
+── 档位 n_train=384
+  训练 T （n=384） 1207s
+  训练 Ts（n=384） 1460s
+    评估 100/400  (63s)
+    评估 200/400  (126s)
+    评估 300/400  (189s)
+    评估 400/400  (252s)
+  L_A 8.25721 · L_C 5.58017 · L_D 0.01108 · L_F 1.096e-29
+  G_read +2.67705 (3se 0.58817) · G_approx +5.56908 (3se 0.34286) · G_range +0.01108
+  主导 approx · 分离 |Δ| 2.89204 (3se 0.72534)
+── 档位 n_train=96
+  训练 T （n=96） 305s
+  训练 Ts（n=96） 366s
+    评估 100/400  (64s)
+    评估 200/400  (128s)
+    评估 300/400  (192s)
+    评估 400/400  (256s)
+  L_A 9.42105 · L_C 6.23802 · L_D 0.01322 · L_F 5.885e-30
+  G_read +3.18302 (3se 0.63672) · G_approx +6.22480 (3se 0.40598) · G_range +0.01322
+  主导 approx · 分离 |Δ| 3.04178 (3se 0.80116)
+  C36-a: {'max_term': 5.5690833684604915, 'dmin': 3.553335010015382, 'terms': {'read': 2.6770450742934555, 'approx': 5.5690833684604915, 'range': 0.01108449797009659}, 'ok': True} ⇒ 过
+  C36-b: {'dom': 'approx', 'second': 'read', 'diff': 2.8920382941670355, '3se': 0.7253427760282918, 'ok': True} ⇒ 过
+  C36-c: {'L_F': 1.0958753596969119e-29, 'L_D': 0.01108449797009659, 'L_C': 5.580167866430587, 'L_A': 8.257212940724042, 'ok': True} ⇒ 过
+  P36-1: {'violations': 0, 'ok': True}
+  归因：('读数头的函数逼近', '读数头的结构（需新任务层 revision）')
+⇒ 判据状态 **SUCCEEDED**  (5641s)

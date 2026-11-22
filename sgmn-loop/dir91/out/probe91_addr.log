@@ -1,0 +1,44 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:03,  4.56it/s]Loading weights:  68%|██████▊   | 197/290 [00:00<00:00, 773.92it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 693.28it/s]
+事实 32；块 600；训练键 16；评测键 16；n_q=16（chance=0.25）
+
+===== Stage A 守卫 =====
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/probe91_addr.py:237: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  d = max(float((m.injection - m_orig[li]).abs().max()) for li, m in st.mems.items())
+[PASS] A91-30: 打补丁的读通路在**无替换**时与原生**逐位相同**：no_write 下 max|Δm|=0.0e+00（须 ==0）；还原 W 交叉校验 max|Δm|=0.0e+00（须 ==0）
+[PASS] A91-33: k_i 与 `key_matrices` **逐位相同**（max|Δk|=0.0e+00，须 ==0）；写入数=[599, 599, 599]，期望=599（=块数-1）
+[PASS] A91-36: γ=0 下「无写」与「写后」的 K,V **逐位相同**：三层 max|Δ|=0.0e+00（须 ==0）
+[PASS] A91-31: q=k_0 时 y 与 W·k_0 **逐位相同**：三层 max|Δy|=0.0e+00（须 ==0）——证明替换确实生效且未被静默忽略
+[PASS] A91-32: share 实现已算例：q=k_0 时 raw share=0.0314 ≥ 下界 0.0313（须成立，≈1/N ⇒ DEF-91-30 退化）；centered share=0.1845 ≥ 下界 0.0663（须成立）；正交合成算例 raw=1.000000000000（须 ==1）
+[PASS] A91-34: 三臂共用同一 `Random(555)`：n_item=96（须=96）、n_q=32（须=32）
+
+===== seed 20261028 =====
+  写入完成 writes=[599, 599, 599] 21s
+  [real] acc_q=0.062 acc_item=0.1250 loss=2.37e-06
+  [oracle_frozen] acc_q=0.125 acc_item=0.2917
+  [oracle_trained] acc_q=0.000 acc_item=0.1875 loss=9.83e-06
+[PASS] A91-35@20261028: `oracle_*` 的初值 Wq/Wo/gamma 与 `real` 臂终值**逐位相同**：max|ΔWq|=0.0e+00 max|ΔWo|=0.0e+00 max|Δγ|=0.0e+00（须全 ==0）
+  [share L8] **cen**(eval)=0.0304 cen(train)=0.0260 cen(oracle)=0.0582 | raw(eval)=0.0311 raw(oracle)=0.0314 | cos(q,k)=+0.0443 cos(y,v)=+0.0102 rel(y,v)=1.4449
+  [share L12] **cen**(eval)=0.0171 cen(train)=0.0226 cen(oracle)=0.0382 | raw(eval)=0.0331 raw(oracle)=0.0314 | cos(q,k)=+0.0035 cos(y,v)=+0.0116 rel(y,v)=1.6157
+  [share L16] **cen**(eval)=0.0282 cen(train)=0.0188 cen(oracle)=0.0489 | raw(eval)=0.0304 raw(oracle)=0.0315 | cos(q,k)=+0.0294 cos(y,v)=+0.0235 rel(y,v)=2.0020
+
+===== seed 7777 =====
+  写入完成 writes=[599, 599, 599] 21s
+  [real] acc_q=0.000 acc_item=0.1250 loss=1.55e-06
+  [oracle_frozen] acc_q=0.188 acc_item=0.2708
+  [oracle_trained] acc_q=0.000 acc_item=0.0000 loss=8.96e-06
+[PASS] A91-35@7777: `oracle_*` 的初值 Wq/Wo/gamma 与 `real` 臂终值**逐位相同**：max|ΔWq|=0.0e+00 max|ΔWo|=0.0e+00 max|Δγ|=0.0e+00（须全 ==0）
+  [share L8] **cen**(eval)=0.0341 cen(train)=0.0205 cen(oracle)=0.0401 | raw(eval)=0.0303 raw(oracle)=0.0313 | cos(q,k)=+0.0229 cos(y,v)=-0.0210 rel(y,v)=1.4275
+  [share L12] **cen**(eval)=0.0278 cen(train)=0.0248 cen(oracle)=0.0611 | raw(eval)=0.0286 raw(oracle)=0.0314 | cos(q,k)=+0.0006 cos(y,v)=+0.0150 rel(y,v)=1.6281
+  [share L16] **cen**(eval)=0.0246 cen(train)=0.0220 cen(oracle)=0.0575 | raw(eval)=0.0305 raw(oracle)=0.0316 | cos(q,k)=+0.0392 cos(y,v)=-0.0016 rel(y,v)=1.7584
+[PASS] A91-30..34,36: 六条臂前守卫全部 PASS（明细见上）
+
+★ seed 20261028: real=0.062 oracle_trained=0.000 oracle_frozen=0.125 Δ=-0.062 share_cen(actual)=0.0282 ceiling=0.0489 rho=0.577 raw=0.0311 ⇒ **A**
+
+★ seed 7777: real=0.000 oracle_trained=0.000 oracle_frozen=0.188 Δ=+0.000 share_cen(actual)=0.0278 ceiling=0.0575 rho=0.483 raw=0.0303 ⇒ **A**
+
+★ 判决 = **A**
+
+★ 完成 ⇒ dir91/out/probe91_addr.json

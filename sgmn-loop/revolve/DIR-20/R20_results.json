@@ -1,0 +1,836 @@
+{
+  "dir": "DIR-20",
+  "round": "R1",
+  "checks": [
+    {
+      "name": "A1' Freeze C（读梯度非零 / 写梯度精确 0 / 基座逐位不变 / 阴性对照泄漏）",
+      "passed": true,
+      "detail": "读梯度非零 6/9；写梯度精确0 12/12；基座逐位不变 True；阴性对照泄漏 3/12",
+      "tolerance": "读梯度>0 且 写梯度==0 且 基座不变 且 泄漏>0",
+      "value": {
+        "read": true,
+        "write": true,
+        "base": true,
+        "leak": 3
+      }
+    },
+    {
+      "name": "A1' 句柄数 = 2×层数",
+      "passed": true,
+      "detail": "handles=6 mems=3",
+      "tolerance": 6,
+      "value": 6
+    },
+    {
+      "name": "A2' 训练生效性：Wo/gamma 改变且 gamma 梯度非零；cue 模式下 Wq 梯度恒 0 且不变",
+      "passed": true,
+      "detail": "Δmax|Wo|=0.004012；Δmax|gamma|=0.003742；‖g_gamma‖=4.61；‖g_Wq‖=0；Δ|Wq|=0",
+      "tolerance": null,
+      "value": true
+    },
+    {
+      "name": "A2' ⑩ Hebbian 核自检：写一步后 W 朝 v 移动且不发散",
+      "passed": true,
+      "detail": "‖Wk−v‖：41.8378 → 41.4426（须下降）；‖W‖=29.9（须有限且 < 1e6）",
+      "tolerance": 41.83784103393555,
+      "value": 41.4426383972168
+    },
+    {
+      "name": "A2' ⑪ 梯度隔离：Hebbian 臂中任务梯度不流入核状态 W，且（非 W4 臂）P_v 梯度恒 0",
+      "passed": true,
+      "detail": "核状态 W 的梯度泄漏 0/3（须 0）；P_v 的梯度泄漏 0/3（须 0）",
+      "tolerance": null,
+      "value": {
+        "W_leak": 0,
+        "Pv_leak": 0
+      }
+    },
+    {
+      "name": "A2' ④ 读阶段冻结写 ⇒ 记忆状态逐位不变",
+      "passed": true,
+      "detail": "equal=True",
+      "tolerance": null,
+      "value": true
+    },
+    {
+      "name": "A2' ⑤ 跨方向对照探针：未训练的 cue 臂命中 = 1.0（复现 DIR-16 的 C1）",
+      "passed": true,
+      "detail": "hit=1.0000（DIR-16 的 C1 = 1.0000）；每篇写入条目数=68",
+      "tolerance": 0.9,
+      "value": 1.0
+    },
+    {
+      "name": "A2' ⑥ 槽位不回绕：每篇写入条目数 ≤ N_ENTRIES",
+      "passed": true,
+      "detail": "每篇 68 条（N_ENTRIES=256）",
+      "tolerance": 256,
+      "value": 68
+    },
+    {
+      "name": "A2' ⑦ 评测码留出：训练码与评测码（含干扰码）零重叠",
+      "passed": true,
+      "detail": "目标码重叠 0；与干扰码重叠 0",
+      "tolerance": null,
+      "value": 0
+    },
+    {
+      "name": "A2' ⑧ 干扰项构造：同线索 + 异码 + 异上下文 + 码在文档末尾（唯一持有其身份的条目）",
+      "passed": true,
+      "detail": "线索 = CUE_A（目标与干扰相同）；码不同（全局唯一）；填充切片不同（间隔 ≥ 400 token）⇒ 上下文签名必不同；码为文档最后一个 token ⇒ 邻位条目**不含**码的身份；抽样 4 篇通过=True",
+      "tolerance": null,
+      "value": 1.0
+    },
+    {
+      "name": "A2' ⑨ 目标不可猜中：基座 NLL ≥ 3（否则任务平凡）",
+      "passed": true,
+      "detail": "base NLL = 15.4878（阈值 3.0）；码为稀有单 token 词",
+      "tolerance": 3.0,
+      "value": 15.487825711568197
+    },
+    {
+      "name": "A2' ⑫ 读路径一致性：W0_verbatim 的读出 y 与其来源槽 v_j 的余弦 ≥ 0.999",
+      "passed": true,
+      "detail": "cos(y, v_j) 均值 = 0.999820（阈值 0.999，9 个槽）",
+      "tolerance": 0.999,
+      "value": 0.9998197025722928
+    },
+    {
+      "name": "A2'⑬ 真值槽**精确映射**自洽（D54）+ 槽空间寻址命中（未训练臂）",
+      "passed": true,
+      "detail": "addr(写入序)=1.0000（★ DIR-17 协议下**必然 ≈ 0**（回绕 ⇒ 真值槽≠写入序），非缺陷）；addr(槽空间，精确映射)=1.0000（阈值 0.99）",
+      "tolerance": 0.99,
+      "value": 1.0
+    },
+    {
+      "name": "A2'⑭ 槽表状态**确定性**：陈旧残留数逐篇一致 + 槽号映射 == (写入前 count + j) % N",
+      "passed": true,
+      "detail": "陈旧条目数（逐篇/逐层）= [0, 0, 0, 0, 0, 0, 0, 0, 0]（须**完全一致** ⇒ 确定性）；槽号映射违例 = 0 处（须 0）",
+      "tolerance": 0,
+      "value": 0
+    },
+    {
+      "name": "A2'⑮ P_v 梯度语义：主臂任务损失下 P_v 梯度恒 0；写侧自监督臂 P_v 梯度非零",
+      "passed": true,
+      "detail": "主臂 ‖∂L_task/∂P_v‖ = [None, None, None]（须全 0/None）；pvw 臂 ‖∂L_write/∂P_v‖ = [1.0046374797821045, 1.0020302534103394, 0.9817663431167603]（须有非零）",
+      "tolerance": null,
+      "value": {
+        "main": [
+          null,
+          null,
+          null
+        ],
+        "pvw": [
+          1.0046374797821045,
+          1.0020302534103394,
+          0.9817663431167603
+        ]
+      }
+    },
+    {
+      "name": "A2'⑯ 维度一致：d_k == d_v == model.config.hidden_size（卡片 D49 已订正）",
+      "passed": true,
+      "detail": "d_k = d_v = 896（hidden_size）；脚本传 896，非 64",
+      "tolerance": 896,
+      "value": 896
+    },
+    {
+      "name": "A2'⑯′ 交换性对照可构造：同池、均匀抽样、从未写入的对照 token ≥ 32 个",
+      "passed": true,
+      "detail": "抽到 32 个（须 32）；同池、均匀抽样、从未写入",
+      "tolerance": 32,
+      "value": 32
+    },
+    {
+      "name": "A2'⑰ 键尺度检查：renorm/ortho 的 ‖k‖² ≈ 5（恒定）；linear 的实测 ‖k‖² 远大于 5（D50/D51）",
+      "passed": true,
+      "detail": "linear: E‖k‖²=['380839.2', '407843.4', '427719.8'] max=['13484455.0', '14463688.0', '15190310.0']；renorm: E‖k‖²=['5.000', '5.000', '5.000']；ortho: E‖k‖²=['5.000', '5.000', '5.000']（⇒ 装置的 pk_scale 标定口径错 ⇒ 真实键尺度 ≫ 5 ⇒ η 窗口不相交）",
+      "tolerance": 5.0,
+      "value": 5.0
+    },
+    {
+      "name": "A2'⑱〔★ 修订 68 零效度自检〕「内容置换」钩子只动内容、不动寻址 ⇒ H14 的对照干净",
+      "passed": true,
+      "detail": "键逐位相同=True（置换不动地址 ⇒ H14 的寻址侧干净）；值的配对余弦均值=['-0.0008', '-0.0062', '0.3026', '0.0011', '-0.0090']（须 < 0.99 ⇒ 置换确实换了内容）",
+      "tolerance": 0.99,
+      "value": 0.30258495769771415
+    },
+    {
+      "name": "A4' 训练不发散（损失有限、max|Wo| 有限、gamma 有限）",
+      "passed": true,
+      "detail": "loss 首/末 = 15.8405/14.3603；max|Wo|=0.1631；gamma 终值=[0.0537, 0.0537, 0.0505]",
+      "tolerance": null,
+      "value": 0.1631084531545639
+    },
+    {
+      "name": "A19-1 基座冻结对照：联合训练后基座参数与初始参数**逐位相同**",
+      "passed": true,
+      "detail": "max|θ−θ₀| = 0.000e+00（须精确为 0）",
+      "tolerance": 0.0,
+      "value": 0.0
+    },
+    {
+      "name": "A19-2 基座可训：被训参数集合**非空**且其梯度**非零有限**",
+      "passed": true,
+      "detail": "可训基座参数数 = 290；有梯度的 = 290；梯度范数 min/max = 3.618e-02/3.753e+02；全部有限 = True；存在非零 = True",
+      "tolerance": null,
+      "value": 375.3111877441406
+    },
+    {
+      "name": "A19-3 保护旋钮的生效性检查**双向**：放开/关闭都改变被训集合；低秩投影后残差 ≈ 0",
+      "passed": true,
+      "detail": "none=0 all=290 layers=72 lowrank=169（须 0<layers<all）；低秩残差 投影前=0.000e+00 扰动后=1.167e+01 投影后=7.051e-05（须 投影后 < 1e-4 且 扰动后 > 1e-6 ⇒ 双向可辨）",
+      "tolerance": 0.0001,
+      "value": 7.051019201753661e-05
+    },
+    {
+      "name": "A19-4 训练数据与基座保持评测数据的**文档窗口集合**交集为空（逐位断言）",
+      "passed": true,
+      "detail": "训练窗口数=39827；探针窗口数=4226；**交集=0（须 0）**；两文件前缀不同=True（train.txt vs valid.txt）",
+      "tolerance": 0.0,
+      "value": 0.0
+    },
+    {
+      "name": "A19-5 交换性对照 token 仍从码池**均匀抽样**（D53 教训：不得取最稀有者）",
+      "passed": true,
+      "detail": "抽到 32 个、去重后 32 个（须 32 且互不相同）",
+      "tolerance": 32.0,
+      "value": 32.0
+    },
+    {
+      "name": "A19-6 记忆寻址指标 addr_slot 仍用**精确槽号映射**（D54：写入序 → 槽号可精确预测）",
+      "passed": true,
+      "detail": "写入记录数 == 槽号记录数 ⇒ 精确映射可用",
+      "tolerance": 0.0,
+      "value": 0.0
+    },
+    {
+      "name": "A19-7 基座保持的 NLL 口径在挂记忆 vs 不挂记忆两个对照下**逐位可算**",
+      "passed": true,
+      "detail": "PPL(挂记忆)=2.505492；PPL(不挂记忆)=2.506668；差=-0.001177（须非 0 ⇒ 挂记忆确实改变了基座输出）",
+      "tolerance": 0.0,
+      "value": 0.0011766620710780273
+    },
+    {
+      "name": "A19-8 D_kv 漂移度量在「零训练步」对照下必须为 **0**（度量自检）",
+      "passed": true,
+      "detail": "D_kv(零训练两次采样) = 0.000e+00（须 < 1e-9）",
+      "tolerance": 0.0,
+      "value": 0.0
+    },
+    {
+      "name": "A19-9 〔KL 正则生效性 · 双向〕启用 ⇒ 项非零且改变基座梯度；禁用 ⇒ 不贡献该梯度",
+      "passed": true,
+      "detail": "KL 序列(启用) = [0.0, 0.135443, 0.583149]（须非零、有限）；基座梯度范数 启用=666.342197 vs 禁用=1162.240911（须不同 ⇒ 双向可辨）；★ **KL 是被惩罚项，其本身不要求下降**（原断言的期望写错 ⇒ 缺陷 D69）",
+      "tolerance": 0.0,
+      "value": -495.8987146197659
+    },
+    {
+      "name": "A19-10〔内容置换只动内容、不动寻址〕⇒ H2′★ 的对照干净",
+      "passed": true,
+      "detail": "键逐位相同=True（置换不动地址 ⇒ H2′ 的寻址侧干净）；值的配对余弦均值=['-0.0009', '-0.0074', '0.3026', '0.0007', '-0.0104']（须 < 0.99 ⇒ 置换确实换了内容）",
+      "tolerance": 0.99,
+      "value": 0.30258495769771415
+    },
+    {
+      "name": "A20-0〔★ D86〕继承 Stage A 的遗留显存已释放，基座已重新冻结（供后续断言与主循环）",
+      "passed": true,
+      "detail": "释放对象=['_bf0', '_opt9']；清空基座梯度；基座 requires_grad 全部恢复 False；当前 alloc=5511 MiB reserved=6010 MiB",
+      "tolerance": 0.0,
+      "value": 5511.1884765625
+    },
+    {
+      "name": "A20-9〔只读评测不写〕评测前后 core.count 与 write_calls 不变（且写权限未被永久关闭）",
+      "passed": true,
+      "detail": "评测前 count/write_calls=[(68, 68), (68, 68), (68, 68)]；评测后=[(68, 68), (68, 68), (68, 68)]；评测前写权限开启=True；★ 若评测期间未冻结写，前缀的前向会**自己写入**⇒ count 必增 ⇒ 本项必 FAIL",
+      "tolerance": 0.0,
+      "value": 0.0
+    },
+    {
+      "name": "A20-1〔export → import 往返指纹逐位相同〕",
+      "passed": true,
+      "detail": "内存指纹=86e7c185373a90d4b59d07cd84781ed5；导入后重导出指纹=86e7c185373a90d4b59d07cd84781ed5",
+      "tolerance": 0.0,
+      "value": 1.0
+    },
+    {
+      "name": "A20-2〔往返后读出逐位相同〕同一前缀下新旧装置的读出余弦 ≥ 0.999",
+      "passed": true,
+      "detail": "逐层余弦=['1.000000', '1.000000', '1.000000']（最小 1.000000）",
+      "tolerance": 0.999,
+      "value": 0.9999999403953552
+    },
+    {
+      "name": "A20-14〔状态文件往返：落盘后 torch.load 的指纹 == 内存中的指纹〕",
+      "passed": true,
+      "detail": "内存指纹=86e7c185373a90d4b59d07cd84781ed5；落盘读回指纹=86e7c185373a90d4b59d07cd84781ed5",
+      "tolerance": 0.0,
+      "value": 1.0
+    },
+    {
+      "name": "A20-3〔import_state(strict=True) 喂错形状必须抛错（不得静默截断）〕",
+      "passed": true,
+      "detail": "ValueError: 层 8：W 形状不符 (3, 3) vs (896, 896)",
+      "tolerance": 0.0,
+      "value": 1.0
+    },
+    {
+      "name": "A20-4〔include_read_map=False ⇒ W_o / γ 未搬运（导入后仍为随机初值）〕",
+      "passed": true,
+      "detail": "导入后 W_o 仍 == 随机初值=True；γ 仍 == 随机初值=True；且 ≠ 源装置（源被扰动 +1.0）=True",
+      "tolerance": 0.0,
+      "value": 1.0
+    },
+    {
+      "name": "A20-5〔include_addr=False ⇒ 地址表未搬运（count == 0、keys 全零）〕",
+      "passed": true,
+      "detail": "逐层 count=[0, 0, 0]；keys 全零=[True, True, True]",
+      "tolerance": 0.0,
+      "value": 0.0
+    },
+    {
+      "name": "A20-7〔content_wrong 的置换**是排列且无不动点**〕",
+      "passed": true,
+      "detail": "层16: n=34 是排列=True 不动点数=0（★ D62：torch 视图别名会写坏排列 ⇒ 必须先取标量副本）",
+      "tolerance": 0.0,
+      "value": 1.0
+    },
+    {
+      "name": "A20-6′〔内容置换只动**值**、不动**寻址键**；签名**逐层**报告（第一挂载层必须逐位相同）〕",
+      "passed": true,
+      "detail": "keys 逐位相同=True（全部挂载层）；vals 逐位不同=True（全部挂载层）；sigs 逐层相同={'8': True, '12': False, '16': False}；★ 第一挂载层（层 8）逐位相同=True（下游层不同是**结构事实**：记忆注入会改变下游 hidden state ⇒ 签名携带注入痕迹 ⇒ 非缺陷）",
+      "tolerance": 0.0,
+      "value": 1.0
+    },
+    {
+      "name": "A20-11〔vals 不进读路径（置零 ⇒ 读出逐位不变）；W 进读路径（置零 ⇒ 读出改变）〕",
+      "passed": true,
+      "detail": "vals 置零后逐层余弦=['1.00000000', '1.00000000', '1.00000012']（须 ≥ 1-1e-6）；W 置零后逐层余弦=['0.000000', '0.000000', '0.000000']（须 < 0.999）",
+      "tolerance": 0.999,
+      "value": 0.0
+    },
+    {
+      "name": "A20-12′〔真值槽精确可预测（= 写前 count + true_idx）且不回绕〕",
+      "passed": true,
+      "detail": "写前 count C0=0；逐层 slot_of_write[true_idx] == C0 + true_idx：[True, True, True]；写后 count=[68, 68, 68]；未回绕（≤ N_ENTRIES=256）=True；★ Stage A 中 C0=0（无训练残留）⇒ 退化为 true_slot == true_idx；正式轮里 C0=训练残留 ⇒ **addr（写入序口径）恒为 0，只有 addr_slot 可读**",
+      "tolerance": 0.0,
+      "value": 1.0
+    },
+    {
+      "name": "A20-13〔X8_linear 的键尺度实测 ≫ 5（linear ≫ 100，renorm ≈ 5）〕",
+      "passed": true,
+      "detail": "linear 逐层 E‖k‖²=['355493.3', '380907.8', '399417.2']；renorm 逐层 E‖k‖²=['5.0000', '5.0000', '5.0000']；★ 复现 D50/D51 ⇒ X8 必须用 η=1e-5（修订 20-C）",
+      "tolerance": 100.0,
+      "value": 355493.34375
+    },
+    {
+      "name": "A20-8〔会话 B 的模型实例**确实是新的**（id 不同）；会话 A 的已释放（显存回落）〕",
+      "passed": true,
+      "detail": "id(会话A)=140476385646928，id(会话B)=140476385644688；显存 9410 MiB → 7526 MiB（回落 1885 MiB）",
+      "tolerance": 500.0,
+      "value": 1884.58642578125
+    },
+    {
+      "name": "H1″ 〔跨会话可用〕X1_full_state 相对 X11_newinst_noexport（同一「新实例」，唯一差别=有没有状态）有显著收益",
+      "passed": true,
+      "detail": "Δ(Δnll)=+5.510448（阈值 > 0.5） t=34.53 p=1.25e-12 pos=178/180 逐种子=['+5.4414', '+5.4293', '+5.6607'] （nll: X1_full_state=9.6714 vs X11_newinst_noexport=15.1819）",
+      "tolerance": 0.5,
+      "value": 5.51044840282864
+    },
+    {
+      "name": "H2″ 〔★ 内容特异 · 记忆内对照〕X1_full_state 显著优于 X4_content_wrong（只差内容，地址逐位相同）",
+      "passed": true,
+      "detail": "Δ(Δnll)=+1.718927（阈值 > 0.5） t=19.54 p=1.25e-12 pos=167/180 逐种子=['+1.7510', '+1.7077', '+1.6981'] （nll: X1_full_state=9.6714 vs X4_content_wrong=11.3904）",
+      "tolerance": 0.5,
+      "value": 1.7189267794291179
+    },
+    {
+      "name": "H3″ 〔★ 跨会话折损有界〕X1_full_state 相对 X10_same_session 的收益折损 ≤ 事先声明的界 1.0 nats",
+      "passed": true,
+      "detail": "折损 = nll(X1) − nll(X10) = 9.6714 − 9.6714 = +0.0000 nats（阈值 ≤ 1.0）逐种子=['+0.0000', '+0.0000', '+0.0000']；benefit(X1)=+5.5104，benefit(X10)=+5.5104",
+      "tolerance": 1.0,
+      "value": 0.0
+    },
+    {
+      "name": "H4″ 〔★ 键尺度归一 ⇒ 跨会话寻址稳定〕X1_full_state(ortho) 显著优于 X8_linear（原尺度）",
+      "passed": true,
+      "detail": "Δ(Δnll)=+1.274396（阈值 > 0.5） t=14.06 p=1.25e-12 pos=155/180 逐种子=['+1.2348', '+1.2625', '+1.3259'] （nll: X1_full_state=9.6714 vs X8_linear=10.9458）",
+      "tolerance": 0.5,
+      "value": 1.2743960592481824
+    },
+    {
+      "name": "H5″ 〔★ 会话归属〕X1_full_state 显著优于 X5_wrong_session（导入另一个种子的状态）",
+      "passed": true,
+      "detail": "Δ(Δnll)=+2.258251（阈值 > 0.5） t=15.40 p=1.25e-12 pos=162/180 逐种子=['+2.0604', '+2.1314', '+2.5830'] （nll: X1_full_state=9.6714 vs X5_wrong_session=11.9297）",
+      "tolerance": 0.5,
+      "value": 2.2582508113649156
+    },
+    {
+      "name": "H6″ 〔★ 零效度门槛〕X6_verbatim（按构造内容正确）的跨会话收益显著 > 0（参照 X11）",
+      "passed": true,
+      "detail": "Δ(Δnll)=+5.797380（阈值 > 0.5） t=34.17 p=1.25e-12 pos=179/180 逐种子=['+5.7995', '+5.8238', '+5.7688'] （nll: X6_verbatim=9.3845 vs X11_newinst_noexport=15.1819）",
+      "tolerance": 0.5,
+      "value": 5.797380317582024
+    },
+    {
+      "name": "H7″ 〔状态成分的必要性〕至少一个成分缺失（X2_no_readmap / X3_no_addr）显著降低跨会话收益",
+      "passed": true,
+      "detail": "X2_no_readmap: Δ(Δnll)=+5.5509(t=34.95,p≈1.25e-12,n=180) 逐种子=['+5.4588', '+5.4694', '+5.7245'] ⇒ PASS；X3_no_addr: Δ(Δnll)=+4.1758(t=17.47,p≈1.25e-12,n=180) 逐种子=['+4.1309', '+4.3219', '+4.0746'] ⇒ PASS",
+      "tolerance": 0.5,
+      "value": 4.17577633327908
+    },
+    {
+      "name": "R-1 〔报告项〕X1_full_state 跨会话后的寻址/内容读数",
+      "passed": true,
+      "detail": "hit=0.9204 addr_slot=0.9204 fid_true=0.9822 cos_y_vtrue=0.9520 （★ 寻址是否幸存 + 是否取回内容）",
+      "tolerance": 0.0,
+      "value": 0.9203703703703705
+    },
+    {
+      "name": "R-2 〔报告项〕X8_linear（原尺度）的寻址/内容读数",
+      "passed": true,
+      "detail": "hit=0.0074 addr_slot=0.8185 fid_true=-0.0029 cos_y_vtrue=-0.0026",
+      "tolerance": 0.0,
+      "value": 0.007407407407407407
+    },
+    {
+      "name": "R-3 〔报告项〕X11_newinst_noexport 相对 X0_no_state 的差（「新实例」与「状态搬运」的分解）",
+      "passed": true,
+      "detail": "nll(X11)=15.1819  nll(X0)=15.1819  差=+0.0000 nats （★ 基座冻结 ⇒ 参数逐位相同 ⇒ 预期 ≈ 0 ⇒ 检验「重建模型实例本身」是否改变读数）",
+      "tolerance": 0.0,
+      "value": 0.0
+    },
+    {
+      "name": "R-4 〔报告项〕X7_renorm vs X8_linear（第二个归一配置的读数）",
+      "passed": true,
+      "detail": "Δ(Δnll)=-0.0630 t=-1.51 p≈0.602 n=180 逐种子=['-0.0270', '-0.1213', '-0.0407']",
+      "tolerance": 0.0,
+      "value": -0.06300015449523926
+    },
+    {
+      "name": "R-5 〔报告项〕X1（跨会话）vs X10（同会话）的寻址读数对照",
+      "passed": true,
+      "detail": "hit: X1=0.9204 vs X10=0.9204；addr_slot: X1=0.9204 vs X10=0.9204；fid_true: X1=0.9822 vs X10=0.9822",
+      "tolerance": 0.0,
+      "value": 0.9203703703703705
+    }
+  ],
+  "arms": {
+    "X0_no_state": {
+      "lp": -15.181886556413438,
+      "nll": 15.181886556413438,
+      "fid": NaN,
+      "fid_true": NaN,
+      "cos_y_vtrue": NaN,
+      "nll_ctrl": 14.377451435724895,
+      "nll_dcode": 14.992882898118761,
+      "addr": 0.0,
+      "addr_slot": 0.0,
+      "ppl": null,
+      "dkv": null,
+      "base_drift": null,
+      "kl_last": null,
+      "ppl_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "dkv_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "lp_by_seed": [
+        -15.313814194997152,
+        -14.934852123260498,
+        -15.296993350982666
+      ],
+      "nll_by_seed": [
+        15.313814194997152,
+        14.934852123260498,
+        15.296993350982666
+      ],
+      "hit": 0.0,
+      "n": 180
+    },
+    "X1_full_state": {
+      "lp": -9.671438153584798,
+      "nll": 9.671438153584798,
+      "fid": 0.9817426914418184,
+      "fid_true": 0.9821766614913939,
+      "cos_y_vtrue": 0.9519608731623048,
+      "nll_ctrl": 11.518142504162258,
+      "nll_dcode": 11.68686867819892,
+      "addr": 0.0,
+      "addr_slot": 0.9203703703703705,
+      "ppl": null,
+      "dkv": null,
+      "base_drift": null,
+      "kl_last": null,
+      "ppl_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "dkv_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "lp_by_seed": [
+        -9.872429045041402,
+        -9.505566994349161,
+        -9.63631842136383
+      ],
+      "nll_by_seed": [
+        9.872429045041402,
+        9.505566994349161,
+        9.63631842136383
+      ],
+      "hit": 0.9203703703703705,
+      "n": 180
+    },
+    "X2_no_readmap": {
+      "lp": -15.222349913914998,
+      "nll": 15.222349913914998,
+      "fid": 0.9718382640017403,
+      "fid_true": 0.9821766614913939,
+      "cos_y_vtrue": 0.8403931872160345,
+      "nll_ctrl": 14.415834267934164,
+      "nll_dcode": 15.031023756663005,
+      "addr": 0.23703703703703702,
+      "addr_slot": 0.7037037037037036,
+      "ppl": null,
+      "dkv": null,
+      "base_drift": null,
+      "kl_last": null,
+      "ppl_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "dkv_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "lp_by_seed": [
+        -15.331259902318319,
+        -14.97492496172587,
+        -15.360864877700806
+      ],
+      "nll_by_seed": [
+        15.331259902318319,
+        14.97492496172587,
+        15.360864877700806
+      ],
+      "hit": 0.7037037037037036,
+      "n": 180
+    },
+    "X3_no_addr": {
+      "lp": -13.847214486863878,
+      "nll": 13.847214486863878,
+      "fid": NaN,
+      "fid_true": NaN,
+      "cos_y_vtrue": NaN,
+      "nll_ctrl": 13.44418905046251,
+      "nll_dcode": 13.732755541801453,
+      "addr": 0.0,
+      "addr_slot": 0.0,
+      "ppl": null,
+      "dkv": null,
+      "base_drift": null,
+      "kl_last": null,
+      "ppl_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "dkv_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "lp_by_seed": [
+        -14.003299697240193,
+        -13.82742746671041,
+        -13.710916296641033
+      ],
+      "nll_by_seed": [
+        14.003299697240193,
+        13.82742746671041,
+        13.710916296641033
+      ],
+      "hit": 0.0,
+      "n": 180
+    },
+    "X4_content_wrong": {
+      "lp": -11.390364933013917,
+      "nll": 11.390364933013917,
+      "fid": 0.9805615462638713,
+      "fid_true": 0.980488959175569,
+      "cos_y_vtrue": 0.9782537745104896,
+      "nll_ctrl": 11.016424173778958,
+      "nll_dcode": 11.279959167374505,
+      "addr": 0.0,
+      "addr_slot": 0.9944444444444445,
+      "ppl": null,
+      "dkv": null,
+      "base_drift": null,
+      "kl_last": null,
+      "ppl_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "dkv_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "lp_by_seed": [
+        -11.623452806472779,
+        -11.2132408618927,
+        -11.33440113067627
+      ],
+      "nll_by_seed": [
+        11.623452806472779,
+        11.2132408618927,
+        11.33440113067627
+      ],
+      "hit": 0.9944444444444445,
+      "n": 180
+    },
+    "X5_wrong_session": {
+      "lp": -11.929688964949714,
+      "nll": 11.929688964949714,
+      "fid": 0.9675255807461564,
+      "fid_true": 0.982176661491394,
+      "cos_y_vtrue": 0.6180604478275334,
+      "nll_ctrl": 11.71207037501865,
+      "nll_dcode": 11.770181814829508,
+      "addr": 0.05925925925925925,
+      "addr_slot": 0.29814814814814816,
+      "ppl": null,
+      "dkv": null,
+      "base_drift": null,
+      "kl_last": null,
+      "ppl_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "dkv_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "lp_by_seed": [
+        -11.932787171999614,
+        -11.636953735351563,
+        -12.219325987497966
+      ],
+      "nll_by_seed": [
+        11.932787171999614,
+        11.636953735351563,
+        12.219325987497966
+      ],
+      "hit": 0.29814814814814816,
+      "n": 180
+    },
+    "X7_renorm": {
+      "lp": -11.00883436732822,
+      "nll": 11.00883436732822,
+      "fid": 0.7238315221888048,
+      "fid_true": 0.7236082931911503,
+      "cos_y_vtrue": 0.7235736717228535,
+      "nll_ctrl": 10.79057306183709,
+      "nll_dcode": 10.953449572457208,
+      "addr": 0.0,
+      "addr_slot": 0.9962962962962962,
+      "ppl": null,
+      "dkv": null,
+      "base_drift": null,
+      "kl_last": null,
+      "ppl_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "dkv_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "lp_by_seed": [
+        -11.134205945332845,
+        -10.889377959569295,
+        -11.00291919708252
+      ],
+      "nll_by_seed": [
+        11.134205945332845,
+        10.889377959569295,
+        11.00291919708252
+      ],
+      "hit": 0.0,
+      "n": 180
+    },
+    "X8_linear": {
+      "lp": -10.945834212832981,
+      "nll": 10.945834212832981,
+      "fid": -0.004222343211916234,
+      "fid_true": -0.002861110031712828,
+      "cos_y_vtrue": -0.002636908379348892,
+      "nll_ctrl": 10.76152974764506,
+      "nll_dcode": 10.99511841668023,
+      "addr": 0.0,
+      "addr_slot": 0.8185185185185188,
+      "ppl": null,
+      "dkv": null,
+      "base_drift": null,
+      "kl_last": null,
+      "ppl_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "dkv_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "lp_by_seed": [
+        -11.107216930389404,
+        -10.768038829167685,
+        -10.962246878941853
+      ],
+      "nll_by_seed": [
+        11.107216930389404,
+        10.768038829167685,
+        10.962246878941853
+      ],
+      "hit": 0.007407407407407407,
+      "n": 180
+    },
+    "X6_verbatim": {
+      "lp": -9.384506238831413,
+      "nll": 9.384506238831413,
+      "fid": NaN,
+      "fid_true": NaN,
+      "cos_y_vtrue": 0.94371088080936,
+      "nll_ctrl": 11.787575313780042,
+      "nll_dcode": 12.055429116884868,
+      "addr": 0.0,
+      "addr_slot": 0.8629629629629628,
+      "ppl": null,
+      "dkv": null,
+      "base_drift": null,
+      "kl_last": null,
+      "ppl_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "dkv_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "lp_by_seed": [
+        -9.514335147539775,
+        -9.11100951830546,
+        -9.528174050649007
+      ],
+      "nll_by_seed": [
+        9.514335147539775,
+        9.11100951830546,
+        9.528174050649007
+      ],
+      "hit": 0.8629629629629628,
+      "n": 180
+    },
+    "X10_same_session": {
+      "lp": -9.671438153584798,
+      "nll": 9.671438153584798,
+      "fid": 0.9817426914418184,
+      "fid_true": 0.9821766614913939,
+      "cos_y_vtrue": 0.9519608731623048,
+      "nll_ctrl": 11.518142504162258,
+      "nll_dcode": 11.68686867819892,
+      "addr": 0.0,
+      "addr_slot": 0.9203703703703705,
+      "ppl": null,
+      "dkv": null,
+      "base_drift": null,
+      "kl_last": null,
+      "ppl_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "dkv_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "lp_by_seed": [
+        -9.872429045041402,
+        -9.505566994349161,
+        -9.63631842136383
+      ],
+      "nll_by_seed": [
+        9.872429045041402,
+        9.505566994349161,
+        9.63631842136383
+      ],
+      "hit": 0.9203703703703705,
+      "n": 180
+    },
+    "X11_newinst_noexport": {
+      "lp": -15.181886556413438,
+      "nll": 15.181886556413438,
+      "fid": NaN,
+      "fid_true": NaN,
+      "cos_y_vtrue": NaN,
+      "nll_ctrl": 14.377451435724895,
+      "nll_dcode": 14.992882898118761,
+      "addr": 0.0,
+      "addr_slot": 0.0,
+      "ppl": null,
+      "dkv": null,
+      "base_drift": null,
+      "kl_last": null,
+      "ppl_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "dkv_by_seed": [
+        NaN,
+        NaN,
+        NaN
+      ],
+      "lp_by_seed": [
+        -15.313814194997152,
+        -14.934852123260498,
+        -15.296993350982666
+      ],
+      "nll_by_seed": [
+        15.313814194997152,
+        14.934852123260498,
+        15.296993350982666
+      ],
+      "hit": 0.0,
+      "n": 180
+    }
+  },
+  "meta": {
+    "a4_loss": {
+      "first": 15.840493202209473,
+      "last": 14.360299110412598
+    }
+  },
+  "summary_pass": {
+    "passed": 56,
+    "total": 56
+  }
+}

@@ -1,0 +1,72 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:51,  5.56it/s]Loading weights:  60%|█████▉    | 173/290 [00:00<00:00, 724.91it/s]Loading weights:  92%|█████████▏| 267/290 [00:00<00:00, 789.64it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 697.05it/s]
+OK chunks=600 B=600 CHUNK=64
+[PASS] A88-11: B=600 块（每块 64 token）⇒ 块 ≠ token；N* 以块计
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir88/R1_task88.py:152: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  k2 = [float((m.Pk ** 2).sum() * 5.0 * m.pk_scale ** 2) for m in st0.mems.values()]
+[PASS] A88-12: 线性预测 η*≈2/(α‖k‖²)，按 E[k²]=5 与 d_k 估 ‖k‖²=22383.9 ⇒ η*≈8.935e-05（诊断量，不进裁决）
+[PASS] A88-10: σ1(diag(3,1,1)) 幂迭代=3.000000000
+[PASS] A88-2[λ=0.0]: 三层 m.lam 实测=[0.0, 0.0, 0.0]（目标 0.0，float32 容差 1e-6）
+[PASS] A88-5[λ=0.0]: 三层 γ 实测=[0.05000000074505806, 0.05000000074505806, 0.05000000074505806]，requires_grad=[False, False, False]
+[PASS] A88-2[λ=0.05]: 三层 m.lam 实测=[0.05, 0.05, 0.05]（目标 0.05，float32 容差 1e-6）
+[PASS] A88-5[λ=0.05]: 三层 γ 实测=[0.05000000074505806, 0.05000000074505806, 0.05000000074505806]，requires_grad=[False, False, False]
+[PASS] A88-2[λ=0.5]: 三层 m.lam 实测=[0.5, 0.5, 0.5]（目标 0.5，float32 容差 1e-6）
+[PASS] A88-5[λ=0.5]: 三层 γ 实测=[0.05000000074505806, 0.05000000074505806, 0.05000000074505806]，requires_grad=[False, False, False]
+[PASS] A88-4: 注入前 isfinite=True；注入 nan 后 检出=True（须 True ⇒ 检出）；复原后 isfinite=True（须 真/检出/真）
+[PASS] A88-8: (λ=ref, η=1e-5) 600 块 N*=None（须 None，复现 D-106 probe）
+[PASS] A88-6: 同 seed 两次前向 logits 逐位相同 max|Δ|=0
+[PASS] A88-9: 手算(照实际顺序) max|ΔU|=0.00e+00 max|ΔV|=0.00e+00；若按『同步用旧U』则 max|ΔV|=0.00e+00（须显著>1e-6 ⇒ 守卫有分辨力）
+[PASS] A88-1: 基座摘要 d0=35aad0c57ca5… d1=35aad0c57ca5…（须逐位相同）
+[PASS] A88-3: no_write 跑满 600 块后 U,V max|Δ|=0.0e+00、write_calls={8: 0, 12: 0, 16: 0}（须全 0）
+
+★ Stage A: 15/15 PASS
+[MEM λ=0.0|η=3e-05]
+  → N*=None  drift_end=0.22155173122882843
+[MEM λ=0.0|η=0.0001]
+  [λ=0.0|η=0.0001] 发散 @ 块 17
+  → N*=17  drift_end=0.22634103894233704
+[MEM λ=0.0|η=0.0003]
+  [λ=0.0|η=0.0003] 发散 @ 块 6
+  → N*=6  drift_end=0.22757627069950104
+[MEM λ=0.0|η=0.001]
+  [λ=0.0|η=0.001] 发散 @ 块 5
+  → N*=5  drift_end=0.22757627069950104
+[MEM λ=0.05|η=3e-05]
+  → N*=None  drift_end=0.21826350688934326
+[MEM λ=0.05|η=0.0001]
+  [λ=0.05|η=0.0001] 发散 @ 块 17
+  → N*=17  drift_end=0.226164773106575
+[MEM λ=0.05|η=0.0003]
+  [λ=0.05|η=0.0003] 发散 @ 块 6
+  → N*=6  drift_end=0.22757627069950104
+[MEM λ=0.05|η=0.001]
+  [λ=0.05|η=0.001] 发散 @ 块 5
+  → N*=5  drift_end=0.22757627069950104
+[MEM λ=0.5|η=3e-05]
+  → N*=None  drift_end=0.1925574243068695
+[MEM λ=0.5|η=0.0001]
+  [λ=0.5|η=0.0001] 发散 @ 块 18
+  → N*=18  drift_end=0.22459016740322113
+[MEM λ=0.5|η=0.0003]
+  [λ=0.5|η=0.0003] 发散 @ 块 6
+  → N*=6  drift_end=0.22757627069950104
+[MEM λ=0.5|η=0.001]
+  [λ=0.5|η=0.001] 发散 @ 块 5
+  → N*=5  drift_end=0.22757627069950104
+  [FULL full|η=0.0001] N*=None
+  [FULL full|η=0.0003] N*=None
+  [NOWRITE η=0.0001] N*=None
+  [NOWRITE η=0.001] N*=None
+[PASS] A88-7: N* 对 η 的单调性：违反 0 处（η↑ ⇒ N*↓）
+
+=== 裁决材料 ===
+  C88-a = True
+  C88-d = True
+  thr_lam0 = {'value': 3e-05, 'mode': 'detected', 'censored_high': False}
+  thr_lam05 = {'value': 3e-05, 'mode': 'detected', 'censored_high': False}
+  ratio = 1.0
+  C88-b_state = CONFIRMED
+  C88-c_slope = -0.04910917660989297
+  C88-c = False

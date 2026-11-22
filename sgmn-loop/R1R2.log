@@ -1,0 +1,72 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-07 v2：写通道的可行工作窗口 ===
+
+[R1 Stage A]
+[PASS] A1 G = G_data + G_reg 分解精确: 最大绝对差 0.000e+00
+    alpha=1 eta=0.001  : rho=0.6850 R^2=+0.9999 W_T=+0.98965 W*=0.99010 学到=True 动过=True
+    alpha=1 eta=0.01   : rho=0.3756 R^2=+1.0000 W_T=+0.99304 W*=0.99010 学到=True 动过=True
+    alpha=1 eta=0.03   : rho=0.3457 R^2=+0.9999 W_T=+0.98954 W*=0.99010 学到=True 动过=True
+    alpha=1 eta=0.1    : rho=0.4498 R^2=+0.9979 W_T=+0.95389 W*=0.99010 学到=True 动过=True
+    alpha=0 eta=0.01  : rho=0.0000 R^2=-0.0082 W_T=-0.00410 学到=False 动过=False
+[PASS] A2 方向性判据的语义：alpha=1 时收敛到 W*；alpha=0 时不学到 W*: alpha=1 的 4 个「动过」的步长全部学到=True；alpha=0 未学到 W*=True（W_T=-0.004101，W_0 初值 -0.004152；该档在所选步长下接近『惰性』而非『收敛到 W0』）
+[PASS] A3 对照档 alpha=0 => rho 精确为 0: rho 均值=0.0
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:10,  4.09it/s]Loading weights:  68%|██████▊   | 197/290 [00:00<00:00, 699.95it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 647.04it/s]
+[PASS] A5 分段前视可重复（逐位相同）: 两次前视最大差 0.000e+00
+[PASS] A4 与 DIR-06 探针一致：eta_w=1e-4 为「有限但发散」: logits 有限=True，max|U|=1.080e+11（DIR-06 测得 2.27e+07）
+
+[R2] 尺度 x 步长网格（标量模型；判据：stable AND learned）
+  mu=0.05     eta=1e-08   : stable=True  learned=False R^2=-4.3084 max|U|=1.020e+00 rho=0.434
+  mu=0.05     eta=1e-07   : stable=True  learned=False R^2=-4.3082 max|U|=1.020e+00 rho=0.434
+  mu=0.05     eta=1e-06   : stable=True  learned=False R^2=-4.3058 max|U|=1.020e+00 rho=0.434
+  mu=0.05     eta=1e-05   : stable=True  learned=False R^2=-4.2822 max|U|=1.020e+00 rho=0.434
+  mu=0.05     eta=0.0001  : stable=True  learned=False R^2=-4.0569 max|U|=1.020e+00 rho=0.436
+  mu=0.05     eta=0.001   : stable=True  learned=False R^2=-2.5531 max|U|=1.020e+00 rho=0.450
+  mu=0.05     eta=0.01    : stable=True  learned=False R^2=-0.0578 max|U|=1.019e+00 rho=0.592
+  mu=0.5      eta=1e-08   : stable=True  learned=False R^2=-4.3083 max|U|=1.020e+00 rho=0.748
+  mu=0.5      eta=1e-07   : stable=True  learned=False R^2=-4.3067 max|U|=1.020e+00 rho=0.748
+  mu=0.5      eta=1e-06   : stable=True  learned=False R^2=-4.2908 max|U|=1.020e+00 rho=0.748
+  mu=0.5      eta=1e-05   : stable=True  learned=False R^2=-4.1366 max|U|=1.020e+00 rho=0.748
+  mu=0.5      eta=0.0001  : stable=True  learned=False R^2=-2.9625 max|U|=1.020e+00 rho=0.754
+  mu=0.5      eta=0.001   : stable=True  learned=False R^2=-0.2356 max|U|=1.020e+00 rho=0.810
+  mu=0.5      eta=0.01    : stable=True  learned=True  R^2=+0.9900 max|U|=1.017e+00 rho=0.526
+  mu=5        eta=1e-08   : stable=True  learned=False R^2=-4.3068 max|U|=1.020e+00 rho=0.909
+  mu=5        eta=1e-07   : stable=True  learned=False R^2=-4.2916 max|U|=1.020e+00 rho=0.909
+  mu=5        eta=1e-06   : stable=True  learned=False R^2=-4.1447 max|U|=1.020e+00 rho=0.909
+  mu=5        eta=1e-05   : stable=True  learned=False R^2=-3.0100 max|U|=1.020e+00 rho=0.911
+  mu=5        eta=0.0001  : stable=True  learned=False R^2=-0.2613 max|U|=1.020e+00 rho=0.933
+  mu=5        eta=0.001   : stable=True  learned=True  R^2=+0.9999 max|U|=1.018e+00 rho=0.643
+  mu=5        eta=0.01    : stable=True  learned=True  R^2=+0.9999 max|U|=9.939e-01 rho=0.368
+  mu=50       eta=1e-08   : stable=True  learned=False R^2=-4.2917 max|U|=1.020e+00 rho=0.971
+  mu=50       eta=1e-07   : stable=True  learned=False R^2=-4.1455 max|U|=1.020e+00 rho=0.971
+  mu=50       eta=1e-06   : stable=True  learned=False R^2=-3.0148 max|U|=1.020e+00 rho=0.972
+  mu=50       eta=1e-05   : stable=True  learned=False R^2=-0.2640 max|U|=1.020e+00 rho=0.980
+  mu=50       eta=0.0001  : stable=True  learned=True  R^2=+1.0000 max|U|=1.018e+00 rho=0.762
+  mu=50       eta=0.001   : stable=True  learned=True  R^2=+1.0000 max|U|=9.946e-01 rho=0.378
+  mu=50       eta=0.01    : stable=False learned=False R^2=-inf max|U|=inf rho=nan
+  mu=500      eta=1e-08   : stable=True  learned=False R^2=-4.1456 max|U|=1.020e+00 rho=0.992
+  mu=500      eta=1e-07   : stable=True  learned=False R^2=-3.0153 max|U|=1.020e+00 rho=0.993
+  mu=500      eta=1e-06   : stable=True  learned=False R^2=-0.2642 max|U|=1.020e+00 rho=0.995
+  mu=500      eta=1e-05   : stable=True  learned=True  R^2=+1.0000 max|U|=1.018e+00 rho=0.872
+  mu=500      eta=0.0001  : stable=True  learned=True  R^2=+1.0000 max|U|=9.947e-01 rho=0.388
+  mu=500      eta=0.001   : stable=False learned=False R^2=-inf max|U|=inf rho=nan
+  mu=500      eta=0.01    : stable=False learned=False R^2=-inf max|U|=inf rho=nan
+  mu=5000     eta=1e-08   : stable=True  learned=False R^2=-3.0154 max|U|=1.020e+00 rho=0.999
+  mu=5000     eta=1e-07   : stable=True  learned=False R^2=-0.2643 max|U|=1.020e+00 rho=0.999
+  mu=5000     eta=1e-06   : stable=True  learned=True  R^2=+1.0000 max|U|=1.018e+00 rho=0.949
+  mu=5000     eta=1e-05   : stable=True  learned=True  R^2=+1.0000 max|U|=9.947e-01 rho=0.397
+  mu=5000     eta=0.0001  : stable=True  learned=True  R^2=+1.0000 max|U|=1.801e+00 rho=0.531
+  mu=5000     eta=0.001   : stable=False learned=False R^2=-inf max|U|=inf rho=nan
+  mu=5000     eta=0.01    : stable=False learned=False R^2=-inf max|U|=inf rho=nan
+
+  同时满足（稳定 且 学到）的网格点：10/42
+    mu=0.05    : 稳定点 7  学到点 0  窗口 0  【无窗口】
+    mu=0.5     : 稳定点 7  学到点 1  窗口 1  窗口 eta ∈ {0.01}
+    mu=5       : 稳定点 7  学到点 2  窗口 2  窗口 eta ∈ {0.001, 0.01}
+    mu=50      : 稳定点 6  学到点 2  窗口 2  窗口 eta ∈ {0.0001, 0.001}
+    mu=500     : 稳定点 5  学到点 2  窗口 2  窗口 eta ∈ {1e-05, 0.0001}
+    mu=5000    : 稳定点 5  学到点 3  窗口 3  窗口 eta ∈ {1e-06, 1e-05, 0.0001}
+[PASS] A3b 幅度比 rho 高但系统不动（v1 判据失效的证据）: 网格中存在 21 个 rho>0.5 但未学到的点，例：[(0.05, 0.01), (0.5, 1e-08), (0.5, 1e-07), (0.5, 1e-06)] => rho 是【幅度比】，不能当『是否在学』的判据（v2 改用方向性判据）
+[FAIL] H1 每个尺度上是否存在「稳定 且 学到」的窗口: 逐尺度的窗口数：{'0.05': 0, '0.5': 1, '5.0': 2, '50.0': 2, '500.0': 2, '5000.0': 3}
+
+=== DIR-07 R1+R2：6/7 通过 ===

@@ -1,0 +1,9 @@
+{
+ "smoke": true,
+ "arm": "BB",
+ "mean_L": 39.87816747238833,
+ "n_eval": 5,
+ "steps": 4,
+ "n_train": 3,
+ "card_md5": "339ddd7545d96f6398c9d17f9cd59270"
+}

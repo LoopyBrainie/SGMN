@@ -1,0 +1,24 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[训练] 头（oracle 档，n_rep=16）n=192 ...
+[训练] 头完成 2268s
+[训练] 读控制器（Wq1,bq1；头冻结）n=192 ...
+[训练] 控制器完成 4590s
+[评估] oracle      L=1.431056 (sd 0.7977) align=1.1488 Wmax=2.6777 |q|=1.1488 |y|=0.8049 m̄=0.3188
+[评估] rand        L=19.940696 (sd 15.0604) align=-0.0216 Wmax=2.6777 |q|=1.8660 |y|=0.5197 m̄=0.2913
+[评估] learned     L=22.741123 (sd 17.8000) align=-0.0165 Wmax=2.6777 |q|=2.1925 |y|=0.6141 m̄=0.3034
+[评估] learned_rc  L=21.984750 (sd 11.1186) align=-0.0165 Wmax=2.6777 |q|=2.1925 |y|=0.6851 m̄=0.3084
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir39/R1_task39.py:404: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  "dWq1_trained_vs_init": float((phi_ctl["Wq1"] - init["Wq1"]).norm()),
+
+══ 正式轮 ══
+  L[oracle     ] = 1.431056   align = 1.1488   |q|=1.1488  |y|=0.8049  m̄=0.3188
+  L[rand       ] = 19.940696   align = -0.0216   |q|=1.8660  |y|=0.5197  m̄=0.2913
+  L[learned    ] = 22.741123   align = -0.0165   |q|=2.1925  |y|=0.6141  m̄=0.3034
+  L[learned_rc ] = 21.984750   align = -0.0165   |q|=2.1925  |y|=0.6851  m̄=0.3084
+  可寻址区间 R = L(rand) − L(oracle) = 18.509640
+  效应量 = L(rand) − L(learned) = -2.800427   阈（20%·R）= 3.701928
+  配对 rand−learned: mean=-2.800427 3se=3.310050 n=400
+  内容性对照 learned_rc−learned: mean=-0.756374 3se=2.650192
+  ★ 结局 = FALSIFIED-SIG · 计入 SUCCEEDED = False

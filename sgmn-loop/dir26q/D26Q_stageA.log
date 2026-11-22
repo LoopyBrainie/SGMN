@@ -1,0 +1,23 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+  ✓ A26Q-1 装置 md5 零改动
+  ✓ A26Q-2 参照脚本 md5
+  ✗ A26Q-2b 本文件不重定义 run_unit / build_stream_ar1（只 monkeypatch build_stream_ar1）
+  ✓ A26Q-3 perm 在 φ=0 被拒绝
+  ✗ A26Q-4 W1：ρ_u 0 / 0.5、Λ 同值 0.7454（=√5/3）
+  ✗ A26Q-5 W2：几何偏差 ‖K‖ 7.48e-07 / cos 2.73e-07（≤1e-06）、多重集逐位还原 False
+  ✗ A26Q-6 Q-β：ρ_u nat@0.9=0.900 ≥0.80、perm@0.9=+0.837 ≤0.05、nat@0=-0.002；Λ(perm)=1.992
+  ✓ A26Q-7 W3：位级锚点 72/72 逐位相等（坏 0）
+  ✓ A26Q-8 同种子两次重建键与诊断逐位相同（置换只依赖 seed）
+  ✓ A26Q-9 mu_ret1_consistent（seed 20261028、perm@0.9）
+  ✓ A26Q-9b 测量不扰动 W
+  ✓ A26Q-12 测量闭包字段集同构（18 个字段）
+  ✓ A26Q-11 断言集非空（12 条）
+=== Stage A FAIL（9/13） 448.1s ===
+EXITCODE=1

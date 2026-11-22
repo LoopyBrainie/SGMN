@@ -1,0 +1,123 @@
+{
+ "n_train": 96,
+ "n_eval": 400,
+ "n_rep": 16,
+ "steps": 250,
+ "sig_k": 3.0,
+ "frac_headroom": 0.2,
+ "pass_rate_min": 4,
+ "contrast_min": 4,
+ "cells": {
+  "SH1": {
+   "L_oracle": 1.5424970760660883,
+   "L_rand": 16.069107711510956,
+   "L_learned": 1.8018292012269026,
+   "L_learned_rc": 16.40135937917545,
+   "R": 14.526610635444868,
+   "floor_0.20R": 2.905322127088974,
+   "delta": 14.267278510284052,
+   "paired_delta": {
+    "mean": 14.267278510284052,
+    "sd": 8.006306329286073,
+    "se": 0.4003153164643036,
+    "3se": 1.2009459493929109,
+    "n": 400
+   },
+   "paired_content": {
+    "mean": 14.599530177948544,
+    "sd": 7.2283307946374675,
+    "se": 0.3614165397318734,
+    "3se": 1.0842496191956201,
+    "n": 400
+   },
+   "P1_significance": true,
+   "P2_effect": true,
+   "P3_content": true,
+   "pass": true,
+   "cos": {
+    "oracle": 1.0,
+    "rand": 0.10695344637971063,
+    "learned": 0.9022129079743718,
+    "learned_rc": 0.9022129079743718
+   },
+   "Wmax": {
+    "oracle": 2.4920985330612018,
+    "rand": 2.4920985330612018,
+    "learned": 2.4920985330612018,
+    "learned_rc": 2.4920985330612018
+   }
+  }
+ },
+ "missing": [
+  "SH2/rand",
+  "SH2/learned",
+  "SH3/oracle",
+  "SH3/rand",
+  "SH3/learned",
+  "SH4/oracle",
+  "SH4/rand",
+  "SH4/learned",
+  "SH5/oracle",
+  "SH5/rand",
+  "SH5/learned",
+  "PI/oracle",
+  "PI/rand",
+  "PI/learned"
+ ],
+ "bad_n": [],
+ "contrast": {},
+ "shared_pass_count": 1,
+ "shared_pass_cells": [
+  "SH1"
+ ],
+ "pi_present": false,
+ "pi_full_pass": false,
+ "pi_sig_and_content": false,
+ "contrast_pass_count": 0,
+ "outcome": "INCOMPLETE",
+ "counted": false,
+ "note": "缺臂或 n 不符 ⇒ 整轮作废",
+ "gradnorms": {
+  "SH1/oracle": {
+   "g1": 14.617745202052351,
+   "Wo1": 16.942309942050464,
+   "bo1": 3.729592741484543
+  },
+  "SH1/rand": {
+   "g1": 11.344616872760517,
+   "Wo1": 16.198099190927476,
+   "bo1": 3.9816775294850957
+  },
+  "SH1/learned": {
+   "g1": 12.439887992218523,
+   "Wo1": 16.198099190927476,
+   "bo1": 3.9816775294850957,
+   "Wq1": 1.5934722022676757,
+   "bq1": 0.6444938342276254
+  },
+  "SH2/oracle": {
+   "g1": 14.751170336796536,
+   "Wo1": 16.97963844403481,
+   "bo1": 3.7292973516455366
+  }
+ },
+ "dWq1_from_init": {
+  "SH1/oracle": 0.0,
+  "SH1/rand": 0.0,
+  "SH1/learned": 4.888003123906645,
+  "SH2/oracle": 0.0
+ },
+ "secs": {
+  "SH1/oracle": 1589.048395872116,
+  "SH1/rand": 1621.6486308574677,
+  "SH1/learned": 1621.8901724815369,
+  "SH2/oracle": 1582.8693056106567
+ },
+ "pk1_seed": {
+  "SH1": 20262101,
+  "SH2": 20262102,
+  "SH3": 20262103,
+  "SH4": 20262104,
+  "SH5": 20262105
+ }
+}

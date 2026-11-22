@@ -1,0 +1,377 @@
+{
+ "checks": [
+  {
+   "id": "A26N-1",
+   "ok": true,
+   "msg": "装置 md5 1a242d02c530307f6c76646ca13469ef（期望 1a242d02c530307f6c76646ca13469ef）"
+  },
+  {
+   "id": "A26N-8a",
+   "ok": true,
+   "msg": "c_tau(60)=0.0950（运行时取，禁止手抄）"
+  },
+  {
+   "id": "A26N-3",
+   "ok": true,
+   "msg": "τ 臂与 `R1_gating12.drive(...,'B',tau)` 逐位相同（issued 569==569）"
+  },
+  {
+   "id": "A26N-4",
+   "ok": true,
+   "msg": "$\u000barnothing$ 臂 issued=960（=T=960）且两次驱动 wsig 相同"
+  },
+  {
+   "id": "A26N-5",
+   "ok": true,
+   "msg": "ΔJ 便宜式 vs 暴力 $W'=W^0+U'V'^\\top$：最坏 $|diff|/\\max(|J|,1)$ = 1.07e-07（≤1e-6）"
+  },
+  {
+   "id": "A26N-6",
+   "ok": true,
+   "msg": "三条规则各跑两次 log 逐位相同（{'H': True, 'R': True, 'J': True}）"
+  },
+  {
+   "id": "A26N-7",
+   "ok": true,
+   "msg": "J 臂 issued=960、wsig==E0 ⇒ J≡全写（ΔJ<0 占比 1.000）"
+  },
+  {
+   "id": "A26N-8b",
+   "ok": true,
+   "msg": "量程：gate(τ;60)=0.407∈(0.3, 0.5)；gate(H;24)=0.728、gate(R;24)=0.306（J 由 A26N-7 判为退化）"
+  },
+  {
+   "id": "A26N-9",
+   "ok": true,
+   "msg": "跳写中重复占比 tau:0.972, H:0.906, R:0.913（无跳写的退化臂由 A26N-7 处理：['J']）"
+  },
+  {
+   "id": "A26N-10",
+   "ok": true,
+   "msg": "控制口径 X 有量纲且 μ/精度口径一致"
+  },
+  {
+   "id": "A26N-2",
+   "ok": true,
+   "msg": "锚点：b=40 的 τ 臂 8+1 字段与 D-45 的 B 臂逐位相同（比较 9 项，坏 0 项 []）"
+  }
+ ],
+ "rows": [
+  {
+   "n_kv": 60,
+   "n_read": 20,
+   "seed": 20261028,
+   "b": 40,
+   "m": 60,
+   "T": 960,
+   "arms": {
+    "E0": {
+     "issued": 960,
+     "wsig": "be241d5188c57237",
+     "W_unchanged": true,
+     "clean": 0.8,
+     "mu": 0.0538738266332075,
+     "mu_sd": 0.06061154243110156,
+     "mu_read": 160,
+     "ret1": 0.81875,
+     "ret1_maj": 0.8,
+     "maj_need": 5,
+     "ho8_mean": 0.81875,
+     "ho8_maj": 0.8,
+     "ho4_mean": 0.8125,
+     "ho4_maj": 0.8,
+     "mu_ret1_consistent": true,
+     "X": {
+      "mu": -0.05898412724491209,
+      "mu_sd": 0.035277078635120335,
+      "ret1": 0.0375
+     },
+     "gate_rate": 0.0,
+     "skip_frac_repeat": NaN,
+     "qbar": 16.0
+    },
+    "tau": {
+     "issued": 569,
+     "wsig": "8bb2b0e9eb5c08cc",
+     "W_unchanged": true,
+     "clean": 1.0,
+     "mu": 0.03417347436770797,
+     "mu_sd": 0.02124528433290368,
+     "mu_read": 160,
+     "ret1": 0.9375,
+     "ret1_maj": 1.0,
+     "maj_need": 5,
+     "ho8_mean": 0.9375,
+     "ho8_maj": 1.0,
+     "ho4_mean": 0.9625,
+     "ho4_maj": 1.0,
+     "mu_ret1_consistent": true,
+     "X": {
+      "mu": -0.055218674533534795,
+      "mu_sd": 0.03242359945737762,
+      "ret1": 0.03125
+     },
+     "gate_rate": 0.40729166666666666,
+     "skip_frac_repeat": 0.9718670076726342,
+     "qbar": 9.483333333333333,
+     "log_n": 960
+    },
+    "H": {
+     "issued": 329,
+     "wsig": "9d0c1832a01a501c",
+     "W_unchanged": true,
+     "clean": 0.65,
+     "mu": -0.003221143805421889,
+     "mu_sd": 0.03359547063780822,
+     "mu_read": 160,
+     "ret1": 0.48125,
+     "ret1_maj": 0.5,
+     "maj_need": 5,
+     "ho8_mean": 0.48125,
+     "ho8_maj": 0.5,
+     "ho4_mean": 0.475,
+     "ho4_maj": 0.4,
+     "mu_ret1_consistent": true,
+     "X": {
+      "mu": -0.056769945222185925,
+      "mu_sd": 0.0343469222582504,
+      "ret1": 0.0375
+     },
+     "gate_rate": 0.6572916666666667,
+     "skip_frac_repeat": 0.9064976228209192,
+     "qbar": 5.483333333333333,
+     "log_n": 960,
+     "agree_vs_tau": 0.6604166666666667,
+     "both_write": 0.29791666666666666,
+     "neither_write": 0.3625
+    },
+    "R": {
+     "issued": 914,
+     "wsig": "30dadd0149f8e24f",
+     "W_unchanged": true,
+     "clean": 0.75,
+     "mu": 0.04724622142966837,
+     "mu_sd": 0.06411481462149425,
+     "mu_read": 160,
+     "ret1": 0.7875,
+     "ret1_maj": 0.75,
+     "maj_need": 5,
+     "ho8_mean": 0.7875,
+     "ho8_maj": 0.75,
+     "ho4_mean": 0.7125,
+     "ho4_maj": 0.7,
+     "mu_ret1_consistent": true,
+     "X": {
+      "mu": -0.05638684411533177,
+      "mu_sd": 0.035467452217269976,
+      "ret1": 0.01875
+     },
+     "gate_rate": 0.04791666666666667,
+     "skip_frac_repeat": 0.9130434782608695,
+     "qbar": 15.233333333333333,
+     "log_n": 960,
+     "agree_vs_tau": 0.6010416666666667,
+     "both_write": 0.5729166666666666,
+     "neither_write": 0.028125
+    },
+    "J": {
+     "issued": 960,
+     "wsig": "be241d5188c57237",
+     "W_unchanged": true,
+     "clean": 0.8,
+     "mu": 0.0538738266332075,
+     "mu_sd": 0.06061154243110156,
+     "mu_read": 160,
+     "ret1": 0.81875,
+     "ret1_maj": 0.8,
+     "maj_need": 5,
+     "ho8_mean": 0.81875,
+     "ho8_maj": 0.8,
+     "ho4_mean": 0.8125,
+     "ho4_maj": 0.8,
+     "mu_ret1_consistent": true,
+     "X": {
+      "mu": -0.05898412724491209,
+      "mu_sd": 0.035277078635120335,
+      "ret1": 0.0375
+     },
+     "gate_rate": 0.0,
+     "skip_frac_repeat": NaN,
+     "qbar": 16.0,
+     "log_n": 960,
+     "dj_neg_frac": 1.0,
+     "agree_vs_tau": 0.5927083333333333,
+     "both_write": 0.5927083333333333,
+     "neither_write": 0.0
+    }
+   },
+   "qbar": 9.483333333333333,
+   "log_sig": {
+    "A": "56dd654dda19588e",
+    "H": "e0372176f803129e",
+    "R": "a802075a2dd91450",
+    "J": "652ba9ddb2eb9db0"
+   }
+  },
+  {
+   "n_kv": 60,
+   "n_read": 20,
+   "seed": 20261028,
+   "b": 4,
+   "m": 24,
+   "T": 960,
+   "arms": {
+    "E0": {
+     "issued": 960,
+     "wsig": "91e8ea4630c8a3a6",
+     "W_unchanged": true,
+     "clean": 0.65,
+     "mu": 0.00864492212422192,
+     "mu_sd": 0.047426138000098754,
+     "mu_read": 160,
+     "ret1": 0.56875,
+     "ret1_maj": 0.55,
+     "maj_need": 5,
+     "ho8_mean": 0.56875,
+     "ho8_maj": 0.55,
+     "ho4_mean": 0.6125,
+     "ho4_maj": 0.6,
+     "mu_ret1_consistent": true,
+     "X": {
+      "mu": -0.05508770775632001,
+      "mu_sd": 0.03564855137163592,
+      "ret1": 0.06875
+     },
+     "gate_rate": 0.0,
+     "skip_frac_repeat": NaN,
+     "qbar": 16.0
+    },
+    "tau": {
+     "issued": 342,
+     "wsig": "659b10d795203ff0",
+     "W_unchanged": true,
+     "clean": 0.95,
+     "mu": 0.03309610767755657,
+     "mu_sd": 0.021697835642038768,
+     "mu_read": 160,
+     "ret1": 0.93125,
+     "ret1_maj": 0.95,
+     "maj_need": 5,
+     "ho8_mean": 0.93125,
+     "ho8_maj": 0.95,
+     "ho4_mean": 0.95,
+     "ho4_maj": 0.95,
+     "mu_ret1_consistent": true,
+     "X": {
+      "mu": -0.0510450005705934,
+      "mu_sd": 0.030234875257480847,
+      "ret1": 0.0375
+     },
+     "gate_rate": 0.64375,
+     "skip_frac_repeat": 0.9045307443365695,
+     "qbar": 5.7,
+     "log_n": 960
+    },
+    "H": {
+     "issued": 261,
+     "wsig": "edb69edfc6fbb37b",
+     "W_unchanged": true,
+     "clean": 0.6,
+     "mu": -0.004871223191730678,
+     "mu_sd": 0.03508605471223361,
+     "mu_read": 160,
+     "ret1": 0.45625,
+     "ret1_maj": 0.4,
+     "maj_need": 5,
+     "ho8_mean": 0.45625,
+     "ho8_maj": 0.4,
+     "ho4_mean": 0.45,
+     "ho4_maj": 0.45,
+     "mu_ret1_consistent": true,
+     "X": {
+      "mu": -0.05521574725862592,
+      "mu_sd": 0.03362582934789775,
+      "ret1": 0.05
+     },
+     "gate_rate": 0.728125,
+     "skip_frac_repeat": 0.9084406294706724,
+     "qbar": 4.35,
+     "log_n": 960,
+     "agree_vs_tau": 0.771875,
+     "both_write": 0.2,
+     "neither_write": 0.571875
+    },
+    "R": {
+     "issued": 666,
+     "wsig": "5b846196bcc6e5af",
+     "W_unchanged": true,
+     "clean": 0.75,
+     "mu": 0.016634162701666354,
+     "mu_sd": 0.05421082142196503,
+     "mu_read": 160,
+     "ret1": 0.60625,
+     "ret1_maj": 0.6,
+     "maj_need": 5,
+     "ho8_mean": 0.60625,
+     "ho8_maj": 0.6,
+     "ho4_mean": 0.675,
+     "ho4_maj": 0.6,
+     "mu_ret1_consistent": true,
+     "X": {
+      "mu": -0.05569823533296585,
+      "mu_sd": 0.030935843270979528,
+      "ret1": 0.0625
+     },
+     "gate_rate": 0.30625,
+     "skip_frac_repeat": 0.9455782312925171,
+     "qbar": 11.1,
+     "log_n": 960,
+     "agree_vs_tau": 0.6270833333333333,
+     "both_write": 0.3385416666666667,
+     "neither_write": 0.28854166666666664
+    },
+    "J": {
+     "issued": 960,
+     "wsig": "91e8ea4630c8a3a6",
+     "W_unchanged": true,
+     "clean": 0.65,
+     "mu": 0.00864492212422192,
+     "mu_sd": 0.047426138000098754,
+     "mu_read": 160,
+     "ret1": 0.56875,
+     "ret1_maj": 0.55,
+     "maj_need": 5,
+     "ho8_mean": 0.56875,
+     "ho8_maj": 0.55,
+     "ho4_mean": 0.6125,
+     "ho4_maj": 0.6,
+     "mu_ret1_consistent": true,
+     "X": {
+      "mu": -0.05508770775632001,
+      "mu_sd": 0.03564855137163592,
+      "ret1": 0.06875
+     },
+     "gate_rate": 0.0,
+     "skip_frac_repeat": NaN,
+     "qbar": 16.0,
+     "log_n": 960,
+     "dj_neg_frac": 1.0,
+     "agree_vs_tau": 0.35625,
+     "both_write": 0.35625,
+     "neither_write": 0.0
+    }
+   },
+   "qbar": 5.7,
+   "log_sig": {
+    "A": "7444c7c63e5c2259",
+    "H": "bf1bbf4b31e8b592",
+    "R": "589d035c23a48155",
+    "J": "a32433b7b83931e5"
+   }
+  }
+ ],
+ "dev_md5": "1a242d02c530307f6c76646ca13469ef",
+ "ref_md5": "2339ce7d9fafb825cc6bac111d31f6b8",
+ "tau": 0.0949702426791191,
+ "passed": true
+}

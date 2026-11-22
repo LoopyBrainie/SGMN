@@ -1,0 +1,137 @@
+{
+ "dir": "DIR23r11",
+ "checks": [
+  {
+   "name": "A23-2〔装置 md5 == dir22 的同名文件（零改动，DEC-09）〕",
+   "passed": true,
+   "detail": "dir23=1a242d02c530 dir22=1a242d02c530",
+   "tolerance": null,
+   "value": true
+  },
+  {
+   "name": "A23-1〔冲突对：cos(k_a,k_b) ≥ 0.999 且 |v̂_a·v̂_b| ≤ 1e-3〕",
+   "passed": true,
+   "detail": "min cosk=1.000000；max|dot v|=1.12e-08",
+   "tolerance": 0.001,
+   "value": true
+  },
+  {
+   "name": "A23-3〔非见证臂 k_a ≡ k_b（逐位）；见证臂 cos(k_a,k_b) < 0.99〕",
+   "passed": true,
+   "detail": "非见证 max‖k_a−k_b‖=0.00e+00；见证 min cos=0.2160",
+   "tolerance": null,
+   "value": true
+  },
+  {
+   "name": "A23-4〔S 无参数、无梯度（框架第 219 行的外层通道被关死）〕",
+   "passed": true,
+   "detail": "可训练参数个数=0；P.requires_grad=False",
+   "tolerance": null,
+   "value": 0
+  },
+  {
+   "name": "A23-5〔S 段确实进到读取特征（非空臂，同 D119）；c 段与 W_only 逐位相同〕",
+   "passed": true,
+   "detail": "c 段逐位相同=True；min‖S 段‖=0.3709",
+   "tolerance": null,
+   "value": [
+    true,
+    0.370878666639328
+   ]
+  },
+  {
+   "name": "A23-6〔读调用不改变 W（只读性）〕",
+   "passed": true,
+   "detail": "‖ΔW‖=0.00e+00",
+   "tolerance": null,
+   "value": true
+  },
+  {
+   "name": "A23-7a〔explicit 核：冲突对 margin 精确 0（≤1e-6），换 q 不变〕",
+   "passed": true,
+   "detail": "margins=0.00e+00,0.00e+00,5.07e-07",
+   "tolerance": 1e-06,
+   "value": 5.066394805908203e-07
+  },
+  {
+   "name": "A23-7b〔hebbian 写规则：1a1b ≈ (0.09,0.10)（≤1%），2a2b 后写者占优〕",
+   "passed": true,
+   "detail": "1a1b=(0.0895,0.1000) 2a2b=(0.1518,0.1895)",
+   "tolerance": 0.01,
+   "value": [
+    [
+     0.08950000256299973,
+     0.10000000149011612
+    ],
+    [
+     0.15179423987865448,
+     0.18950000405311584
+    ]
+   ]
+  },
+  {
+   "name": "A23-7c〔目标平衡：问 a 的条目数 / 问 b 的条目数 == 17 / 18〕",
+   "passed": true,
+   "detail": "问 a=18 问 b=17",
+   "tolerance": null,
+   "value": [
+    18,
+    17
+   ]
+  },
+  {
+   "name": "A23-9〔有效窗口 G=⌊d_k/68⌋=13 情节；本族窗口外条目 = 0（逐位打印）〕",
+   "passed": true,
+   "detail": "G=13；窗口外条目=0（序列共 35 对 = 13 块内）",
+   "tolerance": null,
+   "value": 13
+  },
+  {
+   "name": "A23-10〔写入数=⟨对⟩2×m2；α/λ/η/m/r/d_k 与卡片逐字一致；槽不环绕〕",
+   "passed": true,
+   "detail": "count=140 N=1024；常数逐位核对通过",
+   "tolerance": null,
+   "value": 140
+  },
+  {
+   "name": "A23-11〔6 臂 × 2 族 全部产出有限 acc（缺一即 FAIL）〕",
+   "passed": true,
+   "detail": "W_only=1；S_read_tiny=1；S_read_big=1；S_oracle_read=1；S_write=1；S_shuffled=1",
+   "tolerance": null,
+   "value": true
+  },
+  {
+   "name": "A23-12〔两个核（hebbian / explicit）都产出读数〕",
+   "passed": true,
+   "detail": "hebbian:W_only=0.486；explicit:W_only=0.429",
+   "tolerance": null,
+   "value": true
+  },
+  {
+   "name": "A23-13〔hebbian：即使 $q=k_a$（完美选槽），冲突对仍不可分〕",
+   "passed": true,
+   "detail": "margin(q=k_a)=-0.0191；跨对串扰 |y₁·v̂_a|=0.0008",
+   "tolerance": null,
+   "value": -0.019069820642471313
+  },
+  {
+   "name": "A23-14〔base 轴：空记忆下冲突族 acc≈0.5；随机初值（$U_0V_0^\\top$ 提供旁路）下明显更高〕",
+   "passed": true,
+   "detail": "empty: acc=0.486 margin=-0.1026；rand: acc=1.000；explicit: acc=0.429",
+   "tolerance": null,
+   "value": [
+    0.4857142857142857,
+    1.0
+   ]
+  },
+  {
+   "name": "A23-15〔因子化分支 U=V=0 ⇒ ΔU=ΔV≡0：无法从空记忆起步（故 empty 用 §3.2 参考步）〕",
+   "passed": true,
+   "detail": "‖U‖+‖V‖=0.00e+00",
+   "tolerance": null,
+   "value": 0.0
+  }
+ ],
+ "all_pass": true,
+ "secs": 63.9
+}

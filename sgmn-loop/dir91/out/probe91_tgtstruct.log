@@ -1,0 +1,27 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:05,  4.43it/s]Loading weights:  71%|███████▏  | 207/290 [00:00<00:00, 745.63it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 689.97it/s]
+===== seed 20261028 =====
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir91/probe91_woform.py:276: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  ls.append(float(loss))
+  [zero] acc_train=0.062 acc_held=0.125
+  [free] acc_train=1.000 acc_held=1.000
+  [ridge16] acc_train=1.0000 acc_held=0.0625
+  [M1] ★M1b(LOO 全类)=0.0000 (chance 1/27=0.037; CAP_LOO=0.3125; rec=0.0000) | M1a(16→16)=0.0000 (结构上限 CAP_M1A=0.3125, 仅报告)
+  [M2] acc_train=0.1250 acc_held=0.1875 margin(tr/ho)=-1.70/-0.72
+  [M3] held split: seen-value=1 条, unseen-value=15 条
+  [M4] acc_train=0.0625 acc_held=0.1250 dWq=0.000e+00 dgamma=0.000e+00 viol=0
+===== seed 7777 =====
+  [zero] acc_train=0.000 acc_held=0.000
+  [free] acc_train=1.000 acc_held=1.000
+  [ridge16] acc_train=1.0000 acc_held=0.1875
+  [M1] ★M1b(LOO 全类)=0.0000 (chance 1/27=0.037; CAP_LOO=0.3125; rec=0.0000) | M1a(16→16)=0.0000 (结构上限 CAP_M1A=0.3125, 仅报告)
+  [M2] acc_train=0.1875 acc_held=0.0000 margin(tr/ho)=-0.80/-2.96
+  [M3] held split: seen-value=1 条, unseen-value=15 条
+  [M4] acc_train=0.0625 acc_held=0.1250 dWq=0.000e+00 dgamma=0.000e+00 viol=0
+  -> /mnt/sgmn/home/ec2-user/sgmn-loop/dir91/out/probe91_tgtstruct.json
+  seed 20261028: rec=0.0000 (M1b=0.0000/0.3125) M1a=0.0000 | M2 tr/ho=0.1250/0.1875 M4=0.1250 oracle(best held)=None -> Y_NO_IDENTITY
+  seed 7777: rec=0.0000 (M1b=0.0000/0.3125) M1a=0.0000 | M2 tr/ho=0.1875/0.0000 M4=0.1250 oracle(best held)=None -> Y_NO_IDENTITY
+
+* 分支 = Y_NO_IDENTITY  (consistent=False)

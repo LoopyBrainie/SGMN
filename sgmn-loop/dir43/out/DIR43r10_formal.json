@@ -1,0 +1,140 @@
+{
+ "n_inst": 400,
+ "n_ctrl": 100,
+ "n_rep": 16,
+ "steps": 250,
+ "sig_k": 3.0,
+ "cos_direct": 0.9,
+ "rho_grid": [
+  0,
+  1,
+  2,
+  5,
+  10,
+  25,
+  50,
+  100,
+  250
+ ],
+ "train_win": [
+  1,
+  8
+ ],
+ "eval_win": [
+  9,
+  15
+ ],
+ "missing": [],
+ "source": {
+  "learned": [
+   "shard0:jsonl",
+   "shard1:jsonl",
+   "shard2:jsonl",
+   "shard3:jsonl"
+  ],
+  "rand": [
+   "shard0:jsonl",
+   "shard1:jsonl",
+   "shard2:jsonl",
+   "shard3:jsonl"
+  ],
+  "direct": [
+   "shard0:jsonl",
+   "shard1:jsonl",
+   "shard2:jsonl",
+   "shard3:jsonl"
+  ]
+ },
+ "read_files": [
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_learned_shard0.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_learned_shard0.json",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_learned_shard1.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_learned_shard1.json",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_learned_shard2.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_learned_shard2.json",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_learned_shard3.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_learned_shard3.json",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_rand_shard0.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_rand_shard0.json",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_rand_shard1.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_rand_shard1.json",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_rand_shard2.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_rand_shard2.json",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_rand_shard3.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_rand_shard3.json",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_direct_shard0.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_direct_shard0.json",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_direct_shard1.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_direct_shard1.json",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_direct_shard2.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_direct_shard2.json",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_direct_shard3.jsonl",
+  "/home/ec2-user/sgmn-loop/dir43/out/DIR43r10_arm_direct_shard3.json"
+ ],
+ "read_files_all_shards": true,
+ "n_read_files": 24,
+ "bad_n": [],
+ "rho_primary": {
+  "mean": -0.011750211280198883,
+  "sd": 0.35742255588655214,
+  "se": 0.017871127794327608,
+  "3se": 0.05361338338298283,
+  "n": 400
+ },
+ "rho_secondary": {
+  "mean": -0.03770836793577924,
+  "sd": 0.42820953881253143,
+  "se": 0.02141047694062657,
+  "3se": 0.06423143082187971,
+  "n": 400
+ },
+ "rho_diff_primary": {
+  "mean": 0.009085040847956874,
+  "sd": 0.436426736139126,
+  "se": 0.0218213368069563,
+  "3se": 0.0654640104208689,
+  "n": 400
+ },
+ "rho_diff_secondary": {
+  "mean": -0.031056397289914016,
+  "sd": 0.4977071538208796,
+  "se": 0.02488535769104398,
+  "3se": 0.07465607307313193,
+  "n": 400
+ },
+ "direct_cos_min_stats": {
+  "mean": 0.9974791028158633,
+  "sd": 0.0034954320121318647,
+  "se": 0.00017477160060659324,
+  "3se": 0.0005243148018197797,
+  "n": 400
+ },
+ "direct_cos_mean_stats": {
+  "mean": 0.9984963135485063,
+  "sd": 0.002088578059713951,
+  "se": 0.00010442890298569755,
+  "3se": 0.00031328670895709265,
+  "n": 400
+ },
+ "P1_signif": false,
+ "P1b_signif_secondary": false,
+ "P2_specific": false,
+ "P3_nonempty": true,
+ "finite": true,
+ "rho_negative_frac": 0.51,
+ "rho_curve_mean": {
+  "0": -0.03770836793577924,
+  "1": -0.008952838064289807,
+  "2": 0.010144132195010237,
+  "5": 0.02114815234437847,
+  "10": -0.030367813717039185,
+  "25": 0.0044990961353936825,
+  "50": 0.002670883153487832,
+  "100": -0.009211120426024533,
+  "250": -0.011750211280198883
+ },
+ "outcome": "NOT-ADDRESSING",
+ "counted": false,
+ "primary_label": "NULL",
+ "secondary_label": "NULL"
+}

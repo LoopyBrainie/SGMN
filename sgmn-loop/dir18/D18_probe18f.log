@@ -1,0 +1,61 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:55,  5.23it/s]Loading weights:  68%|██████▊   | 197/290 [00:00<00:00, 819.08it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 739.99it/s]
+=== DIR-18 probe18f：写规则可行性图谱（装置层） ===
+[seed 20261028] 装置口径 pk_scale=2.236875
+  s20261028_L8_linear_eta1e-07       fid_mean=-0.0230 fid_max=+0.0744 cos_read=-0.0231 |W|=29.9 (W0=29.9) ‖k‖mean=131.4 max=3452 stable=True
+  s20261028_L8_linear_eta1e-05       fid_mean=-0.0100 fid_max=+0.0486 cos_read=-0.0455 |W|=119 (W0=29.9) ‖k‖mean=131.4 max=3452 stable=True
+  s20261028_L8_linear_eta0.001       fid_mean=+0.0059 fid_max=+0.2707 cos_read=-0.0446 |W|=1.14e+04 (W0=29.9) ‖k‖mean=131.4 max=3452 stable=True
+  s20261028_L8_linear_eta0.01        fid_mean=+0.0000 fid_max=-0.0000 cos_read=+0.0000 |W|=inf (W0=29.9) ‖k‖mean=131.4 max=3452 stable=True
+  s20261028_L8_linear_eta0.1         fid_mean=+nan fid_max=+nan cos_read=+nan |W|=nan (W0=29.9) ‖k‖mean=131.4 max=3452 stable=False
+  s20261028_L8_linear_eta0.2         fid_mean=+nan fid_max=+nan cos_read=+nan |W|=nan (W0=29.9) ‖k‖mean=131.4 max=3452 stable=False
+  s20261028_L8_renorm_eta1e-07       fid_mean=-0.0210 fid_max=+0.0761 cos_read=-0.0191 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L8_renorm_eta1e-05       fid_mean=-0.0196 fid_max=+0.0776 cos_read=-0.0177 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L8_renorm_eta0.001       fid_mean=+0.1229 fid_max=+0.2197 cos_read=+0.1154 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L8_renorm_eta0.01        fid_mean=+0.6124 fid_max=+0.7006 cos_read=+0.6285 |W|=30 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L8_renorm_eta0.1         fid_mean=+0.7577 fid_max=+0.9650 cos_read=+0.7868 |W|=32.3 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L8_renorm_eta0.2         fid_mean=+0.6831 fid_max=+1.0000 cos_read=+0.7327 |W|=36.2 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L8_ortho_eta1e-07        fid_mean=+0.0011 fid_max=+0.0636 cos_read=-0.0061 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L8_ortho_eta1e-05        fid_mean=+0.0014 fid_max=+0.0639 cos_read=-0.0058 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L8_ortho_eta0.001        fid_mean=+0.0317 fid_max=+0.0940 cos_read=+0.0207 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L8_ortho_eta0.01         fid_mean=+0.3039 fid_max=+0.3897 cos_read=+0.2641 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L8_ortho_eta0.1          fid_mean=+0.9816 fid_max=+0.9878 cos_read=+0.9804 |W|=33.8 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L8_ortho_eta0.2          fid_mean=+0.9994 fid_max=+1.0000 cos_read=+0.9999 |W|=42.3 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L12_linear_eta1e-07      fid_mean=+0.0118 fid_max=+0.0595 cos_read=-0.0127 |W|=30 (W0=30) ‖k‖mean=136.2 max=3468 stable=True
+  s20261028_L12_linear_eta1e-05      fid_mean=+0.0252 fid_max=+0.0938 cos_read=+0.0091 |W|=119 (W0=30) ‖k‖mean=136.2 max=3468 stable=True
+  s20261028_L12_linear_eta0.001      fid_mean=+0.0142 fid_max=+0.2882 cos_read=+0.0076 |W|=1.14e+04 (W0=30) ‖k‖mean=136.2 max=3468 stable=True
+  s20261028_L12_linear_eta0.01       fid_mean=+0.0000 fid_max=+0.0000 cos_read=+0.0000 |W|=inf (W0=30) ‖k‖mean=136.2 max=3468 stable=True
+  s20261028_L12_linear_eta0.1        fid_mean=+nan fid_max=+nan cos_read=+nan |W|=nan (W0=30) ‖k‖mean=136.2 max=3468 stable=False
+  s20261028_L12_linear_eta0.2        fid_mean=+nan fid_max=+nan cos_read=+nan |W|=nan (W0=30) ‖k‖mean=136.2 max=3468 stable=False
+  s20261028_L12_renorm_eta1e-07      fid_mean=+0.0105 fid_max=+0.0589 cos_read=-0.0129 |W|=30 (W0=30) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L12_renorm_eta1e-05      fid_mean=+0.0127 fid_max=+0.0614 cos_read=-0.0108 |W|=30 (W0=30) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L12_renorm_eta0.001      fid_mean=+0.2224 fid_max=+0.2902 cos_read=+0.1878 |W|=30 (W0=30) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L12_renorm_eta0.01       fid_mean=+0.6671 fid_max=+0.7874 cos_read=+0.6825 |W|=30.2 (W0=30) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L12_renorm_eta0.1        fid_mean=+0.7556 fid_max=+0.9715 cos_read=+0.7688 |W|=32.7 (W0=30) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L12_renorm_eta0.2        fid_mean=+0.6700 fid_max=+1.0000 cos_read=+0.7174 |W|=36.8 (W0=30) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L12_ortho_eta1e-07       fid_mean=+0.0015 fid_max=+0.0781 cos_read=-0.0011 |W|=30 (W0=30) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L12_ortho_eta1e-05       fid_mean=+0.0018 fid_max=+0.0785 cos_read=-0.0007 |W|=30 (W0=30) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L12_ortho_eta0.001       fid_mean=+0.0367 fid_max=+0.1137 cos_read=+0.0325 |W|=30 (W0=30) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L12_ortho_eta0.01        fid_mean=+0.3449 fid_max=+0.4129 cos_read=+0.3302 |W|=30 (W0=30) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L12_ortho_eta0.1         fid_mean=+0.9861 fid_max=+0.9911 cos_read=+0.9874 |W|=35.1 (W0=30) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L12_ortho_eta0.2         fid_mean=+0.9995 fid_max=+1.0000 cos_read=+0.9999 |W|=45.6 (W0=30) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L16_linear_eta1e-07      fid_mean=+0.0017 fid_max=+0.0739 cos_read=+0.0362 |W|=29.9 (W0=29.9) ‖k‖mean=149.4 max=3500 stable=True
+  s20261028_L16_linear_eta1e-05      fid_mean=+0.0553 fid_max=+0.1249 cos_read=+0.1036 |W|=122 (W0=29.9) ‖k‖mean=149.4 max=3500 stable=True
+  s20261028_L16_linear_eta0.001      fid_mean=-0.0120 fid_max=+0.3158 cos_read=-0.0234 |W|=1.21e+04 (W0=29.9) ‖k‖mean=149.4 max=3500 stable=True
+  s20261028_L16_linear_eta0.01       fid_mean=+nan fid_max=+nan cos_read=+nan |W|=nan (W0=29.9) ‖k‖mean=149.4 max=3500 stable=False
+  s20261028_L16_linear_eta0.1        fid_mean=+nan fid_max=+nan cos_read=+nan |W|=nan (W0=29.9) ‖k‖mean=149.4 max=3500 stable=False
+  s20261028_L16_linear_eta0.2        fid_mean=+nan fid_max=+nan cos_read=+nan |W|=nan (W0=29.9) ‖k‖mean=149.4 max=3500 stable=False
+  s20261028_L16_renorm_eta1e-07      fid_mean=-0.0005 fid_max=+0.0681 cos_read=+0.0349 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L16_renorm_eta1e-05      fid_mean=+0.0046 fid_max=+0.0726 cos_read=+0.0404 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L16_renorm_eta0.001      fid_mean=+0.4286 fid_max=+0.5081 cos_read=+0.4839 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L16_renorm_eta0.01       fid_mean=+0.7584 fid_max=+0.8528 cos_read=+0.8210 |W|=30.5 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L16_renorm_eta0.1        fid_mean=+0.7622 fid_max=+0.9758 cos_read=+0.7782 |W|=33.6 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L16_renorm_eta0.2        fid_mean=+0.6588 fid_max=+1.0000 cos_read=+0.6769 |W|=38 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L16_ortho_eta1e-07       fid_mean=-0.0064 fid_max=+0.0805 cos_read=-0.0578 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L16_ortho_eta1e-05       fid_mean=-0.0059 fid_max=+0.0810 cos_read=-0.0573 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L16_ortho_eta0.001       fid_mean=+0.0412 fid_max=+0.1248 cos_read=-0.0090 |W|=29.9 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L16_ortho_eta0.01        fid_mean=+0.4384 fid_max=+0.5276 cos_read=+0.4126 |W|=30 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L16_ortho_eta0.1         fid_mean=+0.9923 fid_max=+0.9947 cos_read=+0.9939 |W|=39 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+  s20261028_L16_ortho_eta0.2         fid_mean=+0.9997 fid_max=+1.0000 cos_read=+1.0000 |W|=55.7 (W0=29.9) ‖k‖mean=2.236 max=2.236 stable=True
+
+写出 /home/ec2-user/sgmn-loop/dir18/probe18f_out.json

@@ -1,0 +1,23 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+c_tau = 0.0949702426791191
+  seed 61000 done  350.2s
+  seed 61001 done  670.4s
+  seed 61002 done  985.7s
+  seed 61003 done  1296.2s
+  seed 61004 done  1609.9s
+  seed 61005 done  1927.2s
+  seed 61006 done  2241.0s
+  seed 61007 done  2558.2s
+=== DIR-52 可行性/功效探针 ===
+  n=8  ΔG_total mean=+0.001781 sd=0.000917 3se=0.000972   (D-67 参考 +0.000861, 3se 0.000810)
+  恒等式 max|Σ_ρ ΔδG_ρ − ΔG_total| = 1.041e-17
+  ρ=1: ΔδG=+0.000000  sd=0.000000  3se=0.000000  正号 0/8  效应/3se=nan
+  ρ=2: ΔδG=+0.002650  sd=0.001718  3se=0.001823  正号 7/8  效应/3se=1.45
+  ρ=3: ΔδG=-0.002634  sd=0.001015  3se=0.001076  正号 0/8  效应/3se=2.45
+  ρ=4: ΔδG=+0.001766  sd=0.002136  3se=0.002266  正号 6/8  效应/3se=0.78
+  集中度 max/Σ|·| = 0.3758844764616791  (均匀基准 0.25)
+  每轮所需 n（3se 分辨）：[(2, 4), (3, 2), (4, 14)]
+  ★ 探针提示：RESOLVABLE   墙钟 2558.2s
+WROTE dir52/out/DIR52_probe_a.json

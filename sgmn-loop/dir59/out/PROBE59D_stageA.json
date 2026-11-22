@@ -1,0 +1,46 @@
+{
+ "A59D-1": {
+  "max_abs_dL": 0.0,
+  "max_abs_dDiag": 0.0,
+  "keys": [
+   "Wmax",
+   "align_q_k",
+   "c_eq_h",
+   "cos_q_k",
+   "m_abs",
+   "q_fp",
+   "q_norm",
+   "y_norm"
+  ],
+  "pass": true
+ },
+ "A59D-2": {
+  "L_own": 77.39930252477716,
+  "L_foreign": 83.97964284139653,
+  "abs_diff": 6.58034031661937,
+  "pass": true
+ },
+ "A59D-3": {
+  "max_abs_dW": 0.0,
+  "pass": true
+ },
+ "A59D-4": {
+  "sha_own": "253ca54b5f713f30",
+  "sha_foreign": "d902d5df226009f5",
+  "fro_own": 2.0255105099544424,
+  "fro_foreign": 1.7751995390126578,
+  "pass": true
+ },
+ "md5": {
+  "dir31/R1_grad.py": "8fa40f708600bec7e6c484727d2180c7",
+  "dir33/R1_task33.py": "96ef89e87ec61556b52e0e464850087e",
+  "dir37/R1_task37.py": "9236ac0490be9c413f1e8af163289207",
+  "dir40/R1_task40.py": "baab3566891591944efb60a5b6dc9623"
+ },
+ "all_pass": true,
+ "seed_disjoint_train": true,
+ "seed_disjoint_eval": true,
+ "seed_disjoint_cells": true,
+ "cells_distinct": true,
+ "train_eval_disjoint": true
+}

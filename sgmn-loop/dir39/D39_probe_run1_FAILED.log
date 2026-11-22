@@ -1,0 +1,16 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[自检] n_rep=1 的 oracle 档 vs DIR-37 装置臂：|Δ| = 0.000e+00
+Traceback (most recent call last):
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir39/probe39_qsrc.py", line 261, in <module>
+    main()
+    ~~~~^^
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir39/probe39_qsrc.py", line 211, in main
+    evs[lv] = eval_level(lv, phis[lv], PROBE_EVAL)
+              ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/sgmn/home/ec2-user/sgmn-loop/dir39/probe39_qsrc.py", line 173, in eval_level
+    P = T37._mk(sd, phi, train=False)
+  File "/home/ec2-user/sgmn-loop/dir37/R1_task37.py", line 290, in _mk
+    P.update({k: (v if train else v.clone()) for k, v in phi.items()})
+                                  ^^^^^^^
+AttributeError: 'float' object has no attribute 'clone'

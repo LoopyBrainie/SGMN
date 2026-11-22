@@ -1,0 +1,78 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[hebbian·empty·20261028] A: W_only=0.486 S_read_tiny=0.486 S_read_big=0.486 S_oracle_read=0.486 S_write=0.971 S_shuffled=0.486
+[hebbian·empty·20261028] B: W_only=0.500 S_read_tiny=0.900 S_read_big=0.900 S_oracle_read=0.900 S_write=0.500 S_shuffled=0.500
+[hebbian·empty·20261104] A: W_only=0.486 S_read_tiny=0.486 S_read_big=0.486 S_oracle_read=0.486 S_write=0.914 S_shuffled=0.486
+[hebbian·empty·20261104] B: W_only=0.500 S_read_tiny=0.886 S_read_big=0.886 S_oracle_read=0.886 S_write=0.500 S_shuffled=0.500
+[hebbian·empty·7] A: W_only=0.486 S_read_tiny=0.486 S_read_big=0.486 S_oracle_read=0.486 S_write=0.971 S_shuffled=0.486
+[hebbian·empty·7] B: W_only=0.500 S_read_tiny=0.886 S_read_big=0.886 S_oracle_read=0.886 S_write=0.500 S_shuffled=0.500
+[hebbian·empty·20261111] A: W_only=0.486 S_read_tiny=0.486 S_read_big=0.486 S_oracle_read=0.486 S_write=1.000 S_shuffled=0.486
+[hebbian·empty·20261111] B: W_only=0.500 S_read_tiny=0.914 S_read_big=0.914 S_oracle_read=0.914 S_write=0.500 S_shuffled=0.500
+[hebbian·empty·20261118] A: W_only=0.486 S_read_tiny=0.486 S_read_big=0.486 S_oracle_read=0.486 S_write=0.943 S_shuffled=0.486
+[hebbian·empty·20261118] B: W_only=0.500 S_read_tiny=0.886 S_read_big=0.886 S_oracle_read=0.886 S_write=0.500 S_shuffled=0.500
+[hebbian·rand·20261028] A: W_only=1.000 S_read_tiny=1.000 S_read_big=1.000 S_oracle_read=1.000 S_write=1.000 S_shuffled=1.000
+[hebbian·rand·20261028] B: W_only=0.486 S_read_tiny=1.000 S_read_big=1.000 S_oracle_read=1.000 S_write=0.486 S_shuffled=0.486
+[hebbian·rand·20261104] A: W_only=1.000 S_read_tiny=1.000 S_read_big=1.000 S_oracle_read=1.000 S_write=1.000 S_shuffled=1.000
+[hebbian·rand·20261104] B: W_only=0.500 S_read_tiny=1.000 S_read_big=1.000 S_oracle_read=1.000 S_write=0.500 S_shuffled=0.500
+[hebbian·rand·7] A: W_only=1.000 S_read_tiny=1.000 S_read_big=1.000 S_oracle_read=1.000 S_write=1.000 S_shuffled=1.000
+[hebbian·rand·7] B: W_only=0.500 S_read_tiny=1.000 S_read_big=1.000 S_oracle_read=1.000 S_write=0.500 S_shuffled=0.500
+[hebbian·rand·20261111] A: W_only=1.000 S_read_tiny=1.000 S_read_big=1.000 S_oracle_read=1.000 S_write=1.000 S_shuffled=1.000
+[hebbian·rand·20261111] B: W_only=0.500 S_read_tiny=1.000 S_read_big=1.000 S_oracle_read=1.000 S_write=0.500 S_shuffled=0.500
+[hebbian·rand·20261118] A: W_only=1.000 S_read_tiny=1.000 S_read_big=1.000 S_oracle_read=1.000 S_write=1.000 S_shuffled=1.000
+[hebbian·rand·20261118] B: W_only=0.500 S_read_tiny=1.000 S_read_big=1.000 S_oracle_read=1.000 S_write=0.500 S_shuffled=0.500
+[explicit·empty·20261028] A: W_only=0.429 S_read_tiny=0.429 S_read_big=0.429 S_oracle_read=0.429 S_write=1.000 S_shuffled=0.429
+[explicit·empty·20261028] B: W_only=0.500 S_read_tiny=0.514 S_read_big=0.514 S_oracle_read=0.514 S_write=0.500 S_shuffled=0.500
+[explicit·empty·20261104] A: W_only=0.457 S_read_tiny=0.457 S_read_big=0.457 S_oracle_read=0.457 S_write=1.000 S_shuffled=0.457
+[explicit·empty·20261104] B: W_only=0.500 S_read_tiny=0.543 S_read_big=0.543 S_oracle_read=0.543 S_write=0.500 S_shuffled=0.500
+[explicit·empty·7] A: W_only=0.429 S_read_tiny=0.429 S_read_big=0.429 S_oracle_read=0.429 S_write=1.000 S_shuffled=0.429
+[explicit·empty·7] B: W_only=0.500 S_read_tiny=0.543 S_read_big=0.543 S_oracle_read=0.543 S_write=0.500 S_shuffled=0.500
+[explicit·empty·20261111] A: W_only=0.629 S_read_tiny=0.629 S_read_big=0.629 S_oracle_read=0.629 S_write=1.000 S_shuffled=0.629
+[explicit·empty·20261111] B: W_only=0.500 S_read_tiny=0.529 S_read_big=0.529 S_oracle_read=0.529 S_write=0.500 S_shuffled=0.500
+[explicit·empty·20261118] A: W_only=0.400 S_read_tiny=0.400 S_read_big=0.400 S_oracle_read=0.400 S_write=1.000 S_shuffled=0.400
+[explicit·empty·20261118] B: W_only=0.500 S_read_tiny=0.543 S_read_big=0.543 S_oracle_read=0.543 S_write=0.500 S_shuffled=0.500
+[explicit·rand·20261028] A: W_only=0.429 S_read_tiny=0.429 S_read_big=0.429 S_oracle_read=0.429 S_write=1.000 S_shuffled=0.429
+[explicit·rand·20261028] B: W_only=0.500 S_read_tiny=0.514 S_read_big=0.514 S_oracle_read=0.514 S_write=0.500 S_shuffled=0.500
+[explicit·rand·20261104] A: W_only=0.457 S_read_tiny=0.457 S_read_big=0.457 S_oracle_read=0.457 S_write=1.000 S_shuffled=0.457
+[explicit·rand·20261104] B: W_only=0.500 S_read_tiny=0.543 S_read_big=0.543 S_oracle_read=0.543 S_write=0.500 S_shuffled=0.500
+[explicit·rand·7] A: W_only=0.429 S_read_tiny=0.429 S_read_big=0.429 S_oracle_read=0.429 S_write=1.000 S_shuffled=0.429
+[explicit·rand·7] B: W_only=0.500 S_read_tiny=0.543 S_read_big=0.543 S_oracle_read=0.543 S_write=0.500 S_shuffled=0.500
+[explicit·rand·20261111] A: W_only=0.629 S_read_tiny=0.629 S_read_big=0.629 S_oracle_read=0.629 S_write=1.000 S_shuffled=0.629
+[explicit·rand·20261111] B: W_only=0.500 S_read_tiny=0.529 S_read_big=0.529 S_oracle_read=0.529 S_write=0.500 S_shuffled=0.500
+[explicit·rand·20261118] A: W_only=0.400 S_read_tiny=0.400 S_read_big=0.400 S_oracle_read=0.400 S_write=1.000 S_shuffled=0.400
+[explicit·rand·20261118] B: W_only=0.500 S_read_tiny=0.543 S_read_big=0.543 S_oracle_read=0.543 S_write=0.500 S_shuffled=0.500
+
+[判据 · 主 = hebbian]
+  ── hebbian·empty ──
+  H23-a: {"mean": 0.48571428571428565, "min": 0.4857142857142857, "max": 0.4857142857142857, "pass": true}
+  H23-b: {"arms": {"S_read_tiny": {"mean": 0.48571428571428565, "max": 0.4857142857142857}, "S_read_big": {"mean": 0.48571428571428565, "max": 0.4857142857142857}, "S_oracle_read": {"mean": 0.48571428571428565, "max": 0.4857142857142857}}, "pass": true, "falsified": false}
+  H23-c: {"mean": 0.96, "min": 0.9142857142857143, "pass": true}
+  H23-d: {"mean": 0.39428571428571424, "per_seed": [0.4, 0.3857, 0.3857, 0.4143, 0.3857], "p": 0.0625, "pos": 5, "n": 5, "pass": false}
+  _kind: "hebbian"
+  _base: "empty"
+  _n: 5
+  ── hebbian·rand ──
+  H23-a: {"mean": 1.0, "min": 1.0, "max": 1.0, "pass": false}
+  H23-b: {"arms": {"S_read_tiny": {"mean": 1.0, "max": 1.0}, "S_read_big": {"mean": 1.0, "max": 1.0}, "S_oracle_read": {"mean": 1.0, "max": 1.0}}, "pass": false, "falsified": true}
+  H23-c: {"mean": 1.0, "min": 1.0, "pass": true}
+  H23-d: {"mean": 0.5028571428571429, "per_seed": [0.5143, 0.5, 0.5, 0.5, 0.5], "p": 0.0625, "pos": 5, "n": 5, "pass": false}
+  _kind: "hebbian"
+  _base: "rand"
+  _n: 5
+  ── explicit·empty ──
+  H23-a: {"mean": 0.4685714285714286, "min": 0.4, "max": 0.6285714285714286, "pass": false}
+  H23-b: {"arms": {"S_read_tiny": {"mean": 0.4685714285714286, "max": 0.6285714285714286}, "S_read_big": {"mean": 0.4685714285714286, "max": 0.6285714285714286}, "S_oracle_read": {"mean": 0.4685714285714286, "max": 0.6285714285714286}}, "pass": false, "falsified": false}
+  H23-c: {"mean": 1.0, "min": 1.0, "pass": true}
+  H23-d: {"mean": 0.03428571428571425, "per_seed": [0.0143, 0.0429, 0.0429, 0.0286, 0.0429], "p": 0.0625, "pos": 5, "n": 5, "pass": false}
+  _kind: "explicit"
+  _base: "empty"
+  _n: 5
+  ── explicit·rand ──
+  H23-a: {"mean": 0.4685714285714286, "min": 0.4, "max": 0.6285714285714286, "pass": false}
+  H23-b: {"arms": {"S_read_tiny": {"mean": 0.4685714285714286, "max": 0.6285714285714286}, "S_read_big": {"mean": 0.4685714285714286, "max": 0.6285714285714286}, "S_oracle_read": {"mean": 0.4685714285714286, "max": 0.6285714285714286}}, "pass": false, "falsified": false}
+  H23-c: {"mean": 1.0, "min": 1.0, "pass": true}
+  H23-d: {"mean": 0.03428571428571425, "per_seed": [0.0143, 0.0429, 0.0429, 0.0286, 0.0429], "p": 0.0625, "pos": 5, "n": 5, "pass": false}
+  _kind: "explicit"
+  _base: "rand"
+  _n: 5
+
+[formal] 完成  (462s)

@@ -1,0 +1,13 @@
+(1) keys@10  基=η_w0.0045
+    η_w=0.0045  u1=0.094983 rho=0.082905  max|ΔW1|=0.00e+00  max|Δ因子|=0.00e+00
+    η_w=0.0248  u1=0.094983 rho=0.041523  max|ΔW1|=6.27e-13  max|Δ因子|=1.75e-01
+    η_w=0.026   u1=0.094983 rho=0.030703  max|ΔW1|=6.06e-13  max|Δ因子|=2.56e-01
+(2) keys   frac=0.1 eta_w=0.002703 rho=0.083045 gap=2.0720 steps=1
+(2) keys   frac=0.3 eta_w=0.00811 rho=0.082765 gap=2.0617 steps=389
+(2) keys   frac=0.6 eta_w=0.01622 rho=0.082347 gap=2.0462 steps=1092
+(2) keys   frac=0.9 eta_w=0.02433 rho=0.064483 gap=1.3854 steps=1298
+(2) target frac=0.1 eta_w=0.0007303 rho=0.008652 gap=0.1847 steps=155199
+(2) target frac=0.3 eta_w=0.002191 rho=0.008652 gap=0.1847 steps=1
+(2) target frac=0.6 eta_w=0.004382 rho=0.008652 gap=0.1847 steps=3022
+(2) target frac=0.9 eta_w=0.006573 rho=0.008652 gap=0.1847 steps=3340
+已写 /home/ec2-user/sgmn-loop/dir80/out/probe80_gauge.json

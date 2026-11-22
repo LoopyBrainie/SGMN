@@ -1,0 +1,15 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+=== DIR-47 Stage A ===
+/home/ec2-user/sgmn-loop/dir47/R1_task47.py:92: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  num = float(W @ K[t] @ Vv[t])
+  ✓ A47-1 n_writes 全部 = 13（8 个 (seed,arm) 对，唯一值 = [13]）
+  ✓ A47-5 每行 len(hit)+len(rest)==7 且 n_read+n_skip==7 且 len(slots)==n_read
+  ✓ A47-2 8 次运行 × 7 槽位 = 56 单元；max|Δ| = 0.000e+00；不一致 0
+  ✓ A47-3 两臂 picks 逐位相同=True；1≤p≤7=True；前缀 K/V max|Δ|=0.000e+00
+  ✓ A47-4 R=0 时两臂逐槽位 max|Δ| = 0.000e+00（设计自检）
+  ✓ A47-6 正式段 25200..25699（500）vs 既往已落盘 seed 808 个；交集 0 个 []
+  ✓ A47-7 卡 md5=58cb94d44327ae00ca2236d6e56d67d2；N_REP/ALPHA/LAM/ETA/D_H=(16, 1.0, 0.05, 0.2, 8)
+
+★ Stage A 全部通过

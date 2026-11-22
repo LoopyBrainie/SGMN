@@ -1,0 +1,12 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:57,  5.03it/s]Loading weights:  72%|███████▏  | 209/290 [00:00<00:00, 852.58it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 752.60it/s]
+类分布: {'verb6': [5, 5, 5, 5, 6, 6], 'vgrp6': [4, 4, 5, 5, 6, 8]}
+  seed 20261028 L8: mean_all__verb6=1.000 | mean_all__vgrp6=0.219 | vt_pos__verb6=0.094 | vt_pos__vgrp6=0.375 | nonvt__verb6=1.000 | nonvt__vgrp6=0.062
+  seed 20261028 L12: mean_all__verb6=0.938 | mean_all__vgrp6=0.094 | vt_pos__verb6=0.188 | vt_pos__vgrp6=0.406 | nonvt__verb6=0.969 | nonvt__vgrp6=0.094
+  seed 20261028 L16: mean_all__verb6=0.938 | mean_all__vgrp6=0.094 | vt_pos__verb6=0.250 | vt_pos__vgrp6=0.406 | nonvt__verb6=0.938 | nonvt__vgrp6=0.094
+  seed 7777 L8: mean_all__verb6=0.969 | mean_all__vgrp6=0.281 | vt_pos__verb6=0.094 | vt_pos__vgrp6=0.375 | nonvt__verb6=0.969 | nonvt__vgrp6=0.156
+  seed 7777 L12: mean_all__verb6=0.969 | mean_all__vgrp6=0.094 | vt_pos__verb6=0.250 | vt_pos__vgrp6=0.438 | nonvt__verb6=0.969 | nonvt__vgrp6=0.062
+  seed 7777 L16: mean_all__verb6=0.938 | mean_all__vgrp6=0.125 | vt_pos__verb6=0.188 | vt_pos__vgrp6=0.375 | nonvt__verb6=0.938 | nonvt__vgrp6=0.125
+
+★ 完成 ⇒ out/probe91_valgroup.json

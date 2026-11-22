@@ -1,0 +1,20 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  [标定] r= 8 ρ=0.4 cosθ_w=0.9 c_τ=+0.0950 跳过率 0.400 gap +0.0937 重复占比 0.984 OK
+标定：c_tau = 0.0950
+=== R-1 / R-2（纯流统计，描述性）===
+  seed=20261028 φ=0.9: ρ_u=0.8998 | 刚体重瞄 0.8998 | 逐轮独立 +0.0045 | iid 参照 -0.0021 ‖ Λ=0.8812/0.8812/0.2503/0.2490 ‖ 成对余弦最大偏差 3.58e-07 ‖ 平均|ΔK| 0.0367
+  seed=20261104 φ=0.9: ρ_u=0.9001 | 刚体重瞄 0.9001 | 逐轮独立 +0.0035 | iid 参照 +0.0050 ‖ Λ=0.8805/0.8805/0.2509/0.2515 ‖ 成对余弦最大偏差 4.17e-07 ‖ 平均|ΔK| 0.0367
+  seed=7 φ=0.9: ρ_u=0.8997 | 刚体重瞄 0.8997 | 逐轮独立 +0.0044 | iid 参照 -0.0036 ‖ Λ=0.8812/0.8812/0.2512/0.2486 ‖ 成对余弦最大偏差 4.17e-07 ‖ 平均|ΔK| 0.0367
+  ✓ R-1a 刚体重瞄后 ρ_u 最大变化 2.19e-08 ≤1e-5
+  ✓ R-1b 条目内成对余弦最大偏差 4.17e-07 ≤1e-5
+  ✓ R-1c 键确实被改写：最小平均|ΔK| 0.0367 >1e-3
+  ✓ R-2 逐轮独立 Haar 后 |ρ_u| ≤ 4.52e-03（→iid 档）
+=== R-3（装置 E0 臂，描述性；无裁决）===
+  seed=20261028: ret1 id=0.8125 → iso=0.8812  Δ=+0.0687
+  seed=20261029: ret1 id=0.7750 → iso=0.7937  Δ=+0.0187
+  seed=20261030: ret1 id=0.7625 → iso=0.7937  Δ=+0.0312
+  Δret1 配对均值 +0.0396、3se=0.0451、正/负 3/0
+  ⇒ 有超预期效应 ⇒ P1–P3 需重新审视
+=== 前提检查 PASS（4/4） 539.1s ===
+EXITCODE=0

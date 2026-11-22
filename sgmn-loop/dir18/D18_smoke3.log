@@ -1,0 +1,30 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+/home/ec2-user/sgmn-loop/dir18/sgmn_module_hebb.py:37: SyntaxWarning: invalid escape sequence '\l'
+  $G=\alpha(Wk-v)k^\top+\lambda(W-W^0)$ 梯度 + 全矩阵参考步 / 同步因子步），
+/home/ec2-user/sgmn-loop/dir18/sgmn_module_hebb.py:235: SyntaxWarning: invalid escape sequence '\l'
+  * `hebbian_full` —— 全矩阵参考步（§3.2）：$W \leftarrow W - \eta G$；
+/home/ec2-user/sgmn-loop/dir18/sgmn_module_hebb.py:297: SyntaxWarning: invalid escape sequence '\m'
+  """§2.2 的线性读：$y = \mathrm{sg}(W) q$。（$q$ 由上层「地址选键」给出。）"""
+/home/ec2-user/sgmn-loop/dir18/sgmn_module_hebb.py:302: SyntaxWarning: invalid escape sequence '\c'
+  """写保真度：$\cos(W k_j,\; v_j)$（$j$ 为槽下标）。"""
+=== DIR-17 R1（脚本 v1.1 · 卡片 rev 1.3 任务构造）：可寻址读取 + 读侧训练 ===
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:54,  5.28it/s]Loading weights:  55%|█████▌    | 160/290 [00:00<00:00, 679.99it/s]Loading weights:  87%|████████▋ | 252/290 [00:00<00:00, 722.18it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 643.65it/s]
+
+[Stage A]
+Traceback (most recent call last):
+  File "/home/ec2-user/sgmn-loop/dir18/R1_write.py", line 705, in <module>
+    main()
+    ~~~~^^
+  File "/home/ec2-user/sgmn-loop/dir18/R1_write.py", line 366, in main
+    st = make_stack(model, d, "cue")
+  File "/home/ec2-user/sgmn-loop/dir18/R1_write.py", line 220, in make_stack
+    st = SGS(model, MOUNT, d, d, R, ALPHA, LAM, (eta if eta is not None else ETA), GAMMA0, DEV,
+             seed=seed, use_factorized=False, no_write=False, perpos=True,
+             mem_kind=mem_kind, n_entries=N_ENTRIES, key_mode=key_mode)
+  File "/home/ec2-user/sgmn-loop/dir18/sgmn_module_hebb.py", line 586, in __init__
+    m = LayerMem(model.config.hidden_size, d_k, d_v, r, alpha, lam, eta, gamma,
+                 device, gen, use_factorized, no_write=no_write, perpos=perpos,
+                 mem_kind=mem_kind, n_slots=n_slots, n_proto=n_proto,
+                 n_entries=n_entries, key_mode=key_mode)
+TypeError: LayerMem.__init__() got an unexpected keyword argument 'key_mode'

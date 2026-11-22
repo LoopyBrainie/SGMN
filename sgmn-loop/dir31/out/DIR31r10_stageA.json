@@ -1,0 +1,42 @@
+[
+ {
+  "tag": "A31-1(i) 工作例 A 与手算表一致",
+  "pass": true,
+  "detail": "max rel=1.73e-16"
+ },
+ {
+  "tag": "A31-1(ii) G == ∇ℓ(W)（§3.1 目标）",
+  "pass": true,
+  "detail": "fd=-1.6591691936e+01 an=-1.6591691936e+01 rel=3.49e-12"
+ },
+ {
+  "tag": "A31-2 工作例 B 与手算表一致",
+  "pass": true,
+  "detail": "max rel=4.16e-16"
+ },
+ {
+  "tag": "A31-3 (γ2, T=1) rel < FD_TOL",
+  "pass": true,
+  "detail": "an=+1.3044854207e+01 fd=+1.3044854205e+01 rel=1.32e-10"
+ },
+ {
+  "tag": "A31-4 同实例两次 / 两次 build 逐位相同",
+  "pass": true,
+  "detail": "L=109.211783704894"
+ },
+ {
+  "tag": "A31-5 act >= ALIVE_MIN",
+  "pass": true,
+  "detail": "act_min=0.06246 (n=8)"
+ },
+ {
+  "tag": "A31-6 矩阵与卡 §1.4 一致",
+  "pass": true,
+  "detail": "全部 30 格一致"
+ },
+ {
+  "tag": "A31-7 V0 的 U,V,θ 全 None；V1 的 U 非 None；V5 的 θ 非 None",
+  "pass": true,
+  "detail": "V0 w/base=True/True V1 w=False V5 b=False"
+ }
+]

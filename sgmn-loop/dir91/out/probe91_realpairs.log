@@ -1,0 +1,14 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:53,  5.42it/s]Loading weights:  67%|██████▋   | 195/290 [00:00<00:00, 847.36it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 738.50it/s]
+[L8] writes=600 boundary=31 driftK=0.00e+00 driftV=0.00e+00
+     rel: base=2.2846 vs_ref=0.1628 vs_real=0.1628 | sim blocked=0.1633 rr=0.1177
+     real keys: cos=0.9973 centered_effrank=23.09 (ref 23.09)
+[L12] writes=600 boundary=31 driftK=0.00e+00 driftV=0.00e+00
+     rel: base=2.5350 vs_ref=0.1914 vs_real=0.1914 | sim blocked=0.1919 rr=0.1415
+     real keys: cos=0.9966 centered_effrank=22.67 (ref 22.67)
+[L16] writes=600 boundary=31 driftK=0.00e+00 driftV=0.00e+00
+     rel: base=2.3811 vs_ref=0.2771 vs_real=0.2771 | sim blocked=0.2781 rr=0.1870
+     real keys: cos=0.9929 centered_effrank=21.36 (ref 21.36)
+
+★ 完成
