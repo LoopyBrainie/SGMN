@@ -1,0 +1,442 @@
+=== 2026-11-22T19:05:00Z DIR-126 启动 PID 3193273 ===
+========================================================================================================
+DIR-126 开卡前结构核（12 条；只打结构事实 + 已发表常数 + 逻辑层 level）
+========================================================================================================
+
+[S1] 剂量轴
+  S1         PASS  DOSE_ALL9 = [0, 25, 150, 300, 350, 375, 400, 450, 600]（9 个；新格 = [350, 375, 400]）
+
+[S2] 结构常量（每层每 1 个题集的 N₁/N₂ —— 由 n_seen 直方图真算）
+  S2         PASS  1 题集 (N₁,N₂)=(23,20) 闸门=22.0000 ；4 题集 (68,99) 闸门=78.333333
+
+[S3] 工作例 W1–W5 逐位（§3-2）
+  S3         PASS  W1 ratio=0.955844 符=True ；W2 ratio=0.676715 符=True ；W4 frac=0.0 ratio=0.873148 符=False(F-a) ；W5 frac=1.0 ratio=1.034972 符=False(F-b)
+
+[S4] `J126-2` 的临界 ρ（精确置换，`n=9`，单侧 `α=0.05`）
+  S4         PASS  n_perm=362880  crit_rho=-0.600000  p(crit)=0.048399≤0.05  p(次近0的-0.583333)=0.053999>0.05
+
+[S5] `J126-4` 非空转（构造性见证 W4/W5 + 网格分歧率）
+  S5         PASS  构造性 (F-a)/(F-b) 都可复现 ；网格 discordance=0.586980 (bad_a=0.4282, bad_b=0.1588) 门槛=0.05 ⇒ 非恒等式
+
+[S6] `D-156` 已发表读数逐位复现（**已发表常数**，不是本卡观测）
+  S6         PASS  d0:frac=0.8589/0.8589 ratio=0.9353/0.9353 d25:frac=0.6422/0.6422 ratio=0.7262/0.7262 d150:frac=0.7376/0.7376 ratio=0.4596/0.4596 d300:frac=0.3389/0.3389 ratio=0.7587/0.7587 d450:frac=0.0000/0.0000 ratio=1.4336/1.4336 d600:frac=0.0000/0.0000 ratio=1.9571/1.9571
+
+[S7] `frac` 的分母：`m_s = 0` 的层不进分母
+  S7         PASS  m_tot=71(须 71) n_valid=1(须 1) frac=0.0
+
+[S8] `H126` 与 `H126-alt` 在三个新剂量上**可区分**（设计有效性）
+  S8         PASS  两支在 6 个旧剂量上预测完全一致(fit 6/6 的原因)=True ⇒ 三个新剂量是唯一的判别窗口
+
+[S9] `J126-1` 的 level（**逻辑预测，无抽样 α**）
+  S9         PASS  若 `H126` 精确为真 ⇒ `frac=0 ⇒ ratio>1` 是**逻辑推论** ⇒ 观察不到的失败 ⇒ level = 0（不是 0.05 的抽样检验）；反之任一 (F-a)/(F-b) 出现即**确定**否证 ⇒ 检出概率 = 1（不是部分功效）。⇒ 本判据唯一需要的是**非空转**（S5 已过）
+
+[S10] `J126-2` 的 level（精确置换 ⇒ 构造上精确）
+  S10        PASS  拒绝域 {ρ ≤ -0.600} 在独立性零下的精确概率 = 0.048399 ≤ α=0.05 ⇒ level 精确
+
+[S11] 归档基线（只读；本卡不得改动）
+  S11        PASS  dir119 = 18 个 cell（须 18）；dir125 = 36 个（须 36）⇒ 基线已记
+
+[S12] 盲态断言：本卡的新剂量 `{350,375,400}` 此刻**无任何 cell**（`DEF-125-04` 的修法）
+  S12        PASS  新剂量的既有 cell 数 = {350: 0, 375: 0, 400: 0}（须全 0 ⇒ precheck 跑在盲态）
+
+========================================================================================================
+★ 结构核 12/12 PASS，阻断项 0
+========================================================================================================
+产物：dir126/out/precheck126.json
+--- precheck rc=0 ---
+  T01 PASS  t01_frac_basic
+  T02 PASS  t02_gate_direction
+  T03 PASS  t03_clamped_counts_low
+  T04 PASS  t04_zero_m_excluded
+  T05 PASS  t05_predict_strict
+  T06 PASS  t06_sign_of_ratio
+  T07 PASS  t07_worked_W1
+  T08 PASS  t08_worked_W4_fa
+  T09 PASS  t09_worked_W5_fb
+  T10 PASS  t10_spearman_known
+  T11 PASS  t11_perm_n9
+  T12 PASS  t12_perm_side
+  T13 PASS  t13_perm_guard
+  T14 PASS  t14_nonvacuous
+  T15 PASS  t15_clamp_free
+  T16 PASS  t16_sign_table
+  T17 PASS  t17_load_raises
+  T18 PASS  t18_mod_alias
+  T19 PASS  t19_dose_axis
+  T20 PASS  t20_ratio_ci
+
+★ 自测 20/20 PASS，失败 0
+--- selftest rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+========================================================================================================
+Stage A —— 硬门（`A126-1…10`，不需要新剂量数据）
+========================================================================================================
+  [PASS] A126-1: dose=600 S=109 m=133 E[S]=90.1570 p_two=0.000366782252 dir=high clamped=0
+  [PASS] A126-2: 6 个剂量的 (frac, ratio) 逐位复现：d0:0.8589/0.9353 d25:0.6422/0.7262 d150:0.7376/0.4596 d300:0.3389/0.7587 d450:0.0000/1.4336 d600:0.0000/1.9571
+  [PASS] A126-3: dir119 = 18 个 cell（基线，formal 里复核不变）
+  [PASS] A126-4: dir125 = 36 个 cell（★ 本卡不得改动，formal 里复核）
+  [PASS] A126-5: 非空转：discordance=0.586980 ≥ 门槛 0.05（bad_a=0.4282, bad_b=0.1588）
+  [PASS] A126-6: W1=0.955844/符True W2=0.676715/符True W4=0.873148/符False(F-a) W5=1.034972/符False(F-b)
+  [PASS] A126-7: n_perm=362880（须 362880）crit_rho=-0.600000（须 -0.6）
+  [FAIL] A126-8: 新剂量 cell 数 = {'350': 0, '375': 0, '400': 0}（须各 9；stage a 阶段允许未跑）
+  [PASS] A126-9: m_tot=71(须71) n_valid=1(须1) frac=0.0
+  [PASS] A126-10: 两支在 6 个旧剂量上预测一致=True ⇒ 三个新剂量是唯一判别窗口
+
+★ Stage A：10 条断言，阻断失败 = 无
+
+[rc=0, 5.8 s]
+--- stage A rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+========================================================================================================
+Smoke —— 协议可执行（`S126-1…3`；**不给判据判决**）
+========================================================================================================
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:58,  4.97it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 732.69it/s]Loading weights:  97%|█████████▋| 282/290 [00:00<00:00, 792.61it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 687.24it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|350|20271126: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 111.4s
+  COLOCATED|350|20271126: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 110.6s
+  [PASS] S126-1: c2['10000'] 的题集键 = ['556', '557', '558']（须含 ['556', '557', '558']）
+  [PASS] S126-2: 4 题集的 n_seen 直方图 ⇒ N₁=68（须68）N₂=99（须99）；dose=600 逐层（68,99）
+  [PASS] S126-3: 两个独立 scratch 的 acc_by_mult 逐位相同=True、9 个 mult 的 pick_argmin 逐位相同=True
+
+★ Smoke：全绿
+
+[rc=0, 226.7 s]
+--- smoke rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:53,  5.35it/s]Loading weights:  67%|██████▋   | 195/290 [00:00<00:00, 836.74it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 738.41it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|350|20260501: prior=18 acc=[3, 5, 5, 5, 5, 5, 5, 5, 5] n_finite=9 111.7s
+  完成 COLOCATED|350|20260501 prior=18 acc(1e4)=0.10416666666666667
+
+[rc=0, 116.5 s]
+--- cell 350|20260501 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:54,  5.28it/s]Loading weights:  59%|█████▉    | 172/290 [00:00<00:00, 708.84it/s]Loading weights:  92%|█████████▏| 267/290 [00:00<00:00, 762.88it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 690.29it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|350|20260502: prior=18 acc=[1, 1, 2, 2, 2, 2, 2, 2, 2] n_finite=9 112.6s
+  完成 COLOCATED|350|20260502 prior=18 acc(1e4)=0.041666666666666664
+
+[rc=0, 117.4 s]
+--- cell 350|20260502 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:05,  4.41it/s]Loading weights:  67%|██████▋   | 195/290 [00:00<00:00, 749.81it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 676.42it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|350|20260503: prior=18 acc=[4, 8, 7, 7, 7, 7, 7, 7, 7] n_finite=9 114.3s
+  完成 COLOCATED|350|20260503 prior=18 acc(1e4)=0.14583333333333334
+
+[rc=0, 119.0 s]
+--- cell 350|20260503 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:59,  4.85it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 730.13it/s]Loading weights:  98%|█████████▊| 285/290 [00:00<00:00, 810.50it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 688.82it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|350|20260504: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 114.9s
+  完成 COLOCATED|350|20260504 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 119.7 s]
+--- cell 350|20260504 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:56,  5.12it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 759.75it/s]Loading weights:  99%|█████████▉| 287/290 [00:00<00:00, 809.04it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 694.31it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|350|20260505: prior=18 acc=[0, 0, 0, 0, 0, 0, 0, 0, 0] n_finite=9 110.4s
+  完成 COLOCATED|350|20260505 prior=18 acc(1e4)=0.0
+
+[rc=0, 115.2 s]
+--- cell 350|20260505 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:53,  5.44it/s]Loading weights:  64%|██████▍   | 186/290 [00:00<00:00, 798.94it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 733.46it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|350|20260506: prior=18 acc=[1, 5, 7, 7, 7, 7, 7, 7, 7] n_finite=9 110.1s
+  完成 COLOCATED|350|20260506 prior=18 acc(1e4)=0.14583333333333334
+
+[rc=0, 114.9 s]
+--- cell 350|20260506 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:05,  4.44it/s]Loading weights:  67%|██████▋   | 195/290 [00:00<00:00, 736.83it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 683.28it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|350|20271126: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 110.9s
+  完成 COLOCATED|350|20271126 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 115.7 s]
+--- cell 350|20271126 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:15,  3.84it/s]Loading weights:  76%|███████▌  | 221/290 [00:00<00:00, 754.94it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 670.19it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|350|20271203: prior=18 acc=[1, 2, 2, 2, 2, 2, 2, 2, 2] n_finite=9 112.2s
+  完成 COLOCATED|350|20271203 prior=18 acc(1e4)=0.041666666666666664
+
+[rc=0, 117.0 s]
+--- cell 350|20271203 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:59,  4.84it/s]Loading weights:  60%|█████▉    | 173/290 [00:00<00:00, 679.21it/s]Loading weights:  92%|█████████▏| 266/290 [00:00<00:00, 768.54it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 667.79it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|350|20271210: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 113.2s
+  完成 COLOCATED|350|20271210 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 118.0 s]
+--- cell 350|20271210 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:14,  3.89it/s]Loading weights:  76%|███████▌  | 219/290 [00:00<00:00, 764.55it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 665.04it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|375|20260501: prior=18 acc=[2, 2, 2, 2, 2, 2, 2, 2, 2] n_finite=9 113.1s
+  完成 COLOCATED|375|20260501 prior=18 acc(1e4)=0.041666666666666664
+
+[rc=0, 117.9 s]
+--- cell 375|20260501 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:45,  6.31it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 774.33it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 767.78it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|375|20260502: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 112.7s
+  完成 COLOCATED|375|20260502 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 117.4 s]
+--- cell 375|20260502 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:55,  5.22it/s]Loading weights:  62%|██████▏   | 181/290 [00:00<00:00, 739.29it/s]Loading weights:  96%|█████████▌| 278/290 [00:00<00:00, 774.15it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 689.73it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|375|20260503: prior=18 acc=[4, 8, 7, 7, 7, 7, 7, 7, 7] n_finite=9 111.5s
+  完成 COLOCATED|375|20260503 prior=18 acc(1e4)=0.14583333333333334
+
+[rc=0, 116.3 s]
+--- cell 375|20260503 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:00,  4.75it/s]Loading weights:  67%|██████▋   | 195/290 [00:00<00:00, 743.95it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 688.19it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|375|20260504: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 111.1s
+  完成 COLOCATED|375|20260504 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 115.9 s]
+--- cell 375|20260504 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:44,  6.50it/s]Loading weights:  55%|█████▍    | 159/290 [00:00<00:00, 735.10it/s]Loading weights:  85%|████████▍ | 246/290 [00:00<00:00, 781.67it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 723.39it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|375|20260505: prior=18 acc=[0, 0, 0, 0, 0, 0, 0, 0, 0] n_finite=9 111.8s
+  完成 COLOCATED|375|20260505 prior=18 acc(1e4)=0.0
+
+[rc=0, 116.6 s]
+--- cell 375|20260505 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:59,  4.83it/s]Loading weights:  65%|██████▌   | 189/290 [00:00<00:00, 745.47it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 688.96it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|375|20260506: prior=18 acc=[7, 6, 3, 3, 3, 3, 3, 3, 3] n_finite=9 111.1s
+  完成 COLOCATED|375|20260506 prior=18 acc(1e4)=0.0625
+
+[rc=0, 115.9 s]
+--- cell 375|20260506 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:09,  4.18it/s]Loading weights:  68%|██████▊   | 197/290 [00:00<00:00, 718.97it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 660.59it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|375|20271126: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 112.3s
+  完成 COLOCATED|375|20271126 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 117.1 s]
+--- cell 375|20271126 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:07,  4.29it/s]Loading weights:  71%|███████▏  | 207/290 [00:00<00:00, 778.33it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 699.74it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|375|20271203: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 112.4s
+  完成 COLOCATED|375|20271203 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 117.2 s]
+--- cell 375|20271203 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:01,  4.67it/s]Loading weights:  68%|██████▊   | 196/290 [00:00<00:00, 765.85it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 695.46it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|375|20271210: prior=18 acc=[0, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 112.7s
+  完成 COLOCATED|375|20271210 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 117.5 s]
+--- cell 375|20271210 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:55,  5.21it/s]Loading weights:  60%|█████▉    | 173/290 [00:00<00:00, 724.80it/s]Loading weights:  93%|█████████▎| 271/290 [00:00<00:00, 764.64it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 693.46it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|400|20260501: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 113.2s
+  完成 COLOCATED|400|20260501 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 118.0 s]
+--- cell 400|20260501 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:01,  4.70it/s]Loading weights:  68%|██████▊   | 196/290 [00:00<00:00, 758.86it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 695.45it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|400|20260502: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 114.3s
+  完成 COLOCATED|400|20260502 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 119.0 s]
+--- cell 400|20260502 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:49,  5.82it/s]Loading weights:  56%|█████▌    | 161/290 [00:00<00:00, 722.78it/s]Loading weights:  88%|████████▊ | 254/290 [00:00<00:00, 746.40it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 701.20it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|400|20260503: prior=18 acc=[4, 8, 7, 7, 7, 7, 7, 7, 7] n_finite=9 117.9s
+  完成 COLOCATED|400|20260503 prior=18 acc(1e4)=0.14583333333333334
+
+[rc=0, 122.6 s]
+--- cell 400|20260503 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:50,  5.76it/s]Loading weights:  59%|█████▉    | 172/290 [00:00<00:00, 752.05it/s]Loading weights:  92%|█████████▏| 267/290 [00:00<00:00, 788.36it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 720.41it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|400|20260504: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 113.7s
+  完成 COLOCATED|400|20260504 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 118.6 s]
+--- cell 400|20260504 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:02,  4.62it/s]Loading weights:  64%|██████▍   | 185/290 [00:00<00:00, 709.49it/s]Loading weights:  98%|█████████▊| 285/290 [00:00<00:00, 795.51it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 671.73it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|400|20260505: prior=18 acc=[0, 0, 0, 0, 0, 0, 0, 0, 0] n_finite=9 112.9s
+  完成 COLOCATED|400|20260505 prior=18 acc(1e4)=0.0
+
+[rc=0, 117.7 s]
+--- cell 400|20260505 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:04,  4.46it/s]Loading weights:  68%|██████▊   | 197/290 [00:00<00:00, 764.97it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 680.13it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|400|20260506: prior=18 acc=[5, 3, 3, 3, 3, 3, 3, 3, 3] n_finite=9 112.9s
+  完成 COLOCATED|400|20260506 prior=18 acc(1e4)=0.0625
+
+[rc=0, 117.7 s]
+--- cell 400|20260506 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:09,  4.18it/s]Loading weights:  76%|███████▌  | 220/290 [00:00<00:00, 820.04it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 702.53it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|400|20271126: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 115.6s
+  完成 COLOCATED|400|20271126 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 120.4 s]
+--- cell 400|20271126 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:50,  5.75it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 802.83it/s]Loading weights:  98%|█████████▊| 285/290 [00:00<00:00, 869.92it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 753.04it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|400|20271203: prior=18 acc=[1, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 117.2s
+  完成 COLOCATED|400|20271203 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 122.1 s]
+--- cell 400|20271203 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:02,  4.65it/s]Loading weights:  63%|██████▎   | 183/290 [00:00<00:00, 725.19it/s]Loading weights: 100%|█████████▉| 289/290 [00:00<00:00, 817.35it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 679.83it/s]
+/mnt/sgmn/home/ec2-user/sgmn-loop/dir104/R1_task104.py:137: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+  COLOCATED|400|20271210: prior=18 acc=[0, 1, 1, 1, 1, 1, 1, 1, 1] n_finite=9 114.0s
+  完成 COLOCATED|400|20271210 prior=18 acc(1e4)=0.020833333333333332
+
+[rc=0, 118.8 s]
+--- cell 400|20271210 rc=0 ---
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+========================================================================================================
+Formal —— 汇总 + 裁决（`DIR-126`）
+========================================================================================================
+  [PASS] A126-8: 新剂量 cell 数 = {'350': 9, '375': 9, '400': 9}（须各 9）
+
+  dose   Σm      frac      ratio     pred     obs      max m_s   闸门            符?
+  ------------------------------------------------------------------------------------------------
+  0      248     0.8589    0.9353    -1       -1       36        22.000        ✓
+  25     682     0.6422    0.7262    -1       -1       147       78.333        ✓
+  150    667     0.7376    0.4596    -1       -1       167       78.333        ✓
+  300    419     0.3389    0.7587    -1       -1       142       78.333        ✓
+  350    175     0.0000    1.2676    1        1        56        78.333        ✓
+  375    117     0.0000    1.3793    1        1        49        78.333        ✓
+  400    99      0.0000    1.6137    1        1        49        78.333        ✓
+  450    124     0.0000    1.4336    1        1        49        78.333        ✓
+  600    133     0.0000    1.9571    1        1        49        78.333        ✓
+  J126-1 dose=350  frac=0.0000   ratio=1.2676    pred=+1 obs=1 ⇒ 相符
+  J126-1 dose=375  frac=0.0000   ratio=1.3793    pred=+1 obs=1 ⇒ 相符
+  J126-1 dose=400  frac=0.0000   ratio=1.6137    pred=+1 obs=1 ⇒ 相符
+
+  J126-2（n=9，单侧 less，精确置换）：rho=-0.803326  crit_rho=-0.6024948132556827  p=0.007606 ⇒ 拒绝（ρ 显著为负）
+  J126-2 稳健性（排除 dose=0，n=8）：rho=-0.872872  p=0.002976（report-only，不改判据）
+  [PASS] A126-3: dir119 逐位不变=True（18 个）
+  [PASS] A126-4: dir125 逐位不变=True（36 个）
+
+========================================================================================================
+★★ 判决：第 1 行 → H126_CONFIRMED_MEDIATED
+   J126-1：相符 3/3、否证(F-a) 0、否证(F-b) 0、不可判 0；任一 frac=0 = True
+   J126-2：ρ=-0.803326 ≤ crit -0.602495 ? True
+========================================================================================================
+产物：dir126/out/formal.json
+
+[rc=0, 6.1 s]
+--- formal rc=0 ---
+=== 2026-11-22T20:05:12Z 完成 ===

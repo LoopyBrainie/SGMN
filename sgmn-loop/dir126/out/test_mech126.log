@@ -1,0 +1,22 @@
+  T01 PASS  t01_frac_basic
+  T02 PASS  t02_gate_direction
+  T03 PASS  t03_clamped_counts_low
+  T04 PASS  t04_zero_m_excluded
+  T05 PASS  t05_predict_strict
+  T06 PASS  t06_sign_of_ratio
+  T07 PASS  t07_worked_W1
+  T08 PASS  t08_worked_W4_fa
+  T09 PASS  t09_worked_W5_fb
+  T10 PASS  t10_spearman_known
+  T11 PASS  t11_perm_n9
+  T12 PASS  t12_perm_side
+  T13 PASS  t13_perm_guard
+  T14 PASS  t14_nonvacuous
+  T15 PASS  t15_clamp_free
+  T16 PASS  t16_sign_table
+  T17 PASS  t17_load_raises
+  T18 PASS  t18_mod_alias
+  T19 PASS  t19_dose_axis
+  T20 PASS  t20_ratio_ci
+
+★ 自测 20/20 PASS，失败 0

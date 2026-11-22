@@ -1,0 +1,201 @@
+{
+ "id": "DIR-126 precheck",
+ "card": "rev126/v10",
+ "n_pass": 12,
+ "n_total": 12,
+ "n_blocking_fail": 0,
+ "items": [
+  {
+   "id": "S1",
+   "ok": true,
+   "detail": "DOSE_ALL9 = [0, 25, 150, 300, 350, 375, 400, 450, 600]（9 个；新格 = [350, 375, 400]）",
+   "blocking": true
+  },
+  {
+   "id": "S2",
+   "ok": true,
+   "detail": "1 题集 (N₁,N₂)=(23,20) 闸门=22.0000 ；4 题集 (68,99) 闸门=78.333333",
+   "blocking": true
+  },
+  {
+   "id": "S3",
+   "ok": true,
+   "detail": "W1 ratio=0.955844 符=True ；W2 ratio=0.676715 符=True ；W4 frac=0.0 ratio=0.873148 符=False(F-a) ；W5 frac=1.0 ratio=1.034972 符=False(F-b)",
+   "blocking": true
+  },
+  {
+   "id": "S4",
+   "ok": true,
+   "detail": "n_perm=362880  crit_rho=-0.600000  p(crit)=0.048399≤0.05  p(次近0的-0.583333)=0.053999>0.05",
+   "blocking": true
+  },
+  {
+   "id": "S5",
+   "ok": true,
+   "detail": "构造性 (F-a)/(F-b) 都可复现 ；网格 discordance=0.586980 (bad_a=0.4282, bad_b=0.1588) 门槛=0.05 ⇒ 非恒等式",
+   "blocking": true
+  },
+  {
+   "id": "S6",
+   "ok": true,
+   "detail": "d0:frac=0.8589/0.8589 ratio=0.9353/0.9353 d25:frac=0.6422/0.6422 ratio=0.7262/0.7262 d150:frac=0.7376/0.7376 ratio=0.4596/0.4596 d300:frac=0.3389/0.3389 ratio=0.7587/0.7587 d450:frac=0.0000/0.0000 ratio=1.4336/1.4336 d600:frac=0.0000/0.0000 ratio=1.9571/1.9571",
+   "blocking": true
+  },
+  {
+   "id": "S7",
+   "ok": true,
+   "detail": "m_tot=71(须 71) n_valid=1(须 1) frac=0.0",
+   "blocking": true
+  },
+  {
+   "id": "S8",
+   "ok": true,
+   "detail": "两支在 6 个旧剂量上预测完全一致(fit 6/6 的原因)=True ⇒ 三个新剂量是唯一的判别窗口",
+   "blocking": true
+  },
+  {
+   "id": "S9",
+   "ok": true,
+   "detail": "若 `H126` 精确为真 ⇒ `frac=0 ⇒ ratio>1` 是**逻辑推论** ⇒ 观察不到的失败 ⇒ level = 0（不是 0.05 的抽样检验）；反之任一 (F-a)/(F-b) 出现即**确定**否证 ⇒ 检出概率 = 1（不是部分功效）。⇒ 本判据唯一需要的是**非空转**（S5 已过）",
+   "blocking": false
+  },
+  {
+   "id": "S10",
+   "ok": true,
+   "detail": "拒绝域 {ρ ≤ -0.600} 在独立性零下的精确概率 = 0.048399 ≤ α=0.05 ⇒ level 精确",
+   "blocking": true
+  },
+  {
+   "id": "S11",
+   "ok": true,
+   "detail": "dir119 = 18 个 cell（须 18）；dir125 = 36 个（须 36）⇒ 基线已记",
+   "blocking": true
+  },
+  {
+   "id": "S12",
+   "ok": true,
+   "detail": "新剂量的既有 cell 数 = {350: 0, 375: 0, 400: 0}（须全 0 ⇒ precheck 跑在盲态）",
+   "blocking": true
+  }
+ ],
+ "crit_rho": -0.6,
+ "crit_rho_p": 0.04839891975308642,
+ "n_perm": 362880,
+ "nonvac": {
+  "discordance": 0.5869801804715145,
+  "p_bad_a": 0.4282000733826282,
+  "p_bad_b": 0.15878010708888626,
+  "p_frac0": 0.5521794018693914,
+  "p_ratio_hi": 0.2827594355756494,
+  "nonvacuous": true
+ },
+ "worked": {
+  "W1": {
+   "frac": 1.0,
+   "w1": 0.9565217391304346,
+   "w2": 0.9142857142857143,
+   "ratio": 0.955844155844156,
+   "pred": -1,
+   "obs": -1,
+   "agree": true
+  },
+  "W2": {
+   "frac": 1.0,
+   "w1": 1.238095238095238,
+   "w2": 0.8378378378378378,
+   "ratio": 0.6767151767151768,
+   "pred": -1,
+   "obs": -1,
+   "agree": true
+  },
+  "W4": {
+   "frac": 0.0,
+   "w1": 1.3170731707317076,
+   "w2": 1.1500000000000001,
+   "ratio": 0.8731481481481481,
+   "pred": 1,
+   "obs": -1,
+   "agree": false
+  },
+  "W5": {
+   "frac": 1.0,
+   "w1": 0.7755102040816326,
+   "w2": 0.8026315789473685,
+   "ratio": 1.0349722991689752,
+   "pred": -1,
+   "obs": 1,
+   "agree": false
+  }
+ },
+ "struct": {
+  "gate_1q": 22.0,
+  "gate_4q": 78.33333333333333,
+  "n1_1q": 23,
+  "n2_1q": 20,
+  "n1_4q": 68,
+  "n2_4q": 99
+ },
+ "d119_md5_before": {
+  "COLOCATED_0_20260501.json": "b6c59ebb1f32aa05fe59d092fbe82f77",
+  "COLOCATED_0_20260502.json": "c8c572ec6b9e527b242a4697e0b5d05b",
+  "COLOCATED_0_20260503.json": "8a1d4c796668f8bbeb5f9709e87e11c8",
+  "COLOCATED_0_20260504.json": "715ba9add1654ed976a105ac5cef5f73",
+  "COLOCATED_0_20260505.json": "4628b6bb0b24c9ef996885eedd4e3daf",
+  "COLOCATED_0_20260506.json": "671310de8d7ce8193504033524b7a402",
+  "COLOCATED_0_20271126.json": "b1435b921968a9c9b8851a39066822a1",
+  "COLOCATED_0_20271203.json": "26c839543f49de783e162ce3e1ef4afc",
+  "COLOCATED_0_20271210.json": "647c76360c42020f34f7546b7cc38751",
+  "COLOCATED_600_20260501.json": "634a78fe25c6f66ea20b7cc808992973",
+  "COLOCATED_600_20260502.json": "a70456d6f2e0f78c763bdd3ac33f8713",
+  "COLOCATED_600_20260503.json": "03927a69be00d1cd18a7836b02648e8d",
+  "COLOCATED_600_20260504.json": "136ad13c313d18cfca1a2408df109765",
+  "COLOCATED_600_20260505.json": "6d2c807b728f5ec535fcb2a997e4f5b9",
+  "COLOCATED_600_20260506.json": "b8b29026cf49ebf2466012045812e020",
+  "COLOCATED_600_20271126.json": "a672b397792f1f29f29332a3887dbda3",
+  "COLOCATED_600_20271203.json": "bccb6783558cd853ded8311f7de1d7c6",
+  "COLOCATED_600_20271210.json": "2c2b6c1649791fe27618468fd7f1de93"
+ },
+ "d125_md5_before": {
+  "COLOCATED_150_20260501.json": "200d7af56693be711da31efdc2a9d9af",
+  "COLOCATED_150_20260502.json": "fd7d657bbc61bad2b35c2059f367cbc6",
+  "COLOCATED_150_20260503.json": "bdb269b786142de5f18ecef5fa53900f",
+  "COLOCATED_150_20260504.json": "92b68556a27452e655132275a5ce94b0",
+  "COLOCATED_150_20260505.json": "44ed6334cfeb27a937c738433c45b344",
+  "COLOCATED_150_20260506.json": "2ef5b30b8ceb0cc83df84259925ee48a",
+  "COLOCATED_150_20271126.json": "80b648fb34bcbab96f20e43b1e1354e1",
+  "COLOCATED_150_20271203.json": "d2adca3de4d2c89f60d2996f50659cb2",
+  "COLOCATED_150_20271210.json": "d7aa617b8275dfc7fcef318b2aa55448",
+  "COLOCATED_25_20260501.json": "6ed24e1b302bf3d78f355c7ba18f4b5a",
+  "COLOCATED_25_20260502.json": "966d30bbbb179c7b26cf35cb591f6475",
+  "COLOCATED_25_20260503.json": "39d64d80477af4b6402536cf1dab5c3d",
+  "COLOCATED_25_20260504.json": "5a9fe15ba234bf5a27058a526d71cd7c",
+  "COLOCATED_25_20260505.json": "2efcf6fdf5af83c4a33187db51f478de",
+  "COLOCATED_25_20260506.json": "50b4075da8571eb2012567931f89c9a0",
+  "COLOCATED_25_20271126.json": "0baddb3cb54b6fa2f84a89bf27fce857",
+  "COLOCATED_25_20271203.json": "92bc9ac0acdf313d94d5e42bf675ab3f",
+  "COLOCATED_25_20271210.json": "24e40d03ba29d430090020f404620508",
+  "COLOCATED_300_20260501.json": "477273668fd93dae3ff797730178e39e",
+  "COLOCATED_300_20260502.json": "43adeb27890b9ed93c63d1621b937d4c",
+  "COLOCATED_300_20260503.json": "0981e6afd640ed0cfed89f03928179a8",
+  "COLOCATED_300_20260504.json": "3cea3ea29adb8fd340968a54b07bf8ae",
+  "COLOCATED_300_20260505.json": "ee0d6825d36f4cb0368226a39d636bf7",
+  "COLOCATED_300_20260506.json": "700c0329e84aa5c7faf7492627b2a1e7",
+  "COLOCATED_300_20271126.json": "cf3b80515275a07689c8e009ad236343",
+  "COLOCATED_300_20271203.json": "e5f45e8a7894f2b0f65b08f9538d4e0c",
+  "COLOCATED_300_20271210.json": "0ebab134022286ac1e26071950409f2f",
+  "COLOCATED_450_20260501.json": "b126f450847ac10503d2db834a82c852",
+  "COLOCATED_450_20260502.json": "e39bf2a13c1b9082e45cf9207dc03307",
+  "COLOCATED_450_20260503.json": "84acbc7153e891b44fa8a2a6d9f3790d",
+  "COLOCATED_450_20260504.json": "b610472833ee12ca602fb82ca6c271f2",
+  "COLOCATED_450_20260505.json": "f8a608cd2c7cfcd1d4f87379be9523b8",
+  "COLOCATED_450_20260506.json": "f2d95eb5257a0e32763ed1b701d3f335",
+  "COLOCATED_450_20271126.json": "d672b178b1503df13971d1e6f3580dcd",
+  "COLOCATED_450_20271203.json": "6a4871fc718255c3bab142b8c21485ee",
+  "COLOCATED_450_20271210.json": "3e526e7c8911645047042abced3a1c6f"
+ },
+ "new_dose_cells_present": {
+  "350": 0,
+  "375": 0,
+  "400": 0
+ }
+}
