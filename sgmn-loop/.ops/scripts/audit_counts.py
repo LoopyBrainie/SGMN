@@ -133,19 +133,59 @@ def parse_withdrawals(tb_text):
             for m in WITHDRAWN_RE.finditer(tb_text)]
 
 
+def _row_ends(tb_text):
+    """`{证据行名: 该行的结束偏移}`（末行取文本末尾）。
+
+    ★ 为什么需要它：撤回登记写在表格**下方**的独立区块，而它撤回的那一行在表格**上方**。
+      只按**物理位置**重放，撤回就永远落在所有提及之后 ⇒ `D-149` 撤回之后由 `D-150`
+      **重新挣回**的 `+1` 会被一并抹掉（实测：推导 54，实质 55）。
+      撤回标记自己写了它撤回哪一行（`D-149`）⇒ 用该行的**行末**当锚点。
+    ★ 只供 `derive_count` 内部用，`evidence_rows()` 的对外行为一个字不动。
+    """
+    starts = [(m.start(), m.group(1)) for m in _EVIDENCE_ROW.finditer(tb_text)]
+    out, tail = {}, len(tb_text)
+    for i, (pos, name) in enumerate(starts):
+        out[name] = starts[i + 1][0] if i + 1 < len(starts) else tail
+    return out
+
+
 def derive_count(tb_text):
     """从证据表推导当前 `SUCCEEDED` 分子；无提及时返回 `None`。
 
-    ① `cur = max(所有提及的 N)` —— **原语义原样保留**（无撤回标记时行为与旧实现逐位相同）；
-    ② 依次施加每条撤回：`from` 必须等于**当前**推导值（否则标记与推导不同源 ⇒ 抛错），
-       `to` 必须等于 `from − 1`（一次撤回只撤掉**一个**方向 ⇒ 否则抛错）；
-    ③ 返回最终 `cur`。
+    ★★★ `P119-1`（`DEF-119-06`）：旧实现 `cur = max(提及) − 每条撤回−1` **看不见
+      「撤回后又重新挣回同一数值」** —— `D-149` 先提过 `55`、随后被 `CORR-31` 撤回
+      `55 -> 54`；`D-150` 再 +1 又回到 `55`，而 `max` 仍是 55、减 1 得 **54**
+      ⇒ 机器值比实质值少 1，且**任何写法都接不上账**（若把 `D-150` 写成 `56`，
+      撤回标记的 `from=55` 就对不上）。⇒ 改为**按文档顺序重放**。
+
+    三条语义，缺一不可：
+    ① **提及取单调上界** `cur = max(cur, N)`：`SUCCEEDED` 是单调累积量。
+       ★ 这里是 `max` 而**不是**「直接赋值」，这是必须的，有两个理由：
+         (a) 本表「共域」区里**引用**了计数器起源 `SUCCEEDED = 32 / 32` —— 那是历史数字，
+             不是一次状态转移；赋值会把计数打回 **32**（实测本表就踩得到）；
+         (b) 允许赋值就等于**任何人引一个旧数字即可绕过 `WITHDRAWN` 记账** ⇒ 撤回机制形同虚设。
+    ② 撤回：`from` 必须等于**当时**的 `cur`（否则标记与推导不同源 ⇒ 抛错）；
+       `to` 必须 `== from − 1`（一次撤回只撤掉一个方向 ⇒ 否则抛错）。
+    ③ 撤回的**语义位置** = 它所指证据行的**行末**（行不存在时退回标记自身位置，兼容合成用例）。
     """
-    hits = [int(m.group(1)) for m in MENTION_RE.finditer(tb_text)]
-    if not hits:
+    if not MENTION_RE.search(tb_text):
         return None
-    cur = max(hits)
-    for name, frm, to in parse_withdrawals(tb_text):
+    row_end = _row_ends(tb_text)
+    events = []
+    for m in MENTION_RE.finditer(tb_text):
+        events.append((m.start(), 0, "mention", int(m.group(1))))
+    for m in WITHDRAWN_RE.finditer(tb_text):
+        name = m.group(1)
+        events.append((row_end.get(name, m.start()), 1, "withdraw",
+                       (name, int(m.group(2)), int(m.group(3)))))
+    events.sort(key=lambda e: (e[0], e[1]))
+
+    cur = None
+    for _pos, _seq, kind, payload in events:
+        if kind == "mention":
+            cur = payload if cur is None else max(cur, payload)
+            continue
+        name, frm, to = payload
         if frm != cur:
             raise CountError(
                 f"撤回合不上账：标记 {name} 声明从 {frm} 撤回，但推导出的当前值是 {cur}"

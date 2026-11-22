@@ -14,7 +14,7 @@
    本题把这两条都当成**被测性质**，而不是实现细节。
 
 用法：
-    python3 test_audit_counts.py            # 正常跑，应 15/15 PASS、exit 0
+    python3 test_audit_counts.py            # 正常跑，应全部 PASS、exit 0
     python3 test_audit_counts.py --inject 3 # 注入第 3 条，应 1 条 FAIL、exit 1
 """
 import argparse
@@ -94,6 +94,28 @@ CODOMAIN_TB = """\
 #: 共域测试用「哪些方向有冻结卡片」
 CODOMAIN_CARDS = {"101": True, "102": True, "103": False, "104": True}
 
+# ---- P119-1 合成证据表：*真实表的形状* —— 被撤回的行在**上方**，撤回登记在**下方** -------------
+# `D-149` 提 55 → `CORR-31` 撤回（登记区块在表格下方）→ `D-150` **又重新挣回** 55；
+# 最后还有一个「共域」区引用了计数器起源 `SUCCEEDED = 32 / 32`（历史数字，不是状态转移）。
+# 旧算法（`max−每条撤回`）在这里只能得 54；直接赋值的重放会得 32。两者都是错的。
+ANCHORED_TB = """\
+| **D-148（`DIR-117`）** | 甲 |
+| **`SUCCEEDED`** | **`SUCCEEDED = 54 / 55`（+1）** |
+| **D-149（`DIR-118`）** | 乙 |
+| **`SUCCEEDED`** | **`SUCCEEDED = 55 / 56`（+1）** |
+| **`CORR-31`（勘误 · 针对** `D-149`） | 本卡不计入成功计数（真实计数 54 / 56） |
+| **D-150（`DIR-119`）** | 丙 |
+| **`SUCCEEDED`** | **`SUCCEEDED = 55 / 56`（+1）** |
+
+## 撤回登记（withdrawal register）
+
+WITHDRAWN: D-149 55 -> 54
+
+## 共域（co-domain）状态
+
+1. `DIRECTION-REGISTER.md:5` 写明计数器起源 **`SUCCEEDED = 32 / 32`**。
+"""
+
 #: (tag, callable, 期望值)
 TESTS = [
     # ── P118-3：撤回 ────────────────────────────────────────────────────────
@@ -157,6 +179,20 @@ TESTS = [
 
     ("⑳ `PARALLEL_REPORT_KEYS` 两个键存在且互不相同（★ 防「把键表掏空」绕过 ④d）",
      lambda: (len(AC.PARALLEL_REPORT_KEYS), len(set(AC.PARALLEL_REPORT_KEYS))), (2, 2)),
+
+    # ── P119-1：撤回后**重新挣回同一数值**（DEF-119-06）───────────────────
+    ("㉑ 撤回后又挣回同一个数（55→撤回→54→再提 55）⇒ 55"
+     "（★ 旧算法给 54；这条是 DEF-119-06 的直接反例）",
+     lambda: AC.derive_count(HISTORY + "WITHDRAWN: D-149 55 -> 54\n"
+                             + "| 后来 | 当前计数：SUCCEEDED = 55 / 56 |\n"), 55),
+
+    ("㉒ ★ 撤回锚定到**它所撤回的行**（登记区块在表格下方、`D-150` 在上方又挣回）⇒ 55"
+     "（★ 按物理位置重放会给 54；按「赋值」重放会被末尾 32/32 引用打成 32）",
+     lambda: AC.derive_count(ANCHORED_TB), 55),
+
+    ("㉓ 引用一个**旧的**计数（55 之后又出现 `SUCCEEDED = 32 / 32`）⇒ 仍 55"
+     "（★ 否则引旧数就能绕过 `WITHDRAWN` 记账）",
+     lambda: AC.derive_count(HISTORY + "| 引用 | 起源 SUCCEEDED = 32 / 32 |\n"), 55),
 ]
 
 
@@ -198,7 +234,7 @@ def main():
                       "絶対に存在しない文字列")
 
     print("=" * 80)
-    print("audit_counts 自测（P118-3 撤回 · P118-6 分母 · P118-7 共域）")
+    print("audit_counts 自测（P118-3 撤回 · P118-6 分母 · P118-7 共域 · P119-1 重放）")
     print("=" * 80)
     for tag, fn, want in TESTS:
         try:
