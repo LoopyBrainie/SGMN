@@ -115,6 +115,11 @@ cp -f "$ROOT/COVERAGE-v24.md"        "$PKG/03_LEDGERS/COVERAGE-v24.md" \
 # ★ DEF-26P-10（补）：台账是交付物，复制失败不得静默吞掉
 cp -f "$ROOT/MANIFEST.md"           "$PKG/03_LEDGERS/MANIFEST.md" || { say "★★ MANIFEST.md 入包失败 ⇒ 中止"; exit 7; }
 cp -f "$ROOT/SUMMARY.md"            "$PKG/03_LEDGERS/SUMMARY.md"  || { say "★★ SUMMARY.md 入包失败 ⇒ 中止"; exit 7; }
+# ★ P130-1（Cycle 243）：`CARD-CHECKLIST.md`（开卡清单）是**治理文件** —— 它是纪律的唯一归档地
+#   （`handoff.md` 每轮被覆盖，规则只写在那里会随之丢失）。它不在 ② 的内容根
+#   （只有 revolve/framework/dir*）⇒ 与 COVERAGE-v24.md 同类，必须显式拷入，否则静默缺席归档。
+cp -f "$ROOT/CARD-CHECKLIST.md"      "$PKG/03_LEDGERS/CARD-CHECKLIST.md" \
+  || { say "★★ CARD-CHECKLIST.md 入包失败 ⇒ 中止（开卡纪律依赖它）"; exit 7; }
 # ★ DEF-26P-12：`decisions/` 从未进 ② 的内容根（`revolve framework dir*`），也不在 ③ 的手写清单里
 #   ⇒ **决策台账在终包里整段缺失**。此处按**保留路径**拷入（卡片里写的是 `decisions/DECISIONS.md`，路径必须可解析）。
 mkdir -p "$PKG/03_LEDGERS/decisions"
@@ -203,6 +208,7 @@ done > /tmp/_full_mf.txt
 # ★ DEF-26P-12 硬断言：以下**归档必需品**必须在包内（缺一即中止，不许靠「源==包」断言糊过去，
 #   因为 decisions/ 与 .ops/scripts/ 从来不进 ② 的内容根，两边同时漏 ⇒ 计数断言照不出来）。
 for _must in "03_LEDGERS/COVERAGE-v24.md" \
+              "03_LEDGERS/CARD-CHECKLIST.md" \
               "03_LEDGERS/decisions/DECISIONS.md" \
              "06_CONTINUITY/.ops/scripts/rebuild_full.sh" \
              "06_CONTINUITY/.ops/scripts/repack.sh" \
@@ -211,7 +217,7 @@ for _must in "03_LEDGERS/COVERAGE-v24.md" \
              "06_CONTINUITY/.ops/scripts/test_audit_counts.py"; do
   [ -f "$PKG/$_must" ] || { say "★★ 归档必需品缺失：$_must ⇒ 中止"; exit 9; }
 done
-say "归档必需品齐备：DECISIONS.md + 三脚本（rebuild_full / repack / audit_consistency）"
+say "归档必需品齐备：DECISIONS.md + CARD-CHECKLIST.md + 三脚本（rebuild_full / repack / audit_consistency）"
 N=$(wc -l < /tmp/_full_mf.txt)
 say "全包文件数 = $N（源文件数 = $N_SRC）"
 # ★ 2026-11-07：原实现用**硬编码下限 250**（旧沙箱布局的规模）⇒ 恢复后的工作区只有 186 个源文件
