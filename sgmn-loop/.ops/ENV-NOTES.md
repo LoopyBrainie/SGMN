@@ -381,3 +381,47 @@ ssh -o ProxyCommand="$HOME/.sandbox/experiment/1107/sgmn-loop/.ops/scripts/tr.sh
      （`mult×100 → Δlogit×4.93`），根因是 **final RMSNorm 会重标定 `‖h‖`**。
      ⇒ 估增益必须**实测**，且要扫到 `Δlogit ≳ 典型 logit 间隙`的量级才有判别力。
 
+
+---
+
+## 9. 实验归档：git 远端与分支（Cycle 230 起生效）
+
+**远端**：`origin = https://github.com/LoopyBrainie/SGMN.git`（**PUBLIC** 仓库，`gh repo view` 可复核）。
+**分支**：每个实验轮次一条 `experiment/<开始日期>`，本轮 **`experiment/1107`**。
+**已完成**：`experiment/1107` 基于远端 `main`（`acb79cf`）建立，首提交 `e41b508`（2510 文件），已 `push -u`；
+`refs/heads/main` **未动**（仍 `acb79cf`）。
+
+### 9.1 每个 cycle 收尾必须做（用户 2026-11-22 指令：从下一轮开始直接 commit）
+```bash
+cd /home/brra1n0/.sandbox/experiment/1107
+git add -A
+git commit -m "<cycle N>: <一句话>"        # 只提交，不碰 main
+GIT_TERMINAL_PROMPT=0 git -c credential.helper='!gh auth git-credential' push
+```
+★ **凭据**：`gh` 已登录（`LoopyBrainie`，scopes 含 `repo`），但**未配置 credential.helper**
+⇒ 必须带上上面那行 `-c credential.helper='!gh auth git-credential'`，否则会**卡在询问用户名**。
+（**不要**为此改全局 git 配置；用一次性 `-c` 即可。）
+★ **绝不** `git push origin main`、**绝不** 在 `experiment/*` 上 merge main —— 分支互相独立。
+
+### 9.2 两条已知陷阱（都实测踩过）
+1. **远端 `.gitignore` 是 GitHub 的 Python 模板，`*.log` 会静默丢掉全部实验日志**（实测 487 个）。
+   已在 `.gitignore` 末尾加 `!*.log` 取消。**新增/覆盖 `.gitignore` 时必须保留该行。**
+2. **`.pi/` 必须保持排除**：内含 `.pi/loop/inbox.md`（**与用户的私人对话原文**），
+   而本仓库 **PUBLIC**。代价：云端 agent 只拿仓库**看不到** `task/inbox/handoff` ⇒ 无法直接续跑 loop
+   （可见状态只有 `00_HANDOFF.md`）。**若要云端可续跑，须用户明确授权**。
+3. 本地根提交 `37e7a10` 与远端 `main`（`acb79cf`）**历史无关**（两条孤儿根）⇒
+   **不要**以 `37e7a10` 为基建分支（公开仓库会出现两个不相连的根）；以 `origin/main` 为基。
+
+### 9.3 ★★ 追加型文件的同步纪律（因一次真实事故而写）
+**事故**：上一 cycle 把「决定二百一十九」用 `ssh cat >>` 追加到**训练机**副本，
+随后又用 `ssh cat >` 把**本地**副本（从未含该决定）整体覆盖过去 ⇒ **训练机上刚写入的决定被抹掉**，
+两边都只剩 46 条；而当时的 **md5 双向核对报「✓ 一致」** —— 因为**两边都错**。
+**教训**：**md5 只能证明「两份相同」，不能证明「内容正确」**。
+**规则**：
+- 「追加型编辑」只作用于**唯一权威副本**；禁止「先追加到远端、再整文件覆盖远端」。
+- 覆盖式同步**之前**，必须证明 **本地 ⊇ 远端**（比对 `^### 决定` / `^\| \*\*D-` 这类**结构性计数与关键串**），
+  不是只比 md5：
+  ```bash
+  comm -23 <(远端 heads | sort) <(本地 heads | sort)   # 必须为空
+  ```
+- 同步后**再**比 md5（此时 md5 才只用于「同步是否完成」）。
