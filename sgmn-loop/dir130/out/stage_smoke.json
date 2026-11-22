@@ -1,0 +1,24 @@
+{
+ "shape": {
+  "六个顶层键齐": true,
+  "C0 有 ok/复现": true,
+  "C2 有 p/thr": true,
+  "C3 有 p/thr": true,
+  "C5 覆盖 k=1..9": true,
+  "总行数 15330": true,
+  "verdict 在冻结枚举里": true
+ },
+ "ok": true,
+ "meta_a": {
+  "dose": 300,
+  "n_sub": 15,
+  "n_cell_subsets": 511,
+  "n_rows": 7665
+ },
+ "meta_b": {
+  "dose": 350,
+  "n_sub": 15,
+  "n_cell_subsets": 511,
+  "n_rows": 7665
+ }
+}
