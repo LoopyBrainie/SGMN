@@ -1,0 +1,42 @@
+==============================================================================
+DIR-124 测量层自测（36 条）
+==============================================================================
+PASS T1  P1(2) == 1/2、P2(2) == 1/5（DIR-123 同一实现）
+PASS T2  W1(u) ≡ W2(u) ≡ u（每候选加成与 k 无关）在 u ∈ [1,200] 上 < 1e-10
+PASS T3  OR(u) ≡ 4 在 u ∈ [1,200] 上 < 1e-10（参数无关的精确预测）
+PASS T4  P2(r·u) < P2(u) 当 r > 1（备择方向由机制决定，不是约定）
+PASS T5  strata_of 三轴的 ΣN1/ΣN2 全 = (612, 891)
+PASS T6  strata_of 层数：both=36、seed=9、qset=4
+PASS T7  qset 轴的每层 N1 = 9 × 该题集单 cell 的 d1（×n_seeds，S3 曾抓到漏乘）
+PASS T8  分层不重叠且不漏：所有 idx 的并集大小 = n_seeds × 4（每轴）
+PASS T9  convolve_null 归一为 1（合成 m 向量）
+PASS T10 convolve_null vs 暴力枚举（4 层、60 项）max|Δ| < 1e-15
+PASS T11 convolve_null 跳过 m == 0 层（不改变分布）
+PASS T12 单层时 上尾 = P(X >= e)、且 上尾 + 下尾 = 1 + pmf(e)
+PASS T13 双侧 p：∈ [pmf(obs), 1]、众数处 = 1（★ 不 ≥ 上尾 —— 上尾含 pmf 更大的点）
+PASS T14 工作例 层A：û = 2 精确（4·p1+5·p2 = 3）
+PASS T15 工作例 层A：θ = 2/3、Binomial(3,2/3) = [1,6,12,8]/27
+PASS T16 工作例 层B：û = 11.6846584384、θ = 0.8768943744
+PASS T17 工作例 卷积 pmf 逐位 = 卡片 §3-2 表
+PASS T18 工作例 strat_test：S=4、p_two=0.5737934260、p_upper=0.2598205554、dir=high
+PASS T19 工作例 m 一致：显式给出错误 m ⇒ 抛 ValueError
+PASS T20 全 e1 = 0 ⇒ S=0、上尾=1、双侧=pmf[0]（下尾显著）⇒ 双侧下 reject=True、dir=low
+PASS T21 e1 全部推到上界（e1 = N1）⇒ 必拒绝、方向 high
+PASS T22 全部 m = 0 ⇒ 不可执行（reason = no_stratum_with_m_gt_0，p = None）
+PASS T23 m = 0 的层被跳过但不改变判决（strata_used 减少 1，S/p 不变）
+PASS T24 判据只吃 k=1/2：stratum_obs 的键里没有 e3（CORR-35 ① 结构守卫）
+PASS T25 dose=600 观测读数 = D-154 已发表（e1=109、e2=24、m=133）
+PASS T26 dose=0：9 cell 全是 dose=0、W_bitwise_same 真、**只有题集 555**（无 c2）
+PASS T26b dose=0 的机会数 ΣN1/ΣN2 = (207,180)（= 主检的 0.338 / 0.202）
+PASS T26c dose=600 的 rngs = (555,556,557,558)（主检用全四题集）
+PASS T27 两批数据的 pick_argmin 不完全相同（负对照不是训练态副本）
+PASS T28 power(ratio=1) < power(ratio=2)（小 reps）
+PASS T29 power(ratio=3) > power(ratio=2)（小 reps，单调性）
+PASS T30 level(ratio=1) ≤ α + 0.02（有效性，小 reps）
+PASS T31 power 对同一 seed 可复现（固定 MC_SEED ⇒ 逐位相同）
+PASS T32 power 在小 u 下高于大 u（m 更大 ⇒ 信息更多，结构性质）
+PASS T33 冻结量自检：SIDE/AXIS/ALPHA/DOSE 与卡片 §9 一致
+PASS T34 判据不是恒真也不是恒假：合成池上 reject 真出现过 True 与 False
+==============================================================================
+36 / 36 PASS
+==============================================================================

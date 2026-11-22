@@ -1,0 +1,92 @@
+{
+ "boundary": {
+  "600": {
+   "active": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+   ],
+   "n_active": 0,
+   "n": 9,
+   "m_tot": 133,
+   "hi_tot": 705.0
+  },
+  "0": {
+   "active": [
+    true,
+    true,
+    true,
+    true,
+    false,
+    true,
+    true,
+    false,
+    true
+   ],
+   "n_active": 7,
+   "n": 9,
+   "m_tot": 248,
+   "hi_tot": 198.0
+  }
+ },
+ "w_model_free": {
+  "600": {
+   "N1": 612,
+   "N2": 891,
+   "e1": 109,
+   "e2": 24,
+   "p1": 0.1781045751633987,
+   "p2": 0.026936026936026935,
+   "w1": 9.229357798165138,
+   "w2": 18.0625,
+   "ratio": 1.9570700795228628,
+   "OR": 7.828280318091453
+  },
+  "0": {
+   "N1": 207,
+   "N2": 180,
+   "e1": 161,
+   "e2": 87,
+   "p1": 0.7777777777777778,
+   "p2": 0.48333333333333334,
+   "w1": 0.5714285714285714,
+   "w2": 0.5344827586206896,
+   "ratio": 0.9353448275862069,
+   "OR": 3.7413793103448274
+  }
+ },
+ "D3_u_below_1": {
+  "0.55": {
+   "u_true": 0.55,
+   "reject_rate": 0.9405,
+   "clamped_strata_frac": 0.9781666666666666
+  },
+  "0.8": {
+   "u_true": 0.8,
+   "reject_rate": 0.3695,
+   "clamped_strata_frac": 0.8071666666666667
+  }
+ },
+ "D4_u_at_least_1": {
+  "2.0": {
+   "u_true": 2.0,
+   "reject_rate": 0.0135
+  },
+  "9.2": {
+   "u_true": 9.2,
+   "reject_rate": 0.036
+  }
+ },
+ "verdict_flags": {
+  "placebo_all_clamped": false,
+  "main_none_clamped": true,
+  "artifact_confirmed": true,
+  "calibrated_above_1": false
+ }
+}
