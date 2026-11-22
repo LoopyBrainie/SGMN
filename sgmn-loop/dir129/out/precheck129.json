@@ -1,0 +1,45 @@
+{
+ "stage": "precheck",
+ "stage_a": [
+  {
+   "id": "S1",
+   "ok": true,
+   "detail": "n=121 doses=9 subs=15 k={1: 4, 2: 6, 3: 4, 4: 1} span555=9"
+  },
+  {
+   "id": "S2",
+   "ok": true,
+   "detail": "缺键=0 n_cells!=9=0 None 读数=0"
+  },
+  {
+   "id": "S3",
+   "ok": true,
+   "detail": "T1 复现: frac=0 在 dose<350 的条数=0 / frac>0 在 dose>=350 的条数=0 | 边际 frac0=75 fracpos=46"
+  },
+  {
+   "id": "S4",
+   "ok": true,
+   "detail": "D-158 计数复核: {'FA': 2, 'SAME': 119}"
+  },
+  {
+   "id": "S5",
+   "ok": true,
+   "detail": "V126 与 T350 逐结构相同 121/121"
+  },
+  {
+   "id": "S6",
+   "ok": true,
+   "detail": "pred(0.0)=1 pred(1e-300)=-1 pred(None)=None"
+  },
+  {
+   "id": "S7",
+   "ok": true,
+   "detail": "15==2^4-1? True 格完整? True"
+  },
+  {
+   "id": "S8",
+   "ok": true,
+   "detail": "mech129 内的写模式 open 调用数=0"
+  }
+ ]
+}

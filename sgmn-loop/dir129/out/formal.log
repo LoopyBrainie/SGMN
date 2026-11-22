@@ -1,0 +1,71 @@
+==============================================================================
+DIR-129 Stage A 守卫核（只打结构事实与已发表常数，不打 C3/C4 读数）
+==============================================================================
+  ✓ S1: n=121 doses=9 subs=15 k={1: 4, 2: 6, 3: 4, 4: 1} span555=9
+  ✓ S2: 缺键=0 n_cells!=9=0 None 读数=0
+  ✓ S3: T1 复现: frac=0 在 dose<350 的条数=0 / frac>0 在 dose>=350 的条数=0 | 边际 frac0=75 fracpos=46
+  ✓ S4: D-158 计数复核: {'FA': 2, 'SAME': 119}
+  ✓ S5: V126 与 T350 逐结构相同 121/121
+  ✓ S6: pred(0.0)=1 pred(1e-300)=-1 pred(None)=None
+  ✓ S7: 15==2^4-1? True 格完整? True
+  ✓ S8: mech129 内的写模式 open 调用数=0
+
+自测 T1..T12
+  ✓ T1 共线核能抓 frac=0 在 dose<350: holds=False n_below=1 见证=1
+  ✓ T2 共线核能抓 frac>0 在 dose>=350: holds=False n_above=1 见证=1
+  ✓ T3 共线夹具上 V126 与 T350 逐结构相同: V126==V350 ? True
+  ✓ T4 等价区间恰为 (300,350] 唯一一个: E=[(300, 350)] 期望=[(300, 350)]
+  ✓ T5 CLEAN 分类与转折窗: tag=CLEAN win=(300, 350) 期望=('CLEAN', (300, 350))
+  ✓ T6 交错轨迹 ⇒ NONMONO: tag=NONMONO 期望=NONMONO
+  ✓ T7 单调无转折 ⇒ ALL_NEG / ALL_POS: all-neg=ALL_NEG all-pos=ALL_POS 期望=('ALL_NEG', 'ALL_POS')
+  ✓ T8 obs 非 ±1 ⇒ UNDET（不算失败）: ratio==1 ⇒ UNDET; ratio=None ⇒ UNDET 期望=('UNDET', 'UNDET')
+  ✓ T9 pred_h126 严格 ==0、无容差: strict==0: (1, -1, -1, None) 期望=(1, -1, -1, None)
+  ✓ T10 非全格时 is_full_lattice=False: singleton=2 infl=1.0 lattice=False 期望=(2, 1.0, False)
+  ✓ T11 9 个剂量 ⇒ 10 个 breakpoint 区间: 区间数=10 右端=[0, 25, 150, 300, 350, 375, 400, 450, 600, None] 期望=(10, [0, 25, 150, 300, 350, 375, 400, 450, 600, None])
+  ✓ T12 readings.json 121 条且可索引: len=121 cohort=121 含(0,555)=True
+  ⇒ 自测 12/12 过，红 0 条: []
+
+【工作例 §6】结构 (dose=0, sub={555}) —— readings.json 第 0 条
+  frac = 0.8588709677419355  ⇒ pred_h126 = -1
+  ratio = 0.9353448275862069 ⇒ obs = -1
+  verdict = SAME   （pred 与 obs 一致 ⇒ SAME）
+  该结构属 555 的负集（obs=-1）：True
+  ★ 轨迹与分类属 C3，按纪律**只在 --stage formal 打印**
+
+★ Stage A 全过
+
+==============================================================================
+FORMAL —— 全部判据读数
+==============================================================================
+
+[C1 共线普查] holds=True  frac0_below=0  fracpos_above=0  |  frac0=75 fracpos=46 总=121
+[C2 等价阈值] E 是否为空=False  等价区间=[(300, 350)]
+
+[C3 纵向轨迹 · 报告] 计数={'NONMONO': 2, 'CLEAN': 13}
+   按 k 分层={1: {'NONMONO': 1, 'CLEAN': 3}, 2: {'CLEAN': 5, 'NONMONO': 1}, 3: {'CLEAN': 4}, 4: {'CLEAN': 1}}
+   不同转折窗=[[300, 350]]
+   逐题集:
+     (555,)                 k=1 tag=NONMONO   win=None obs=[-1, -1, -1, -1, 1, 1, 1, -1, 1]
+     (556,)                 k=1 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+     (557,)                 k=1 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+     (558,)                 k=1 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+     (555, 556)             k=2 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+     (555, 557)             k=2 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+     (555, 558)             k=2 tag=NONMONO   win=None obs=[-1, -1, -1, 1, 1, 1, -1, 1]
+     (556, 557)             k=2 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+     (556, 558)             k=2 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+     (557, 558)             k=2 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+     (555, 556, 557)        k=3 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+     (555, 556, 558)        k=3 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+     (555, 557, 558)        k=3 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+     (556, 557, 558)        k=3 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+     (555, 556, 557, 558)   k=4 tag=CLEAN     win=[300, 350] obs=[-1, -1, -1, 1, 1, 1, 1, 1]
+
+[C4 有效单元 · 报告] {'n_subsets': 15, 'n_singleton': 4, 'inflation': 3.75, 'is_full_lattice': True}
+
+[verdict 计数] {'SAME': 119, 'FA': 2}
+
+★ 判决表第 2 行 ⇒ C129-PAIRING-CANNOT-BREAK-CONFOUND（H129 被否证）
+★ SUCCEEDED 不增（保持 57）
+
+读数已写 out/stage_formal.json

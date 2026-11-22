@@ -1,0 +1,11 @@
+{
+ "stage": "smoke",
+ "shape": {
+  "有五个顶层键": true,
+  "C1 有 holds": true,
+  "C2 有 equivalent/is_empty": true,
+  "C3 有 15 条 records": true,
+  "C4 有 inflation": true,
+  "向量长度 121": true
+ }
+}
