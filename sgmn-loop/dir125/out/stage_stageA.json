@@ -1,0 +1,103 @@
+{
+ "stageA": [
+  {
+   "name": "A125-1",
+   "ok": true,
+   "detail": "工作例 6 读数逐位（u=0.2065603008 θ=0.5956264661 θ_old=0.4380952381 Δθ=+0.1575312280）",
+   "blocking": true
+  },
+  {
+   "name": "A125-2",
+   "ok": true,
+   "detail": "m=1..42 严格递减=True；m≥n1+n2 ⇒ (0.0, clamped=True)",
+   "blocking": true
+  },
+  {
+   "name": "A125-3",
+   "ok": true,
+   "detail": "放宽域后 J124-1 逐位不变：S=109 m=133 p_two=0.000366782 clamped=0（hi_old=78.3333，逐层 m_s≤49）",
+   "blocking": true
+  },
+  {
+   "name": "A125-4",
+   "ok": true,
+   "detail": "池化 (68,99,133)：u=0.1963949625 θ=0.4655612531 vs θ_old=0.3408521303 ⇒ 「分层」与「放宽域」是两条独立修正",
+   "blocking": true
+  },
+  {
+   "name": "A125-7",
+   "ok": true,
+   "detail": "映射断言在 AST 里找到 1 处；被 `if` 包住的 0 处 ⇒ 无条件执行",
+   "blocking": true
+  },
+  {
+   "name": "A125-8",
+   "ok": true,
+   "detail": "D-124 冻结两层工作例：S=4 p_two=0.5737934260 p_upper=0.2598205554 dir=high",
+   "blocking": true
+  },
+  {
+   "name": "A125-9",
+   "ok": true,
+   "detail": "Σpmf=1.000000000000000 E[S]=6.0500000000",
+   "blocking": true
+  },
+  {
+   "name": "A125-10",
+   "ok": true,
+   "detail": "合成池 60 次：reject 出现 [False, True] ⇒ 判据非空转",
+   "blocking": true
+  },
+  {
+   "name": "A125-11",
+   "ok": true,
+   "detail": "27 层：水平 0.0376 ≤ 0.0546；功效(1.96) 0.9999 ≥ 0.80",
+   "blocking": true
+  },
+  {
+   "name": "A125-12",
+   "ok": true,
+   "detail": "dose=0 的 9 层全是 (N1,N2)=(23,20) 且只含 e1/e2 ⇒ k=3 层未被使用",
+   "blocking": true
+  },
+  {
+   "name": "A125-14",
+   "ok": true,
+   "detail": "新格路径 = /mnt/sgmn/home/ec2-user/sgmn-loop/dir125/out/cells/COLOCATED_25_20271126.json（含 dir125/out/cells、不含 dir119）",
+   "blocking": true
+  },
+  {
+   "name": "A125-15",
+   "ok": true,
+   "detail": "dir119 归档 18 个 cell 的 md5 基线已记录",
+   "blocking": true
+  }
+ ],
+ "cells": {},
+ "smoke": {},
+ "verdict": {},
+ "power27": {
+  "level": 0.0376,
+  "power_1_96": 0.99985
+ },
+ "dir119_md5_before": {
+  "COLOCATED_0_20260501.json": "b6c59ebb1f32aa05fe59d092fbe82f77",
+  "COLOCATED_0_20260502.json": "c8c572ec6b9e527b242a4697e0b5d05b",
+  "COLOCATED_0_20260503.json": "8a1d4c796668f8bbeb5f9709e87e11c8",
+  "COLOCATED_0_20260504.json": "715ba9add1654ed976a105ac5cef5f73",
+  "COLOCATED_0_20260505.json": "4628b6bb0b24c9ef996885eedd4e3daf",
+  "COLOCATED_0_20260506.json": "671310de8d7ce8193504033524b7a402",
+  "COLOCATED_0_20271126.json": "b1435b921968a9c9b8851a39066822a1",
+  "COLOCATED_0_20271203.json": "26c839543f49de783e162ce3e1ef4afc",
+  "COLOCATED_0_20271210.json": "647c76360c42020f34f7546b7cc38751",
+  "COLOCATED_600_20260501.json": "634a78fe25c6f66ea20b7cc808992973",
+  "COLOCATED_600_20260502.json": "a70456d6f2e0f78c763bdd3ac33f8713",
+  "COLOCATED_600_20260503.json": "03927a69be00d1cd18a7836b02648e8d",
+  "COLOCATED_600_20260504.json": "136ad13c313d18cfca1a2408df109765",
+  "COLOCATED_600_20260505.json": "6d2c807b728f5ec535fcb2a997e4f5b9",
+  "COLOCATED_600_20260506.json": "b8b29026cf49ebf2466012045812e020",
+  "COLOCATED_600_20271126.json": "a672b397792f1f29f29332a3887dbda3",
+  "COLOCATED_600_20271203.json": "bccb6783558cd853ded8311f7de1d7c6",
+  "COLOCATED_600_20271210.json": "2c2b6c1649791fe27618468fd7f1de93"
+ }
+}

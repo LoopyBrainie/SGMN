@@ -1,0 +1,10 @@
+{
+ "dose": 450,
+ "seed": 20271210,
+ "file": "COLOCATED_450_20271210.json",
+ "acc_by_mult_same": true,
+ "pick_argmin_same": true,
+ "differing_mults": [],
+ "c2_presence_same": true,
+ "ok": true
+}
