@@ -9,6 +9,7 @@
  ④b 三个头部的 SUCCEEDED 计数**彼此一致**且**等于证据表推导值**（★ 防「头部过期」）
  ⑤ 关键 md5 记录一致（装置 / 脚本）
  ⑧ 开卡清单 CARD-CHECKLIST.md 的格式完整性（条目数/字段/执行方式，声明 vs 机械点数）
+ ⑧e–⑧g `判读` 字段与 `check_cards.py` 的 `INTERP` **逐字同一**（`P133-1`）
 
 用法：python3 audit_consistency.py
 """
@@ -365,6 +366,57 @@ else:
         if _m8b and int(_m8b.group(1)) != _real.get(_sym, 0):
             _dbad.append(f"{_sym}{_lbl} 声明 {_m8b.group(1)} vs 实测 {_real.get(_sym, 0)}")
     check(not _dbad, f"⑧ 执行方式分布：{_dbad or '一致'}")
+    # ⑧e–⑧g ★★ P133-1（Cycle 246）：`判读` 字段与 `check_cards.py` 的 `INTERP` **逐字同一**。
+    #   动机：`check_cards.py` 为让谓词可执行，对 5 条纪律各自做了**窄化**，但窄化原本只写在
+    #   各函数体的**局部变量**里 ⇒ 归档（本文件）无从核对，脚本一改，归档就是**谎**且无人发现。
+    #   ★ 这正是 `P131-1` 已吃过的亏（纪律只活在每轮被覆盖的 `handoff.md` 里）**换了个载体**。
+    #   口径：**字符串同一性**，不做语义判断（`P131-1` 的手写计数漂移 19/23 就是这么来的）。
+    try:
+        import check_cards as _CC
+        _INTERP = _CC.INTERP
+        _imp_err = None
+    except Exception as _e:
+        _INTERP, _imp_err = None, f"{type(_e).__name__}: {_e}"
+    check(_INTERP is not None,
+          f"⑧e 须能 import check_cards 以取得 INTERP（{_imp_err or 'OK'}）")
+    if _INTERP is not None:
+        # 逐块取 `判读` 行（**块内**搜索，避免命中「变更记录」里的说明文字）
+        _blocks8 = {}
+        for _i, (_n, _pos) in enumerate(_hits):
+            _end = _hits[_i + 1][1] if _i + 1 < len(_hits) else len(_t8)
+            _blocks8[_n] = _t8[_pos:_end]
+        _got8 = {}
+        for _n, _blk in _blocks8.items():
+            _m8 = re.search(r"^- \*\*判读\*\*：(.*)$", _blk, re.M)
+            if _m8:
+                _got8[_n] = (_m8.group(1), _m8)
+        # ⑧e 正向：INTERP 里每条 `[窄化]` 都必须在清单里有**逐字相同**的 `判读` 行
+        _e_miss, _e_diff = [], []
+        for _k, _v in sorted(_INTERP.items()):
+            if not _v.startswith("[窄化]"):
+                continue
+            if _k not in _got8:
+                _e_miss.append(f"K{_k}")
+            elif _got8[_k][0] != _v:
+                _e_diff.append(f"K{_k}(清单{len(_got8[_k][0])}字 vs INTERP{len(_v)}字)")
+        check(not _e_miss,
+              f"⑧e `[窄化]` 条目须在清单有 `判读` 行：缺 {_e_miss or '无'}")
+        check(not _e_diff,
+              f"⑧e `判读` 须与 INTERP **逐字相同**：不一致 {_e_diff or '无'}")
+        # ⑧f 反向：不得有孤儿 `判读`（清单声称窄化、而代码已无该窄化）
+        _e_orphan = sorted(set(_got8) - {k for k, v in _INTERP.items() if v.startswith("[窄化]")})
+        check(not _e_orphan,
+              f"⑧f 不得有孤儿 `判读`（代码已无该窄化）：多余 {_e_orphan or '无'}")
+        # ⑧g 结构：`判读` 必须**紧接** `检查` 行（下一条非空行即 `判读`），便于机械解析
+        _e_adj = []
+        for _k, (_v, _m) in _got8.items():
+            _head8 = _blocks8[_k][:_m.start()]
+            _ln8 = [l for l in _head8.splitlines() if l.strip()]
+            if not _ln8 or not _ln8[-1].startswith("- **检查**："):
+                _e_adj.append(f"K{_k}")
+        check(not _e_adj,
+              f"⑧g `判读` 须紧接 `检查` 行（中间不得插其他字段）：不合 {_e_adj or '无'}")
+
 
 print("\n" + "=" * 88)
 print(("★ 全部通过" if not fails else f"★ {len(fails)} 项未通过"))
