@@ -212,6 +212,7 @@ done > /tmp/_full_mf.txt
 #   因为 decisions/ 与 .ops/scripts/ 从来不进 ② 的内容根，两边同时漏 ⇒ 计数断言照不出来）。
 for _must in "03_LEDGERS/COVERAGE-v24.md" \
               "03_LEDGERS/CARD-CHECKLIST.md" \
+              "06_CONTINUITY/COMPLIANCE-BASELINE.md" \
               "03_LEDGERS/decisions/DECISIONS.md" \
              "06_CONTINUITY/.ops/scripts/rebuild_full.sh" \
              "06_CONTINUITY/.ops/scripts/repack.sh" \
@@ -223,7 +224,7 @@ for _must in "03_LEDGERS/COVERAGE-v24.md" \
              "06_CONTINUITY/.ops/scripts/restore_out.sh"; do
   [ -f "$PKG/$_must" ] || { say "★★ 归档必需品缺失：$_must ⇒ 中止"; exit 9; }
 done
-say "归档必需品齐备：DECISIONS.md + CARD-CHECKLIST.md + 六脚本（rebuild_full / repack / audit_consistency / check_cards / blind_copy / restore_out）"
+say "归档必需品齐备：DECISIONS.md + CARD-CHECKLIST.md + COMPLIANCE-BASELINE.md + 六脚本（rebuild_full / repack / audit_consistency / check_cards / blind_copy / restore_out）"
 N=$(wc -l < /tmp/_full_mf.txt)
 say "全包文件数 = $N（源文件数 = $N_SRC）"
 # ★ 2026-11-07：原实现用**硬编码下限 250**（旧沙箱布局的规模）⇒ 恢复后的工作区只有 186 个源文件
