@@ -142,7 +142,7 @@ mkdir -p "$PKG/06_CONTINUITY/.ops/scripts"
 # ★★ P118-3（Cycle 225）修：原白名单只有 3 个脚本，而 `audit_consistency.py` 现在
 #   `import audit_counts` ⇒ 只带 audit_consistency.py 入包会让"可复现性资产"**导入即崩**。
 #   ⇒ 把被依赖的纯函数层与其自测一并入包（★ 新增审计脚本时必须同步加到这里与下方 `_must`）。
-for _s in rebuild_full.sh repack.sh audit_consistency.py audit_counts.py test_audit_counts.py; do
+for _s in rebuild_full.sh repack.sh audit_consistency.py audit_counts.py test_audit_counts.py check_cards.py; do
   cp -f "$ROOT/.ops/scripts/$_s" "$PKG/06_CONTINUITY/.ops/scripts/$_s" \
     || { say "★★ 打包脚本入包失败：$_s ⇒ 中止"; exit 7; }
 done
@@ -214,10 +214,11 @@ for _must in "03_LEDGERS/COVERAGE-v24.md" \
              "06_CONTINUITY/.ops/scripts/repack.sh" \
              "06_CONTINUITY/.ops/scripts/audit_consistency.py" \
              "06_CONTINUITY/.ops/scripts/audit_counts.py" \
-             "06_CONTINUITY/.ops/scripts/test_audit_counts.py"; do
+             "06_CONTINUITY/.ops/scripts/test_audit_counts.py" \
+             "06_CONTINUITY/.ops/scripts/check_cards.py"; do
   [ -f "$PKG/$_must" ] || { say "★★ 归档必需品缺失：$_must ⇒ 中止"; exit 9; }
 done
-say "归档必需品齐备：DECISIONS.md + CARD-CHECKLIST.md + 三脚本（rebuild_full / repack / audit_consistency）"
+say "归档必需品齐备：DECISIONS.md + CARD-CHECKLIST.md + 四脚本（rebuild_full / repack / audit_consistency / check_cards）"
 N=$(wc -l < /tmp/_full_mf.txt)
 say "全包文件数 = $N（源文件数 = $N_SRC）"
 # ★ 2026-11-07：原实现用**硬编码下限 250**（旧沙箱布局的规模）⇒ 恢复后的工作区只有 186 个源文件
