@@ -9,6 +9,39 @@ say() { echo "[$(date -u +%H:%M:%S)] $*" | tee -a "$LOG"; }
 
 say "===== DIR-18 打包开始 ====="
 
+# ---------- ⓪ 快照保留 N 代（Cycle 250 · `P134-4` · 决定二百四十）----------
+# ★★★ 事故根因（`决定二百三十九` §六b）：本脚本末尾的 `rebuild_full.sh` 会**覆盖**
+#   `SGMN_LOOP_full.zip`，而工作区只留这**一份**。2026-11-23 03:45 那次覆盖把 02:46
+#   唯一完好的全量快照抹掉 ⇒ 290 个深层 `out/` 文件**永久丢失**。
+#   ⇒ 每次 repack **先**把**现有**全量包存成一代快照（带 UTC 时间戳），只留最近 KEEP 代。
+#   这样「上一次覆盖前的状态」总是还在，事故当晚不会被第二次 repack 抹掉。
+# ★ 只修剪**本机制自己的家族**（前缀 `SGMN_LOOP_full_g`）：`_final_c163…c168.zip` 等
+#   历史快照是**别的**机制留下的、也是某些深层文件的唯一来源 ⇒ **绝不能**被这里删掉。
+SNAP_DIR=$ROOT/.ops/archive
+KEEP=${SGMN_SNAP_KEEP:-5}
+case "$KEEP" in ''|*[!0-9]*) say "★★ SGMN_SNAP_KEEP='$KEEP' 非正整数 ⇒ 退回 5"; KEEP=5 ;; esac
+[ "$KEEP" -ge 1 ] || { say "★★ SGMN_SNAP_KEEP=$KEEP <1 ⇒ 退回 5"; KEEP=5; }
+if [ -f "$ROOT/SGMN_LOOP_full.zip" ]; then
+  mkdir -p "$SNAP_DIR" || say "★★ 无法创建 $SNAP_DIR ⇒ 无快照保护"
+  _tag=$(date -u +%Y%m%dT%H%M%SZ)
+  _snap=$SNAP_DIR/SGMN_LOOP_full_g$_tag.zip
+  _i=1; while [ -e "$_snap" ]; do _snap=$SNAP_DIR/SGMN_LOOP_full_g${_tag}_$_i.zip; _i=$((_i+1)); done
+  if cp -f "$ROOT/SGMN_LOOP_full.zip" "$_snap"; then
+    say "快照保留：$(basename "$_snap")（$(stat -c%s "$_snap") B）"
+  else
+    say "★★ 快照复制失败 ⇒ 本次覆盖**无退路**，请先手动另存"
+  fi
+  # 修剪：按 mtime 新→旧，删第 KEEP+1 代及以后（**只碰 g 家族**）
+  _n_before=$(ls -1 "$SNAP_DIR"/SGMN_LOOP_full_g*.zip 2>/dev/null | wc -l)
+  ls -1t "$SNAP_DIR"/SGMN_LOOP_full_g*.zip 2>/dev/null \
+    | tail -n +$((KEEP + 1)) \
+    | while IFS= read -r _old; do rm -f "$_old" && say "修剪旧快照：$(basename "$_old")"; done
+  _n_after=$(ls -1 "$SNAP_DIR"/SGMN_LOOP_full_g*.zip 2>/dev/null | wc -l)
+  say "快照代数：$_n_before → $_n_after（上限 $KEEP；★ 不改动 _final_* 历史快照与 /tmp 手动另存）"
+else
+  say "无现有全量包（首次打包）⇒ 跳过快照"
+fi
+
 # ---------- ① DIR-18 产物包 ----------
 # ★ 2026-11-07：恢复后的工作区里 DIR-18 在**顶层** `dir18/`（旧沙箱布局是 `revolve/DIR-18/`）。
 rm -f "$ROOT/DIR-18_artifacts.zip"

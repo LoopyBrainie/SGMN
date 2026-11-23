@@ -428,7 +428,7 @@ GIT_TERMINAL_PROMPT=0 git -c credential.helper='!gh auth git-credential' push
 
 ---
 
-## ★★★ 事故与纪律：`~/sgmn-loop` 是**符号链接** ⇒ `cp -a` 复制的是**链接本身**（Cycle 249 实测，已完整还原）
+## ★★★ 事故与纪律：`~/sgmn-loop` 是**符号链接** ⇒ `cp -a` 复制的是**链接本身**（Cycle 249 实测；**部分还原，290 个深层文件永久丢失**）
 
 **现象**：我做「盲态 `precheck`」实验时执行 `cp -a ~/sgmn-loop /tmp/blind2`，
 随后 `cd /tmp/blind2 && rm -rf dir*/out` —— **删掉的是真实树的 `dir*/out`**，
@@ -444,12 +444,21 @@ lrwxrwxrwx. 1 ec2-user ec2-user 33 /tmp/blind2 -> /mnt/sgmn/home/ec2-user/sgmn-l
 `cp -a` **保留**符号链接（不跟随），所以 `/tmp/blind2` 变成了指向真实树的**第二个链接**；
 `cd` 进去之后的所有 `rm`/`mv` 都作用在**真实归档**上。
 
-**还原（成功，三个来源）**：
+**★ 更正（Cycle 250 自查）：本节初稿写「已完整还原」，那是错的。** 还原用了四个来源，
+但**只还原了浅层**，且还原后我又误跑了 `repack.sh`，**覆盖了 02:46 那份唯一完好的全量 zip**
+⇒ **290 个深层 `out/` 文件（`out/cells/*`、`out/FDSNAP/*` 等）永久丢失**。
+最终机械核：`N_SRC`（同一 `rebuild_full.sh` 前后各测一次）**3614 → 3324**；
+`dir*/out` **1900 → 1610**。详见 `revolve/P134-3-PRECHECK-STAGE-AUDIT.md` §0 与 `决定二百三十九` §六。
+★ **未损失任何冻结结论**（`VERDICT`/`evidence/table.md`/`decisions/`/`formal.json` 全在 git 且未被 `rm` 触及）。
+
+**还原（四个来源，但只覆盖浅层）**：
 1. `SGMN_LOOP_full.zip`（**`repack.sh` 在 02:46 生成，早于事故**）→
    `unzip` 出 `04_EVIDENCE/dir*/out/*`（**1362 项 / 126 目录**）→ `cp -rn` **不覆盖**幸存文件；
 2. 本地 git 工作区（1012 个 `dir*/out` 文件）→ 补**包内没有的 229 个**（`*.log` 等）；
 3. 本地 4 个 `precheck{124,125,126,128}.json` 原件 → 覆盖回训练机，
-   **撤销 `Cycle 248` 普查重跑对原始 `precheck` 产物的副作用**。
+   **撤销 `Cycle 248` 普查重跑对原始 `precheck` 产物的副作用**；
+4. `.ops/archive/SGMN_LOOP_full_final_c168.zip`（Nov 20，早于事故）→ 补 **45** 个深层文件
+   （**只覆盖到 ≈`dir90`**，故 `dir100…dir130` 的深层 `out/` 已不可得）。
 **核验**：训练机 1565 文件；与本地交集 **md5 不一致 = 0**；**仅本地 = 0**；
 `dir125/out/cells` = 36、`dir126/out/cells` = 27（与台账一致）；
 **功能回归**：11 张 `precheck` 的 `rc` **逐张复现 `Cycle 248` 普查**（9 张 0 + 2 张 1）。
@@ -466,7 +475,26 @@ lrwxrwxrwx. 1 ec2-user ec2-user 33 /tmp/blind2 -> /mnt/sgmn/home/ec2-user/sgmn-l
    ```
 3. **`repack.sh` 的全量 zip 是灾备第一来源**，不是"最后一步的打包动作"：
    它比 git 多 **553** 个从未回拉本地的文件，正是这次能完全还原的原因。
-4. **事故要如实记录、不追认**（本轮已写进 `revolve/P134-3-PRECHECK-STAGE-AUDIT.md` §0 与 `决定二百三十九`）。
+4. **事故要如实记录、不追认**（已写进 `revolve/P134-3-PRECHECK-STAGE-AUDIT.md` §0 与 `决定二百三十九`）。
+5. **`unzip` 取归档必须覆盖全部分流**（`02_ROUNDS/` + `04_EVIDENCE/` + `05_LOGS/`）——
+   只取其中一处会**静默地只还原一半**，而 `cp -n` 不报错、计数还很好看。
+6. **还原后不要立刻 `repack.sh`**：先 `cp SGMN_LOOP_full.zip /tmp/pre_accident.zip` 另存，
+   再还原，最后才打包。★ 这正是本次 290 个文件永久丢失的**直接原因**。
+
+★★★ **这三条纪律现已工具化（Cycle 250 · `P134-4`），不要再手打命令**：
+- `.ops/scripts/blind_copy.sh <dest>` —— `cp -rL` 复制 + 断言 ①②③④ + 写 `.blind_copy_ok` 标记；
+  `.ops/scripts/blind_copy.sh --assert-isolated <dir>` —— **破坏性操作前必跑**，
+  没有标记/是符号链接/与源同 inode/内部有逃逸链接 ⇒ **一律拒跑（rc=4）**；
+- `.ops/scripts/restore_out.sh <zip> [--expect N]` —— 逐**分流**枚举（分流清单从数据现读，不硬编码）、
+  `cp -n` 只增不改、结束时打印**结构性总数**并与 `--expect` 对账；
+  ★ 真包实测：`1610` 候选 == 磁盘 `1610` 个 `out` 文件（`02_ROUNDS` 45 + `04_EVIDENCE` 1343 + `05_LOGS` 222）；
+- `repack.sh` 开头**自动保留 N 代全量快照**（`SGMN_SNAP_KEEP`，默认 5）到 `.ops/archive/`，
+  只修剪**自己那一族**（`SGMN_LOOP_full_g*.zip`），**绝不触碰** `_final_*` 历史快照。
+  ⇒ 事故当晚那次覆盖，现在会先留下 02:46 的那一代。
+**实测（Cycle 250）**：两套测试各 `16/16`、`25/25` 通过；并在**真实 1.2G 树**上复刻事故
+（`SGMN_ROOT=~/sgmn-loop` 复制 → 副本里 `rm -rf dir*/out`）⇒ 副本 out 归零、**真实树 1610 个文件未损**
+（`dir125/out/cells`=36、`dir126/out/cells`=27）；`restore_out.sh` 在真实树上幂等核
+**逐字节未变**（1610 个文件的 md5 聚合前后相同）。
 
 ## ★★ 教训：变异测试必须先证明「变异真的写进去了」（Cycle 249 第二次踩到）
 
