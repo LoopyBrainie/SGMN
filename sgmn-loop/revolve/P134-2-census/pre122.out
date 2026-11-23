@@ -1,0 +1,32 @@
+[PASS] S0-a  D90 的 N_CAND = 4（源文件核对）
+[PASS] S0-b  D90 的 N_DRAWS = 3
+[PASS] S0-c  dir114 的 N_VAL=16 / N_FACT=32
+[PASS] S0-d  build_facts_pairs 默认 seed = 9091
+[PASS] S0-e  partitions 默认 shuffle_seed = 777
+[PASS] S0-f  make_items_with_vals 用 random.Random(rng_seed)
+[PASS] S1-a  facts = 32 条（须 32）
+[PASS] S1-b  COLOCATED 训练侧值数 = 8（须 8）
+[PASS] S1-c  COLOCATED 留出侧 key 数 = 16（须 16）
+[PASS] S1-d  留出侧值数 = 8（须 8）
+[PASS] S2-a  rng=555 项数 = 48（= 16 key × 3）
+[PASS] S2-b  rng=555 的 n_seen_hist = {'0': 2, '1': 23, '2': 20, '3': 3}（须 == 已发表 {'0': 2, '1': 23, '2': 20, '3': 3}，D-151）
+[PASS] S2-c  cell 文件 = 9（须 9）
+[PASS] S2-d  重建后逐 seed 逃逸数 = [0, 3, 18, 0, 2, 9, 5, 0, 5]（须 == 已发表 [0, 3, 18, 0, 2, 9, 5, 0, 5]，D-152）★ 顺序敏感
+[PASS] S2-e  逃逸合计 = 42（须 == 已发表 42）
+
+--- S3 c2 题集结构（只报结构与已发表直方图，不报新读数）---
+[PASS] S3-556a  rng=556 的 n_seen_hist = {'0': 3, '1': 18, '2': 27, '3': 0}（须 == 存档 c2 {'0': 3, '1': 18, '2': 27, '3': 0}）
+      rng=556: 项数 48、可逃逸项 = 45、key 数 = 16
+[PASS] S3-556b  rng=556 的候选值组合与主读物（555）不同
+[PASS] S3-557a  rng=557 的 n_seen_hist = {'0': 4, '1': 9, '2': 29, '3': 6}（须 == 存档 c2 {'0': 4, '1': 9, '2': 29, '3': 6}）
+      rng=557: 项数 48、可逃逸项 = 44、key 数 = 16
+[PASS] S3-557b  rng=557 的候选值组合与主读物（555）不同
+[PASS] S3-558a  rng=558 的 n_seen_hist = {'0': 3, '1': 18, '2': 23, '3': 4}（须 == 存档 c2 {'0': 3, '1': 18, '2': 23, '3': 4}）
+      rng=558: 项数 48、可逃逸项 = 45、key 数 = 16
+[PASS] S3-558b  rng=558 的候选值组合与主读物（555）不同
+[PASS] S3-d  同一 rng 的 n_seen_hist 在 9 个 seed 上完全相同 ⇒ 题集与训练 seed 无关（配对设计）
+[PASS] S4-a  每 key 的项数 = [3]、key 数 = 16 ⇒ ★ 48 项不是独立单位，key 才是（16 个独立单位/qset）
+[PASS] S5-a  主题集 D_row = 58.28571428571427（须 == 已发表 58.28571428571427，D-152）
+
+[precheck122] 全部 PASS
+[precheck122] ★ 本核未计算、未打印 556/557/558 上的任何逃逸读数（判据观测值保持未见）

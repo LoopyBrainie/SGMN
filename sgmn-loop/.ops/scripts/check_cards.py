@@ -126,10 +126,10 @@ class Ctx:
 INTERP = {
     7: "[窄化] 只抓 **>=3 位小数**的浮点（实测型读数，如 `0.8589`）；`0.05`/`0.0`/`0.5`/`0.95` 这类**惯例阈值**不算 —— `DEF-127-02` 的真实缺陷是**手抄实测值**，不是冻结一个显著性水平（首版按字面抓全部浮点 ⇒ 4/5 误报）；『派生』的等价标注放宽到 `机器算/算出/推导/computed`（卡片的实际用词）",
     8: "[窄化] 仅当『逐位相等』与『浮点』同句、且未出现 整数/有理数/Fraction、也不是『更正/改为/不可满足』句式才 FAIL（修订记录小节整体不计）—— 首版把『rev 1.0 曾要求浮点逐位相等、已因不可满足而改掉』误判为违规",
-    16: "[降级] 本条由 `①自动化` **降为 `②留痕`**：静态核对器**不判**，也不得记 PASS。判定须在 trainer 上以**子进程**跑 `precheck{n}.py --stage precheck` 并扫 stdout —— 但『哪些词算 formal 的判据读数』**只能由卡片在开卡时自己冻结**（如 `dir130` 的 `S9_FORBIDDEN` + `T13` 自测）。核对器若自行拟一份通用禁用词表，要么误报合规卡、要么就是把已知的 11 张卡调到全绿 —— 后者正是 `P133-1` 要防的**静默窄化**。⇒ 现由卡片自带的 `S*` 执行，核对器不判。★ 未决（**不得当成已合规**）：`dir130` 的 `--stage precheck` 会打印 `frac = 0.0`，而 `frac(û<1)` 在本项目自己的词汇里**就是**判据量（`D-160`/`P130-3`），其 `S9_FORBIDDEN` 却未收它 ⇒ 等于**卡片自我豁免**；这 11 张是否合 `原文` **未裁定**（见 `P134-2`）。",
+    16: "[降级] 本条由 `①自动化` **降为 `②留痕`**：静态核对器**不判**，也不得记 PASS。判定须在 trainer 上以**子进程**跑 `precheck{n}.py` 并扫 stdout —— 但『哪些词算 formal 的判据读数』**只能由卡片在开卡时自己冻结**（如 `dir130` 的 `S9_FORBIDDEN` + `T13` 自测）。核对器若自行拟一份通用禁用词表，要么误报合规卡、要么就是把已知的 11 张卡调到全绿 —— 后者正是 `P133-1` 要防的**静默窄化**。⇒ 现由卡片自带的 `S*` 执行，核对器不判。★★ `P134-2` 已**逐卡实跑裁定**（trainer，stdout 原样留档于 `revolve/P134-2-census/`，结论见 `revolve/P134-2-PRECHECK-CENSUS.md`）：**11 张 0 违规**，**无需**任何 `RECHECK.md`。允许打印：结构事实 / 已发表常数复现 / **单个工作例**的判据量与标签 / 检测器自测（含 level·power 仿真与预期标签）；禁止：本研究自身的判据**聚合**（`C2`/`C3`/`C4`、`p₃₅₀`/`p₃₀₀`）与**整条序列/分类**（机械佐证：11 份输出中含 ≥20 个数字的行数 = 0）。★ 故『`frac` 在单个工作例里打印』**不违规** —— `原文` 括号禁的是「**整条**序列/分类」，量词是「整条」。★ 更正 `P134-1` 的**错误论断**：`dir130` 的 `frac = 0.0` 属【工作例 §6】且下一行即声明 `p₃₅₀`/`p₃₀₀` 只在 `--stage formal` 打印 ⇒ 不是「自我豁免」，是**已声明的窄边界**；原记「未裁定」现裁定为**合规**。★★ 但查出**两处与 `K16` 无关的真实缺陷**：① `precheck125`/`precheck126` 的 `S12` 盲态前置条件（新剂量须 0 cell）在 `formal` 之后**永不可能再通过** ⇒ 重跑必 `rc=1`，**不是卡的问题**；② **8/11 根本没有 `--stage` 开关**，且至少 5 张读 `formal` 产物（`readings.json`/`out/cells`）⇒ 它们在**开卡时刻根本跑不起来**，`K16` 对它们只是**空洞成立**（纪律成立是因为检查从未在该时刻发生）⇒ 已派生 `P134-3`。",
     18: "[窄化] 仅当卡片真的在说**继承一个带定义域限制的求解器**时才适用；`û_s=0` 的『夹紧层』是**测量端点的定义**，不是求解器夹紧（首版按字面匹配 clamp/夹紧 ⇒ 4/5 误报）",
     22: "[窄化] 仅在卡片**真的用 α/抽样推断**时要求（首版对『否证/排除』全文触发，5/5 误报）；穷举型卡片没有抽样误差 ⇒ N/A",
-    24: "[窄化] 只算**非三引号**的 `\"`-定界 CJK 字符串：单条 `len>=60`，或**隐式拼接**各段源码长度之和 `>=60`；三引号文档字符串与短消息不计（首版把全部 docstring 计入 ⇒ 5/5 误报）。★ `P134-1` 补拼接：原先 `\"段一\" \"段二\"` 是**两个**都不到 60 的 token ⇒ 漏判，补后**6 张历史卡由 PASS 转 FAIL**（`DIR-31/33/38/91/103/115`，逐条人工确认是真拼接）；`NEWLINE` 逻辑换行**断开**拼接，仅括号内 `NL` 与 `COMMENT` 可连接。★ 两处**已知逃逸**（**未修**，见 `P134-2`）：① py3.12+ 的 `f\"…\"` 被 tokenize 成 `FSTRING_START`，本判据不覆盖；② `tokenize` 抛 `TokenError`/`IndentationError` 的文件整份跳过（`def f(:` 这类语法错即可绕过），此为 `P132-1` 既有行为、本轮**未改**。",
+    24: "[窄化] 只算**非三引号**、**双引号定界**的字面量（含 `f`/`r`/`u` 等前缀），且须含 CJK；长度用**同一把尺子**、三式同源：裸串 `len(源码) >= 60`（含 2 个定界符 ⇒ 等价于文本 >= 58）、带前缀式 `引号内文本 >= 58`、`f` 式只算**散文**（`{}` 之外，**排除**替换域与格式说明）`>= 58`；**隐式拼接**按同一尺子累加（仅括号内 `NL` 与 `COMMENT` 可连接，`NEWLINE` 逻辑换行**断开**）；三引号文档字符串与短消息不计（首版把全部 docstring 计入 ⇒ 5/5 误报）。★ `P134-1`：原先『段一』『段二』相邻是**两个**都不到 60 的 token ⇒ 漏判；补后 **6 张历史卡 PASS→FAIL**（`DIR-31/33/38/91/103/115`，逐条人工确认是真拼接）。★★ `P134-2` 更正与补全：① 原记『py3.12+ 把 `f` 式 tokenize 成 `FSTRING_START` ⇒ 逃逸』**机制说错了** —— 判据本要求以双引号起，各版本都把带前缀者排除，**结论从未因版本而变**；真缺口是**规则没覆盖带前缀式**（与 `原文`『不得用双引号定界』不符）。② 现补前缀式与 `f` 式，并给 `tokenize` 失败的文件加**逐行兜底**（原整份跳过 ⇒ 未闭合括号即可免检）。★ 尺子为何必须分式：实测 `f` 式若按**整段源码**计，历史全量 **1781 处 / 95 张卡**（量的是代码体积而非中文）；若把格式说明算进散文，`dir51/calib51.py:161` 会因 `:.6f` 越线而误报（该行中文仅 6 字）。★ 实测影响：**25 张卡 PASS→FAIL、无一反向**；兜底路径历史命中 **0**（现状休眠，仅防未来）。★ K24 对历史卡 FAIL 率 60/103 → **85/103** ⇒ **只能作新卡前置门，不得回溯判定历史卡**（`P130-1`/`P131-1`）。",
 }
 
 def k04(ctx):
@@ -366,11 +366,79 @@ def k22(ctx):
     return R(FAIL, f"VERDICT 缺：{', '.join(miss)}", interp)
 
 
+_K24_TEXT_MIN = 58
+#   ★ 为何是 58 而非 60（`P134-2`）：裸串沿用 `P132-1` 的历史判据 `len(源码) >= 60`，而裸串源码
+#   含 **2 个定界符** ⇒ 等价于「引号内文本 >= 58」。带前缀/`f"…"` 只能按**文本**度量，取 58
+#   才与裸串**同一把尺子**；取 60 会平白留下一段 58–59 字符的残余漏判。
+#   ★★ 而「文本」对 `f"…"` **必须排除替换域与格式说明**：本判据量的是**中文散文**，不是格式机器。
+#   实测反例（差点变成误报）：`dir51/calib51.py:161` 的
+#       f"  功效: mean(D^ortho){m_o:+.6f} sd={s_o:.6f} rel_se={relse:.4f} n_need={n_need}  墙钟 {w:.1f}s"
+#   若把 `:.6f` 这类格式说明算进文本，长度 59 就越线 —— 而该行中文只有「功效」「墙钟」6 个字，
+#   是一行**可读的**诊断输出，正是规则**不该**管的东西。故只收 `{}` **之外**的 `FSTRING_MIDDLE`。
+_PREFIX = re.compile(r'^[rRbBuUfF]+')
+#   tokenize 失败文件的兜底行扫描：只认**单行** `"…"`。`(?<!["\'])` 避免把 `""` 或 `'"'` 的
+#   第二个引号当成起点。★ 保守设计：宁可漏判，也不误报（见 `_k24_linescan`）。
+_K24_LINE_RE = re.compile(r'(?<!["\'])"((?:[^"\\\n]|\\.)*)"')
+
+
 def _k24_hit(tok_or_text):
-    """单条字面量的 K24 判据：`"`-定界（排除 `r"`/`b"`/`f"` 前缀）+ 非三引号 + 含 CJK + len>=60。"""
+    """**裸**字面量的 K24 判据（`P132-1` 原规则，逐字节未动）。"""
     st = tok_or_text if isinstance(tok_or_text, str) else tok_or_text.string
     return (st.startswith('"') and not st.startswith('"""')
             and CJK.search(st) is not None and len(st) >= 60)
+
+
+def _k24_prefixed_text(src):
+    """带前缀（`r"`/`b"`/`u"`/`f"`…）的双引号字面量 ⇒ 返回**引号内文本**；非此形返回 `None`。"""
+    m = _PREFIX.match(src)
+    if not m:
+        return None
+    body = src[m.end():]
+    if not body.startswith('"') or body.startswith('"""') or len(body) < 2:
+        return None
+    return body[1:-1]
+
+
+def _k24_linescan(name, s):
+    """`tokenize` 失败时的**兜底**扫描（`P134-2` 新增）。
+
+    动机：原先整份文件 `continue` 跳过 ⇒ 未闭合括号这类**词法级**错误（`def f(:` 即是）
+    即可让文件里所有长 CJK 双引号串**免检**（★ 实测自 `P132-1` 起即如此，非本轮引入）。
+    ★ 保守：含三引号（`\"\"\"` 或 `'''`）的行**整行跳过** —— 多行串无法按行判定，
+    宁可漏判不可误报；长度口径与带前缀式一致（`_K24_TEXT_MIN`）。
+    """
+    out = []
+    for ln, line in enumerate(s.splitlines(), 1):
+        if '"""' in line or "'''" in line:
+            continue
+        for m in _K24_LINE_RE.finditer(line):
+            text = m.group(1)
+            if len(text) >= _K24_TEXT_MIN and CJK.search(text):
+                out.append(f"{name}:{ln}(兜底)")
+    return out
+
+
+def _k24_judge_run(run, bad, name):
+    """对一段（一或多个）字面量单元应用 K24 判据。"""
+    if not run:
+        return
+    if len(run) == 1:
+        u = run[0]
+        if u["kind"] == "bare":
+            return                       # ① 已判（裸单串，逐字节沿用 `P132-1`）
+        if CJK.search(u["text"]) and len(u["text"]) >= _K24_TEXT_MIN:
+            bad.append(f"{name}:{u['row']}(前缀/f)")
+        return
+    if all(u["kind"] == "bare" for u in run):
+        # ② `P134-1` 原规则，**逐字节未动**：合并源码长度 + 首段须以 `"` 起
+        merged = "".join(u["src"] for u in run)
+        if _k24_hit(merged) and run[0]["src"].startswith('"'):
+            bad.append(f"{name}:{run[0]['row']}(拼接{len(run)}段)")
+        return
+    # ★ `P134-2` 新增：含前缀/f-string 的拼接 ⇒ 按**文本**长度累加
+    text = "".join(u["text"] for u in run)
+    if CJK.search(text) and len(text) >= _K24_TEXT_MIN:
+        bad.append(f"{name}:{run[0]['row']}(拼接{len(run)}段·含前缀)")
 
 
 def k24(ctx):
@@ -385,28 +453,62 @@ def k24(ctx):
         try:
             toks = list(tokenize.generate_tokens(io.StringIO(s).readline))
         except (tokenize.TokenError, IndentationError):
-            # ★ 保持 P132-1 行为不变：tokenize 不了的整个文件**跳过**（不因加严而误报）。
+            # ★ `P134-2`：不再整份跳过，改为**逐行兜底扫描**（原先那是一处真实逃逸）。
+            bad.extend(_k24_linescan(p.name, s))
             continue
-        # ① 单字面量（P132-1 原规则，逐字节未动）
+        # ① 单字面量（`P132-1` 原规则，逐字节未动）
         for tok in toks:
             if tok.type == tokenize.STRING and _k24_hit(tok):
                 bad.append(f"{p.name}:{tok.start[0]}")
-        # ② 隐式拼接（★ P134-1 新增）：相邻 STRING 之间只隔 NL/COMMENT ⇒ 合并后再判。
-        #   动机：`"段一" "段二"` 会产生**两个**都不到 60 字符的 token ⇒ 单字面量规则漏判。
-        #   长度口径：**各 token 源码长度之和**（`len(tok.string)` 累加，**不含**连接符空白），
-        #   与 ① 的 `len(tok.string)` 同一把尺子。
+        # 拆「字面量单元」：裸/带前缀 STRING 各占 1 token；f-string 占 START..END 一整段。
+        #   ★ 为何要拆：`f"…"` 在 py3.12+ 是 `FSTRING_START`+`FSTRING_MIDDLE`+`FSTRING_END`，
+        #   **根本不是 `STRING`** ⇒ 规则 ①② 的结构性盲区（历史全量实测：**20 处 / 12 张卡**）。
+        units, i = [], 0
+        while i < len(toks):
+            t = toks[i]
+            if t.type == tokenize.FSTRING_START:
+                depth, j, mids, field = 0, i, [], 0
+                while j < len(toks):
+                    tj = toks[j]
+                    if tj.type == tokenize.FSTRING_START:
+                        depth += 1
+                    elif tj.type == tokenize.OP and tj.string in ("{", "}"):
+                        # ★ 替换域计数：`{`/`}` 成对。py3.12+ 把**格式说明**（`:.6f`）也发成
+                        #   `FSTRING_MIDDLE`（与散文**同深度**），只能靠这个计数器区分。
+                        field += 1 if tj.string == "{" else -1
+                    elif (tj.type == tokenize.FSTRING_MIDDLE
+                          and depth == 1 and field == 0):
+                        mids.append(tj.string)      # 只取最外层、替换域**之外**的散文
+                    elif tj.type == tokenize.FSTRING_END:
+                        depth -= 1
+                        if depth == 0:
+                            break
+                    j += 1
+                if j < len(toks):
+                    st, en = toks[i], toks[j]
+                    # 只算**单行、非三引号**；文本口径 = 各 FSTRING_MIDDLE 源码长度之和
+                    if st.start[0] == en.end[0] and '"""' not in st.string:
+                        units.append({"i0": i, "i1": j, "kind": "f", "src": None,
+                                      "text": "".join(mids), "row": st.start[0]})
+                    i = j + 1
+                    continue
+            if t.type == tokenize.STRING:
+                pre = _k24_prefixed_text(t.string)
+                bare = t.string.startswith('"')
+                units.append({"i0": i, "i1": i, "kind": "bare" if bare else "p",
+                              "src": t.string,
+                              "text": t.string[1:-1] if bare else (pre or ""),
+                              "row": t.start[0]})
+            i += 1
+        # ② 隐式拼接：相邻单元之间**只隔** `NL`/`COMMENT` ⇒ 视为同一段（`P134-1` 语义）。
         run = []
-        for tok in toks + [None]:
-            if tok is not None and tok.type == tokenize.STRING:
-                run.append(tok)
+        for u in units + [None]:
+            if u is not None and (not run or all(
+                    toks[k].type in CONNECT for k in range(run[-1]["i1"] + 1, u["i0"]))):
+                run.append(u)
                 continue
-            if tok is not None and tok.type in CONNECT:
-                continue
-            if len(run) >= 2:
-                merged = "".join(t.string for t in run)
-                if _k24_hit(merged) and run[0].string.startswith('"'):
-                    bad.append(f"{p.name}:{run[0].start[0]}(拼接{len(run)}段)")
-            run = []
+            _k24_judge_run(run, bad, p.name)
+            run = [u] if u is not None else []
     bad = list(dict.fromkeys(bad))          # 去重但保序
     if not bad:
         return R(PASS, f"扫 {len(ctx.py)} 个 .py，无长 CJK 双引号单行串/拼接串", interp)
@@ -531,6 +633,54 @@ def selftest():
     #   都不会连成一段，**测不到该性质**（变异 M2 因此假绿）。现改为两条**裸**字符串语句。
     cases.append((24, "两条相邻裸字符串语句不得并成拼接", PASS, "## §1\nx\n",
                   {"a.py": f'"{_A}"\n"{_B}"\n'}))
+    # ★★ `P134-2` 规则 ③：`f"…"` / `r"…"` 等**带前缀**的双引号字面量原先是结构性盲区
+    #   （py3.12+ 的 `f"…"` 根本不是 `STRING` token）。口径：**引号内文本** >= 58。
+    _T = "报" * 60                         # 60 字文本（>= 58）
+    cases.append((24, "f-string 文本长(60)", FAIL, "## §1\nx\n",
+                  {"a.py": f'print(f"{_T}")\n'}))
+    # ★★ **关键回归守卫**：源码长但**文本短**（插值密集）**不得**判违规。
+    #   若把尺子误换成「整段源码长度」，本条必红；而历史全量扫会有 **1781 处 / 95 张卡**误报
+    #   —— 那会把 K24 变成「几乎所有卡都 FAIL」，规则随即失去分辨力。
+    _iv = "".join("{" + f"v{i}" + "}" for i in range(12))   # {v0}..{v11} 每个 4 字符
+    _dense = 'f"' + "甲乙丙丁戊己庚辛壬癸子丑" + _iv + '"'      # 文本 12 字、源码 62 字符
+    assert len(_dense) >= 60 and 12 < _K24_TEXT_MIN, (len(_dense), 12)
+    cases.append((24, "f-string 源码长但文本短(插值密集)", PASS, "## §1\nx\n",
+                  {"a.py": "".join(f"v{i} = {i}\n" for i in range(12)) + f"print({_dense})\n"}))
+    cases.append((24, "三引号 f-string 长文本", PASS, "## §1\nx\n",
+                  {"a.py": 'def f():\n    return f"""' + "长" * 60 + '"""\n'}))
+    cases.append((24, "r-string 文本长(60)", FAIL, "## §1\nx\n",
+                  {"a.py": f'p = r"{_T}"\n'}))
+    cases.append((24, "r-string 文本短", PASS, "## §1\nx\n",
+                  {"a.py": 'p = r"' + "短" * 20 + '"\n'}))
+    # ★★ `P134-2` 兜底：`tokenize` 失败的文件原先**整份跳过** ⇒ 未闭合括号即可免检
+    #   （★ 实测 `def f(:` 亦抛 `TokenError: unexpected EOF in multi-line statement`）。
+    cases.append((24, "tokenize 失败文件：兜底抓到长串", FAIL, "## §1\nx\n",
+                  {"a.py": f'x = ("{_T}"\n'}))
+    #   ★★ 同理：初版只写未终止三引号（`y = """…`），**行内没有闭口引号对**
+    #   ⇒ 无论有无护栏，正则都匹配不到，变异**测不出来**。现让同一行既有 `"""` 又有一对
+    #   闭口长 CJK 串（括号不闭合使 tokenize 失败）⇒ 无护栏则误报、有护栏才 PASS。
+    cases.append((24, "tokenize 失败文件：三引号行不误报", PASS, "## §1\nx\n",
+                  {"a.py": 'x = ("""abc""", "' + "长" * 60 + '"\n'}))
+    # ★★ `P134-2` **含前缀/f 式的隐式拼接**：这是本轮 25 张翻转里**占 19 张**的那条分支
+    #   （初版没有夹具，变异 M-f 因此测不出来 —— 又一类「夹具没踩在性质上」）。
+    #   口径：各段**文本**长度累加（f 式只算散文），>= 58 即违规。
+    _A3, _B3 = "段" * 30, "乙" * 30
+    cases.append((24, "含前缀拼接越线(30+f+30)", FAIL, "## §1\nx\n",
+                  {"a.py": "v = 1\n" + f'x = "{_A3}" f"{{v}}" "{_B3}"\n'}))
+    cases.append((24, "含前缀拼接未越线(20+f+20)", PASS, "## §1\nx\n",
+                  {"a.py": "v = 1\n" + f'x = "{"段" * 20}" f"{{v}}" "{"乙" * 20}"\n'}))
+
+    # ★★ `P134-2` **格式说明不算散文**（`{}` 计数器）：本条的散文 < 58，但若把 `:.6f` 之类
+    #   算进文本就越线 —— 这正是 `dir51/calib51.py:161` 的真实形状（该行中文仅 6 字）。
+    #   去掉 `field` 计数器 ⇒ 本条必红（变异 M-d）。
+    #   ★★ 夹具必须**跨阈值**才检验得到变异：取散文 50 字、格式说明 3×`+.6f`=12 字
+    #   ⇒ 散文 50 < 58 而「散文+说明」62 >= 58。若散文远低于阈值（初版只 13 字），
+    #   去掉计数器后仍不越线，变异**测不出来**（与上一轮 M2 同一类错误）。
+    _pn, _nspec = 50, 12
+    assert _pn < _K24_TEXT_MIN <= _pn + _nspec, (_pn, _nspec)
+    _spec = ('print(f"' + "测" * _pn + '{a:+.6f}{b:+.6f}{c:+.6f}")\n'
+             "a = b = c = 0.0\n")
+    cases.append((24, "f-string 格式说明不计入散文(50/62)", PASS, "## §1\nx\n", {"a.py": _spec}))
 
 
     ok = bad = 0
