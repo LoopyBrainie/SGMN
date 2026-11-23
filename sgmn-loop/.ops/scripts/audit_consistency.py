@@ -9,11 +9,11 @@
  ④b 三个头部的 SUCCEEDED 计数**彼此一致**且**等于证据表推导值**（★ 防「头部过期」）
  ⑤ 关键 md5 记录一致（装置 / 脚本）
  ⑧ 开卡清单 CARD-CHECKLIST.md 的格式完整性（条目数/字段/执行方式，声明 vs 机械点数）
- ⑧e–⑧g `判读` 字段与 `check_cards.py` 的 `INTERP` **逐字同一**（`P133-1`）
+ ⑧e–⑧h `判读` 字段与 `check_cards.py` 的 `INTERP` **逐字同一** + 标签合法（`P133-1`/`P134-1`）
 
 用法：python3 audit_consistency.py
 """
-import re, pathlib, hashlib, sys, os
+import re, pathlib, hashlib, sys, os, ast
 import audit_counts as AC   # ★ P118-3：SUCCEEDED 计数的纯函数层（可单测）
 from collections import Counter
 
@@ -371,14 +371,27 @@ else:
     #   各函数体的**局部变量**里 ⇒ 归档（本文件）无从核对，脚本一改，归档就是**谎**且无人发现。
     #   ★ 这正是 `P131-1` 已吃过的亏（纪律只活在每轮被覆盖的 `handoff.md` 里）**换了个载体**。
     #   口径：**字符串同一性**，不做语义判断（`P131-1` 的手写计数漂移 19/23 就是这么来的）。
+    # ★★ `P134-1`：**不再 `import check_cards`**，改为从**源码**用 `ast.literal_eval` 取 `INTERP`。
+    #   动机（本轮实测踩到）：`import` 走 `__pycache__`，而 pyc 的失效判据是 `(mtime, 源码字节数)`。
+    #   于是「同尺寸、同一秒内改回」的脚本**会读到陈旧字节码** —— 实测把 `[降级]` 改成等长的
+    #   `[随便]` 再改回，`import` 仍报 `[随便]` ⇒ ⑧e/⑧f/⑧h 会拿**旧文本**做「逐字同一」比对，
+    #   而这条断言的全部价值就是「代码与归档不许漂移」。读源码同时去掉了 import 副作用
+    #   （不让一个只读审计去执行被审模块）。
+    _ccf = pathlib.Path(__file__).resolve().parent / "check_cards.py"
+    _INTERP, _imp_err = None, None
     try:
-        import check_cards as _CC
-        _INTERP = _CC.INTERP
-        _imp_err = None
+        _cc_tree = ast.parse(_ccf.read_text(encoding="utf-8"))
+        for _nd in _cc_tree.body:
+            if (isinstance(_nd, ast.Assign)
+                    and any(isinstance(t, ast.Name) and t.id == "INTERP" for t in _nd.targets)):
+                _INTERP = ast.literal_eval(_nd.value)
+                break
+        if _INTERP is None:
+            _imp_err = "源码里找不到模块级 `INTERP = {...}` 赋值"
     except Exception as _e:
-        _INTERP, _imp_err = None, f"{type(_e).__name__}: {_e}"
+        _imp_err = f"{type(_e).__name__}: {_e}"
     check(_INTERP is not None,
-          f"⑧e 须能 import check_cards 以取得 INTERP（{_imp_err or 'OK'}）")
+          f"⑧e 须能从 check_cards.py **源码**读出 INTERP（{_imp_err or 'OK'}）")
     if _INTERP is not None:
         # 逐块取 `判读` 行（**块内**搜索，避免命中「变更记录」里的说明文字）
         _blocks8 = {}
@@ -390,23 +403,24 @@ else:
             _m8 = re.search(r"^- \*\*判读\*\*：(.*)$", _blk, re.M)
             if _m8:
                 _got8[_n] = (_m8.group(1), _m8)
-        # ⑧e 正向：INTERP 里每条 `[窄化]` 都必须在清单里有**逐字相同**的 `判读` 行
+        # ⑧e 正向：INTERP 里**每一条**都必须在清单里有**逐字相同**的 `判读` 行。
+        #   ★ P134-1：原实现只查以 `[窄化]` 开头的条目 ⇒ `K16` 降级为 `②留痕` 后
+        #   若仍带 `判读`，⑧e 会**看不见**它，而 ⑧f 又会把它当孤儿 ⇒ 两头痛。
+        #   现改为「凡进 INTERP 就必须镜像」，标签合法性交给 ⑧h。
         _e_miss, _e_diff = [], []
         for _k, _v in sorted(_INTERP.items()):
-            if not _v.startswith("[窄化]"):
-                continue
             if _k not in _got8:
                 _e_miss.append(f"K{_k}")
             elif _got8[_k][0] != _v:
                 _e_diff.append(f"K{_k}(清单{len(_got8[_k][0])}字 vs INTERP{len(_v)}字)")
         check(not _e_miss,
-              f"⑧e `[窄化]` 条目须在清单有 `判读` 行：缺 {_e_miss or '无'}")
+              f"⑧e INTERP 条目须在清单有 `判读` 行：缺 {_e_miss or '无'}")
         check(not _e_diff,
               f"⑧e `判读` 须与 INTERP **逐字相同**：不一致 {_e_diff or '无'}")
-        # ⑧f 反向：不得有孤儿 `判读`（清单声称窄化、而代码已无该窄化）
-        _e_orphan = sorted(set(_got8) - {k for k, v in _INTERP.items() if v.startswith("[窄化]")})
+        # ⑧f 反向：不得有孤儿 `判读`（清单写了 判读、而 INTERP 里已无该键）
+        _e_orphan = sorted(set(_got8) - set(_INTERP))
         check(not _e_orphan,
-              f"⑧f 不得有孤儿 `判读`（代码已无该窄化）：多余 {_e_orphan or '无'}")
+              f"⑧f 不得有孤儿 `判读`（INTERP 无此键）：多余 {_e_orphan or '无'}")
         # ⑧g 结构：`判读` 必须**紧接** `检查` 行（下一条非空行即 `判读`），便于机械解析
         _e_adj = []
         for _k, (_v, _m) in _got8.items():
@@ -416,6 +430,14 @@ else:
                 _e_adj.append(f"K{_k}")
         check(not _e_adj,
               f"⑧g `判读` 须紧接 `检查` 行（中间不得插其他字段）：不合 {_e_adj or '无'}")
+        # ⑧h 标签合法：`判读` 必须以 `[窄化]` 或 `[降级]` 开头。
+        #   ★ 为什么要这条：⑧e 现在「凡 INTERP 必镜像」，若允许任意前缀，
+        #   `INTERP` 就成了自由文本框，`[窄化]`/`[降级]` 的区别（谁还在判、谁已不判）
+        #   会静默消失 —— 读者无从知道某条纪律是不是还在被核对器执行。
+        _e_tag = [f"K{_k}" for _k, _v in sorted(_INTERP.items())
+                  if not (_v.startswith("[窄化]") or _v.startswith("[降级]"))]
+        check(not _e_tag,
+              f"⑧h `判读` 标签须为 `[窄化]` 或 `[降级]`：不合 {_e_tag or '无'}")
 
 
 print("\n" + "=" * 88)

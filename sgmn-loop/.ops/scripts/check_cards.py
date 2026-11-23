@@ -3,7 +3,8 @@
 
 ★ 本脚本**只读**：不写任何卡片、不改任何冻结行、不运行任何实验代码。
 ★ 它**不**替代卡片自己的 Stage A 守卫；它只回答「这张卡在形式上是否满足了
-   开卡清单里那 14 条可机械判定的纪律」。
+   开卡清单里那些 `①自动化` 纪律」。（`P134-1` 起为 **13** 条：`K16` 已降为 `②留痕`，
+   原因见 `INTERP[16]` —— 它必须真跑 `precheck` 子进程，而禁用词表只能由卡片自冻结。）
 
 用法：
     python3 check_cards.py --dirs 126 127 128 129 130     # 校准集
@@ -63,9 +64,18 @@ class Ctx:
         self.num = num
         self.cdir = REVOLVE / f"DIR-{num}"
         self.ddir = ROOT / f"dir{num}"
+        # ★ P134-1 修：原先 key 用 `_v(\d+)\.md$` 且假定必有匹配 ⇒ `--all` 在
+        #   `DIR-42/DIRECTION_rev42_v10_rev1.0_archived.md` 与 `DIR-91/DIRECTION_rev91_v28_r23.md`
+        #   这类**非 `_vN.md` 结尾**的卡上 `AttributeError: 'NoneType' object has no attribute 'group'`。
+        #   口径：① 版本号 `_v(\d+)` 允许出现在名字**任意位置**，取不到记 -1；
+        #        ② **排除** 名字含 `archived` 的归档件（否则 `_v10` 与 `_v10_..._archived`
+        #           同为版本 10，按名排序会让**归档件胜出**）；
+        #        ③ 仍取最高版本，并列时按名字定序（确定性）。
         cands = sorted(
-            self.cdir.glob(f"DIRECTION_rev{num}_v*.md"),
-            key=lambda p: int(re.search(r"_v(\d+)\.md$", p.name).group(1)),
+            (p for p in self.cdir.glob(f"DIRECTION_rev{num}_v*.md")
+             if "archived" not in p.name),
+            key=lambda p: ((int(m.group(1)) if (m := re.search(r"_v(\d+)", p.name)) else -1),
+                           p.name),
         )
         self.card = cands[-1] if cands else None
         self.text = self.card.read_text(encoding="utf-8") if self.card else ""
@@ -108,12 +118,18 @@ class Ctx:
 #   现改为：文本在此定义，函数引用 `INTERP[k]`，审计 ⑧ 断言清单里的 `判读`
 #   行与本字典**逐字相同**（字符串同一性，不做语义判断）。
 #   ★ 只有以 `[窄化]` 开头的条目才需要在清单里写 `判读` 行。
+# ★★ P133-1（Cycle 246）+ P134-1（Cycle 247）：需要**显式判读**的条目，**唯一来源**。
+#   `[窄化]` = 该条 `原文` 比可机械判定的范围宽，本脚本按窄的一侧实现；
+#   `[降级]` = 该条**不再由本脚本判定**（`P134-1` 把 `K16` 由 `①自动化` 降为 `②留痕`）。
+#   ★ 两种标签都必须在本字典里，并**逐字**镜像到 `CARD-CHECKLIST.md` 的 `判读` 行；
+#   审计 ⑧e/⑧f 做**字符串同一性**核对，⑧h 校验标签属于上面两种。
 INTERP = {
     7: "[窄化] 只抓 **>=3 位小数**的浮点（实测型读数，如 `0.8589`）；`0.05`/`0.0`/`0.5`/`0.95` 这类**惯例阈值**不算 —— `DEF-127-02` 的真实缺陷是**手抄实测值**，不是冻结一个显著性水平（首版按字面抓全部浮点 ⇒ 4/5 误报）；『派生』的等价标注放宽到 `机器算/算出/推导/computed`（卡片的实际用词）",
     8: "[窄化] 仅当『逐位相等』与『浮点』同句、且未出现 整数/有理数/Fraction、也不是『更正/改为/不可满足』句式才 FAIL（修订记录小节整体不计）—— 首版把『rev 1.0 曾要求浮点逐位相等、已因不可满足而改掉』误判为违规",
+    16: "[降级] 本条由 `①自动化` **降为 `②留痕`**：静态核对器**不判**，也不得记 PASS。判定须在 trainer 上以**子进程**跑 `precheck{n}.py --stage precheck` 并扫 stdout —— 但『哪些词算 formal 的判据读数』**只能由卡片在开卡时自己冻结**（如 `dir130` 的 `S9_FORBIDDEN` + `T13` 自测）。核对器若自行拟一份通用禁用词表，要么误报合规卡、要么就是把已知的 11 张卡调到全绿 —— 后者正是 `P133-1` 要防的**静默窄化**。⇒ 现由卡片自带的 `S*` 执行，核对器不判。★ 未决（**不得当成已合规**）：`dir130` 的 `--stage precheck` 会打印 `frac = 0.0`，而 `frac(û<1)` 在本项目自己的词汇里**就是**判据量（`D-160`/`P130-3`），其 `S9_FORBIDDEN` 却未收它 ⇒ 等于**卡片自我豁免**；这 11 张是否合 `原文` **未裁定**（见 `P134-2`）。",
     18: "[窄化] 仅当卡片真的在说**继承一个带定义域限制的求解器**时才适用；`û_s=0` 的『夹紧层』是**测量端点的定义**，不是求解器夹紧（首版按字面匹配 clamp/夹紧 ⇒ 4/5 误报）",
     22: "[窄化] 仅在卡片**真的用 α/抽样推断**时要求（首版对『否证/排除』全文触发，5/5 误报）；穷举型卡片没有抽样误差 ⇒ N/A",
-    24: "[窄化] 只算**单行、非三引号**的 `\"`-定界 CJK 字符串且 `len>=60`；三引号文档字符串与短消息不计（首版把全部 docstring 计入 ⇒ 5/5 误报）",
+    24: "[窄化] 只算**非三引号**的 `\"`-定界 CJK 字符串：单条 `len>=60`，或**隐式拼接**各段源码长度之和 `>=60`；三引号文档字符串与短消息不计（首版把全部 docstring 计入 ⇒ 5/5 误报）。★ `P134-1` 补拼接：原先 `\"段一\" \"段二\"` 是**两个**都不到 60 的 token ⇒ 漏判，补后**6 张历史卡由 PASS 转 FAIL**（`DIR-31/33/38/91/103/115`，逐条人工确认是真拼接）；`NEWLINE` 逻辑换行**断开**拼接，仅括号内 `NL` 与 `COMMENT` 可连接。★ 两处**已知逃逸**（**未修**，见 `P134-2`）：① py3.12+ 的 `f\"…\"` 被 tokenize 成 `FSTRING_START`，本判据不覆盖；② `tokenize` 抛 `TokenError`/`IndentationError` 的文件整份跳过（`def f(:` 这类语法错即可绕过），此为 `P132-1` 既有行为、本轮**未改**。",
 }
 
 def k04(ctx):
@@ -258,15 +274,6 @@ def k15(ctx):
     return R(PASS, f"{len(hits)} 处均点名 S 编号", interp)
 
 
-def k16(ctx):
-    """K16 precheck 阶段不得打印 formal 判据读数（须执行判定）。"""
-    return R(NA, "需在 trainer 上以子进程运行 `--stage precheck` 并扫 stdout",
-             "[不可静态判定]",
-             reason=("本脚本是静态核对器，**不冒充执行**。正确做法："
-                     f"在 trainer 上跑 `python3 dir{ctx.num}/precheck{ctx.num}.py --stage precheck`，"
-                     "断言 stdout 不含判据量名/结局标签/PASS/FAIL（模板见 dir130 的 S9 + T13）"))
-
-
 def k17(ctx):
     """K17 盲态守卫不得复用会产出判据结局的函数。"""
     interp = "按原文执行：盲态/结构核脚本的 import 不得含结局判定器（R1_task / adjudicate / verdict）"
@@ -359,29 +366,57 @@ def k22(ctx):
     return R(FAIL, f"VERDICT 缺：{', '.join(miss)}", interp)
 
 
+def _k24_hit(tok_or_text):
+    """单条字面量的 K24 判据：`"`-定界（排除 `r"`/`b"`/`f"` 前缀）+ 非三引号 + 含 CJK + len>=60。"""
+    st = tok_or_text if isinstance(tok_or_text, str) else tok_or_text.string
+    return (st.startswith('"') and not st.startswith('"""')
+            and CJK.search(st) is not None and len(st) >= 60)
+
+
 def k24(ctx):
     """K24 不要用 ASCII 双引号内嵌写中文长字符串。"""
     interp = INTERP[24]
     bad = []
+    # 连接符：**只允许** `NL`（括号内的换行）与 `COMMENT`。★ `NEWLINE`（逻辑换行）
+    # 必须**断开** —— 否则相邻两条独立的字符串语句 `"甲…"。换行。"乙…"` 会被并成一段。
+    CONNECT = {tokenize.NL, tokenize.COMMENT}
     for p in ctx.py:
         s = p.read_text(encoding="utf-8", errors="replace")
         try:
             toks = list(tokenize.generate_tokens(io.StringIO(s).readline))
         except (tokenize.TokenError, IndentationError):
+            # ★ 保持 P132-1 行为不变：tokenize 不了的整个文件**跳过**（不因加严而误报）。
             continue
+        # ① 单字面量（P132-1 原规则，逐字节未动）
         for tok in toks:
-            st = tok.string
-            if (tok.type == tokenize.STRING and st.startswith('"')
-                    and not st.startswith('"""')
-                    and CJK.search(st) and len(st) >= 60):
+            if tok.type == tokenize.STRING and _k24_hit(tok):
                 bad.append(f"{p.name}:{tok.start[0]}")
+        # ② 隐式拼接（★ P134-1 新增）：相邻 STRING 之间只隔 NL/COMMENT ⇒ 合并后再判。
+        #   动机：`"段一" "段二"` 会产生**两个**都不到 60 字符的 token ⇒ 单字面量规则漏判。
+        #   长度口径：**各 token 源码长度之和**（`len(tok.string)` 累加，**不含**连接符空白），
+        #   与 ① 的 `len(tok.string)` 同一把尺子。
+        run = []
+        for tok in toks + [None]:
+            if tok is not None and tok.type == tokenize.STRING:
+                run.append(tok)
+                continue
+            if tok is not None and tok.type in CONNECT:
+                continue
+            if len(run) >= 2:
+                merged = "".join(t.string for t in run)
+                if _k24_hit(merged) and run[0].string.startswith('"'):
+                    bad.append(f"{p.name}:{run[0].start[0]}(拼接{len(run)}段)")
+            run = []
+    bad = list(dict.fromkeys(bad))          # 去重但保序
     if not bad:
-        return R(PASS, f"扫 {len(ctx.py)} 个 .py，无长 CJK 双引号单行串", interp)
+        return R(PASS, f"扫 {len(ctx.py)} 个 .py，无长 CJK 双引号单行串/拼接串", interp)
     return R(FAIL, f"{len(bad)} 处：{', '.join(bad[:5])}", interp)
 
 
+# ★ `P134-1`：`16` **已移除** —— `K16` 由 `①自动化` 降为 `②留痕`（见 `INTERP[16]`）。
+#   它要求真的执行 `precheck` 子进程才能判，而禁用词表只能由卡片自己冻结 ⇒ 本脚本不冒充执行。
 REGISTRY = {4: k04, 5: k05, 7: k07, 8: k08, 12: k12, 14: k14, 15: k15,
-            16: k16, 17: k17, 18: k18, 19: k19, 21: k21, 22: k22, 24: k24}
+            17: k17, 18: k18, 19: k19, 21: k21, 22: k22, 24: k24}
 
 
 # ---------------------------------------------------------------------------
@@ -477,6 +512,26 @@ def selftest():
                   {"a.py": 'print("这是一段刻意写得很长的中文提示信息用来越过六十个字符的阈值因此它必须被判定为违规并且还需要继续补充中文内容才能稳稳超过六十个字符的界限才行")\n'}))
     cases.append((24, "三引号文档字符串", PASS, "## §1\nx\n",
                   {"a.py": 'def f():\n    """这是一段很长很长的中文文档字符串用来确认三引号不被计入违规六十字符以上"""\n'}))
+    # ★★ P134-1：隐式拼接（`"段一" "段二"`）原先是**漏判**的逃逸路径 ——
+    #   两个都不到 60 字符的 token 各自过不了阈值。以下每条期望值都**实测**过（非手算）。
+    _A, _B = "段" * 34, "乙" * 34          # 各 34 字 → 单条不过阈值、合并 68 过
+    _a, _b = "短" * 20, "少" * 20          # 各 20 字 → 合并 40 仍不过
+    cases.append((24, "隐式拼接两段(34+34)合并越线", FAIL, "## §1\nx\n",
+                  {"a.py": f'x = "{_A}" "{_B}"\n'}))
+    cases.append((24, "隐式拼接两段(20+20)合并未越线", PASS, "## §1\nx\n",
+                  {"a.py": f'x = "{_a}" "{_b}"\n'}))
+    cases.append((24, "括号内跨行拼接(34+34)", FAIL, "## §1\nx\n",
+                  {"a.py": f'x = ("{_A}"\n     "{_B}")\n'}))
+    cases.append((24, "括号内跨行拼接(20+20)未越线", PASS, "## §1\nx\n",
+                  {"a.py": f'x = ("{_a}"\n     "{_b}")\n'}))
+    cases.append((24, "三条拼接(24*3)", FAIL, "## §1\nx\n",
+                  {"a.py": f'z = ("{"三"*24}"\n     "{"四"*24}"\n     "{"五"*24}")\n'}))
+    # ★ 反向守卫：**两条相邻的裸字符串语句**不得被当成拼接（`NEWLINE` 必须断开 run）。
+    #   ★ 初版夹具写成 `x = ".."\ny = ".."`，中间隔着 `y` 与 `=` ⇒ 无论 NEWLINE 是否算连接符
+    #   都不会连成一段，**测不到该性质**（变异 M2 因此假绿）。现改为两条**裸**字符串语句。
+    cases.append((24, "两条相邻裸字符串语句不得并成拼接", PASS, "## §1\nx\n",
+                  {"a.py": f'"{_A}"\n"{_B}"\n'}))
+
 
     ok = bad = 0
     with tempfile.TemporaryDirectory() as td:
@@ -534,7 +589,20 @@ def main():
             return 2
 
     if a.all:
-        nums = sorted(int(p.name.split("-")[1]) for p in REVOLVE.glob("DIR-*") if p.is_dir())
+        # ★ P134-1 修：原先 `int(p.name.split("-")[1])` 在 `revolve/DIR-26M`（变体目录）上
+        #   直接 `ValueError: invalid literal for int(): '26M'` ⇒ `--all` **从未跑通**。
+        #   口径：本脚本按 `dir{n}/` 定位，只认**纯数字** `DIR-{n}`；变体目录（`DIR-26B`/
+        #   `DIR-87c` 等）没有同号目录 ⇒ **跳过并明示**（不静默截断）。
+        canon, skip = [], []
+        for p in sorted(REVOLVE.glob("DIR-*")):
+            if not p.is_dir():
+                continue
+            m = re.fullmatch(r"DIR-(\d+)", p.name)
+            (canon if m else skip).append(int(m.group(1)) if m else p.name)
+        nums = sorted(canon)
+        if skip:
+            print(f"★ 跳过 {len(skip)} 个非规范目录（无同号 `dir{{n}}/`，本脚本不覆盖）："
+                  f"{', '.join(sorted(skip))}")
     elif a.dirs:
         nums = a.dirs
     else:
