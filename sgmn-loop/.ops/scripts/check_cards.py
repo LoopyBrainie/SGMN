@@ -866,7 +866,59 @@ def selftest():
             ok, bad = (ok + 1, bad) if _ok else (ok, bad + 1)
             print(f"  {'✓' if _ok else '✗'} 见证 {_lbl:<16} 旧门={_o} 新门={_n}"
                   + ("  ⇒ 夹具踩在差异上" if _ok else "  ⇒ 夹具**未**踩在差异上"))
-    print(f"\n自测：{ok} 通过 / {bad} 不符（共 {len(cases)}）")
+    # ★★★ `P133-8`：守卫的**覆盖度**（`S*` 存在 ≠ `S*` 够用）。
+    #   ★ 这 4 条用**合成样本**钉**工具**的正确性；**实况**由 `--probe-guard-coverage` 报告
+    #     （实况会随 `DIR-130` 被修好而变 ⇒ 不能写成夹具，否则修好即报红）。
+    ok8 = bad8 = 0
+    with tempfile.TemporaryDirectory() as td8:
+        t8 = pathlib.Path(td8)
+
+        # ① 词表判据**必然**漏掉语义集合里不含词表 token 的形式 ⇒ 「有守卫」≠「够用」可被检出
+        _src8 = t8 / "synthetic_guard.py"
+        _src8.write_text('FORB = ("a =", "b =")\n', encoding="utf-8")
+        _f8 = _forbidden_from_source(_src8, "FORB")
+        _forms8 = ("a = 1", "a=1", "n_pos = 12345")
+        _hit8 = [f for f in _forms8 if any(w in f for w in _f8)]
+        _ok8 = (len(_f8) == 2 and len(_hit8) == 1)
+        ok8, bad8 = (ok8 + 1, bad8) if _ok8 else (ok8, bad8 + 1)
+        print(f"  {'✓' if _ok8 else '✗'} P133-8-1 词表判据漏掉不含词表 token 的语义形式"
+              f"  命中 {len(_hit8)}/{len(_forms8)}")
+
+        # ② 带身份载体：**形式无关**地拦下全部 6 条被禁形式（remedy 可被检出）
+        _res8 = _tagged_forms_rendered()
+        _blk8 = sum(1 for _, o, _ in _res8 if o)
+        _ok8 = (_blk8 == len(GUARD_FORMS_DIR130) == 6)
+        ok8, bad8 = (ok8 + 1, bad8) if _ok8 else (ok8, bad8 + 1)
+        print(f"  {'✓' if _ok8 else '✗'} P133-8-2 带身份载体拦下被禁形式 {_blk8}/6")
+
+        # ③ 循环见证检测：以禁用词表为迭代源造见证 ⇒ 必须被检出
+        _src8b = t8 / "synthetic_circ.py"
+        _src8b.write_text(
+            'FORB = ("x", "y")\n'
+            'def t1():\n'
+            '    hits = {w: det("a" + w) for w in FORB}\n'
+            '    return (True, str(hits))\n'
+            'def t2():\n'
+            '    return (True, "unrelated")\n', encoding="utf-8")
+        _c8 = _circular_witness(_src8b, "FORB")
+        _ok8 = (_c8 == [("t1", "comprehension")])
+        ok8, bad8 = (ok8 + 1, bad8) if _ok8 else (ok8, bad8 + 1)
+        print(f"  {'✓' if _ok8 else '✗'} P133-8-3 检出循环见证 {_c8}")
+
+        # ④ 循环见证检测**不得**误伤非循环的自测（防矫枉过正）
+        _src8c = t8 / "synthetic_clean.py"
+        _src8c.write_text(
+            'FORB = ("x", "y")\n'
+            'def t1():\n'
+            '    return (True, "clean" + str(FORB))\n', encoding="utf-8")
+        _c8b = _circular_witness(_src8c, "FORB")
+        _ok8 = (_c8b == [])
+        ok8, bad8 = (ok8 + 1, bad8) if _ok8 else (ok8, bad8 + 1)
+        print(f"  {'✓' if _ok8 else '✗'} P133-8-4 非循环自测不误报 {_c8b}")
+
+    ok += ok8
+    bad += bad8
+    print(f"\n自测：{ok} 通过 / {bad} 不符（共 {len(cases)} 夹具 + {ok8 + bad8} 条 P133-8 探针夹具）")
     return 0 if bad == 0 else 1
 
 
@@ -945,12 +997,284 @@ def probe_k15_scope():
 
 
 # ---------------------------------------------------------------------------
+# ★ P133-8：守卫的**覆盖度**（`S*` 存在 ≠ `S*` 够用）
+# ---------------------------------------------------------------------------
+
+#: `DIR-130` §6 的被禁形式集合（6 条 = 2 条现行命中 + 4 条现行漏掉）。
+#: ★ 这 6 条**按语义**挑（§6 禁的是「跨结构聚合」），**不是**按现行词表挑
+#:   —— 若由词表自己出题，连「漏」都测不出来（自证循环，见 `_circular_witness`）。
+GUARD_FORMS_DIR130 = (
+    ("p₃₅₀ = 0.0",                    "终值（有空格）"),
+    ("p₃₀₀ = 0.0",                    "终值（有空格）"),
+    ("p₃₅₀=0.0",                      "终值（无空格）"),
+    ("frac>0 的 (sub,C) 对数 = 12345", "分子（跨结构计数）"),
+    ("可算 (sub,C) 对数 = 18000",      "分母（跨结构计数）"),
+    ("k=3: frac==0 的 C 有 84 个",     "逐 k 计数"),
+)
+
+
+def _forbidden_from_source(path, name="S9_FORBIDDEN"):
+    """从**源码**用 `ast` 取禁用词表（不 `import`；冻结文件只读）。"""
+    try:
+        tree = ast.parse(pathlib.Path(path).read_text(encoding="utf-8"))
+    except (OSError, SyntaxError, UnicodeDecodeError):
+        return None
+    for n in tree.body:
+        if isinstance(n, ast.Assign) and any(getattr(t, "id", None) == name for t in n.targets):
+            try:
+                return tuple(ast.literal_eval(n.value))
+            except (ValueError, TypeError):
+                return None
+    return None
+
+
+def _circular_witness(path, list_name="S9_FORBIDDEN"):
+    """检测「见证集由被测判据反推」⇒ 见证只证明**非空转**，不证明**覆盖**。
+
+    口径：在**自测函数**（名 `t<数字>`）里找**以禁用词表为迭代源**的循环 ——
+    `for w in <词表>`（`ast.For`）**或** `{w: … for w in <词表>}`（`ast.comprehension`）——
+    见证字符串直接由禁用词拼出 ⇒ 与被测判据**同源** ⇒ 自证循环。
+    """
+    try:
+        tree = ast.parse(pathlib.Path(path).read_text(encoding="utf-8"))
+    except (OSError, SyntaxError, UnicodeDecodeError):
+        return []
+    hits = []
+    for fn in [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]:
+        if not re.fullmatch(r"t\d+", fn.name):
+            continue
+        for n in ast.walk(fn):
+            if isinstance(n, ast.For) and isinstance(n.iter, ast.Name) \
+                    and n.iter.id == list_name:
+                hits.append((fn.name, "for"))
+                break
+            if isinstance(n, ast.comprehension) and isinstance(n.iter, ast.Name) \
+                    and n.iter.id == list_name:
+                hits.append((fn.name, "comprehension"))
+                break
+    return sorted(set(hits))
+
+
+class _Tagged:
+    """**带身份**的被禁量载体：precheck 模式下不可格式化 ⇒ 「打印判据量」成为**不可能**。
+
+    ★ 与文本黑名单的本质差别：它判的是**量本身**，不是**量的写法**
+      ⇒ **形式无关**（有空格/无空格/换措辞/只留一个数字，全都拦得住）。
+    ★ 这不是「更好的黑名单」，而是**换判据**：从「文本」换成「来源」。
+    """
+    __slots__ = ("v", "tag")
+
+    def __init__(self, v, tag):
+        self.v, self.tag = v, tag
+
+    def _boom(self):
+        raise PermissionError(f"判据量 {self.tag} 不得在 precheck 阶段被打印")
+
+    def __format__(self, spec):
+        self._boom()
+
+    def __str__(self):
+        self._boom()
+
+    def __repr__(self):
+        self._boom()
+
+
+def _tagged_forms_rendered():
+    """把 6 条被禁形式**经由带身份载体**渲染 ⇒ 每条都必须失败。"""
+    cases = [
+        ("p₃₅₀ = {v}", lambda: f"p₃₅₀ = {_Tagged(0.0, 'p350')}"),
+        ("p₃₀₀ = {v}", lambda: f"p₃₀₀ = {_Tagged(0.0, 'p300')}"),
+        ("p₃₅₀={v}（无空格）", lambda: f"p₃₅₀={_Tagged(0.0, 'p350')}"),
+        ("分子计数 = {v}", lambda: f"frac>0 的 (sub,C) 对数 = {_Tagged(12345, 'n_pos')}"),
+        ("分母计数 = {v}", lambda: f"可算 (sub,C) 对数 = {_Tagged(18000, 'n_comp')}"),
+        ("逐 k 计数 = {v}", lambda: f"k=3: frac==0 的 C 有 {_Tagged(84, 'n_zero_k3')} 个"),
+    ]
+    out = []
+    for label, fn in cases:
+        try:
+            s = fn()
+            out.append((label, False, s))
+        except PermissionError:
+            out.append((label, True, "已拒绝"))
+    return out
+
+
+def _archive_leak():
+    """★ `P133-8` 的**核心实测**：已归档的 precheck 输出是否已泄露判决分支。
+
+    数据来源（**只读**）：`dir130/out/precheck130.log`（precheck 阶段实印）
+    + `dir130/out/stage_formal.json`（formal 阶段的真值，用于对账）。
+    """
+    log_p = ROOT / "dir130" / "out" / "precheck130.log"
+    fm_p = ROOT / "dir130" / "out" / "stage_formal.json"
+    if not log_p.exists() or not fm_p.exists():
+        return None
+    import json
+    try:
+        log = log_p.read_text(encoding="utf-8")
+        fm = json.loads(fm_p.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    m_none = re.search(r"None=(\d+)", log)
+    m_zero = re.search(r"零=(\d+)", log)
+    m_per = re.search(r"每剂量=(\d+)/(\d+)", log)
+    if not (m_none and m_zero and m_per):
+        return None
+    n_none_pool, n_zero_pool = int(m_none.group(1)), int(m_zero.group(1))
+    per = (int(m_per.group(1)), int(m_per.group(2)))
+    c2, c3 = fm.get("c2_p350") or {}, fm.get("c3_p300") or {}
+    if not (c2 and c3):
+        return None
+
+    def nz(d):
+        return d["n_comp"] - d["n_pos"]          # frac==0 的行数
+
+    def un(d):
+        return d["n_uncomp"]                       # frac is None 的行数
+
+    truth = {"nz350": nz(c2), "nz300": nz(c3), "un350": un(c2), "un300": un(c3),
+             "p350": c2.get("p"), "p300": c3.get("p"),
+             "thr_max": c2.get("thr_max"), "thr_min": c3.get("thr_min")}
+    # 对账：precheck 印的池化数 == formal 两个剂量的分项之和
+    acct_zero = (truth["nz350"] + truth["nz300"] == n_zero_pool)
+    acct_none = (truth["un350"] + truth["un300"] == n_none_pool)
+    # 由 precheck 的三个数单独推出的**紧**界。
+    #   联合约束：`n_zero(d) + n_none(d) <= N`（行划分为 None/零/正三类）
+    #   ⇒ 给定 `a = n_none(d)`，另一剂量的零计数上限 = `N - (n_none_tot - a)`
+    #   ⇒ `n_zero(d) >= n_zero_tot - (N - (n_none_tot - a))`；`p(d)` 对 `a` 单调 ⇒ 逐 `a` 取最大。
+    N = max(per)
+    nn_tot, nz_tot = n_none_pool, n_zero_pool
+    bound_hi = 0.0
+    for a in range(nn_tot + 1):
+        comp = N - a
+        if comp <= 0:
+            continue
+        nz_min = max(0, nz_tot - (N - (nn_tot - a)))
+        if nz_min > comp:
+            continue
+        bound_hi = max(bound_hi, 1.0 - nz_min / comp)
+    bound_lo = 0.0
+    thr = truth["thr_min"]
+    c3_determined = (thr is not None and bound_hi < thr)
+    truth_inside = (bound_lo - 1e-12 <= truth["p350"] <= bound_hi + 1e-12
+                    and bound_lo - 1e-12 <= truth["p300"] <= bound_hi + 1e-12)
+    return {"n_none_pool": n_none_pool, "n_zero_pool": n_zero_pool, "per": per,
+            "nz350": truth["nz350"], "nz300": truth["nz300"],
+            "un350": truth["un350"], "un300": truth["un300"],
+            "acct_zero": acct_zero, "acct_none": acct_none,
+            "bound_lo": bound_lo, "bound_hi": bound_hi,
+            "truth_inside": truth_inside,
+            "thr_min": thr, "c3_determined": c3_determined,
+            "p350": truth["p350"], "p300": truth["p300"],
+            "verdict": fm.get("verdict") or fm.get("verdict_str")}
+
+
+def probe_guard_coverage():
+    """`P133-8` 探针：守卫的**覆盖度** —— `S*` 存在 ≠ `S*` 够用。
+
+    只**报告**，不改任何判定（`K25` 是 `②留痕`，不接硬门 —— 「够不够」判不了）。
+    """
+    print("=" * 100)
+    print("P133-8 探针 · 守卫的覆盖度（`S*` 存在 ≠ `S*` 够用）")
+    print("=" * 100)
+
+    # ---------- ① 全库普查：谁声明了「阶段打印纪律」，谁配了守卫 ----------
+    nums, skip = canonical_nums()
+    print(f"\n【① 全库普查】规范目录 {len(nums)} 个"
+          + (f"；变体目录跳过 {len(skip)} 个" if skip else ""))
+    pat = re.compile(r"不得打印|不得输出|禁止打印|不得产出|不得报告|不得泄露|只许打印")
+    n_card = 0
+    hits_cards = []
+    for n in nums:
+        ctx = Ctx(n)
+        if not ctx.card:
+            continue
+        n_card += 1
+        hits = [ln.strip() for ln in ctx.text.splitlines()
+                if pat.search(_de_emph(ln))]
+        if hits:
+            hits_cards.append((n, ctx.card.name, hits))
+    print(f"   有卡 {n_card} 张；含「阶段打印纪律」的卡 **{len(hits_cards)}** 张")
+    for n, cn, hs in hits_cards:
+        print(f"     DIR-{n}（{cn}）命中 {len(hs)} 行")
+    print(f"   ⇒ 其余 {n_card - len(hits_cards)} 张卡零命中 ⇒ 无阶段纪律 ⇒ 无「阶段静默守卫」需求")
+
+    # ---------- ② DIR-130 深挖：现行词表 vs 语义被禁集 ----------
+    pc = ROOT / "dir130" / "precheck130.py"
+    forb = _forbidden_from_source(pc)
+    print(f"\n【② `DIR-130/S9` 的覆盖度】现行禁用词表（从源码 ast 取）= {forb}")
+    if forb is None:
+        print("   ★ 取不到禁用词表 ⇒ 跳过（源文件缺失或改版）")
+    else:
+        hit = miss = 0
+        for form, kind in GUARD_FORMS_DIR130:
+            h = [w for w in forb if w in form]
+            hit += bool(h)
+            miss += (not h)
+            print(f"     {'命中' if h else '★漏  '} [{kind:<14}] {form}")
+        print(f"   ⇒ 现行检测器：命中 {hit}/6，**漏 {miss}/6**")
+
+    # ---------- ③ 数值碰撞：按「数值」匹配会误伤合法输出 ----------
+    print("\n【③ 数值碰撞】同一语义量的数值，可能合法地出现在 precheck 输出里")
+    src = pc.read_text(encoding="utf-8") if pc.exists() else ""
+    m_bin = re.search(r"C\(9,k\) = ([0-9,]+)", src)
+    if m_bin:
+        nums_bin = [int(x) for x in m_bin.group(1).split(",")]
+        print(f"   合法见证 `C(9,k) = {m_bin.group(1)}` 里有 {nums_bin.count(84)} 个 84")
+        print(f"   被禁形式 #6 `k=3: frac==0 的 C 有 84 个` 也含 84")
+        print("   ⇒ 按**数值**匹配的检测器 ⇒ 对合法输出**误伤** ⇒ 不 sound")
+    else:
+        print("   ★ 源码里找不到 `C(9,k)` 见证串 ⇒ 跳过")
+
+    # ---------- ④ 自证循环：见证集由被测判据反推 ----------
+    circ = _circular_witness(pc)
+    print(f"\n【④ 自证循环】在自测函数里用 `<禁用词表>` 作迭代源造见证的："
+          f"{circ if circ else '无'}")
+    print("   ⇒ 见证与被测判据**同源** ⇒ 只证明「检测器非空转」，**不**证明「纪律被守住」")
+
+    # ---------- ⑤ 方案演示：把判据从「文本」换成「来源」 ----------
+    print("\n【⑤ 方案演示】带身份载体（判「量」而非判「写法」）")
+    res = _tagged_forms_rendered()
+    n_block = sum(1 for _, ok, _ in res if ok)
+    for label, ok, info in res:
+        print(f"     {'已拒绝' if ok else '★未拦住'}  {label:<20} {info if not ok else ''}")
+    print(f"   ⇒ 被禁形式被拦 {n_block}/6（**形式无关**：不认空格、不认措辞）")
+    legit = [f"C(9,k) = {','.join(str(x) for x in (9,36,84,126,126,84,36,9,1))}",
+             "frac = 0.0", "m_tot = 17  n_low = 0"]
+    print(f"   ⇒ 合法结构输出照常渲染：{legit[0]} / {legit[1]}")
+
+    # ---------- ⑥ 已归档输出是否已泄露判决分支 ----------
+    print("\n【⑥ 已归档 precheck 输出的判决分支泄露（实测）】")
+    lk = _archive_leak()
+    if lk is None:
+        print("   ★ 缺 `dir130/out/precheck130.log` 或 `stage_formal.json` ⇒ 跳过")
+    else:
+        print(f"   precheck 印：每剂量 {lk['per'][0]}/{lk['per'][1]} 行、"
+              f"零={lk['n_zero_pool']}、None={lk['n_none_pool']}")
+        print(f"   formal 真值：n_zero(350)={lk['nz350']}、n_zero(300)={lk['nz300']}"
+              f"；n_uncomp(350)={lk['un350']}、n_uncomp(300)={lk['un300']}"
+              f"；p₃₅₀={lk['p350']:.6f}、p₃₀₀={lk['p300']:.6f}")
+        print(f"   对账：n_zero 两剂量之和 == precheck 印的「零」？ "
+              f"{'✓' if lk['acct_zero'] else '✗'}；n_uncomp 之和 == 「None」？ "
+              f"{'✓' if lk['acct_none'] else '✗'}")
+        print(f"   由 precheck 单独可推：p ∈ [{lk['bound_lo']:.6f}, {lk['bound_hi']:.6f}]"
+              f" ⇒ c3 ⇔ p₃₀₀ ≥ {lk['thr_min']} ⇒ "
+              f"{'**已可判定（必不成立）**' if lk['c3_determined'] else '不可判定'}")
+        print(f"   自检：formal 真值落在界内？ {'✓' if lk['truth_inside'] else '✗（界算错）'}")
+        print(f"   真判决 = {lk['verdict']}")
+    print("\n★ 只报告，不改变任何判定。")
+    return 0
+
+
+# ---------------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dirs", nargs="*", type=int)
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--probe-k15-scope", action="store_true")
+    ap.add_argument("--probe-guard-coverage", action="store_true")
     a = ap.parse_args()
 
     if a.selftest:
@@ -958,6 +1282,9 @@ def main():
 
     if a.probe_k15_scope:
         return probe_k15_scope()
+
+    if a.probe_guard_coverage:
+        return probe_guard_coverage()
 
     # ★ 覆盖率守卫：清单声明的 ①自动化 集合必须与本脚本实现的一致（DEF-128-03）
     auto = checklist_auto()
@@ -977,7 +1304,7 @@ def main():
     elif a.dirs:
         nums = a.dirs
     else:
-        ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope")
+        ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope / --probe-guard-coverage")
 
     ks = sorted(REGISTRY)
     total = {PASS: 0, FAIL: 0, NA: 0}
