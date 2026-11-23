@@ -126,6 +126,7 @@ class Ctx:
 INTERP = {
     7: "[窄化] 只抓 **>=3 位小数**的浮点（实测型读数，如 `0.8589`）；`0.05`/`0.0`/`0.5`/`0.95` 这类**惯例阈值**不算 —— `DEF-127-02` 的真实缺陷是**手抄实测值**，不是冻结一个显著性水平（首版按字面抓全部浮点 ⇒ 4/5 误报）；『派生』的等价标注放宽到 `机器算/算出/推导/computed`（卡片的实际用词）",
     8: "[窄化] 仅当『逐位相等』与『浮点』同句、且未出现 整数/有理数/Fraction、也不是『更正/改为/不可满足』句式才 FAIL（修订记录小节整体不计）—— 首版把『rev 1.0 曾要求浮点逐位相等、已因不可满足而改掉』误判为违规",
+    15: '[窄化] 「须有 `S\\d+` **执行**它」按**同一小节内**判定 —— 停在**位置约束**上，**不判**该 `S` 是否真执行（后者见 `P130-4`）。★ 为何**不**改成**卡级**（`P133-7` 量过、裁过）：① **前提不成立** ——「`DIR-130` 的纪律已被 `S9` 守住」只在**弱**意义下为真：`§6` 禁的是「`p₃₅₀`/`p₃₀₀` **及其任一中间聚合**」，而 `S9` 的禁用词只有**5 个字面 token**（`p₃₅₀ =`/`p₃₀₀ =`/`★ 判决:`/`C130-FRAC`/`C130-PROTOCOL`）⇒ 分子类中间聚合（如「`frac=0` 的 `C` 计数」）**不在**其内 ⇒ 卡级口径会对一张**守卫不足**的卡记 `PASS`，那正是 `P133-1` 防的**假 `PASS`**（比假 `N/A` 更坏：它把缺陷读成合规）；② **实测影响面 = 1 条判决**（`DIR-130` `FAIL`→`PASS`）、**`N/A`→`PASS` = 0 条**（`N/A` ⇔ 零命中，是算术必然），且唯一被改的正是**提出该问题的那张卡** ⇒ 与「改尺子让卡变绿」同形；③ **设计上**一张卡可有多处阶段纪律，卡级会让**一个** `S` 为全卡所有纪律背书 ⇒ 分辨力塌缩（本库现只有 1 张卡有命中，故 ③ 是**设计论证、非实测**，不得记作实测）。★ `DIR-130` 的缺口是**文档**性质（`S9` 于 `v1.2` 后补、`§6` 正文未回链），已照 `DIR-126` 先例在 `revolve/DIR-130/RECHECK.md` **追加**说明，卡片与 `VERDICT` **一字未改**。',
     16: "[降级] 本条由 `①自动化` **降为 `②留痕`**：静态核对器**不判**，也不得记 PASS。判定须在 trainer 上以**子进程**跑 `precheck{n}.py` 并扫 stdout —— 但『哪些词算 formal 的判据读数』**只能由卡片在开卡时自己冻结**（如 `dir130` 的 `S9_FORBIDDEN` + `T13` 自测）。核对器若自行拟一份通用禁用词表，要么误报合规卡、要么就是把已知的 11 张卡调到全绿 —— 后者正是 `P133-1` 要防的**静默窄化**。⇒ 现由卡片自带的 `S*` 执行，核对器不判。★★ `P134-2` 已**逐卡实跑裁定**（trainer，stdout 原样留档于 `revolve/P134-2-census/`，结论见 `revolve/P134-2-PRECHECK-CENSUS.md`）：**11 张 0 违规**，**无需**任何 `RECHECK.md`。允许打印：结构事实 / 已发表常数复现 / **单个工作例**的判据量与标签 / 检测器自测（含 level·power 仿真与预期标签）；禁止：本研究自身的判据**聚合**（`C2`/`C3`/`C4`、`p₃₅₀`/`p₃₀₀`）与**整条序列/分类**（机械佐证：11 份输出中含 ≥20 个数字的行数 = 0）。★ 故『`frac` 在单个工作例里打印』**不违规** —— `原文` 括号禁的是「**整条**序列/分类」，量词是「整条」。★ 更正 `P134-1` 的**错误论断**：`dir130` 的 `frac = 0.0` 属【工作例 §6】且下一行即声明 `p₃₅₀`/`p₃₀₀` 只在 `--stage formal` 打印 ⇒ 不是「自我豁免」，是**已声明的窄边界**；原记「未裁定」现裁定为**合规**。★★ 但查出**两处与 `K16` 无关的真实缺陷**：① `precheck125`/`precheck126` 的 `S12` 盲态前置条件（新剂量须 0 cell）在 `formal` 之后**永不可能再通过** ⇒ 重跑必 `rc=1`，**不是卡的问题**；② **8/11 根本没有 `--stage` 开关**，且至少 5 张读 `formal` 产物（`readings.json`/`out/cells`）⇒ 它们在**开卡时刻根本跑不起来**，`K16` 对它们只是**空洞成立**（纪律成立是因为检查从未在该时刻发生）⇒ 已派生 `P134-3`。",
     18: "[窄化] 仅当卡片真的在说**继承一个带定义域限制的求解器**时才适用；`û_s=0` 的『夹紧层』是**测量端点的定义**，不是求解器夹紧（首版按字面匹配 clamp/夹紧 ⇒ 4/5 误报）",
     22: "[窄化] 适用门**不再按符号搜 α**（`P133-3` 实测：本框架的 α 首先是**写入率/门控参数** —— `SGMN_v2.4_架构设计.md` §7.2 第 1 行「写入映射与门控」即「$\\alpha$ 的产生规则」，装置里是 `G = α(Wk−v)kᵀ + λW`，代码写作 `ALPHA`/`ALPHA, LAM`），改为要求**显著性用法的证据**：① 先抹掉 LaTeX 的 `\\alpha`/`$\\alpha$`；② α 被赋 **(0, 0.5)** 内的值（**排除 0** —— `decay` 臂把写率置零是控制臂，且零假阳性率的检验不存在）；③ `p` 与 α 直接比较；④ `p` 与具体水平比较（`p<0.05`/`p ≤ 0.0012`）；⑤ 显式点名「显著性水平」。★ 旧口径命中 **48** 张，逐张核过其中 **34 张是假阳性**（**17** 张只是 LaTeX 架构符号、**16** 张是写规则里的 α、**1** 张是 `α=0` 控制臂）⇒ 误报率 **71%**，FAIL 已失去分辨力；新口径命中 **15** 张，逐张核过**都是真显著性水平**（`DIR-19/20/21/23/92/104/112/113/114/120/121/122/123/124/126`）。★★ 另修一处**假阴性**：旧门只认 ASCII 的 `p<0…`，**不认 `≤`** ⇒ `DIR-112`（两条判据是 `p ≤ 0.0012` / `p≤0.035`）被**静默判 N/A** —— 与 `K15` 的假 N/A 同一物种。★ **更正一处我自己的错误论断**：`DIR-104`（`ALPHA = 0.05`）**不是**假阴性的例子（它被旧门看见靠的是自己卡里的 LaTeX `\alpha`，即假阳性那条路）；实测本库「大写 `ALPHA` 作显著性却对旧门不可见」的卡**零张**（`DIR-46/47/49/86/106/118` 的 `ALPHA` 全是写率/装置参数）。穷举型卡片没有抽样误差 ⇒ N/A",
@@ -677,6 +678,12 @@ def selftest():
     #   ⑤ **防漏判**：强调与 S 编号**都在同一行**
     cases.append((15, "**不得**打印且同行点名 S9", PASS,
                   "## §6\n**不得**打印判决行（`S9`）。\n", {}))
+    #   ⑥ ★★ `P133-7`（Cycle 254）**裁定的机械钉子**：纪律写在 `§6`，而 `S9` 只出现在**别的节**
+    #      ⇒ 现行**小节级**判 `FAIL`。★ 若日后有人把 `k15` 改成**卡级**（整张卡任一 `S\d+` 即算守住），
+    #      本夹具会由 `FAIL` 变 `PASS` ⇒ **测试立刻变红**，裁定不会被静默推翻。
+    cases.append((15, "纪律在某节、S 只在他节（P133-7 裁定仍 FAIL）", FAIL,
+                  "## §5 Stage A\n| `S9` | 阶段纪律：precheck 不得含判据读数 |\n"
+                  "\n## §6 工作例\n**不得**打印聚合读数。\n", {}))
 
     cases.append((18, "继承受限求解器但不打印夹紧", FAIL,
                   "## §2\n本卡继承带定义域限制的求解器，夹紧须报。\n", {"a.py": "x = 1\n"}))
@@ -864,15 +871,93 @@ def selftest():
 
 
 # ---------------------------------------------------------------------------
+def canonical_nums():
+    """规范 `DIR-{n}/` 编号（升序）与被跳过的变体目录名（升序）。
+
+    ★ `P134-1` 修：原先 `int(p.name.split("-")[1])` 在 `revolve/DIR-26M`（变体目录）上
+      直接 `ValueError: invalid literal for int(): '26M'` ⇒ `--all` **从未跑通**。
+      口径：本脚本按 `dir{n}/` 定位，只认**纯数字** `DIR-{n}`；变体目录（`DIR-26B`/
+      `DIR-87c` 等）没有同号目录 ⇒ **跳过并明示**（不静默截断）。
+    ★ `P133-7`：抽成函数，供 `--all` 与 `--probe-k15-scope` **共用**，避免两处枚举漂移。
+    """
+    canon, skip = [], []
+    for p in sorted(REVOLVE.glob("DIR-*")):
+        if not p.is_dir():
+            continue
+        m = re.fullmatch(r"DIR-(\d+)", p.name)
+        (canon if m else skip).append(int(m.group(1)) if m else p.name)
+    return sorted(canon), sorted(skip)
+
+
+def probe_k15_scope():
+    """`P133-7` 探针：对照 `K15` 的**小节级**（现行）与**卡级**（候选）两种口径。
+
+    只**报告**，不改变 `k15()` 的判定 —— 用途是让「改口径会影响哪些判决」可复算，
+    而不是拿影响面去反推该不该改（那只会在两个方向上都自证）。
+    """
+    nums, skip = canonical_nums()
+    print("=" * 100)
+    print("K15 口径对照探针（小节级 = 现行；卡级 = 候选：整张卡任一 `S\\d+` 即为守住）")
+    print("=" * 100)
+    if skip:
+        print(f"★ 跳过 {len(skip)} 个非规范目录：{', '.join(skip)}")
+    n_cards = n_hit_cards = 0
+    deltas = []
+    for n in nums:
+        ctx = Ctx(n)
+        if not ctx.card:
+            continue
+        n_cards += 1
+        hits = []
+        for head, body in ctx.sections():
+            for ln in body.splitlines():
+                de = _de_emph(ln)
+                if re.search(r"不得打印|不得输出|禁止打印", de):
+                    has_s = bool(re.search(r"\bS\d+\b", de)
+                                 or re.search(r"\bS\d+\b", _de_emph(body)))
+                    hits.append((head, ln.strip(), has_s))
+        if not hits:
+            continue
+        n_hit_cards += 1
+        card_s = sorted(set(re.findall(r"\bS\d+\b", _de_emph(ctx.text))),
+                        key=lambda x: int(x[1:]))
+        sec_ok = all(h[2] for h in hits)
+        card_ok = bool(card_s)
+        print(f"\n■ DIR-{n}")
+        print(f"   命中 {len(hits)} 处 / 分布在 {len({h[0] for h in hits})} 个小节")
+        print(f"   卡内 `S` 编号 {len(card_s)} 个：{', '.join(card_s) or '无'}")
+        print(f"   小节级 = {'PASS' if sec_ok else 'FAIL'}    卡级 = {'PASS' if card_ok else 'FAIL'}")
+        for head, ln, hs in hits:
+            print(f"     [{'本节有S' if hs else '本节无S'}] {head[:30]} | {ln[:58]}")
+        if sec_ok != card_ok:
+            deltas.append((n, sec_ok, card_ok, len(hits), len(card_s)))
+    print("\n" + "=" * 100)
+    print(f"有命中的卡：**{n_hit_cards}** 张（其余 {n_cards - n_hit_cards} 张零命中 ⇒ 两口径同为 `N/A`）")
+    if not deltas:
+        print("两种口径全库**无差异**")
+    else:
+        print(f"口径差异：**{len(deltas)}** 张")
+        for n, s_, c_, nh, ns in deltas:
+            print(f"   DIR-{n}：小节级 {'PASS' if s_ else 'FAIL'} → 卡级 {'PASS' if c_ else 'FAIL'}"
+                  f"   （命中 {nh} 处；卡内 {ns} 个 S）")
+    print("★ 只报告，不改变 `k15()` 判定。")
+    return 0
+
+
+# ---------------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dirs", nargs="*", type=int)
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--probe-k15-scope", action="store_true")
     a = ap.parse_args()
 
     if a.selftest:
         return selftest()
+
+    if a.probe_k15_scope:
+        return probe_k15_scope()
 
     # ★ 覆盖率守卫：清单声明的 ①自动化 集合必须与本脚本实现的一致（DEF-128-03）
     auto = checklist_auto()
@@ -885,24 +970,14 @@ def main():
             return 2
 
     if a.all:
-        # ★ P134-1 修：原先 `int(p.name.split("-")[1])` 在 `revolve/DIR-26M`（变体目录）上
-        #   直接 `ValueError: invalid literal for int(): '26M'` ⇒ `--all` **从未跑通**。
-        #   口径：本脚本按 `dir{n}/` 定位，只认**纯数字** `DIR-{n}`；变体目录（`DIR-26B`/
-        #   `DIR-87c` 等）没有同号目录 ⇒ **跳过并明示**（不静默截断）。
-        canon, skip = [], []
-        for p in sorted(REVOLVE.glob("DIR-*")):
-            if not p.is_dir():
-                continue
-            m = re.fullmatch(r"DIR-(\d+)", p.name)
-            (canon if m else skip).append(int(m.group(1)) if m else p.name)
-        nums = sorted(canon)
+        nums, skip = canonical_nums()
         if skip:
             print(f"★ 跳过 {len(skip)} 个非规范目录（无同号 `dir{{n}}/`，本脚本不覆盖）："
-                  f"{', '.join(sorted(skip))}")
+                  f"{', '.join(skip)}")
     elif a.dirs:
         nums = a.dirs
     else:
-        ap.error("需要 --dirs / --all / --selftest")
+        ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope")
 
     ks = sorted(REGISTRY)
     total = {PASS: 0, FAIL: 0, NA: 0}
