@@ -32,6 +32,9 @@ M = M126.M                                                        # mech125
 #: `DIR-127` 的落盘读数（`mech127.all_readings()` 的结果，121 条）；本卡只做**复现核**
 READINGS = os.path.join(ROOT, "dir127", "out", "readings.json")
 
+#: 卡号（**结构常量**：出现在输出标题行 `DIR-130 …` 里；`v1.3` 的 `S10` 数字来源审计须把它计入白名单）
+CARD_ID = 130
+
 # ---------------------------------------------------------------- 冻结常量（卡片 §2/§3）
 DOSE_A = 300                     # 正侧（`frac > 0`）
 DOSE_B = 350                     # 零侧（`frac == 0`）
@@ -52,6 +55,95 @@ VERDICTS = ("C130-PROTOCOL-INVALID",
             "C130-FRAC-FRAGILE-POSITIVE",
             "C130-FRAC-NOISE-DOMINATED-ZERO",
             "C130-FRAC-NOISE-DOMINATED-BOTH")
+
+# ---------------------------------------------------------------- 判据量载体（卡片 `v1.3` §6）
+#: 当前阶段。`"precheck"` 下**真实读数的跨读数聚合量不可渲染**；`"smoke"`/`"formal"` 下无限制。
+_STAGE = "formal"
+
+
+def set_stage(stage):
+    """设置阶段（`"precheck"` / `"smoke"` / `"formal"`）。`precheck130.py` 在入口调用。"""
+    global _STAGE
+    if stage not in ("precheck", "smoke", "formal"):
+        raise ValueError("stage 须为 precheck/smoke/formal")
+    _STAGE = stage
+    return _STAGE
+
+
+def get_stage():
+    return _STAGE
+
+
+class AggPrintBlocked(RuntimeError):
+    """★ 在 `precheck` 阶段试图**渲染**一个真实读数的跨读数聚合量（`v1.3` §6 纪律）。"""
+
+
+class Agg(float):
+    """带身份的**跨读数聚合量**载体（`v1.3` §6 的**结构性守卫**）。
+
+    ★ `origin="reading"`（真实读数的聚合）在 `precheck` 阶段**渲染即抛异常**
+      ⇒ 被禁量**进不了文本** —— 不是「没打印」，是**打印不出来**。
+    ★ `origin="fixture"`（合成夹具）**可渲染** —— 自测的期望值必须可打印（`T1`/`T10`/`T12`）。
+    ★ `_isint` 记住它原本是 `int` 还是 `float`，使渲染与**冻结前**逐字一致
+      （`n_comp` 印 `7440` 不是 `7440.0`；`p` 印 `0.0` 不是 `0`）。
+    """
+
+    __slots__ = ("origin", "tag", "_isint")
+
+    def __new__(cls, value, origin="reading", tag="", isint=None):
+        obj = super().__new__(cls, value)
+        obj.origin = origin
+        obj.tag = tag
+        obj._isint = (isint if isint is not None else isinstance(value, int)) and not isinstance(value, bool)
+        return obj
+
+    def _blocked(self):
+        return self.origin == "reading" and _STAGE == "precheck"
+
+    def _txt(self, spec=""):
+        v = float(self)
+        if spec:
+            # int 型格式码（d/x/o/b/n/c）对 float 不合法 ⇒ 先转 int
+            if any(ch in spec for ch in "dxXobnc") and self._isint:
+                return format(int(v), spec)
+            return format(v, spec)
+        return str(int(v)) if self._isint else repr(v)
+
+    def __repr__(self):
+        if self._blocked():
+            raise AggPrintBlocked(self.tag)
+        return self._txt()
+
+    def __str__(self):
+        if self._blocked():
+            raise AggPrintBlocked(self.tag)
+        return self._txt()
+
+    def __format__(self, spec):
+        if self._blocked():
+            raise AggPrintBlocked(self.tag)
+        return self._txt(spec)
+
+
+def _origin_of(rows):
+    """聚合的来源身份：只要含**真实读数**行 ⇒ `"reading"`（保守）。"""
+    for r in rows:
+        if isinstance(r, dict) and r.get("origin") == "reading":
+            return "reading"
+    return "fixture"
+
+
+def plainify(obj):
+    """把 `Agg` 还原成普通 `int`/`float`（用于 `json.dump` —— `json` 会把 float 子类当 float 写，
+    **绕过** `__repr__` 的守卫；且 `int` 会被写成 `0.0` ⇒ 与冻结前的 JSON 不逐字相同）。"""
+    if isinstance(obj, Agg):
+        v = float(obj)
+        return int(v) if obj._isint else v
+    if isinstance(obj, dict):
+        return {k: plainify(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [plainify(v) for v in obj]
+    return obj
 
 
 # ---------------------------------------------------------------- 结构层
@@ -103,6 +195,7 @@ def reading_cells(dose, sub, idxs):
         "frac": fr["frac"], "n_low": int(fr["n_low"]), "n_clamped": int(fr["n_clamped"]),
         "n_valid": int(fr["n_valid"]), "umin": fr["umin"], "umax": fr["umax"],
         "detail": fr["detail"],
+        "origin": "reading",           # ★ `v1.3`：来源标记 —— 一切跨读数聚合据此判身份
     }
 
 
@@ -124,14 +217,31 @@ def p_flip(rows):
 
     ★ `frac` **严格** `> 0`，无容差（卡片 §3）。
     ★ `frac is None`（`m_tot == 0`，不可判）**不进分母**，但计入 `n_uncomputable`。
+    ★ `v1.3`：全部返回**跨读数聚合量** ⇒ 一律用带身份的 `Agg` 包装（`origin` 由行来源决定）。
     """
     comp = [r for r in rows if r["frac"] is not None]
     pos = sum(1 for r in comp if r["frac"] > 0.0)
-    return {"p": (pos / float(len(comp))) if comp else None,
-            "n_pos": pos, "n_comp": len(comp),
-            "n_uncomp": len(rows) - len(comp),
-            "nominal": len(rows),
-            "comp_frac": (len(comp) / float(len(rows))) if rows else None}
+    org = _origin_of(rows)
+    n = len(rows)
+    nc = len(comp)
+    return {"p": (Agg(pos / float(nc), origin=org, tag="p") if nc else None),
+            "n_pos": Agg(pos, origin=org, tag="n_pos", isint=True),
+            "n_comp": Agg(nc, origin=org, tag="n_comp", isint=True),
+            "n_uncomp": Agg(n - nc, origin=org, tag="n_uncomp", isint=True),
+            "nominal": Agg(n, origin=org, tag="nominal", isint=True),
+            "comp_frac": (Agg(nc / float(n), origin=org, tag="comp_frac") if n else None)}
+
+
+def count_over(rows, pred, tag):
+    """★ `v1.3`：**跨读数计数**的唯一出口 —— 返回带身份的 `Agg`。
+
+    ★ 为什么需要它：跨读数的**计数**（如「多少条读数 `frac is None`」）与 `p_flip` 的
+      返回值**同性质**（都是跨读数聚合），但它**不经过** `p_flip` ⇒ 若不收口，
+      它就是一个可以随手 `print` 的裸整数 ⇒ 泄漏面重现（`P133-8` 实测的 `None=270`/`零=11092`）。
+    ★ 因此：**一切跨读数计数必须走这里或 `p_flip`**，两者都返回 `Agg` ⇒ precheck 渲染即失败。
+    """
+    n = sum(1 for r in rows if pred(r))
+    return Agg(n, origin=_origin_of(rows), tag=tag, isint=True)
 
 
 def per_k(rows):
@@ -160,11 +270,18 @@ def u_margin(rows, k9_only=False):
             if d["u"] is not None:
                 us.append(d["u"])
     lows = [u for u in us if u < 1.0]
-    return {"umin": (min(us) if us else None), "umax": (max(us) if us else None),
-            "u_maxlow": (max(lows) if lows else None),
-            "margin_above": (min(us) - 1.0) if us else None,
-            "margin_below": (1.0 - max(lows)) if lows else None,
-            "n_layers": len(us), "n_low_layers": len(lows), "n_clamped": n_cl}
+    org = _origin_of(rows)
+
+    def _f(x):
+        return None if x is None else Agg(x, origin=org, tag="u_margin")
+
+    return {"umin": _f((min(us) if us else None)), "umax": _f((max(us) if us else None)),
+            "u_maxlow": _f((max(lows) if lows else None)),
+            "margin_above": _f((min(us) - 1.0) if us else None),
+            "margin_below": _f((1.0 - max(lows)) if lows else None),
+            "n_layers": Agg(len(us), origin=org, tag="n_layers", isint=True),
+            "n_low_layers": Agg(len(lows), origin=org, tag="n_low_layers", isint=True),
+            "n_clamped": Agg(n_cl, origin=org, tag="n_clamped", isint=True)}
 
 
 # ---------------------------------------------------------------- 复现核（`C0-1` / `S3`）

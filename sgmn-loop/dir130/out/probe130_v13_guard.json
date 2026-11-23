@@ -1,0 +1,138 @@
+{
+ "v1": {
+  "ok": true,
+  "forms": [
+   {
+    "form": "① 判据终值（带空格写法）",
+    "tag": "p",
+    "origin": "reading",
+    "blocked": true,
+    "rendered": []
+   },
+   {
+    "form": "② 判据终值（无空格写法）",
+    "tag": "p",
+    "origin": "reading",
+    "blocked": true,
+    "rendered": []
+   },
+   {
+    "form": "③ 判据的分子（跨读数计数）",
+    "tag": "n_pos",
+    "origin": "reading",
+    "blocked": true,
+    "rendered": []
+   },
+   {
+    "form": "④ 判据的分母（跨读数计数）",
+    "tag": "n_comp",
+    "origin": "reading",
+    "blocked": true,
+    "rendered": []
+   },
+   {
+    "form": "⑤ 逐 k 的计数（分层的跨读数聚合）",
+    "tag": "n_comp",
+    "origin": "reading",
+    "blocked": true,
+    "rendered": []
+   },
+   {
+    "form": "⑥ 池化计数（`v1.2` 实际泄漏的那两个）",
+    "tag": "n_zero",
+    "origin": "reading",
+    "blocked": true,
+    "rendered": []
+   },
+   {
+    "form": "⑦ 池化计数（`v1.2` 的 `None=270`）",
+    "tag": "n_none",
+    "origin": "reading",
+    "blocked": true,
+    "rendered": []
+   }
+  ]
+ },
+ "v2": {
+  "ok": true,
+  "items": [
+   {
+    "kind": "单结构量 · m_tot",
+    "value": "17",
+    "ok": true
+   },
+   {
+    "kind": "单结构量 · n_low",
+    "value": "0",
+    "ok": true
+   },
+   {
+    "kind": "单结构量 · n_cells",
+    "value": "1",
+    "ok": true
+   },
+   {
+    "kind": "单结构量 · N1",
+    "value": "23",
+    "ok": true
+   },
+   {
+    "kind": "单结构量 · N2",
+    "value": "20",
+    "ok": true
+   },
+   {
+    "kind": "单结构量 · frac",
+    "value": "0.0",
+    "ok": true
+   },
+   {
+    "kind": "合成夹具 · p",
+    "value": "0.5",
+    "ok": true
+   },
+   {
+    "kind": "合成夹具 · n_pos",
+    "value": "1",
+    "ok": true
+   },
+   {
+    "kind": "合成夹具 · n_comp",
+    "value": "2",
+    "ok": true
+   }
+  ]
+ },
+ "v5": {
+  "S10": {
+   "ok": true,
+   "detail": "输出数字去重 35 个；未溯源 0 个（须 0）[]"
+  },
+  "new": {
+   "interval_p300": [
+    0.0,
+    0.9998695368558382
+   ],
+   "decides": {
+    "C2（p₃₅₀ ≤ 0.05）": false,
+    "C3（p₃₀₀ ≥ 0.95）": false
+   },
+   "any_decidable": false
+  },
+  "old": {
+   "n_zero_pooled": 11092,
+   "n_none_pooled": 270,
+   "interval_p300": [
+    0.0,
+    0.53657876943881
+   ],
+   "decides": {
+    "C2（p₃₅₀ ≤ 0.05）": false,
+    "C3（p₃₀₀ ≥ 0.95）": true
+   },
+   "any_decidable": true
+  },
+  "ok": true
+ },
+ "ok": true
+}

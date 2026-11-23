@@ -1,0 +1,256 @@
+{
+ "meta_a": {
+  "dose": 300,
+  "n_sub": 15,
+  "n_cell_subsets": 511,
+  "n_rows": 7665
+ },
+ "meta_b": {
+  "dose": 350,
+  "n_sub": 15,
+  "n_cell_subsets": 511,
+  "n_rows": 7665
+ },
+ "c0": {
+  "reproduction_ok": true,
+  "n_compared": 30,
+  "comp_frac_a": 0.9941291585127201,
+  "comp_frac_b": 0.9706457925636007,
+  "min_computable": 0.5,
+  "ok": true,
+  "reproduction": {
+   "n_compared": 30,
+   "n_bad": 0,
+   "bad": [],
+   "ok": true
+  }
+ },
+ "c2_p350": {
+  "p": 0.0,
+  "n_pos": 0,
+  "n_comp": 7440,
+  "n_uncomp": 225,
+  "nominal": 7665,
+  "comp_frac": 0.9706457925636007,
+  "thr_max": 0.05,
+  "holds": true
+ },
+ "c3_p300": {
+  "p": 0.5207349081364829,
+  "n_pos": 3968,
+  "n_comp": 7620,
+  "n_uncomp": 45,
+  "nominal": 7665,
+  "comp_frac": 0.9941291585127201,
+  "thr_min": 0.95,
+  "holds": false
+ },
+ "c4_u350": {
+  "umin": 1.5061578590702887,
+  "umax": 26.28005912773481,
+  "u_maxlow": null,
+  "margin_above": 0.5061578590702887,
+  "margin_below": null,
+  "n_layers": 19200,
+  "n_low_layers": 0,
+  "n_clamped": 0
+ },
+ "c4_u350_k9": {
+  "umin": 1.5061578590702887,
+  "umax": 26.28005912773481,
+  "u_maxlow": null,
+  "margin_above": 0.5061578590702887,
+  "margin_below": null,
+  "n_layers": 75,
+  "n_low_layers": 0,
+  "n_clamped": 0
+ },
+ "c4_u300": {
+  "umin": 0.0922668018090525,
+  "umax": 9.55440995841487,
+  "u_maxlow": 0.9640993619713583,
+  "margin_above": -0.9077331981909476,
+  "margin_below": 0.03590063802864174,
+  "n_layers": 26880,
+  "n_low_layers": 4096,
+  "n_clamped": 0
+ },
+ "c4_u300_k9": {
+  "umin": 0.0922668018090525,
+  "umax": 9.55440995841487,
+  "u_maxlow": 0.9640993619713583,
+  "margin_above": -0.9077331981909476,
+  "margin_below": 0.03590063802864174,
+  "n_layers": 105,
+  "n_low_layers": 16,
+  "n_clamped": 0
+ },
+ "c5_per_k_350": {
+  "1": {
+   "p": 0.0,
+   "n_pos": 0,
+   "n_comp": 75,
+   "n_uncomp": 60,
+   "nominal": 135,
+   "comp_frac": 0.5555555555555556,
+   "n_rows": 135
+  },
+  "2": {
+   "p": 0.0,
+   "n_pos": 0,
+   "n_comp": 450,
+   "n_uncomp": 90,
+   "nominal": 540,
+   "comp_frac": 0.8333333333333334,
+   "n_rows": 540
+  },
+  "3": {
+   "p": 0.0,
+   "n_pos": 0,
+   "n_comp": 1200,
+   "n_uncomp": 60,
+   "nominal": 1260,
+   "comp_frac": 0.9523809523809523,
+   "n_rows": 1260
+  },
+  "4": {
+   "p": 0.0,
+   "n_pos": 0,
+   "n_comp": 1875,
+   "n_uncomp": 15,
+   "nominal": 1890,
+   "comp_frac": 0.9920634920634921,
+   "n_rows": 1890
+  },
+  "5": {
+   "p": 0.0,
+   "n_pos": 0,
+   "n_comp": 1890,
+   "n_uncomp": 0,
+   "nominal": 1890,
+   "comp_frac": 1.0,
+   "n_rows": 1890
+  },
+  "6": {
+   "p": 0.0,
+   "n_pos": 0,
+   "n_comp": 1260,
+   "n_uncomp": 0,
+   "nominal": 1260,
+   "comp_frac": 1.0,
+   "n_rows": 1260
+  },
+  "7": {
+   "p": 0.0,
+   "n_pos": 0,
+   "n_comp": 540,
+   "n_uncomp": 0,
+   "nominal": 540,
+   "comp_frac": 1.0,
+   "n_rows": 540
+  },
+  "8": {
+   "p": 0.0,
+   "n_pos": 0,
+   "n_comp": 135,
+   "n_uncomp": 0,
+   "nominal": 135,
+   "comp_frac": 1.0,
+   "n_rows": 135
+  },
+  "9": {
+   "p": 0.0,
+   "n_pos": 0,
+   "n_comp": 15,
+   "n_uncomp": 0,
+   "nominal": 15,
+   "comp_frac": 1.0,
+   "n_rows": 15
+  }
+ },
+ "c5_per_k_300": {
+  "1": {
+   "p": 0.1523809523809524,
+   "n_pos": 16,
+   "n_comp": 105,
+   "n_uncomp": 30,
+   "nominal": 135,
+   "comp_frac": 0.7777777777777778,
+   "n_rows": 135
+  },
+  "2": {
+   "p": 0.2419047619047619,
+   "n_pos": 127,
+   "n_comp": 525,
+   "n_uncomp": 15,
+   "nominal": 540,
+   "comp_frac": 0.9722222222222222,
+   "n_rows": 540
+  },
+  "3": {
+   "p": 0.35,
+   "n_pos": 441,
+   "n_comp": 1260,
+   "n_uncomp": 0,
+   "nominal": 1260,
+   "comp_frac": 1.0,
+   "n_rows": 1260
+  },
+  "4": {
+   "p": 0.46296296296296297,
+   "n_pos": 875,
+   "n_comp": 1890,
+   "n_uncomp": 0,
+   "nominal": 1890,
+   "comp_frac": 1.0,
+   "n_rows": 1890
+  },
+  "5": {
+   "p": 0.5740740740740741,
+   "n_pos": 1085,
+   "n_comp": 1890,
+   "n_uncomp": 0,
+   "nominal": 1890,
+   "comp_frac": 1.0,
+   "n_rows": 1890
+  },
+  "6": {
+   "p": 0.6833333333333333,
+   "n_pos": 861,
+   "n_comp": 1260,
+   "n_uncomp": 0,
+   "nominal": 1260,
+   "comp_frac": 1.0,
+   "n_rows": 1260
+  },
+  "7": {
+   "p": 0.7907407407407407,
+   "n_pos": 427,
+   "n_comp": 540,
+   "n_uncomp": 0,
+   "nominal": 540,
+   "comp_frac": 1.0,
+   "n_rows": 540
+  },
+  "8": {
+   "p": 0.8962962962962963,
+   "n_pos": 121,
+   "n_comp": 135,
+   "n_uncomp": 0,
+   "nominal": 135,
+   "comp_frac": 1.0,
+   "n_rows": 135
+  },
+  "9": {
+   "p": 1.0,
+   "n_pos": 15,
+   "n_comp": 15,
+   "n_uncomp": 0,
+   "nominal": 15,
+   "comp_frac": 1.0,
+   "n_rows": 15
+  }
+ },
+ "n_rows_total": 15330,
+ "verdict": "C130-FRAC-FRAGILE-POSITIVE"
+}

@@ -28,6 +28,7 @@
 """
 import argparse
 import ast
+import json
 import io
 import pathlib
 import re
@@ -1028,6 +1029,18 @@ def _forbidden_from_source(path, name="S9_FORBIDDEN"):
     return None
 
 
+def _ast_has_class(path, name):
+    """从**源码**用 `ast` 判定某个**类**是否存在（不 `import`；冻结文件只读）。
+
+    ★ `DEF-130-02` 的延续：文本行扫描会读到文档字符串里的类名而假阳性 ⇒ 只认 `ast.ClassDef`。
+    """
+    try:
+        tree = ast.parse(pathlib.Path(path).read_text(encoding="utf-8"))
+    except (OSError, SyntaxError, UnicodeDecodeError):
+        return False
+    return any(isinstance(n, ast.ClassDef) and n.name == name for n in tree.body)
+
+
 def _circular_witness(path, list_name="S9_FORBIDDEN"):
     """检测「见证集由被测判据反推」⇒ 见证只证明**非空转**，不证明**覆盖**。
 
@@ -1263,6 +1276,39 @@ def probe_guard_coverage():
               f"{'**已可判定（必不成立）**' if lk['c3_determined'] else '不可判定'}")
         print(f"   自检：formal 真值落在界内？ {'✓' if lk['truth_inside'] else '✗（界算错）'}")
         print(f"   真判决 = {lk['verdict']}")
+
+    # ---------- ⑦ `v1.3` 起：本卡的纪律有几道网（载体 + 数字来源审计）----------
+    print("\n【⑦ `v1.3` 起的第二道网（结构性守卫 · 形式无关）】")
+    card = ROOT / "revolve" / "DIR-130" / "DIRECTION_rev130_v13.md"
+    if not card.exists():
+        print("   ★ 缺 `DIRECTION_rev130_v13.md` ⇒ 尚未升级 ⇒ 只剩 `S9` 这一道（字面）网")
+    else:
+        ctext = card.read_text(encoding="utf-8")
+        mech = ROOT / "dir130" / "mech130.py"
+        pre = ROOT / "dir130" / "precheck130.py"
+        has_agg = _ast_has_class(mech, "Agg")
+        has_s10 = "s10_number_audit" in pre.read_text(encoding="utf-8")
+        has_s11 = "`S11`" in ctext
+        has_wl = "白名单" in ctext and "F1" in ctext and "F2" in ctext and "F3" in ctext
+        print(f"   卡片 `v1.3` 在位 ✓ · 白名单 + `F1`/`F2`/`F3` 定义：{'✓' if has_wl else '✗'}"
+              f" · `S11`（纪律不依赖词表）：{'✓' if has_s11 else '✗'}")
+        print(f"   `mech130.Agg` 载体：{'✓' if has_agg else '✗'} · "
+              f"`precheck130.s10_number_audit`（数字来源审计）：{'✓' if has_s10 else '✗'}")
+        gj = ROOT / "dir130" / "out" / "probe130_v13_guard.json"
+        if not gj.exists():
+            print("   ★ 缺 `dir130/out/probe130_v13_guard.json` ⇒ 守卫验证尚未实跑")
+        else:
+            g = json.loads(gj.read_text(encoding="utf-8"))
+            print(f"   守卫验证实测：V1（6 条被禁形式全被拦、形式无关）"
+                  f"{'✓' if g.get('v1', {}).get('ok') else '✗'} · "
+                  f"V2（合法输出零误伤）{'✓' if g.get('v2', {}).get('ok') else '✗'} · "
+                  f"V5（新输出推不出任何分支）{'✓' if g.get('v5', {}).get('ok') else '✗'}")
+            old_iv = (g.get("v5", {}).get("old", {}) or {}).get("interval_p300")
+            new_iv = (g.get("v5", {}).get("old", {}) or {}).get("decides")
+            if old_iv:
+                print(f"   ★ 对照（旧归档输出）：p₃₀₀ 可行区间上界 = {old_iv[1]:.6f}"
+                      f" ⇒ 旧输出**能**判掉分支 = {new_iv}")
+            print("   ⇒ 纪律现有**两道**网：`S9`（字面，快但窄）+ `S10`+`Agg`（形式无关，慢但全覆盖）")
     print("\n★ 只报告，不改变任何判定。")
     return 0
 

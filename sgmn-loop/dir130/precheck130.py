@@ -11,9 +11,12 @@
 """
 import argparse
 import collections
+import contextlib
+import io
 import json
 import os
 import random
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -320,21 +323,21 @@ def stage_a():
     out.append(("S4", bad4 == 0, f"(F2) 加性/单调违例={bad4}（须 0）"))
 
     # --- S5 frac None ⟺ m_tot==0；frac==0.0 ⟺ m_lo==0（两剂量全域）
+    # ★ v1.3：跨读数的**计数**走 `M.count_over`（返回带身份的 `Agg` ⇒ precheck 渲染即失败）。
+    #   ★ 这里**不再打印** None/零 的个数 —— 那正是 `P133-8` 实测的泄漏面
+    #   （`None=270` / `零=11092` = 两个 per-dose 计数的**池化** ⇒ 可界住 p ⇒ 可判掉分支）。
     bad5 = 0
-    n_none = 0
-    n_zero = 0
     for r in rows_a + rows_b:
         is_none = r["frac"] is None
-        if is_none:
-            n_none += 1
         if is_none != (r["m_tot"] == 0):
             bad5 += 1
         if not is_none:
             if (r["frac"] == 0.0) != (r["m_lo"] == 0):
                 bad5 += 1
-            if r["frac"] == 0.0:
-                n_zero += 1
-    out.append(("S5", bad5 == 0, f"违例={bad5}（须 0）；None={n_none} 零={n_zero}"))
+    n_none = M.count_over(rows_a + rows_b, lambda r: r["frac"] is None, "n_none")
+    n_zero = M.count_over(rows_a + rows_b, lambda r: r["frac"] is not None and r["frac"] == 0.0,
+                           "n_zero")
+    out.append(("S5", bad5 == 0, f"违例={bad5}（须 0）"))
 
     # --- S6 mech130 无写模式 open
     src = open(os.path.join(HERE, "mech130.py"), "r", encoding="utf-8").read()
@@ -343,14 +346,17 @@ def stage_a():
                 f"mech130 写模式 open 调用={len(writes)}（须 0，AST 判定）{writes[:2]}"))
 
     # --- S7 NC 标签不得用作过滤：k=1 时 n_cells==1 仍计入
+    # ★ v1.3：只报**布尔**，不报 `n_comp` 的值 —— `n_comp` 是跨读数聚合（`Agg`），
+    #   在 precheck 阶段**渲染即失败** ⇒ 它根本不该出现在输出里。
     one = [r for r in rows_b if r["k"] == 1]
     d1 = M.p_flip(one)
     uses_nc = ('"NC"' in src) or ("'NC'" in src) or ("verdict_of" in src)
+    counted = bool(d1["n_comp"] > 0)
     ok_S7 = (len(one) == 9 * 15 and one[0]["n_cells"] == 1 and one[0]["k"] == 1
-             and d1["n_comp"] > 0 and not uses_nc)
+             and counted and not uses_nc)
     out.append(("S7", ok_S7,
                 f"k=1 行数={len(one)}（须 9×15=135）n_cells={one[0]['n_cells']} "
-                f"计入={d1['n_comp']} 源码用 NC 标签={uses_nc}（须 False）"))
+                f"计入>0={counted} 源码用 NC 标签={uses_nc}（须 False）"))
 
     # --- S8 总行数 == 15330
     n_tot = len(rows_a) + len(rows_b)
@@ -372,23 +378,87 @@ def _s9_detect(text):
     return [w for w in S9_FORBIDDEN if w in text]
 
 
-def s9_precheck_silent():
-    """`S9`：★ `--stage precheck` **不得**产出任何 `C2`/`C3` 读数或判决行（阶段纪律）。
-
-    做法：把 `--stage precheck` 作为**子进程**跑一遍，扫它的 stdout/stderr。
-    ★ 不递归：`precheck` 分支在 Stage A 之后直接 `return`，不会再进 smoke/formal。
-    """
+def _precheck_subprocess():
+    """跑 `--stage precheck` 子进程，返回 `(rc, stdout, stderr)`。"""
     import subprocess
     try:
         p = subprocess.run([sys.executable, os.path.join(HERE, "precheck130.py"),
                             "--stage", "precheck"],
                            capture_output=True, text=True, timeout=1700)
     except Exception as exc:                          # noqa: BLE001
-        return ("S9", False, f"子进程异常 {type(exc).__name__}: {exc}")
-    out = (p.stdout or "") + (p.stderr or "")
-    bad = _s9_detect(out)
-    ok = (not bad) and (p.returncode == 0)
-    return ("S9", ok, f"precheck 子进程 rc={p.returncode} 命中判据读数={bad}（须 []）")
+        return (None, "", f"__EXC__ {type(exc).__name__}: {exc}")
+    return (p.returncode, (p.stdout or ""), (p.stderr or ""))
+
+
+def s9_precheck_silent():
+    """`S9`：★ `--stage precheck` **不得**产出任何 `C2`/`C3` 读数或判决行（阶段纪律）。
+
+    做法：把 `--stage precheck` 作为**子进程**跑一遍，扫它的 stdout/stderr。
+    ★ 不递归：`precheck` 分支在 Stage A 之后直接 `return`，不会再进 smoke/formal。
+    """
+    rc, so, se = _precheck_subprocess()
+    bad = _s9_detect(so + se)
+    ok = (not bad) and (rc == 0)
+    return ("S9", ok, f"precheck 子进程 rc={rc} 命中判据读数={bad}（须 []）"), so
+
+
+# ------------------------------------------------------------------ `S10`（`v1.3`）：数字来源审计
+def _num_tokens(text):
+    """抽取**ASCII** 数字 token。
+
+    ★ 必须用 `[0-9]` 而不是 `\\d` —— 后者会匹配 `p₃₅₀` 的 Unicode 下标数字（`₃₅₀`）。
+    """
+    return re.findall(r"[0-9]+(?:\.[0-9]+)?(?:[eE][-+]?[0-9]+)?", text)
+
+
+def _structural_numbers():
+    """`v1.3` §6 的 (a) 类：**结构常量**（由 `ns`/题集/子集结构决定，与读数无关）。"""
+    S = {float(x) for x in range(0, 10)}
+    S |= {float(M.N_CELL_SUBSETS), float(M.NOMINAL_PER_DOSE), float(M.NOMINAL_TOTAL)}
+    S |= {float(x) for x in M.k_counts()}
+    S |= {float(2 ** 4 - 1), float(M.N_CELLS * 15), float(2 * 15)}
+    S |= {float(M.DOSE_A), float(M.DOSE_B)}
+    S |= {float(M.CARD_ID)}                        # ★ 卡号（标题行 `DIR-130 …`）
+    S |= {float(x) for x in M.M.ALL_RNGS}          # ★ `M` 是 mech130；`M.M` 才是 mech125
+    S |= {float(s) for s in M.SEEDS_ARCHIVED}
+    return S
+
+
+def _single_structure_numbers():
+    """`v1.3` §6 的 (ii) 类：**单结构量** —— 审计器**重算**同一条读数取得。"""
+    r = M.reading_cells(M.DOSE_B, (555,), (0,))
+    return {float(r["m_tot"]), float(r["n_low"]), float(r["n_cells"]),
+            float(r["N1"]), float(r["N2"]), float(r["frac"])}
+
+
+def _fixture_numbers():
+    """`v1.3` §6 的 (iii) 类：**合成夹具**的值 —— 审计器**重跑**自测取得。"""
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        run_selftests(0)
+    return {float(t) for t in _num_tokens(buf.getvalue())}
+
+
+def s10_number_audit(text):
+    """★ `S10`（`v1.3`）：precheck 输出的**数字来源审计**。
+
+    规则：输出中出现的**每一个**数字，必须可溯源到
+      (a) **结构常量**（与读数无关）；或
+      (b) **单结构量**（**一条**读数的 `m_tot`/`n_low`/`frac`/`n_cells`/`N1`/`N2`）；或
+      (c) **合成夹具**的值（自测消息里的数字）。
+    ⇒ 任何**跨读数聚合**（`p`/`n_pos`/`n_comp`/`n_uncomp`/`comp_frac`/逐 `k`/池化/部分和）
+      既不在 (a) 也不在 (b)/(c) ⇒ **必被抓出**。
+
+    ★ 与**载体守卫**互补：载体拦「走了 `Agg` 出口」的；本条拦「绕过出口裸算的」。
+      ★ `S10` 是**第二道网**：它的白名单故意包含 `0..9`（小整数）——
+        若某条跨读数聚合计数恰好是个位数，载体仍会拦住它（它在 precheck 根本渲染不出来）；
+        `S10` 拦的是**载体没覆盖到**的写法。
+    """
+    nums = {float(t) for t in _num_tokens(text)}
+    allowed = _structural_numbers() | _single_structure_numbers() | _fixture_numbers()
+    bad = sorted(nums - allowed)
+    return ("S10", not bad,
+            f"输出数字去重 {len(nums)} 个；未溯源 {len(bad)} 个（须 0）{bad[:6]}")
 
 
 # ------------------------------------------------------------------ 工作例
@@ -410,6 +480,10 @@ def main(argv=None):
     ap.add_argument("--inject", type=int, default=0)
     ap.add_argument("--out", default=None)
     a = ap.parse_args(argv)
+
+    # ★ `v1.3`：阶段必须在任何读数/打印之前定下 —— `precheck`/`smoke` 下真实读数的
+    #   跨读数聚合量**渲染即失败**（`Agg` 载体）；只有 `formal` 可打印。
+    M.set_stage(a.stage)
 
     nT = len(_tests(0))
 
@@ -450,12 +524,18 @@ def main(argv=None):
         return 0
 
     if a.stage == "smoke":
-        print("\n【S9 · `--stage precheck` 判据静默（阶段纪律）】")
-        sid, ok9, d9 = s9_precheck_silent()
-        print(f"  {'✓' if ok9 else '✗'} {sid}: {d9}")
-        if not ok9:
-            print("\n★ S9 失败 ⇒ 阻断 formal")
+        print("\n【S9/S10 · `--stage precheck` 的阶段纪律守卫（`v1.3`）】")
+        (sid9, ok9, d9), pre_out = s9_precheck_silent()
+        print(f"  {'✓' if ok9 else '✗'} {sid9}: {d9}")
+        sid10, ok10, d10 = s10_number_audit(pre_out)
+        print(f"  {'✓' if ok10 else '✗'} {sid10}: {d10}")
+        if not (ok9 and ok10):
+            print("\n★ S9/S10 失败 ⇒ 阻断 formal")
             return 1
+        # ★ 落盘**被审计过的那一份** precheck 输出（归档产物与被审计文本逐字一致）
+        os.makedirs(os.path.join(HERE, "out"), exist_ok=True)
+        with open(os.path.join(HERE, "out", "precheck130_v13.log"), "w", encoding="utf-8") as fh:
+            fh.write(pre_out)
         res = M.analyse(rows_a=rows_a, rows_b=rows_b)
         need = {"c0", "c2_p350", "c3_p300", "c4_u350", "c5_per_k_350", "verdict"}
         shape = {
@@ -474,8 +554,8 @@ def main(argv=None):
         ok = all(shape.values())
         if a.out:
             with open(a.out, "w", encoding="utf-8") as fh:
-                json.dump({"shape": shape, "ok": ok,
-                           "meta_a": res["meta_a"], "meta_b": res["meta_b"]}, fh,
+                json.dump(M.plainify({"shape": shape, "ok": ok,
+                                      "meta_a": res["meta_a"], "meta_b": res["meta_b"]}), fh,
                           ensure_ascii=False, indent=1)
         return 0 if ok else 1
 
@@ -522,7 +602,7 @@ def main(argv=None):
 
     if a.out:
         with open(a.out, "w", encoding="utf-8") as fh:
-            json.dump(res, fh, ensure_ascii=False, indent=1, default=str)
+            json.dump(M.plainify(res), fh, ensure_ascii=False, indent=1, default=str)
         print(f"  （已写 {a.out}）")
     return 0
 

@@ -1,6 +1,6 @@
 # MANIFEST · SGMN Loop（`revolve/DIR-*` 目录 126 个〔非方向总数〕；SUCCEEDED = 57 / 57）
 
-> 生成：2026-11-23 08:44:46 UTC
+> 生成：2026-11-23 09:49:25 UTC
 > 校验：逐文件 md5（`md5sum -c`）
 
 ## 核心台账
@@ -31,7 +31,7 @@ d627feb14f3641bb9f095cadd06ec026  ./REPORT.md
 a70ff3b1cf42a268d1c17a4f5a977acf  ./SUMMARY.md
 d80efc637d5205fea9946aea6c05bd05  ./VERDICT-SCAFFOLD.md
 b1dd66c311fcc3100c1e8de2d922c1ca  ./VERDICT.md
-a0cd4e8bf14dbe69f775e36bb17f02e8  ./decisions/DECISIONS.md
+d3ce1a437fafecc814e73178e19af63a  ./decisions/DECISIONS.md
 a7a8b0527d107be13c02fe4f2711a237  ./dir107/PRE-CHECK-25of72.md
 e82858cebcac81948980b3526d7d33cd  ./dir108/DIRECTION_rev108_v10.md
 89f2cb106630da51c86f2f4feb261a79  ./dir108/DIRECTION_rev108_v11.md
@@ -288,8 +288,9 @@ bd1fee7bee25b8b2c23e0e262daaf41f  ./revolve/DIR-129/DIRECTION_rev129_v10.md
 83a2c5cb522195424766c4f9798d319a  ./revolve/DIR-130/DIRECTION_rev130_v10.md
 5c97c959ba5dcc825da37081613a8130  ./revolve/DIR-130/DIRECTION_rev130_v11.md
 785eef89971a98ef087c9672263593a3  ./revolve/DIR-130/DIRECTION_rev130_v12.md
-a171c0426e578ec997ac2cf51541f089  ./revolve/DIR-130/RECHECK.md
-37e0df66e88de5c8161e5c4ba75765e1  ./revolve/DIR-130/VERDICT.md
+a0aa3f774fb6a32e51c605af88be002f  ./revolve/DIR-130/DIRECTION_rev130_v13.md
+24d468040818bc27b9df15a54a554bdb  ./revolve/DIR-130/RECHECK.md
+af0e0b104015515b2c4873541b9c3af2  ./revolve/DIR-130/VERDICT.md
 
 ### DIR-19
 25e9f74f19c54b974ffdbfb7a00d06af  ./revolve/DIR-19/DIRECTION_rev15.md
@@ -1600,13 +1601,19 @@ e6df08950d9e931c056353bf2b0778a2  ./dir129/mech129.py
 
 ### dir130
 88da54f8b84b85ed627150f63ac6a0ce  ./dir130/STAGE-DECLARATION.md
-f048077ecb723761c1e9b368dc953a41  ./dir130/mech130.py
+4f87a8ed363d96430cc32e6fe673b0e0  ./dir130/mech130.py
 cc062a76e7e1da66847bc4eae8f98f15  ./dir130/out/formal130.log
+f73272850153f4773fc27c5285644c87  ./dir130/out/formal130_v13.log
 b9c725fcdda6810a2eff00eb21b54523  ./dir130/out/precheck130.log
+365982c2919a7cbc2273f76fd83645fe  ./dir130/out/precheck130_v13.log
+cac2fc08b81f8a2af688e4734dbf082b  ./dir130/out/probe130_v13_guard.json
 13af4dfe29e4b49c590acdd80117faf9  ./dir130/out/smoke130.log
 0ec837ebebc01b939b28f413497b6d4b  ./dir130/out/stage_formal.json
+0ec837ebebc01b939b28f413497b6d4b  ./dir130/out/stage_formal_v13.json
 018fbc0b85c543c2e5c40cacba9087a8  ./dir130/out/stage_smoke.json
-6cf7b8cc2362d3dbbd102015efc64ade  ./dir130/precheck130.py
+018fbc0b85c543c2e5c40cacba9087a8  ./dir130/out/stage_smoke_v13.json
+8d7f22262c1b48fd0e4557e12f7c0ee7  ./dir130/precheck130.py
+62f19b8fc2f7716c1ccebda9b64b0a67  ./dir130/probes/probe130_v13_guard.py
 
 ### dir15
 f057dbc4d0e79fe10cdc8fa3367c53ed  ./dir15/D15_R1.log

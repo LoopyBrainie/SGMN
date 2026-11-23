@@ -1,0 +1,17 @@
+/opt/pytorch/lib64/python3.13/site-packages/torch/cuda/__init__.py:68: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  [PASS] cells(600) 9 个  实测 9
+  [PASS] cell 含 prior_mech
+  [PASS] cell 含 mech_by_mult[10000]
+  [PASS] mech 含 pick_argmin(48)
+  [PASS] mech 含 ok(48)
+  [PASS] prior_mech 全部 == 18/48（已发表常数）  [0.375]
+  [PASS] n_seen_hist 全部 == {0:2,1:23,2:20,3:3}（已发表常数）  {'0': 2, '1': 23, '2': 20, '3': 3}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<00:48,  5.91it/s]Loading weights:  59%|█████▉    | 172/290 [00:00<00:00, 768.57it/s]Loading weights:  93%|█████████▎| 269/290 [00:00<00:00, 797.70it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 733.00it/s]
+  [PASS] 重建题目复现存档 n_seen_hist（逐值）  {'0': 2, '1': 23, '2': 20, '3': 3}
+  [PASS] 重建 48 项 / 每项 4 候选
+  [PASS] tgt 合法
+  [PASS] 候选值全集 / 正确值集合可枚举  候选值 16 个、正确值 8 个、tv 8 个
+  [PASS] 正确值全部 ∉ tv（构造前提）
+
+★ 结构核：全部 PASS
