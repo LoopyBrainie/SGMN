@@ -8,6 +8,7 @@
  ④ 各文件的 SUCCEEDED 计数与方向数一致
  ④b 三个头部的 SUCCEEDED 计数**彼此一致**且**等于证据表推导值**（★ 防「头部过期」）
  ⑤ 关键 md5 记录一致（装置 / 脚本）
+ ⑧ 开卡清单 CARD-CHECKLIST.md 的格式完整性（条目数/字段/执行方式，声明 vs 机械点数）
 
 用法：python3 audit_consistency.py
 """
@@ -309,6 +310,61 @@ for _d in _revdirs:
         _mev.append(_d)
 check(not _mreg, f"⑦ DIR（≥69）都在 DIRECTION-REGISTER：缺 {_mreg or '无'}")
 check(not _mev, f"⑦ 有 VERDICT 的 DIR（≥69）都在证据表出现：缺 {_mev or '无'}")
+
+# ⑧ ★ P131-1（Cycle 244）：开卡清单（CARD-CHECKLIST.md）的**格式完整性**。
+#   动机：`P131-1` 把 23 条纪律从 `handoff.md` 迁进该文件，但**没有任何守卫** ⇒
+#   它会以与 `handoff.md` 完全相同的方式腐烂（本轮实测两次：漏写 `**依据**` 字段、
+#   以及 `### K1 的回扫结果` 被当成条目 ⇒ 朴素切分器数出 25 条）。
+#   本项不检查纪律**内容**（那属 `P132-1` 的核对器），只检查**形式**是否可被机械解析。
+#   ★ 口径同 ⑥b：**不硬编码条目数**，而是断言「声明值 == 机械点数」（DEF-128-03）。
+print("\n⑧ 开卡清单格式（CARD-CHECKLIST.md；P131-1）")
+_cc = ROOT / "CARD-CHECKLIST.md"
+if not _cc.exists():
+    check(False, "⑧ CARD-CHECKLIST.md 缺失（开卡纪律的唯一归档地）")
+else:
+    _t8 = _cc.read_text(encoding="utf-8")
+    # 条目切分：K1 用 `## K1 · `（表格式），K2+ 用 `### K<n> · `（项目式）
+    _hits = [(int(m.group(1)), m.start()) for m in re.finditer(r"^#{2,3} K(\d+) · ", _t8, re.M)]
+    _nums = [n for n, _ in _hits]
+    check(_nums == list(range(1, len(_nums) + 1)),
+          f"⑧ 条目编号须连续 1..{len(_nums)}（实际 {_nums}）")
+    # 声明值 vs 机械点数（DEF-128-03：结构计数必须由代码数，不得手写）
+    _m8 = re.search(r"当前条目数：\*{0,2}(\d+)", _t8)
+    _decl8 = int(_m8.group(1)) if _m8 else None
+    check(_decl8 == len(_nums),
+          f"⑧ 声明条目数 {_decl8} vs 机械点数 {len(_nums)}（须相等）")
+    # 每条：K1 只要 触发/依据/检查；K2+ 还要 原文
+    _bad8 = []
+    for _i, (_n, _pos) in enumerate(_hits):
+        _end = _hits[_i + 1][1] if _i + 1 < len(_hits) else len(_t8)
+        _b = _t8[_pos:_end]
+        _need = ("触发", "依据", "检查") if _n == 1 else ("原文", "触发", "依据", "检查")
+        for _f in _need:
+            if f"**{_f}**" not in _b:
+                _bad8.append(f"K{_n}缺{_f}")
+        _mchk = re.search(r"\*\*检查\*\*\s*[：|]\s*([^\n]*)", _b)
+        if not (_mchk and re.search(r"[①②③]", _mchk.group(1))):
+            _bad8.append(f"K{_n}无执行方式")
+    check(not _bad8, f"⑧ 每条须有 原文/触发/依据/检查 + 执行方式：缺 {_bad8 or '无'}")
+    # 「原文」不得为空（迁入条目必须逐字保留措辞）
+    _empty8 = [int(m.group(1)) for m in
+               re.finditer(r"^### K(\d+) · [^\n]*\n- \*\*原文\*\*：\s*$", _t8, re.M)]
+    check(not _empty8, f"⑧ 「原文」不得为空：空 {_empty8 or '无'}")
+    # 声明分布 vs 机械分布（本项目已实际踩过：声明 15/9 而实测 14/10）
+    _mk = []
+    for _k in range(len(_hits)):
+        _q = _hits[_k][1]
+        _e = _hits[_k + 1][1] if _k + 1 < len(_hits) else len(_t8)
+        _mm = re.search(r"\*\*检查\*\*\s*[：|]\s*([^\n]*)", _t8[_q:_e])
+        _hit = re.search(r"[①②③]", _mm.group(1)) if _mm else None
+        _mk.append(_hit.group(0) if _hit else "?")
+    _real = Counter(_mk)
+    _dbad = []
+    for _sym, _lbl in (("①", "自动化"), ("②", "留痕"), ("③", "人工")):
+        _m8b = re.search(rf"`{_sym}{_lbl}`\s*(\d+)\s*条", _t8)
+        if _m8b and int(_m8b.group(1)) != _real.get(_sym, 0):
+            _dbad.append(f"{_sym}{_lbl} 声明 {_m8b.group(1)} vs 实测 {_real.get(_sym, 0)}")
+    check(not _dbad, f"⑧ 执行方式分布：{_dbad or '一致'}")
 
 print("\n" + "=" * 88)
 print(("★ 全部通过" if not fails else f"★ {len(fails)} 项未通过"))
