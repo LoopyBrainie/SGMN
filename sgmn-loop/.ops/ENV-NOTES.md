@@ -425,3 +425,59 @@ GIT_TERMINAL_PROMPT=0 git -c credential.helper='!gh auth git-credential' push
   comm -23 <(远端 heads | sort) <(本地 heads | sort)   # 必须为空
   ```
 - 同步后**再**比 md5（此时 md5 才只用于「同步是否完成」）。
+
+---
+
+## ★★★ 事故与纪律：`~/sgmn-loop` 是**符号链接** ⇒ `cp -a` 复制的是**链接本身**（Cycle 249 实测，已完整还原）
+
+**现象**：我做「盲态 `precheck`」实验时执行 `cp -a ~/sgmn-loop /tmp/blind2`，
+随后 `cd /tmp/blind2 && rm -rf dir*/out` —— **删掉的是真实树的 `dir*/out`**，
+**125 个目录的 `out/` 全部丢失**（只剩 9 个）。
+
+**机理**：
+```
+$ ls -ld ~/sgmn-loop
+lrwxrwxrwx. 1 root root 33 Nov  7 17:56 /home/ec2-user/sgmn-loop -> /mnt/sgmn/home/ec2-user/sgmn-loop
+$ ls -ld /tmp/blind2
+lrwxrwxrwx. 1 ec2-user ec2-user 33 /tmp/blind2 -> /mnt/sgmn/home/ec2-user/sgmn-loop   # ★ 也是链接
+```
+`cp -a` **保留**符号链接（不跟随），所以 `/tmp/blind2` 变成了指向真实树的**第二个链接**；
+`cd` 进去之后的所有 `rm`/`mv` 都作用在**真实归档**上。
+
+**还原（成功，三个来源）**：
+1. `SGMN_LOOP_full.zip`（**`repack.sh` 在 02:46 生成，早于事故**）→
+   `unzip` 出 `04_EVIDENCE/dir*/out/*`（**1362 项 / 126 目录**）→ `cp -rn` **不覆盖**幸存文件；
+2. 本地 git 工作区（1012 个 `dir*/out` 文件）→ 补**包内没有的 229 个**（`*.log` 等）；
+3. 本地 4 个 `precheck{124,125,126,128}.json` 原件 → 覆盖回训练机，
+   **撤销 `Cycle 248` 普查重跑对原始 `precheck` 产物的副作用**。
+**核验**：训练机 1565 文件；与本地交集 **md5 不一致 = 0**；**仅本地 = 0**；
+`dir125/out/cells` = 36、`dir126/out/cells` = 27（与台账一致）；
+**功能回归**：11 张 `precheck` 的 `rc` **逐张复现 `Cycle 248` 普查**（9 张 0 + 2 张 1）。
+
+**★★★ 纪律（以后**任何**「复制工作区再破坏」的实验都必须照做）**：
+1. **不用 `cp -a` 复制工作区**：用 `cp -rL` 或 `rsync -aL`（`-L` = 跟随链接）。
+2. **破坏前先断言**，三条缺一不可：
+   ```bash
+   cp -rL <src>/. /tmp/x/ || exit 1
+   [ -L /tmp/x ] && { echo "ABORT: 是符号链接"; exit 9; }
+   [ "$(readlink -f /tmp/x)" = "$(readlink -f <src>)" ] && { echo "ABORT: 同一实体"; exit 9; }
+   # 破坏后再核源树计数未变：
+   echo "源树 out 目录数（须仍 N）= $(ls -d <src>/dir*/out 2>/dev/null | wc -l)"
+   ```
+3. **`repack.sh` 的全量 zip 是灾备第一来源**，不是"最后一步的打包动作"：
+   它比 git 多 **553** 个从未回拉本地的文件，正是这次能完全还原的原因。
+4. **事故要如实记录、不追认**（本轮已写进 `revolve/P134-3-PRECHECK-STAGE-AUDIT.md` §0 与 `决定二百三十九`）。
+
+## ★★ 教训：变异测试必须先证明「变异真的写进去了」（Cycle 249 第二次踩到）
+
+**现象**：验 `precheck125/126` 的 `--stage recheck` 时，我用
+`sed -i 's/^STAGE = _stage()/STAGE = "precheck"/'` 造变异，结果 `recheck` **仍然 `rc=0`**
+—— 看起来"变异没让判据变红"，实际是 **`sed` 根本没匹配**（`dir126` 那行有 4 空格缩进，
+`dir125` 的行号位置也不符）。**测的不是变异，是"什么都没变"。**
+
+**纪律**：
+- 用 **Python + `assert s2 != s`** 造变异（改不进去就**报错**，而不是静默通过）；
+- 变异后**打印出被改的那一行**（本轮输出 `变异已写入: STAGE = "precheck"  # MUTANT`）作为证据；
+- 再跑被测命令，确认 `rc` **翻转**；最后**还原**并确认 `rc` 翻回。
+- ★ 与 `Cycle 248` 的三条夹具教训同源：**测试必须能因"被测行为的缺失"而变红**，
+  否则它只是在证明"一切照旧"。

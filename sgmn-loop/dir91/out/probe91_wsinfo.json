@@ -356,9 +356,6 @@
     "location": "WRITE_SIDE_LOSS",
     "M1b_H": 0.041666666666666664
    }
-  },
-  "corrected_branch": "WS_INFO_ABSENT",
-  "corrected_consistent": true,
-  "note": "★ DEF-97-05：原 consistent 误报 False（pop() 早于 len()）；读数未变"
+  }
  }
 }

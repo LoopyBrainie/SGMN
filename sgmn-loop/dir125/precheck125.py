@@ -9,7 +9,7 @@
   ★★ **绝不**打印/读取任何**新剂量**的观测值 —— 那些格子在正式轮跑之前**不存在**。
       `S12` 明文断言本脚本未调用任何「观测读数函数」。
 
-用法：/opt/pytorch/bin/python dir125/precheck125.py
+用法：/opt/pytorch/bin/python dir125/precheck125.py [--stage recheck]
 """
 import os
 import sys
@@ -265,6 +265,23 @@ print("  m=n1+n2=43 ⇒ u=%r clamped=%s ; m=44 ⇒ u=%r clamped=%s"
 ok11 = (mono and u_edge == 0.0 and cl_edge is True and u_over == 0.0 and cl_over is True)
 rec("S11", ok11, "m=1..42 严格递减；m ≥ n1+n2 返回 0 且 clamped=True（夹紧可观测）")
 
+# ---------------------------------------------------------------- 阶段选择（P134-3②）
+# 默认 = "precheck"：按**开卡期**语义断言盲态（新剂量此刻还没有任何 cell）。
+# "--stage recheck"：formal 之后的重跑 —— 盲态**已不可复现**，S12 由断言降为**记录**，
+#   并明写"本次为重跑"。★ 只降 S12 的盲态部分；`load_cells` 越界调用（extra）**仍然断言**，
+#   因为那是仪器纪律、与产物是否存在无关。
+def _stage():
+    a = sys.argv[1:]
+    if "--stage" in a:
+        i = a.index("--stage")
+        if i + 1 < len(a):
+            return a[i + 1]
+    return "precheck"
+
+
+STAGE = _stage()
+RECHECK = (STAGE == "recheck")
+
 # ---------------------------------------------------------------- S12 仪器化自检
 print("\n[S12] ★ 本脚本**没有**读取任何新剂量观测（仪器化断言，不是文本猜测）")
 allowed = {0, 600}
@@ -277,10 +294,13 @@ for d in (M.DOSE_PILOT,) + tuple(M.DOSE_NEW):
             f.startswith("COLOCATED_%d_" % d) for f in os.listdir(M.DIR125_CELLS)):
         have_new.append(d)
 print("  dir125/out/cells 里已有的新剂量格 =", have_new or "无（正式轮之前应为空）")
-ok12 = (not extra) and (not have_new)
-rec("S12", ok12,
-    "load_cells 只被 %s 调用；新剂量格%s"
-    % (sorted(set(_LOADED_DOSES)), "为空" if not have_new else "居然已存在 %r" % have_new))
+ok12 = (not extra) and (RECHECK or not have_new)
+_msg12 = ("load_cells 只被 %s 调用；" % (sorted(set(_LOADED_DOSES)),)) + (
+    "新剂量格为空" if not have_new else
+    ("★ 盲态已不可复现，本次为重跑（RE-CHECK）：新剂量格已存在 %r —— 由断言降为记录" % (have_new,)
+     if RECHECK else "居然已存在 %r" % (have_new,)))
+print("  阶段 = %s%s" % (STAGE, "（盲态不可复现，S12 降为记录）" if RECHECK else ""))
+rec("S12", ok12, _msg12)
 
 # ---------------------------------------------------------------- 汇总
 all_ok = all(c["ok"] for c in CHECKS)

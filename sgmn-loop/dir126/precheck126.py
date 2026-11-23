@@ -9,7 +9,7 @@
   用**仪器化**断言（`S12`）而不是文本扫描来保证这一点（`DEF-125-04` 的修法）。
 
 用法：
-    /opt/pytorch/bin/python dir126/precheck126.py
+    /opt/pytorch/bin/python dir126/precheck126.py [--stage recheck]
 """
 import os
 import sys
@@ -197,6 +197,23 @@ def main():
         % (len(d119), len(d125)))
 
     # ---------------- S12 盲态：新剂量在磁盘上没有任何 cell
+    # ---------------------------------------------------------------- 阶段选择（P134-3②）
+    # 默认 = "precheck"：按**开卡期**语义断言盲态（新剂量此刻还没有任何 cell）。
+    # "--stage recheck"：formal 之后的重跑 —— 盲态**已不可复现**，S12 由断言降为**记录**，
+    #   并明写"本次为重跑"。★ 只降 S12 的盲态部分；`load_cells` 越界调用（extra）**仍然断言**，
+    #   因为那是仪器纪律、与产物是否存在无关。
+    def _stage():
+        a = sys.argv[1:]
+        if "--stage" in a:
+            i = a.index("--stage")
+            if i + 1 < len(a):
+                return a[i + 1]
+        return "precheck"
+
+
+    STAGE = _stage()
+    RECHECK = (STAGE == "recheck")
+
     print("\n[S12] 盲态断言：本卡的新剂量 `{350,375,400}` 此刻**无任何 cell**（`DEF-125-04` 的修法）")
     # ★ 第一版把断言写成「`load_cells` 不得被请求新剂量」—— 错了：本 check 会故意扫全部 9 个剂量，
     #   `load_cells` 必然被**请求**（然后抛错）。真正要保证的是「**磁盘上不存在**新剂量的读数」
@@ -209,8 +226,12 @@ def main():
             hits += _gg.glob(os.path.join(pth, "COLOCATED_%d_*.json" % d))
         found[int(d)] = len(hits)
     bad = {d: n for d, n in found.items() if n > 0}
-    ok12 = (len(bad) == 0)
-    rec("S12", ok12, "新剂量的既有 cell 数 = %s（须全 0 ⇒ precheck 跑在盲态）" % found)
+    ok12 = (len(bad) == 0) or RECHECK
+    print("    阶段 = %s%s" % (STAGE, "（盲态不可复现，S12 降为记录）" if RECHECK else ""))
+    rec("S12", ok12, "新剂量的既有 cell 数 = %s（%s）" % (
+        found,
+        "须全 0 ⇒ precheck 跑在盲态" if not RECHECK
+        else "★ 盲态已不可复现，本次为重跑（RE-CHECK）：由断言降为记录"))
 
     # ---------------- 汇总
     n_ok = sum(1 for r in RES if r["ok"])
