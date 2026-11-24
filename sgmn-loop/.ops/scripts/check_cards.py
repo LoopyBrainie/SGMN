@@ -1415,6 +1415,40 @@ def selftest():
     _t23("-REC-28 ★★★探针**接线**：(语句, 有网卡, 两道网卡, all−pop, 守卫) —— M2/M3/M9/M7",
          _k26_wiring(), (148, 7, 1, 78, 'ValueError'))
 
+    # ---------------------------------------------------------------------
+    # `P135-16`：`U4` 族的**接线**与**一致性**夹具 —— 注入实测出的三个真洞
+    #   A7/A8/A16 改造前 `--selftest` **全绿**（156/0），见 `_u4_wiring` 的签名表。
+    # ---------------------------------------------------------------------
+    ok24 = bad24 = 0
+
+    def _t24(label, got, expect):
+        nonlocal ok24, bad24
+        _ok = got == expect
+        ok24, bad24 = (ok24 + 1, bad24) if _ok else (ok24, bad24 + 1)
+        print(f"  {'✓' if _ok else '✗'} {label}")
+        if not _ok:
+            print(f"     期望 {expect!r}")
+            print(f"     实际 {got!r}")
+
+    # ★★★ 四项签名互异 ⇒ 一条断言罩住 A7/A8/A9/A13/A16（详见 `_u4_wiring` docstring）。
+    _t24("-REC-29 ★★★`U4` 族**接线**：(段数, 条款行数, 文本图缺项, 实扫份数) —— A7/A8/A16",
+         _u4_wiring(), (91, 624, 0, 105))
+
+    # ★★★ 核一句**改造前无人核**的声明：「`_u4_sec_line_ranges` 与 `_u4_sections` 同规则」。
+    _t24("-REC-30 ★★★两条段定位路径**确实同规则**：(不一致份数, 总份数) —— 核 docstring 的声明",
+         _u4_sec_locator_consistency(), (0, 105))
+
+    # ★★★ 面②③：13 条纪律 × 103 张卡的**全部判决**受钉。
+    #   注入实测出两个真洞（改造前 158/0 全绿）：`k04` FAIL→PASS ⇒ --all 11 张卡翻绿；
+    #   `Ctx.sections` 认一级标题 ⇒ 384→387。两者**只能**经 `--all` 计数观测。
+    _t24("-REC-31 ★★★`--all` 判决**接线**：(PASS,FAIL,N/A) + 各 k 的 FAIL 元组 —— k04/Ctx.sections",
+         _all_wiring(),
+         ((384, 271, 684), (11, 0, 41, 25, 50, 3, 0, 0, 2, 0, 42, 12, 85)))
+
+    ok += ok24
+    bad += bad24
+    print(f"   （其中 `P135-16` 的 `U4` 族接线/一致性夹具 {ok24 + bad24} 条）")
+
     ok += ok23
     bad += bad23
     print(f"   （其中 `P135-14` 的人口口径夹具 {ok23 + bad23} 条）")
@@ -1426,7 +1460,8 @@ def selftest():
           f" + {ok10 + bad10} 条 P133-10 探针夹具 + {ok15 + bad15} 条 P133-15 探针夹具"
           f" + {ok14 + bad14} 条 P134-14 探针夹具 + {ok13 + bad13} 条 P133-13 探针夹具"
           f" + {ok20 + bad20} 条 P135-1 夹具 + {ok21 + bad21} 条 P135-3 夹具"
-          f" + {ok22 + bad22} 条 P135-4/5/10 夹具 + {ok23 + bad23} 条 P135-14 夹具）")
+          f" + {ok22 + bad22} 条 P135-4/5/10 夹具 + {ok23 + bad23} 条 P135-14 夹具"
+          f" + {ok24 + bad24} 条 P135-16 夹具）")
     return 0 if bad == 0 else 1
 
 
@@ -2573,6 +2608,90 @@ def _u4_recount(mode='legacy'):
     }
 
 
+# ---------------------------------------------------------------------------
+# `P135-16`：`U4` 族的**接线**取数器 —— 夹具 `-REC-29`/`-REC-30` 用。
+#   ★★★ 动机是**注入实测**（不是静态阅读）：`P135-15` 已证「触到生产代码」只是
+#     **必要不充分**条件。本族实测出**三个真洞**（改造前 `--selftest` 156/0 全绿）：
+#      A7 `_u4_sections` 把**一级标题**也当边界段（235→247 段，三个探针读数变）
+#      A8 `_u4_clauses` 的长度阈值 `>8` 失效（条款 624→665，两个探针读数变）
+#      A16 `_u4_card_texts` 改用 `Ctx.text` 回读（`DIR-19/20` 恒不命中 ⇒ 文本图缺 2 项）
+#   ★ 三者签名互异 ⇒ 一条四元组断言同时罩住（见 `_u4_wiring` 的实测表）。
+#   ★★ 另有一处**声称而未验证**的一致性：`_u4_sec_line_ranges` 的 docstring 写着
+#     「切分规则与 `_u4_sections` **一致**」，但改造前**无任何东西**在核这句话。
+#     实测：把 2278 行的 `#{2,4}` 改成 `#{1,4}` ⇒ 两条路径**分叉**（8/105 文本不一致），
+#     而 selftest **全绿** ⇒ 该声明当时是**未证**的。现由 `-REC-30` 直接核。
+# ---------------------------------------------------------------------------
+def _u4_wiring():
+    """`U4` 族**接线**的四元组 `(段数, 条款行数, 文本图缺项, 实扫份数)` —— 夹具 `-REC-29`。
+
+    四项**全部**从生产函数现算（`_u4_card_texts` / `_u4_sections` / `_u4_clauses` /
+    `_u4_card_text`），**不重写**任何聚合逻辑 —— 否则就是 `P135-15` §六 修掉的
+    「第二份实现」旧病。
+
+    ★★★ 实测签名表（`pop` 口径；★ 每行的对应生产代码被**单独**改坏）：
+
+    | 变异 | (段数, 条款行, 缺项, 实扫) |
+    |---|---|
+    | 基线 | `(91, 624, 0, 105)` |
+    | A7 段认一级标题 | `(98, 619, 0, 105)` |
+    | A8 条款长度阈值失效 | `(91, 665, 0, 105)` |
+    | A9 条款不查 bullet | `(91, 809, 0, 105)` |
+    | A16 文本图改回读 `Ctx.text` | `(90, 616, 2, 105)` |
+    | A13 `pop` 退回 `legacy` | `(90, 616, 0, 103)` |
+
+    ★ 四元组的**每一项**都要，缺一项就有变异漏网：
+      · 只留段数 ⇒ A8/A16 逃；只留条款数 ⇒ A7/A16 逃；只留缺项 ⇒ A7/A8 逃。
+    ★★ **未覆盖**（如实记）：A6（不剔尾空行）与 A19（恒真判据写成 `hit>0`）在本四元组里
+      **不可见** —— 但两者**已**分别被 `-U4-3` 与 `-REC-2` 钉住 ⇒ 不是洞。
+    ★★ **本函数不是**探针：不接 CLI、不进任何已发布读数（同 `_k26_wiring`）。
+    """
+    txt = _u4_card_texts('pop')
+    n_sec = sum(len(_u4_sections(t)) for t in txt.values())
+    n_cl = sum(len(_u4_clauses(b))
+               for t in txt.values() for _h, b in _u4_sections(t))
+    n_ref = n_miss = 0
+    for n in range(1, 300):
+        for p, _t in _u4_card_text(n, 'pop'):
+            n_ref += 1
+            if (n, p.name) not in txt:
+                n_miss += 1
+    return (n_sec, n_cl, n_miss, n_ref)
+
+
+def _u4_sec_locator_consistency():
+    """核 `_u4_sec_line_ranges` 与 `_u4_sections` **是否真的同规则** ⇒ `(不一致份数, 总份数)`。
+
+    夹具 `-REC-30` 用。★ docstring 声称「切分规则与 `_u4_sections` **一致**」，
+    改造前**无人核**（实测：单边改级别规则 ⇒ 8/105 分叉，selftest 仍全绿）。
+
+    ★ 做法：由 `_u4_sections` 的 `(标题, 段体)` **反推行号集**，与
+      `_u4_sec_line_ranges` 的返回集**逐份比对**。
+      · 段体行数由 `_u4_sections` 给出 ⇒ 起点 = 该标题行的下一行；
+      · ★ 必须**剔空行**再比 —— 两边都只收非空行，否则幽灵尾行会把两边**同时**弄错，
+        于是「一致」也成了假绿（`-U4F-1` 就是为这条存在的）。
+    ★★★ 实测：基线 `(0, 105)`；A3 收空行 `(87,105)` · A4 单边改级别 `(8,105)` ·
+      A6 不剔尾空行 `(69,105)` · A7 两边同改级别 `(1,105)` ⇒ 四种都被抓。
+    """
+    txt = _u4_card_texts('pop')
+    bad = tot = 0
+    for t in txt.values():
+        lines = t.split("\n")
+        want = set()
+        for title, body in _u4_sections(t):
+            idx = [i for i, ln in enumerate(lines)
+                   if (m := re.match(r'^(#{2,4})\s*(.+)$', ln))
+                   and m.group(2).strip() == title]
+            if not idx:
+                continue
+            i0 = idx[0]
+            want.update(j for j in range(i0 + 1, i0 + 1 + len(body))
+                        if j < len(lines) and lines[j].strip())
+        tot += 1
+        if _u4_sec_line_ranges(t, ('边界',)) != want:
+            bad += 1
+    return (bad, tot)
+
+
 def _u4_pop_block(mode, per_hit=False):
     """`P135-13` 的统一【⓿ 人口核对】块 —— **分母与实扫必须并排打印**。
 
@@ -3143,6 +3262,62 @@ def _k26_wiring():
     except Exception as e:                                    # noqa: BLE001
         guard = type(e).__name__
     return (len(rows), len(with_net), len(two), delta, guard)
+
+
+# ---------------------------------------------------------------------------
+# `P135-16` 面②③：`--all` 判决的**接线**取数器 —— 夹具 `-REC-31` 用。
+#   ★★★ 动机同样是注入实测。本轮在面②③实测出**两个真洞**（改造前 158/0 全绿）：
+#     · `k04`：把它的 `R(FAIL,` 改成 `R(PASS,` ⇒ `--all` **11 张卡 PASS**、271→260，
+#       而 `--selftest` **零红** ⇒ 11 张卡的 K4 判决**完全无夹具**。
+#     · `Ctx.sections`：把 `#{2,3}` 放宽成 `#{1,3}` ⇒ `--all` 384→387，
+#       `--selftest` **零红** ⇒ 所有谓词共同依赖的**分节器**无人守。
+#   ★★ 两者都通过 `--all` 的**计数**才可观测 ⇒ 夹具必须复刻 `--all` 的计数法
+#     （含 `if not ctx.card: continue` 这条跳过，否则会算成 105×13=1365 而非 1339）。
+# ---------------------------------------------------------------------------
+def _all_wiring():
+    """复刻 `--all` 的计数 ⇒ `((PASS, FAIL, N/A), 各 k 的 FAIL 元组)` —— 夹具 `-REC-31`。
+
+    ★★★ **必须逐字复刻主循环**（`main()` 的 `--all` 分支）：
+      ① 卡集 = `canonical_nums()[0]`（105 张，含 `DIR-19/20`）；
+      ② ★★ **无现行卡的卡整张跳过**（`if not ctx.card: continue`）⇒ 实际 **103 张**
+         （`DIR-19/20` 的卡文件名是 `DIRECTION_rev15.md` / `rev11..16`，
+          而 `Ctx.card` 的 glob 是 `DIRECTION_rev{num}_v*.md` ⇒ 永远不匹配）；
+          ★ 这一步**不可省** —— 省了就变 105×13=**1365**，与 `--all` 的 **1339** 不符。
+      ③ 每张卡 × `sorted(REGISTRY)`（13 条）逐个累计 `r.status`。
+
+    ★★★ 实测签名表（`--all` 与 `(PASS,FAIL,N/A)` 均已核）：
+
+    | 变异 | (PASS, FAIL, N/A) | FAIL 元组首项(K4) |
+    |---|---|---|
+    | 基线 | `(384, 271, 684)` | `11` |
+    | `k04` FAIL→PASS | `(395, 260, 684)` | **0** |
+    | `Ctx.sections` 认一级标题 | `(387, 270, 682)` | **10** |
+    | `k22` FAIL→PASS | `(396, 259, 684)` | 11（K22 项 12→0） |
+
+    ★ **同时**返回元组与三元组：只留三元组则 `k04` 与 `k22` 的差别被掩盖，只留元组则
+      「总数对不对」无法一眼看出。
+    ★★ **未覆盖**（如实记）：
+      · `k17` —— 它的 `R(FAIL,)` 分支在当前语料**从不触发**（实测 FAIL→PASS 后 `--all` 逐位不变）
+        ⇒ **结构性空**，本夹具天然看不见，也**不应**为它造夹具；
+      · `k16` / `k25` —— 段内**没有** `R(FAIL,)`（`k16` 已 `[降级]` 为 `②留痕`、不判）
+        ⇒ 无可注入的 FAIL 分支。
+    ★★ 代价：本函数约 **1.6 s**（13 条 × 103 卡），是 `--selftest` 里最慢的一项；
+      换来的是「全部 13 条纪律 × 103 张卡的判决」整体受钉。
+    """
+    canon, _skip = canonical_nums()
+    ks = sorted(REGISTRY)
+    per = {k: {} for k in ks}
+    tot = {PASS: 0, FAIL: 0, NA: 0}
+    for n in canon:
+        ctx = Ctx(n)
+        if not ctx.card:          # ★★ 与 `main()` 的 `--all` 分支逐字一致
+            continue
+        for k in ks:
+            st = REGISTRY[k](ctx).status
+            per[k][st] = per[k].get(st, 0) + 1
+            tot[st] += 1
+    return ((tot[PASS], tot[FAIL], tot[NA]),
+            tuple(per[k].get(FAIL, 0) for k in ks))
 
 
 def _k26_axis(mode):
