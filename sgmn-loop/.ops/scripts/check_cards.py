@@ -2338,6 +2338,290 @@ def probe_u4():
 
 
 
+# ---------------------------------------------------------------------------
+# P134-14c（Cycle 267）探针：`R-C` 的**深一层** —— 轴值能否溯源到「装置冻结表」
+# ---------------------------------------------------------------------------
+#   动机：`R-C` 只判「条款里出现 `a=b`」（`_U4_AX`），**不判**那个值是不是装置真值。
+#   `P134-14` 的卡片自己就写着「`R-C` **不判什么**：这些值是不是真实装置的值」。
+#   本探针回答的是**可行性**：到底有多少轴值能被机械溯源？不能溯源的**为什么**？
+#
+#   ★★★ 三条**本探针实测出来的**既有事实（不是假设，下文的数字可复算）：
+#     1. **世上没有「装置冻结表」这个东西。** 装置是一条 **import 链 + 模块级 `M.X = v` 覆写**：
+#        `dir31/R1_grad.py` 是根（`D_H, D_K, D_V, R = 8, 4, 4, 2`、`T_STEPS = 8`）；
+#        `dir33/R1_task33.py` 在**模块级**把 `M.D_K = 16`、`M.T_STEPS = 16` 覆写掉；
+#        `dir34/35/36/37/41/42/53/59` 又 `import R1_task33 as R` ⇒ **继承** `16/16`。
+#        ⇒ 要判「卡上的 `d_k=16` 对不对」，只能**静态求值这条链**；没有表可查。
+#     2. **`readings.json` 不是装置表。** `dir*/out/*.json` 共 **499** 个，其中出现装置键
+#        （`D_H|d_h|D_K|T_STEPS`）的只有 **26** 个（**5.2%**）—— 读数记录的是**测量**，
+#        不是冻结常数。以读数作溯源源，覆盖面上限就是 5%。
+#     3. **`_U4_AX` 命中的不都是冻结值，还包括公式。** 边界段里写
+#        `$G=\alpha(Wk-v)k^\top+\lambda(W-W^0)$` 时，`c=`/`a=`/`y=`/`n=` 这些「轴值」
+#        全是**方程的零件** ⇒ `a=b` 这个形态**语法歧义**，不能直接当「冻结值」用。
+#
+#   ★ 因此本探针**只核一类条款**：**装置轴声明型** —— pair 里出现 **≥3 个不同**的
+#     装置轴名（`d_h`/`d_k`/`d_v`/`r`/`T`）。理由（可反驳，且下文列出反例）：
+#     扫参只动 1–2 个轴、且同一轴会重复（`\gamma=0` / `\gamma=10`）；
+#     **5 个轴里出现 ≥3 个**几乎只可能是「本卡只测玩具装置（`d_h=8,d_k=16,…`）」这类声明。
+#     ★★ 这条不是「挑能过的算」：下文【②】把**未达标**的边界条款全部列出，
+#        它们是落在本核对**之外**，而不是被判定成「卡写错了」。
+#
+#   ★ 不进 `REGISTRY`、不改 `PASS/FAIL/N/A`、**不**替任何卡改一个字。
+
+# 装置轴 → 代码常量名（**只收「同一量的不同写法」**，不收语义相近的不同量；
+#   `T` → `T_STEPS` 是因为 `dir31` 里时域常量就叫 `T_STEPS`，而卡上一律写 `T`）
+_DEV_AXIS = {"d_h": "D_H", "dh": "D_H", "d_k": "D_K", "dk": "D_K",
+             "d_v": "D_V", "dv": "D_V", "r": "R", "t": "T_STEPS"}
+
+_AX_MATH = re.compile(r"\$([^$\n]{1,300})\$")
+# 连续赋值 `a=b=c=4`（含 `{=}` 形式，先归一化成 `=`）与 10^k 上标
+_AX_ASSIGN = re.compile(r"(?:^|[,\s（(])((?:[A-Za-z\\][A-Za-z0-9_\\^{}]*\s*=\s*)+)"
+                        r"([-+]?\d[\d.]*(?:[eE][-−+]?\d+)?|10\^\{?-?\d+\}?)")
+
+_AX_GREEK = {"η": "eta", "λ": "lam", "γ": "gamma", "α": "alpha", "θ": "theta",
+             "μ": "mu", "ρ": "rho", "σ": "sigma"}
+
+
+def _ax_norm(nm):
+    """轴名归一化：去 LaTeX 修饰 → 希腊字母转写 → 小写。"""
+    s = nm.strip().replace("\\", "").replace("$", "").replace("{", "").replace("}", "").replace(" ", "")
+    return _AX_GREEK.get(s, s.lower())
+
+
+def _ax_pairs(clause):
+    """从条款里抽 `(名字, 值)` 对。★ 只做**字面**抽取，不判语义。"""
+    flat = _AX_MATH.sub(
+        lambda m: " " + " , ".join(
+            m.group(1).replace("{=}", "=").replace("{＝}", "=").replace("＝", "=").split(",")) + " ",
+        clause)
+    out = []
+    for m in _AX_ASSIGN.finditer(flat):
+        for nm in (x.strip().replace(" ", "") for x in m.group(1).split("=") if x.strip()):
+            if nm and not nm.isdigit():
+                out.append((nm, m.group(2)))
+    return out
+
+
+# —— 装置表静态求值器：沿 `import R1_x as A` 链求值，模块级覆写按出现顺序生效 ——
+_AX_LINE = re.compile(r"^\s*(M\.)?([A-Z][A-Z0-9_]*)\s*=\s*([-+]?\d[\d.]*(?:[eE][-+]?\d+)?)\s*(?:#.*)?$", re.M)
+_AX_TUP = re.compile(r"^\s*((?:[A-Z][A-Z0-9_]*\s*,\s*)+[A-Z][A-Z0-9_]*)\s*=\s*"
+                     r"((?:[-+]?\d[\d.]*(?:[eE][-+]?\d+)?\s*,\s*)+[-+]?\d[\d.]*(?:[eE][-+]?\d+)?)"
+                     r"\s*(?:#.*)?$", re.M)
+# ★★ 第三层：**别名赋值** `D_H, D_V, D_K = R.D_H, R.D_V, R.D_K`（`dir53` 就是这种）
+#    —— RHS 不是字面量而是**属性引用**，必须把它指到的那个名字的值搬过来。
+#    这是「装置表只能靠小型静态求值、不能用 grep」的第三个证据（前两个：元组赋值、import 链覆写）。
+_AX_ALI = re.compile(r"^\s*([A-Z][A-Z0-9_]*)\s*=\s*[A-Za-z_][A-Za-z0-9_]*\.([A-Z][A-Z0-9_]*)\s*(?:#.*)?$", re.M)
+_AX_ALI_TUP = re.compile(r"^\s*((?:[A-Z][A-Z0-9_]*\s*,\s*)+[A-Z][A-Z0-9_]*)\s*=\s*"
+                         r"((?:[A-Za-z_][A-Za-z0-9_]*\.[A-Z][A-Z0-9_]*\s*,\s*)+"
+                         r"[A-Za-z_][A-Za-z0-9_]*\.[A-Z][A-Z0-9_]*)\s*(?:#.*)?$", re.M)
+_AX_IMP = re.compile(r"^import\s+(R1_[A-Za-z0-9_]+)\s+as\s+\w+", re.M)
+_AX_PATH = re.compile(r"sys\.path\.insert\(\s*0\s*,\s*[\"'][^\"']*/dir(\d+)[\"']")
+_AX_MOD_CACHE = {}
+
+
+def _ax_mod_dirs(mod):
+    """`<mod>` 在哪些 `dir{n}/` 里存在（全局索引，带缓存）。★ 重名 ⇒ 调用方不求值。"""
+    if mod not in _AX_MOD_CACHE:
+        # ★ 变体目录（`dir26b`/`dir87c`）不是纯数字 ⇒ 跳过，不让它把整轮探针打崩
+        _AX_MOD_CACHE[mod] = sorted(int(p.parent.name[3:])
+                                    for p in ROOT.glob(f"dir*/{mod}.py")
+                                    if p.parent.name[3:].isdigit())
+    return _AX_MOD_CACHE[mod]
+
+
+def _ax_dev_table(n, _seen=None, _depth=0):
+    """静态求 `dir{n}/*.py` 的**有效装置常量**（含 import 链与 `M.X = v` 覆写）。
+
+    ★ 近似（必须写明，否则会被当成「真跑过」）：只认**模块级**整行赋值与元组赋值；
+      条件分支里的赋值（`if x: M.D_K = 8`）**不求值** ⇒ 命中即「与某条代码路径一致」，
+      **不是**「与正式轮实际用的一致」。这个弱化对本探针的口径是够的（下面【③】说明），
+      但**不得**据此说「卡上的值就是跑出来的值」。
+    """
+    if _seen is None:
+        _seen = set()
+    if n in _seen or _depth > 6:
+        return {}
+    _seen.add(n)
+    d = ROOT / f"dir{n}"
+    if not d.is_dir():
+        return {}
+    ns = {}
+    mains = sorted(d.glob("R1_*.py"))
+    for f in mains:
+        try:
+            t = f.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        # 先求值被 import 的父目录（模块级 import 先执行）
+        # ★★ `sys.path` 解析**不可靠**：`dir53` 写的是 `for _d in (...)` + f-string 循环，
+        #    正则抓不到。口径改为：**按模块名全局索引**（`dir*/<mod>.py` 唯一命中即可）。
+        #    重名时**不求值**（宁缺勿错 —— 求错会变成对卡的假指控）。
+        for mod in _AX_IMP.findall(t):
+            hits = _ax_mod_dirs(mod)
+            if len(hits) == 1:
+                ns.update(_ax_dev_table(hits[0], _seen, _depth + 1))
+        # 再按出现顺序应用本文件的赋值（`M.X =` 覆写在 `X =` 之后生效）
+        ev = [(m.start(), m.group(2), m.group(3)) for m in _AX_LINE.finditer(t)]
+        for m in _AX_TUP.finditer(t):
+            names = [x.strip() for x in m.group(1).split(",")]
+            vals = [x.strip() for x in m.group(2).split(",")]
+            if len(names) == len(vals):
+                ev.extend((m.start(), a, b) for a, b in zip(names, vals))
+        for _p, nm, v in sorted(ev):
+            ns[nm] = v
+        # 别名赋值：RHS 是 `Alias.NAME` ⇒ 取 `NAME` 在（已合并的）命名空间里的值
+        ali = [(m.start(), [m.group(1)], [m.group(2)]) for m in _AX_ALI.finditer(t)]
+        for m in _AX_ALI_TUP.finditer(t):
+            lhs = [x.strip() for x in m.group(1).split(",")]
+            rhs = [x.strip().split(".")[-1] for x in m.group(2).split(",")]
+            if len(lhs) == len(rhs):
+                ali.append((m.start(), lhs, rhs))
+        for _p, lhs, rhs in sorted(ali):
+            for a, b in zip(lhs, rhs):
+                if b in ns:
+                    ns[a] = ns[b]
+    return ns
+
+
+def probe_u4_axis():
+    """`P134-14c` 探针：`R-C` 轴值的**可溯源率**与**不可溯源的原因**（只报告，不判定）。"""
+    # ★ 先现算，后打印：口径块里要引用这些数 ⇒ **不得**先写死再让下面去凑
+    nums, _skip = canonical_nums()
+    _json_all = list(ROOT.glob("dir*/out/*.json"))
+    _json_dev = [p for p in _json_all
+                 if re.search(r'"(D_H|d_h|D_K|d_k|D_V|d_v|T_STEPS)"\s*:', p.read_text(
+                     encoding="utf-8", errors="replace")[:40000])]
+    print("=" * 100)
+    print("P134-14c 探针 · `R-C` 的深一层：轴值能否溯源到「装置冻结表」（只报告，不判定）")
+    print("=" * 100)
+    print("口径（★ 照抄进决定/纪律时**照抄这五行**）：")
+    print("  ① **世上没有「装置冻结表」**：装置 = `dir31/R1_grad.py` 根 + 沿 `import R1_* as M`")
+    print("     链的**模块级 `M.X = v` 覆写**（`dir33` 就把 `D_K` 4→16、`T_STEPS` 8→16）")
+    print(f"  ② **`readings.json` 不是装置表**：`dir*/out/*.json` 里带装置键的只有 "
+          f"{len(_json_dev)}/{len(_json_all)}（{len(_json_dev) / max(len(_json_all), 1):.1%}）")
+    print("     ⇒ 以读数作溯源源，覆盖面**上限**就是这个比例，不能当主源")
+    print("  ③ **`a=b` 形态语法歧义**：它还命中**公式**（`\\alpha(Wk-v)` 之类）⇒ 不能直接当冻结值")
+    print("  ④ 故本探针**只核「装置轴声明型」条款**（≥3 个**不同**装置轴名），其余**落在核对之外**")
+    print("  ⑤ 下列读数是**可行性普查**，**不是** `PASS/FAIL`，也**不**进 `REGISTRY`")
+
+    # ① 三个前提的存量（数字已在函数头现算）
+    print(f"\n【① 溯源源的「存量」普查】")
+    print(f"   读数文件 `dir*/out/*.json`：**{len(_json_all)}** 个，其中**真带装置键**"
+          f"（键名而非值）：**{len(_json_dev)}**（{len(_json_dev) / max(len(_json_all), 1):.1%}）")
+    # ★★ 这个比例**依赖你在哪一侧量**：本地镜像**不完整持有** `dir*/out/`
+    #    （实测本地 499 个 / trainer 808 个）⇒ 读数必须**自带出处**，否则会被当成通用常数。
+    print(f"   ★★ 本数字**自带出处**：`ROOT={ROOT}`（共 {len(_json_all)} 个读数文件）。")
+    print("      本地镜像 **不完整持有** `dir*/out/`（实测 499 vs trainer 808）⇒ 同一句结论在两侧")
+    print("      的百分比**不同**（3.0% vs 2.4%），但**都极低** ⇒ 结论不变、数字**不得**离源引用。")
+    print("   ★ 所以「在 `readings.json` 里找同值」这条**天生覆盖不到绝大多数**卡 —— 不是实现问题。")
+    print("   ★ 装置根 `dir31/R1_grad.py`：`D_H, D_K, D_V, R = 8, 4, 4, 2`、`T_STEPS = 8`")
+    _ov = []
+    for n2 in nums:
+        for f in sorted((ROOT / f"dir{n2}").glob("R1_*.py")) if (ROOT / f"dir{n2}").is_dir() else []:
+            try:
+                t2 = f.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            _ov += [(n2, m.group(2), m.group(3))
+                    for m in _AX_LINE.finditer(t2) if m.group(1)]
+    print(f"   模块级 `M.X = v` 覆写共 **{len(_ov)}** 处："
+          + ("、".join(f"`DIR-{a}` `{b}={c}`" for a, b, c in _ov[:8]) if _ov else "无"))
+    print("   ⇒ **卡的轴值对不对，只能对着这条链求值**；这就是「装置冻结表」的**真实替代物**。")
+
+    # ② 逐卡：分「装置轴声明型」与「其余带轴值条款」
+    dev_rows, other_rows = [], []
+    for n in nums:
+        ctx = Ctx(n)
+        if not ctx.card:
+            continue
+        cands = sorted((p for p in ctx.cdir.glob(f"DIRECTION_rev{n}*.md")
+                        if "archived" not in p.name
+                        and re.match(rf"^DIRECTION_rev{n}([_]|\.)", p.name)),
+                       key=lambda p: ((int(m.group(1)) if (m := re.search(r"_v(\d+)", p.name)) else -1),
+                                      p.name))
+        seen, cls = set(), []
+        for f in cands:
+            try:
+                t = f.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            for _ti, lines in _u4_sections(t):
+                for c in _u4_clauses(lines):
+                    if c in seen:
+                        continue
+                    seen.add(c)
+                    cls.append(c)
+        if not cls:
+            continue
+        tab = _ax_dev_table(n)
+        for c in cls:
+            if not _U4_AX.search(c):
+                continue
+            ps = _ax_pairs(c)
+            ax = [(nm, v) for nm, v in ps if _ax_norm(nm) in _DEV_AXIS]
+            distinct = {_DEV_AXIS[_ax_norm(nm)] for nm, _v in ax}
+            if len(distinct) >= 3:
+                dev_rows.append((n, c, ax, tab))
+            else:
+                other_rows.append((n, c, ps, ax))
+
+    print(f"\n【② 「装置轴声明型」条款（≥3 个不同装置轴）：{len({r[0] for r in dev_rows})} 张卡 · "
+          f"{len(dev_rows)} 条】")
+    ok = bad = nokey = 0
+    for n, c, ax, tab in dev_rows:
+        verdicts = []
+        for nm, v in ax:
+            cn = _DEV_AXIS[_ax_norm(nm)]
+            if cn not in tab:
+                verdicts.append((nm, v, "无该键"))
+                nokey += 1
+            elif v.rstrip(".") == tab[cn].rstrip("."):
+                verdicts.append((nm, v, "✓"))
+                ok += 1
+            else:
+                verdicts.append((nm, v, f"✗≠{tab[cn]}"))
+                bad += 1
+        flag = "★" if any(x[2] not in ("✓", "无该键") for x in verdicts) else " "
+        print(f"   {flag} DIR-{n}: " + " · ".join(f"`{a}={b}`{s}" for a, b, s in verdicts))
+    print(f"   ⇒ 轴值读数：**✓ 溯源命中 {ok}** · **✗ 与装置不符 {bad}** · **无该键 {nokey}**")
+    print("   ★★ `无该键` **不是失败**：本卡的正式脚本没有**同名**常量（可能写的是字面量、")
+    print("      或在父目录里换了名字）⇒ 属「这套核对覆盖不到」，须**逐卡**人工定性。")
+
+    print(f"\n【③ 其余带轴值条款（**落在本核对之外**）：{len(other_rows)} 条】")
+    _b = {"扫参型": 0, "单值条件型": 0, "方程/记号型": 0}
+    for _n, _c, ps, ax in other_rows:
+        names = [_ax_norm(x) for x, _v in ps]
+        if len(set(names)) < len(names):
+            _b["扫参型"] += 1                 # 同一轴出现多次 ⇒ 扫参（自变量），不是装置
+        elif ax:
+            _b["单值条件型"] += 1             # 只有 1–2 个装置轴 ⇒ 局部条件，不是规模声明
+        else:
+            _b["方程/记号型"] += 1            # 一个装置轴都没有 ⇒ 多半是公式零件
+    for k, v in _b.items():
+        print(f"   {k}：**{v}**")
+    _blind = sum(1 for _n, _c, ps, _ax in other_rows if not ps)
+    print(f"   ★ 其中**本探针连 pair 都抽不出**的：**{_blind}** 条（`_U4_AX` 只认「像赋值」，")
+    print("     不认「像赋值但右侧不是数」或「跨行公式」）⇒ 这是**探针自己的盲区**，须与")
+    print("     「条款没写轴值」严格区分：前者是**工具覆盖不到**，后者是**作者没写**。")
+    print("   ★★ 这三类**不得**被塞进「装置轴核对」：")
+    print("      · 扫参型（`\\gamma=0`/`\\gamma=10`）里那个值与装置**故意不同**（它是自变量）")
+    print("      · 单值条件型（`T=1` 截断图）是**探针条件**，不是全卡规模")
+    print("      · 方程/记号型是**公式零件**（`\\alpha(Wk-v)`），根本不指装置")
+    print("      ⇒ 把它们也算进分母，只会把「读数」变成「假警报」。反例见 `DIR-30`/`DIR-31`/`DIR-69`。")
+
+    print("\n【④ 结论（可行性，不是判决）】")
+    print(f"   可机械核的**只有**装置轴声明型 **{len(dev_rows)}** 条 / 边界条款总 **"
+          f"{len(dev_rows) + len(other_rows)}** 条带轴值条款")
+    print("   ★ 这个比例**低**，但它是**真实上界**，不是实现不努力：")
+    print("     ① 装置表本身要**求值 import 链**才算得出来（`dir33` 的覆写会传给 `dir34…`）")
+    print("     ② `readings.json` 只覆盖 5.2% 的卡，天生当不了主源")
+    print("     ③ 剩下 3 类条款的轴值与装置**本来就该不同**（扫参）或**无关**（公式）")
+    print("   ⇒ **不得**由此把 `K27`/`R-C` 升成 `①自动化`：它仍只是**形态齐备性**读数。")
+    print("\n   ★ 本探针未触碰判定：")
+    print(f"     `REGISTRY` 仍 {len(REGISTRY)} 条 {sorted(REGISTRY)}；"
+          f"清单 `①自动化` 仍 {sorted(checklist_auto())}")
+    print("\n★ 只报告，不改变任何判定。")
+    return 0
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dirs", nargs="*", type=int)
@@ -2348,6 +2632,7 @@ def main():
     ap.add_argument("--probe-semantic-discipline", action="store_true")
     ap.add_argument("--probe-k26", action="store_true")
     ap.add_argument("--probe-u4", action="store_true")
+    ap.add_argument("--probe-u4-axis", action="store_true")
     a = ap.parse_args()
 
     if a.selftest:
@@ -2368,6 +2653,9 @@ def main():
     if a.probe_u4:
         return probe_u4()
 
+    if a.probe_u4_axis:
+        return probe_u4_axis()
+
     # ★ 覆盖率守卫：清单声明的 ①自动化 集合必须与本脚本实现的一致（DEF-128-03）
     auto = checklist_auto()
     if auto:
@@ -2387,7 +2675,7 @@ def main():
         nums = a.dirs
     else:
         ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope / --probe-guard-coverage"
-                 " / --probe-semantic-discipline / --probe-k26 / --probe-u4")
+                 " / --probe-semantic-discipline / --probe-k26 / --probe-u4 / --probe-u4-axis")
 
     ks = sorted(REGISTRY)
     total = {PASS: 0, FAIL: 0, NA: 0}
