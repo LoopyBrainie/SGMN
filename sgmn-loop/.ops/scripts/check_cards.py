@@ -1514,7 +1514,7 @@ def _norm_stmt(line):
 
 
 def _checklist_blocks():
-    """`CARD-CHECKLIST.md` 的 25 条 ⇒ [(K号, 字段名, 行文本)]。"""
+    """`CARD-CHECKLIST.md` 的**全部**条目（条数由代码数，`DEF-128-03`）⇒ [(K号, 字段名, 行文本)]。"""
     if not CHECKLIST.exists():
         return []
     t = CHECKLIST.read_text(encoding="utf-8")
@@ -1557,8 +1557,11 @@ def probe_semantic_discipline():
     print("=" * 100)
     print("P133-10 探针 · 全库普查「按语义定义的禁止集」的纪律（只报告，不判定）")
     print("=" * 100)
+    # ★ `P133-11`（Cycle 258）：条目数**由代码数**，不写死（`DEF-128-03`）。
+    #   `K26` 加入后清单从 25 条变 26 条 ⇒ 写死的 "25" 会立刻变成**谎**。
+    _nA = len({n for n, _f, _t in _checklist_blocks()})
     print("口径：")
-    print("  总体 A = `CARD-CHECKLIST.md` 的 25 条条目（`原文` + `检查` 行）")
+    print(f"  总体 A = `CARD-CHECKLIST.md` 的 {_nA} 条条目（`原文` + `检查` 行)")
     print("  总体 B = 105 个规范目录里每张卡的**规范当前 revision**（最高 `_vN`，排除 `archived`）")
     print("  普查单元 = 一条**禁止语句**（禁止语 + 全称量词同句），跨卡去重")
     print("  排除：修订记录/缺陷表等**描述性**小节、表格行（数据而非禁令）")
@@ -1568,7 +1571,7 @@ def probe_semantic_discipline():
           f"{'、'.join(PROHIB_TOKENS)}")
 
     # ---------- ① 总体 A：清单条目 ----------
-    print("\n【① 总体 A · 清单 25 条里的候选】")
+    print(f"\n【① 总体 A · 清单 {_nA} 条里的候选】")
     blocks = _checklist_blocks()
     a_hits = []
     for n, fld, txt in blocks:
@@ -1577,7 +1580,7 @@ def probe_semantic_discipline():
             a_hits.append((n, fld, txt, h))
             print(f"   K{n:<3} 【{fld}】 量词={h[0]!r} 禁止={h[1]!r} 机制={'|'.join(h[2]) or '—'}")
             print(f"        {txt[:120]}")
-    print(f"   ⇒ 25 条条目（×2 字段）里命中 **{len(a_hits)}** 条")
+    print(f"   ⇒ {_nA} 条条目（×2 字段）里命中 **{len(a_hits)}** 条")
 
     # ---------- ② 总体 B：卡片 ----------
     nums, skip = canonical_nums()
