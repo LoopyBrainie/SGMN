@@ -11,6 +11,7 @@
  ⑧ 开卡清单 CARD-CHECKLIST.md 的格式完整性（条目数/字段/执行方式，声明 vs 机械点数）
  ⑧e–⑧h `判读` 字段与 `check_cards.py` 的 `INTERP` **逐字同一** + 标签合法（`P133-1`/`P134-1`）
  ⑨ 证据行「边界」栏的**形态**（非空 / ≠「无」/ 有否定命题 / 标签不漂移 / 新行必须有）——`P134-14b`
+ ⑩ `K27` 四条判定式 ↔ `check_cards.py` 源码的**字符串同一性**（`P134-14d`）
 
 用法：python3 audit_consistency.py
 """
@@ -528,6 +529,93 @@ if tb.exists():
               if int(re.findall(r"\d+", d)[0]) >= BOUNDARY_FROM and d not in _blocks_with9]
     check(not _need9,
           f"⑨e 主块编号 ≥ D-{BOUNDARY_FROM} 必须带边界栏：缺 {_need9 or '无'}")
+
+# ⑩ ★★ P134-14d（Cycle 264）：`K27` 四条判定式的**字符串同一性**（`P133-1` 同型缺陷**换了载体**）。
+#   动机：`K27`（`P134-14a`）把 `R-A`/`R-B`/`R-C`/`R-D` 的判定式写进归档，唯一实现来源是
+#   `.ops/scripts/check_cards.py` 的 `_u4_sections`（默认 `kws` + 标题层级正则 + `DIRECTION`
+#   排除）与 `_U4_POS`/`_U4_AX`/`_U4_Q`（模块级 `re.compile`）。而 ⑧e–⑧h 的同一性断言**只管**
+#   `判读` 字段 ⇒ 探针正则一改，`K27` 的文本就是**谎**且无人发现。
+#   ★★ **这不是假想缺陷**：`P134-14a` 手抄当轮就漂了 —— 源码 `只(?:测|…` 被抄成 `只(测|…`
+#     （丢 `?:`，捕获组语义随之改变），另有 `_U4_AX`/`_U4_Q` 被抄成「人话摘要」而非模式串。
+#   口径：**字符串同一性**，不判正则等价、不做语义判断；两侧都从**源码/归档**机械取，
+#   任一侧改动即红。★ 本项**不改** `--probe-u4` 的判定行为、不进 `INTERP`、不改任何卡。
+print("\n⑩ `K27` 判定式 ↔ check_cards.py 源码（字符串同一性；P134-14d）")
+_K27_SRC = ROOT / ".ops" / "scripts" / "check_cards.py"
+
+
+def _k27_from_source():
+    """从 check_cards.py **源码**取四件判定式（AST，不 import：不让只读审计执行被审模块）。"""
+    src = _K27_SRC.read_text(encoding="utf-8")
+    tree = ast.parse(src)
+    got = {}
+    pats = {}
+    for nd in tree.body:
+        if not isinstance(nd, ast.Assign):
+            continue
+        for tg in nd.targets:
+            if isinstance(tg, ast.Name) and tg.id in ("_U4_POS", "_U4_AX", "_U4_Q"):
+                v = nd.value
+                if (isinstance(v, ast.Call) and getattr(v.func, "attr", "") == "compile"
+                        and v.args and isinstance(v.args[0], ast.Constant)
+                        and isinstance(v.args[0].value, str)):
+                    pats[tg.id] = v.args[0].value
+    for nd in tree.body:
+        if isinstance(nd, ast.FunctionDef) and nd.name == "_u4_sections":
+            seg = ast.get_source_segment(src, nd) or ""
+            kws = ast.literal_eval(nd.args.defaults[-1]) if nd.args.defaults else ("边界",)
+            mlv = re.search(r"#\{(\d),(\d)\}", seg)
+            lv = f"#{{{mlv.group(1)},{mlv.group(2)}}}" if mlv else None
+            mex = re.search(r"\.startswith\(['\"]([^'\"]+)['\"]\)", seg)
+            got["R-A"] = f"kws={kws!r} levels={lv} exclude={mex.group(1) if mex else None}"
+    for _k, _n in (("R-B", "_U4_Q"), ("R-C", "_U4_AX"), ("R-D", "_U4_POS")):
+        if _n in pats:
+            got[_k] = pats[_n]
+    return got
+
+
+def _k27_from_archive():
+    """从 `CARD-CHECKLIST.md` 的 ```k27-judge 代码块取四行（`R-x: <payload>`）。"""
+    p = ROOT / "CARD-CHECKLIST.md"
+    if not p.exists():
+        return {}
+    t = p.read_text(encoding="utf-8")
+    m = re.search(r"```k27-judge\n(.*?)\n\s*```", t, re.S)
+    if not m:
+        return {}
+    out = {}
+    for ln in m.group(1).splitlines():
+        mm = re.match(r"^\s*(R-[ABCD])\s*[：:]\s*(.+?)\s*$", ln)
+        if mm:
+            out[mm.group(1)] = mm.group(2)
+    return out
+
+
+if not _K27_SRC.exists():
+    check(False, f"⑩ 找不到判决式源码 {_K27_SRC}（`K27` 的判定式无实现来源）")
+else:
+    try:
+        _s10 = _k27_from_source()
+        _src_err10 = None
+    except Exception as _e10:
+        _s10, _src_err10 = {}, f"{type(_e10).__name__}: {_e10}"
+    _a10 = _k27_from_archive()
+    check(not _src_err10 and set(_s10) == {"R-A", "R-B", "R-C", "R-D"},
+          f"⑩ 须能从 check_cards.py 源码取全四件判定式（{_src_err10 or sorted(_s10)}）")
+    check(set(_a10) == {"R-A", "R-B", "R-C", "R-D"},
+          f"⑩ 须能在 `CARD-CHECKLIST.md` 找到 ```k27-judge 块并取全四行（实际 {sorted(_a10) or '无'}）")
+    if not _src_err10 and _a10:
+        _diff10 = []
+        for _k in ("R-A", "R-B", "R-C", "R-D"):
+            if _k not in _s10 or _k not in _a10:
+                continue
+            if _s10[_k] != _a10[_k]:
+                _s, _a = _s10[_k], _a10[_k]
+                _at = next((i for i, (x, y) in enumerate(zip(_s, _a)) if x != y),
+                           min(len(_s), len(_a)))
+                _diff10.append(f"{_k}(源码{len(_s)}字 vs 归档{len(_a)}字，首异@{_at}："
+                               f"源码…{_s[max(0,_at-6):_at+10]}… ≠ 归档…{_a[max(0,_at-6):_at+10]}…)")
+        check(not _diff10,
+              f"⑩ `K27` 判定式须与源码**逐字相同**：不一致 {_diff10 or '无'}")
 
 print("\n" + "=" * 88)
 print(("★ 全部通过" if not fails else f"★ {len(fails)} 项未通过"))

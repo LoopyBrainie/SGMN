@@ -147,8 +147,11 @@ mkdir -p "$PKG/06_CONTINUITY/.ops/scripts"
 # ★ P134-14b（Cycle 262）：新增 `test_audit_boundary9.py` —— 审计项 ⑨ 的**注入自测**
 #   （证明 ⑨a–⑨e 每一项都真能红）。★ 与 `test_audit_counts.py` 同理：守卫的守卫也要入包，
 #   否则"⑨ 不会红"这件事在归档里不可复核。
+# ★ P134-14d（Cycle 264）：新增 `test_audit_k27judge.py` —— 审计项 ⑩（`K27` 判定式 ↔ 源码
+#   字符串同一性）的**双向注入自测**。★ 这一条尤其需要入包：⑩ 的干净副本**天生就是绿的**，
+#   若不带自测，「它会不会红」在归档里就只能靠相信。
 for _s in rebuild_full.sh repack.sh audit_consistency.py audit_counts.py test_audit_counts.py \
-          test_audit_boundary9.py check_cards.py blind_copy.sh restore_out.sh; do
+          test_audit_boundary9.py test_audit_k27judge.py check_cards.py blind_copy.sh restore_out.sh; do
   cp -f "$ROOT/.ops/scripts/$_s" "$PKG/06_CONTINUITY/.ops/scripts/$_s" \
     || { say "★★ 打包脚本入包失败：$_s ⇒ 中止"; exit 7; }
 done
@@ -223,6 +226,7 @@ for _must in "03_LEDGERS/COVERAGE-v24.md" \
              "06_CONTINUITY/.ops/scripts/audit_counts.py" \
              "06_CONTINUITY/.ops/scripts/test_audit_counts.py" \
              "06_CONTINUITY/.ops/scripts/test_audit_boundary9.py" \
+             "06_CONTINUITY/.ops/scripts/test_audit_k27judge.py" \
              "06_CONTINUITY/.ops/scripts/check_cards.py" \
              "06_CONTINUITY/.ops/scripts/blind_copy.sh" \
              "06_CONTINUITY/.ops/scripts/restore_out.sh"; do

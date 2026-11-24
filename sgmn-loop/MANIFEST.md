@@ -1,11 +1,11 @@
 # MANIFEST · SGMN Loop（`revolve/DIR-*` 目录 126 个〔非方向总数〕；SUCCEEDED = 57 / 57）
 
-> 生成：2026-11-24 07:58:04 UTC
+> 生成：2026-11-24 09:27:43 UTC
 > 校验：逐文件 md5（`md5sum -c`）
 
 ## 核心台账
 b0c47e6fb275f0d6f749cf8a3191735d  ./.pi_task_mirror.md
-da4b97a03b671240107346ccea582f2f  ./CARD-CHECKLIST.md
+cb6affeedd57650e421148211329288f  ./CARD-CHECKLIST.md
 a408028500300bb7197bf14cda6c2756  ./COVERAGE-v24.md
 a6ae28174debd7f0d77a8c326cfdd808  ./DECISIONS.md
 1f9777086cefff5ebf1bae9d083965f4  ./DIR-106/DIRECTION_rev106_v10.md
