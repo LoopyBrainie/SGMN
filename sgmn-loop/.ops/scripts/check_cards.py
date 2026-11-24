@@ -1125,9 +1125,62 @@ def selftest():
     ok += ok14
     bad += bad14
     print(f"   （其中 `P134-14` 的 `U4` 探针夹具 {ok14 + bad14} 条）")
+    # ------------------------------------------------------------------
+    # ★★ `P133-13`（Cycle 269）**第二种入口**（误读禁令）夹具：13 条，全部纯字符串（不落盘）。
+    #   目的三条：
+    #     (a) 证明入口**真的**能抓到「既无全称量词也无符号」的误读禁令（不是空转）；
+    #     (b) 证明它**不**吃别家的地盘（带量词的归 `P133-10`；无引号断言的归谁都不管）；
+    #     (c) ★ 证明 `把/将` 分支**不可删**（窄框架漏 46 条 —— 反证要能红）。
+    # ------------------------------------------------------------------
+    ok13 = bad13 = 0
+
+    def _t13(label, got, expect):
+        nonlocal ok13, bad13
+        _ok = (got == expect)
+        ok13, bad13 = (ok13 + 1, bad13) if _ok else (ok13, bad13 + 1)
+        print(f"  {'✓' if _ok else '✗'} {label:<46} 期望 {expect!r} 实得 {got!r}")
+
+    _t13("-MIS-1 「不得说「失效」」被认出（无全称量词、无符号）",
+         [q for q, _ in _misread_hits("- 点估计仍为正，不得说「失效」")], ["失效"])
+    _t13("-MIS-2 「不得把 gate 达线读成「乘性乘积是唯一解释」」（把-宾语式）",
+         [q for q, _ in _misread_hits("6. 不得把 gate 达线读成「乘性乘积是唯一解释」")],
+         ["乘性乘积是唯一解释"])
+    _t13("-MIS-3 「不可外推为「X」」也认（`不可`+误读动词才算禁令，不是放宽词表）",
+         [q for q, _ in _misread_hits("边界 · 不可外推为「AR(1) 修正的一般形式」（只测一阶）")],
+         ["AR(1) 修正的一般形式"])
+    _t13("-MIS-4 ★带全称量词的不吃（那是 P133-10 的地盘 ⇒ 两个入口不相交）",
+         _misread_hits("不得说任何「失效」"), [])
+    _t13("-MIS-5 ★「不可判」这类属性标签不吃（不可 + 无动词/引号）",
+         _misread_hits("该判据不可判定"), [])
+    _t13("-MIS-6 ★禁止语在**引号内**（引用一条规则）不吃",
+         _misread_hits("依「空断言集不得记 PASS」的规则处理"), [])
+    _t13("-MIS-7 ★无引号断言不吃（「不得打印 C2 读数」不是误读禁令）",
+         _misread_hits("不得打印 C2 读数"), [])
+    _t13("-MIS-8 ★引号在禁止语**之前**不吃（引号必须被误读动词支配）",
+         _misread_hits("「记忆无用」不得出现在结论里"), [])
+    _t13("-MIS-9 一行两句两条禁令 ⇒ 2 条（不去重、不合并）",
+         len(_misread_hits("不得说「A」；也不得说「B」")), 2)
+    _t13("-MIS-10 ★`把` 宾语跨句不匹配（句读切断，防跨句误配）",
+         _misread_hits("不得把 X 写进结论。后来有人读成「Y」"), [])
+    # (c) ★ 反证「把/将」分支不可删：同一句在**窄框架**（仅动词紧邻）下必漏
+    _wide = [q for q, _ in _misread_hits("不得把 gate 达线读成「乘性乘积是唯一解释」")]
+    _narrow_re = re.compile(_MIS_P + r"\s*的?\s*" + _MIS_V + r"\s*[：:]?\s*(" + _MIS_QUOTE + r")")
+    _narrow = _narrow_re.findall(_de_emph("不得把 gate 达线读成「乘性乘积是唯一解释」"))
+    _t13("-MIS-11 ★见证：窄框架漏、宽框架中 ⇒ `把/将` 分支不可删",
+         (len(_wide), len(_narrow)), (1, 0))
+    _t13("-MIS-12 结构性线索：只测/单尺度 ⇒ SCOPE 为真",
+         bool(_MIS_SCOPE.search(_de_emph("不得外推为「X」（只测一阶、单尺度）"))), True)
+    _t13("-MIS-13 结构性线索皆无 ⇒ 三项全 False（这是**线索**，不是「欠定义」判决）",
+         (bool(_MIS_SCOPE.search("不得说「失效」")),
+          bool(_MIS_CARRIER.search("不得说「失效」")),
+          bool(_MIS_GUARD.search("不得说「失效」"))), (False, False, False))
+
+    ok += ok13
+    bad += bad13
+    print(f"   （其中 `P133-13` 的误读禁令探针夹具 {ok13 + bad13} 条）")
     print(f"\n自测：{ok} 通过 / {bad} 不符（共 {len(cases)} 夹具 + {ok8 + bad8} 条 P133-8 探针夹具"
           f" + {ok10 + bad10} 条 P133-10 探针夹具 + {ok15 + bad15} 条 P133-15 探针夹具"
-          f" + {ok14 + bad14} 条 P134-14 探针夹具）")
+          f" + {ok14 + bad14} 条 P134-14 探针夹具 + {ok13 + bad13} 条 P133-13 探针夹具）")
     return 0 if bad == 0 else 1
 
 
@@ -1571,15 +1624,14 @@ _DESCRIPTIVE_HEAD = re.compile(r"修订|缺陷|历史|变更|变更记录|revisi
 _TABLE_ROW = re.compile(r"^\s*\|")
 
 
-def _sem_hit(line):
-    """一行是否是「含全称量词的禁止语句」。
+def _quant_of(d):
+    """`d` 里**最先出现**的全称量词 `(位置, token)`，没有则 `None`。
 
-    返回 `(量词, 禁止语, 机制标记元组)` 或 `None`。
-    ★ 匹配前先 `_de_emph`（去 markdown 强调/反引号）—— 否则 `**不得**打印` 这类写法
-      会因标记夹在词间而漏（`P133-4` 已实测过同一物种的假 `N/A`）。
+    ★★ 为什么单独抽出来（`P133-13`）：新探针需要问「这一行**有没有**量词」，
+      而 `_sem_hit` 把「量词 + 禁止语」两条判据绑在一个返回值里 ⇒ 拿不到单条结论。
+      **抽成单一来源**，避免新探针另抄一份词表（`DEF-128-03` 的坑：两份常量必然漂移）。
     """
-    d = _de_emph(line)
-    qm = pm = None
+    qm = None
     for tok in QUANT_TOKENS:
         i = d.find(tok)
         if i >= 0 and (qm is None or i < qm[0]):
@@ -1588,6 +1640,19 @@ def _sem_hit(line):
         m = QUANT_CONTEXT.search(d)
         if m:
             qm = (m.start(), m.group(0))
+    return qm
+
+
+def _sem_hit(line):
+    """一行是否是「含全称量词的禁止语句」。
+
+    返回 `(量词, 禁止语, 机制标记元组)` 或 `None`。
+    ★ 匹配前先 `_de_emph`（去 markdown 强调/反引号）—— 否则 `**不得**打印` 这类写法
+      会因标记夹在词间而漏（`P133-4` 已实测过同一物种的假 `N/A`）。
+    """
+    d = _de_emph(line)
+    qm = _quant_of(d)
+    pm = None
     for tok in PROHIB_TOKENS:
         i = d.find(tok)
         if i >= 0 and (pm is None or i < pm[0]):
@@ -1775,6 +1840,180 @@ def probe_semantic_discipline():
     print(f"   `REGISTRY` 仍是 {len(REGISTRY)} 条：{sorted(REGISTRY)}")
     print(f"   清单 `①自动化` 集合仍是 {sorted(checklist_auto())}（两者相等 ⇒ 无新增硬门）")
     print("   ⇒ `PASS/FAIL/N/A` 计数与本探针**无关**；`--all` 的判决一字未动。")
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# ★ `P133-13`（Cycle 269）普查探针 · **第二种入口**：误读禁令（`U4` 的**漏检面**）。
+#
+#   `P133-10` 的机械入口**只有两个**（全称量词 / 符号）⇒ 它看见的 `U4` 只有 **7** 条，
+#   而那 7 条**全部带量词**（`全部`/`任何`）。「禁止集是**开放语义类**、但**既无全称量词
+#   也无符号**」的原则性条款**一条也进不去**（`P133-10` §6-1 已如实记）。
+#
+#   ★★ 本探针的入口**不是第三个词表**，而是**句法框架**：
+#      「**禁止语** ＋（可选 `把/将` ＋ 宾语）＋ **误读动词** ＋ **被禁断言**（引号）」
+#   ⇒ 被禁对象由**引号**给出、由**误读动词**支配 ⇒ 与「量词普查」按构造**不相交**
+#      （本探针**显式排除**带量词的行，那部分是 `P133-10` 的地盘），也与「符号扫描」不同。
+#
+#   ★★★ 只**报告**、**不判定**、不进 `REGISTRY`、不改任何卡的判决：
+#      「这条禁令**可不可判**」仍是**人工**判定（`P133-10` §1-4）。本探针只输出
+#      **结构性线索**（有没有范围理由 / 载体 / 可执行守卫），供人工标注。
+#
+#   ★★ `P133-13` 任务正文曾提「入口可能是**结构化**的：卡片是否显式写出该纪律的可判形式」。
+#      本 cycle **实测否掉了行级的那个版本**：把「无可判形式」当行级判据 ⇒ 卡片命中
+#      **611** 行，绝大多数是节标题与散文片段（见 `revolve/P133-13-MISREAD-PROHIBITION-CENSUS.md`
+#      §4）。⇒ 结论：**「可判」是「条款在其小节内」的属性，不是单行的属性** ⇒ 行级代理
+#      不可用，本探针只走**句法框架**这一路。
+# ---------------------------------------------------------------------------
+
+# 误读动词表（★ 只收**支配被禁断言**的动词；`不得` 后面直接跟名词的不算误读禁令）
+MISREAD_VERBS = ("读成", "读作", "称为", "说", "当作", "断言", "记成", "写成", "解释为",
+                 "表述为", "外推为", "视作", "视为", "理解为", "当成", "称作", "当作是")
+
+# 禁止语表：★ 比 `PROHIB_TOKENS` **多收「不可」** —— 理由与那边相反：
+#   `PROHIB_TOKENS` 不收「不可」是因为本库「不可」多为**属性标签**（「不可判」「不可读」）；
+#   但**「不可 ＋ 误读动词」**（「不可外推为 …」「不可读成 …」）**只**作禁令用
+#   ⇒ 在本框架里收它是**安全的**（框架强制要求后接误读动词，标签用法进不来）。
+#   ★ 这不是「放宽词表」，是**换了判据**：由「禁止语后接任意内容」变成「后接误读动词」。
+MISREAD_PROHIB = ("不得", "禁止", "不许", "严禁", "不能", "不可")
+
+_MIS_QUOTE = r"「[^」]{1,60}」|『[^』]{1,60}』|“[^”]{1,60}”"
+_MIS_V = "(?:" + "|".join(MISREAD_VERBS) + ")"
+_MIS_P = "(?:" + "|".join(MISREAD_PROHIB) + ")"
+# 两种真实语序（★ 都来自实况，不是设计出来的）：
+#   ① 「不得外推为「X」」           —— 动词**紧邻**禁止语
+#   ② 「不得把「X」读成「Y」」/「不得把 gate 达线读成「Y」」
+#      —— 中间夹一个 `把/将` 宾语（★ 这是**最典型**的误读句型，窄框架会漏 46 条）
+_MISREAD_FRAME = re.compile(
+    _MIS_P + r"\s*的?\s*" + _MIS_V + r"\s*[：:]?\s*(" + _MIS_QUOTE + r")"
+    + r"|" + _MIS_P + r"\s*(?:把|将)\s*[^，。；：\n]{0,26}?" + _MIS_V
+    + r"\s*[：:]?\s*(" + _MIS_QUOTE + r")"
+)
+# 结构性线索（**只报线索**，不据此判可判/欠定义 —— 判定归人）
+_MIS_SCOPE = re.compile(r"只测|只覆盖|只对|仅在|只在|只做了|单一|单尺度|单次|未扫|未检验|"
+                        r"未分离|窗口依赖|一族|这一族|单条|一次性|本卡只|只回答")
+_MIS_CARRIER = re.compile(r"证据行|边界栏|VERDICT|_must|白名单|记录在|写进|写在|落(?:在|到)")
+_MIS_GUARD = re.compile(r"\bS\d+\b|⑧[a-z]|check_cards|--probe|precheck")
+
+
+def _misread_hits(line):
+    """一行里**不带全称量词**的误读禁令 ⇒ [(被禁断言, 是否有把/将宾语)]；没有则 `[]`。
+
+    ★ 为什么**排除**带量词的行：那是 `P133-10` 的量词普查地盘。两个入口若重叠，
+      就说不清「新探针到底补了多少」⇒ 本探针的读数是**残差**，与量词普查**按构造不相交**。
+    ★ 去强调后再匹配（`P133-4` 同物种：`**不得**说` 会因标记夹在词间而漏）。
+    """
+    d = _de_emph(line)
+    if _quant_of(d) is not None:
+        return []
+    out = []
+    for m in _MISREAD_FRAME.finditer(d):
+        q = m.group(1) or m.group(2) or ""
+        q = q.strip("「」『』“”")
+        tail = d[m.start():m.end()]
+        out.append((q, ("把" in tail or "将" in tail)))
+    return out
+
+
+def probe_misread_prohibition():
+    """`P133-13` 探针：**误读禁令**（`U4`）在三个 locus 的**漏检面**（只报告，不判定）。
+
+    ★ 三个 locus：① 卡片（`DIRECTION_*` 现行 rev 全文）② `evidence/table.md` ③ `CARD-CHECKLIST.md`
+      —— `P133-10` 的教训：任务正文只说「卡片」，而候选**大量住在他处**。
+    ★ 与 `--probe-u4`（`P134-14`）的分工：那边量的是**这 7 条**的改写路径；
+      这边量的是**族有多大**（7 之外的 145 条此前无人看见）。
+    """
+    print("=" * 100)
+    print("P133-13 探针 · 误读禁令（`U4`）的**漏检面**：不带全称量词的那些（只报告，不判定）")
+    print("=" * 100)
+    print("口径（★ 照抄进任何引用它的文档）：")
+    print("  ① 普查单元 = **一行内**「禁止语 ＋（可选 `把/将`宾语）＋ 误读动词 ＋ 引号断言」")
+    print("  ② ★ **排除了带全称量词的行** ⇒ 本读数是**残差**，与 `P133-10` 的量词普查**不相交**")
+    print("  ③ 结构性线索（范围理由 / 载体 / 可执行守卫）**只是线索**，"
+          "「可不可判」由**人工**判（`P133-10` §1-4）")
+    print("  ④ 本探针**不进** `REGISTRY`、**不改** `PASS/FAIL/N/A`、**不替任何卡改一个字**")
+
+    nums, _skip = canonical_nums()
+    loci = []
+
+    # locus ① 卡片
+    card_hits, card_lines = [], 0
+    for n in nums:
+        ctx = Ctx(n)
+        if not ctx.card:
+            continue
+        for i, ln in enumerate(ctx.text.splitlines(), 1):
+            card_lines += 1
+            for q, _ba in _misread_hits(ln):
+                card_hits.append((f"DIR-{n}:{i}", q, ln))
+    loci.append(("卡片（现行 rev）", card_lines, card_hits))
+
+    # locus ② evidence/table.md ③ CARD-CHECKLIST.md
+    for label, path in (("evidence/table.md", EVIDENCE), ("CARD-CHECKLIST.md", CHECKLIST)):
+        if not path.exists():
+            loci.append((label, 0, []))
+            continue
+        lines = path.read_text(encoding="utf-8").splitlines()
+        hits = []
+        for i, ln in enumerate(lines, 1):
+            for q, _ba in _misread_hits(ln):
+                hits.append((f"{path.name}:{i}", q, ln))
+        loci.append((label, len(lines), hits))
+
+    total = 0
+    print()
+    print(f"{'locus':22s}{'行数':>8s}{'误读禁令':>10s}")
+    for label, nl, hits in loci:
+        print(f"{label:22s}{nl:>8d}{len(hits):>10d}")
+        total += len(hits)
+    print(f"{'合计':22s}{'':>8s}{total:>10d}")
+
+    # 结构性线索分布（只报线索）
+    c = collections.Counter()
+    for _lab, _nl, hits in loci:
+        for _where, _q, ln in hits:
+            d = _de_emph(ln)
+            if _MIS_SCOPE.search(d):
+                c["有范围理由（只测/未扫/单尺度…）"] += 1
+            if _MIS_CARRIER.search(d):
+                c["有载体（证据行/边界栏/VERDICT…）"] += 1
+            if _MIS_GUARD.search(d):
+                c["有可执行守卫（S*/⑧x/--probe）"] += 1
+            if re.search(r"[α-ωΑ-Ω]", d):
+                c["含希腊符号（符号扫描可能顺带触及该行）"] += 1
+            if not (_MIS_SCOPE.search(d) or _MIS_CARRIER.search(d) or _MIS_GUARD.search(d)):
+                c["★ 三项结构性线索皆无"] += 1
+    print("\n【结构性线索】（★ 只是线索：三项皆无 ≠ 已判「欠定义」，判定仍归人）")
+    for k, v in c.most_common():
+        print(f"  {k}：{v}")
+
+    # 与量词普查的对照（证明「不相交」不是声称）
+    q_locus = 0
+    for n in nums:
+        ctx = Ctx(n)
+        if not ctx.card:
+            continue
+        for ln in ctx.text.splitlines():
+            if _sem_hit(ln):
+                q_locus += 1
+    print(f"\n【与量词普查的对照】卡片 locus：`_sem_hit` 命中行 {q_locus} 行；"
+          f"本探针命中 {len(loci[0][2])} 条")
+    print("  ★ 两者**按构造不相交**（本探针 `_quant_of(d) is not None ⇒ 直接返回 []`）⇒ "
+          "相加才是族的总量，不是取并集")
+
+    print("\n【清单清单（前 40 条，全量见 revolve/P133-13-MISREAD-PROHIBITION-CENSUS.md）】")
+    shown = 0
+    for label, _nl, hits in loci:
+        for where, q, _ln in hits:
+            if shown >= 40:
+                break
+            print(f"  {where:18s} 「{q[:34]}」")
+            shown += 1
+
+    print()
+    print("★ `REGISTRY` 未变（本探针不参与判决）："
+          f"{len(REGISTRY)} 条 {sorted(REGISTRY)}")
+    print("\n★ 只报告，不改变任何判定。")
     return 0
 
 
@@ -2633,6 +2872,7 @@ def main():
     ap.add_argument("--probe-k26", action="store_true")
     ap.add_argument("--probe-u4", action="store_true")
     ap.add_argument("--probe-u4-axis", action="store_true")
+    ap.add_argument("--probe-misread", action="store_true")
     a = ap.parse_args()
 
     if a.selftest:
@@ -2656,6 +2896,9 @@ def main():
     if a.probe_u4_axis:
         return probe_u4_axis()
 
+    if a.probe_misread:
+        return probe_misread_prohibition()
+
     # ★ 覆盖率守卫：清单声明的 ①自动化 集合必须与本脚本实现的一致（DEF-128-03）
     auto = checklist_auto()
     if auto:
@@ -2675,7 +2918,8 @@ def main():
         nums = a.dirs
     else:
         ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope / --probe-guard-coverage"
-                 " / --probe-semantic-discipline / --probe-k26 / --probe-u4 / --probe-u4-axis")
+                 " / --probe-semantic-discipline / --probe-k26 / --probe-u4 / --probe-u4-axis"
+                 " / --probe-misread")
 
     ks = sorted(REGISTRY)
     total = {PASS: 0, FAIL: 0, NA: 0}
