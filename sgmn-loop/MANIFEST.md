@@ -1,6 +1,6 @@
 # MANIFEST · SGMN Loop（`revolve/DIR-*` 目录 126 个〔非方向总数〕；SUCCEEDED = 57 / 57）
 
-> 生成：2026-11-24 10:04:31 UTC
+> 生成：2026-11-24 10:40:27 UTC
 > 校验：逐文件 md5（`md5sum -c`）
 
 ## 核心台账

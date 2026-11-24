@@ -151,7 +151,8 @@ mkdir -p "$PKG/06_CONTINUITY/.ops/scripts"
 #   字符串同一性）的**双向注入自测**。★ 这一条尤其需要入包：⑩ 的干净副本**天生就是绿的**，
 #   若不带自测，「它会不会红」在归档里就只能靠相信。
 for _s in rebuild_full.sh repack.sh audit_consistency.py audit_counts.py test_audit_counts.py \
-          test_audit_boundary9.py test_audit_k27judge.py check_cards.py blind_copy.sh restore_out.sh; do
+          test_audit_boundary9.py test_audit_k27judge.py check_cards.py blind_copy.sh restore_out.sh \
+          sync_check.sh; do
   cp -f "$ROOT/.ops/scripts/$_s" "$PKG/06_CONTINUITY/.ops/scripts/$_s" \
     || { say "★★ 打包脚本入包失败：$_s ⇒ 中止"; exit 7; }
 done
@@ -229,10 +230,11 @@ for _must in "03_LEDGERS/COVERAGE-v24.md" \
              "06_CONTINUITY/.ops/scripts/test_audit_k27judge.py" \
              "06_CONTINUITY/.ops/scripts/check_cards.py" \
              "06_CONTINUITY/.ops/scripts/blind_copy.sh" \
-             "06_CONTINUITY/.ops/scripts/restore_out.sh"; do
+             "06_CONTINUITY/.ops/scripts/restore_out.sh" \
+             "06_CONTINUITY/.ops/scripts/sync_check.sh"; do
   [ -f "$PKG/$_must" ] || { say "★★ 归档必需品缺失：$_must ⇒ 中止"; exit 9; }
 done
-say "归档必需品齐备：DECISIONS.md + CARD-CHECKLIST.md + COMPLIANCE-BASELINE.md + 六脚本（rebuild_full / repack / audit_consistency / check_cards / blind_copy / restore_out）"
+say "归档必需品齐备：DECISIONS.md + CARD-CHECKLIST.md + COMPLIANCE-BASELINE.md + 七脚本（rebuild_full / repack / audit_consistency / check_cards / blind_copy / restore_out / sync_check）"
 
 # ★★ P134-14e（Cycle 265）：入包**差集**核对 —— 消灭「新增 `.ops/scripts/*` 静默漏包」。
 #   动机（Cycle 264 **实测**，不是假想）：新增 `test_audit_k27judge.py` 后，上方入包白名单

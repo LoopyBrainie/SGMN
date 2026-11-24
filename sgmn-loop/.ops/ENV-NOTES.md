@@ -403,6 +403,16 @@ GIT_TERMINAL_PROMPT=0 git -c credential.helper='!gh auth git-credential' push
 （**不要**为此改全局 git 配置；用一次性 `-c` 即可。）
 ★ **绝不** `git push origin main`、**绝不** 在 `experiment/*` 上 merge main —— 分支互相独立。
 
+### 9.1b 改动 `.ops/scripts/` 之后：跑一次 `sync_check.sh --strict`
+
+```bash
+sgmn-loop/.ops/scripts/sync_check.sh --strict    # 任一分歧 ⇒ exit 4（ssh 失败 ⇒ exit 5，绝不误报为「全部本地独有」）
+```
+**为什么**（Cycle 265 **实测**）：量入包差集时才发现本地 `_push114.sh` **在 trainer 上根本不存在**
+（历史「本地写了、从未 push」）；反向「trainer 改了、本地不知道」与 `决定二百一十九` 的覆盖式抹除属同一类。
+`push52.sh` 只报「已推 N 个」，**从不报「还有哪些没推」** ⇒ 那份清单只能靠这个差集。
+★ 三份差集（本地独有 / 远端独有 / 同名不同内容）**每一处都要当场解释并留档**。
+
 ### 9.2 两条已知陷阱（都实测踩过）
 1. **远端 `.gitignore` 是 GitHub 的 Python 模板，`*.log` 会静默丢掉全部实验日志**（实测 487 个）。
    已在 `.gitignore` 末尾加 `!*.log` 取消。**新增/覆盖 `.gitignore` 时必须保留该行。**
