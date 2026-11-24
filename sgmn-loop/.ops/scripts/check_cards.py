@@ -1267,6 +1267,17 @@ def selftest():
          (_d["entail_RB_quote"][0], _d["RB_old"][0] == _d["RB_old"][1],
           _d["RB_new"][0] < _d["RB_new"][1]), (True, True, True))
 
+    # ★★★ `P135-10` 防回归：无 `_v` 的卡片文件必须被看见（否则重犯「静默分母虚增」）
+    _t22("-REC-6 版本解析双形态：`rev15.md`→15 · `rev20_v3.md`→3 · 无号→0",
+         (_u4_ver('DIRECTION_rev15.md'), _u4_ver('DIRECTION_rev20_v3.md'),
+          _u4_ver('DIRECTION_foo.md')), (15, 3, 0))
+    _f20 = _u4_card_files(REVOLVE / 'DIR-20')
+    _f19 = _u4_card_files(REVOLVE / 'DIR-19')
+    _t22("-REC-7 ★★`_u4_card_files` 找得到无 `_v` 的卡（`DIR-19`=1 张 · `DIR-20`=6 张，全无 `_v`）",
+         (len(_f19), len(_f20), all('_v' not in q.name for q in _f20),
+          _f19[0].name == 'DIRECTION_rev15.md' if _f19 else False),
+         (1, 6, True, True))
+
     ok += ok22
     bad += bad22
     print(f"   （其中 `P135-4/5` 的非定义性读数夹具 {ok22 + bad22} 条）")
@@ -1274,7 +1285,7 @@ def selftest():
           f" + {ok10 + bad10} 条 P133-10 探针夹具 + {ok15 + bad15} 条 P133-15 探针夹具"
           f" + {ok14 + bad14} 条 P134-14 探针夹具 + {ok13 + bad13} 条 P133-13 探针夹具"
           f" + {ok20 + bad20} 条 P135-1 夹具 + {ok21 + bad21} 条 P135-3 夹具"
-          f" + {ok22 + bad22} 条 P135-4/5 夹具）")
+          f" + {ok22 + bad22} 条 P135-4/5/10 夹具）")
     return 0 if bad == 0 else 1
 
 
@@ -2843,6 +2854,32 @@ _U4_CLAUSE = re.compile(r'^(?:[-*+]|\d+[.、)]|★|\*\*)\s*')
 
 
 _U4_SEC_ALT = ('边界', '红线', '证明义务', '不做什么', '证据边界')
+
+
+def _u4_ver(name):
+    """从 `DIRECTION_*.md` 文件名取版本号；**无 `_v` 的也认**（返回 0 而不是抛错）。
+
+    ★★★ `P135-10`：`P134-14` 的 `R-A` 读数（97/101）**不可复现**的根因之一，正是
+      用 `DIRECTION_*_v*.md` 做 glob —— `DIR-19` 的卡片叫 `DIRECTION_rev15.md`、
+      `DIR-20` 的叫 `DIRECTION_rev11.md`…`rev16.md`，**都不含 `_v`** ⇒ 它们
+      **进分母、永不进分子**，也**不会**被报成「缺失」（根本没被扫描）
+      ⇒ 静默的分母虚增 2。★ 见 `revolve/P135-10-RA-97-PROVENANCE.md`。
+    """
+    m = re.search(r'_v(\d+)\.md$', name)          # `..._rev20_v3.md` → 3（`_v` 优先）
+    if m:
+        return int(m.group(1))
+    m = re.search(r'_rev(\d+)\w*\.md$', name, re.I)  # `..._rev15.md` → 15 · `..._rev26b.md` → 26
+    return int(m.group(1)) if m else 0
+
+
+def _u4_card_files(d):
+    """某卡的**全部** `DIRECTION_*.md`（任意文件名，按版本升序）。
+
+    ★★★ `P135-10` 硬约束：**不得**用 `_v` 做前缀/后缀要求 —— 见 `_u4_ver` 的说明。
+      凡新的 `U4` 探针须经此函数取副本，否则会重犯「静默分母虚增」。
+    """
+    fs = [q for q in d.glob('DIRECTION_*.md') if 'archived' not in q.name]
+    return sorted(fs, key=lambda q: _u4_ver(q.name))
 
 
 def _u4_sections(text, kws=('边界',)):
