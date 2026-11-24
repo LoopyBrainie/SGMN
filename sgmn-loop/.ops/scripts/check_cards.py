@@ -1278,6 +1278,21 @@ def selftest():
           _f19[0].name == 'DIRECTION_rev15.md' if _f19 else False),
          (1, 6, True, True))
 
+    # ★★★ `P135-12` 防回归：① 「U4 语句数/卡集」必须**从普查现算**（不得回头硬编码）；
+    #   ② 人口必须**分子=分母**（旧版 `--probe-u4` 分母 105 / 分子 103）。
+    _n_stmt, _tgt, _cp = _u4_census_targets()
+    _t22("-REC-8 ★★★`U4` 语句数/卡集**由普查现算**（`P133-10` 的 `| **U4** |` 行）",
+         (_n_stmt, _tgt), (7, (35, 36, 38, 39, 40, 129)))
+    _nums12, _ = canonical_nums()
+    _t22("-REC-9 ★★★人口核对：分母 = 实扫 = 105（不得留 `[19,20]` 静默缺口）",
+         (len(_nums12),
+          len([_n for _n in _nums12 if _u4_card_files(Ctx(_n).cdir)]),
+          [_n for _n in _nums12 if not Ctx(_n).card]),
+         (105, 105, [19, 20]))
+    _t22("-REC-10 ★★普查来源路径存在（读数与生成代码**同类**）",
+         (_cp.exists(), _cp.name),
+         (True, 'P133-10-SEMANTIC-DISCIPLINE-CENSUS.md'))
+
     ok += ok22
     bad += bad22
     print(f"   （其中 `P135-4/5` 的非定义性读数夹具 {ok22 + bad22} 条）")
@@ -2882,6 +2897,36 @@ def _u4_card_files(d):
     return sorted(fs, key=lambda q: _u4_ver(q.name))
 
 
+def _u4_census_targets():
+    """从 `P133-10` 普查表**算**出 `U4` 语句数与卡集（不再硬编码）。
+
+    ★★★ `P135-12`：`--probe-u4` 曾把「**7** 条 / **6** 张卡」与
+      `TARGETS = {35,36,38,39,40,129}` 写成**硬编码字串/集合**，不参与计算
+      ⇒ 若 `P133-10` 普查结果变了，探针里的字串**不会跟着变**
+      ⇒ 「读数与生成它的代码**解耦**」。
+    ★ 本函数把唯一来源定在普查文件本身：解析 `| **U4** |` 行。
+    ★ 返回 `(条数, 卡号有序元组, 来源路径)`；文件不可读 ⇒ `(0, (), path)` 且调用方须报「不可读」
+      而不是静默当作 0 条。
+    """
+    p = REVOLVE / 'P133-10-SEMANTIC-DISCIPLINE-CENSUS.md'
+    if not p.exists():
+        return (0, (), p)
+    n = 0
+    cards = set()
+    for ln in p.read_text(encoding='utf-8', errors='replace').splitlines():
+        if '| **U4** |' not in ln:
+            continue
+        cells = [c.strip() for c in ln.strip().strip('|').split('|')]
+        if len(cells) < 2:
+            continue
+        m = re.fullmatch(r'D(\d+)', cells[1])
+        if not m:
+            continue
+        n += 1
+        cards.add(int(m.group(1)))
+    return (n, tuple(sorted(cards)), p)
+
+
 def _u4_sections(text, kws=('边界',)):
     """`R-A` 的定位器：返回 [(标题, 行列表)]。
 
@@ -2985,6 +3030,13 @@ def probe_u4():
         print(f"   ★ 跳过非规范目录 {len(skip)} 个：{', '.join(map(str, skip))}")
     print(f"\n【① 卡 locus（`DIRECTION_*` 的边界段）】规范目录 {len(nums)} 个")
 
+    # ★★★ `P135-12`：此行是**硬编码**，不参与计算 ⇒ 若 `P133-10` 普查结果变了，本行**不会跟着变**
+    #   （「读数与生成它的代码**解耦**」）。
+    #   ★ 校验过的当前值 = `7` 条 / `{35,36,38,39,40,129}`（与普查 `| **U4** |` 行一致）。
+    #   ★★ **本题未改输出**（`--probe-u4` 的 stdout 是归档件 `revolve/P134-14/probe-u4.txt`，
+    #      声称逐字节一致），故保留硬编码值；**现算版**见 `probe_u4_fixed()` / `--probe-u4-fixed`
+    #      （用 `_u4_census_targets()`），并由自测 `-REC-8` 钉住「普查→7 条/6 张卡」的**耦合**。
+    #   ★ 若要彻底去硬编码，须新开 revision 并重生成归档输出 —— 见 `revolve/P135-12-*.md`。
     TARGETS = {35, 36, 38, 39, 40, 129}      # `P133-10` 普查判为 `U4` 的 6 张卡（7 条语句）
     total_cl = y_cl = a_cl = 0
     form = {"NEG": 0, "POS": 0, "BOTH": 0, "NONE": 0}
@@ -3107,9 +3159,184 @@ def probe_u4():
     return 0
 
 
-
 # ---------------------------------------------------------------------------
-# P134-14c（Cycle 267）探针：`R-C` 的**深一层** —— 轴值能否溯源到「装置冻结表」
+# P135-12（Cycle 275）探针：`--probe-u4` 的**人口缺陷修正版**
+# ---------------------------------------------------------------------------
+#   ★★★ 本函数与 `probe_u4()` **并列存在**，不替换它。原因：`probe_u4()` 的 stdout 已作为
+#     `revolve/P134-14/probe-u4.txt` 留档，且有决定声称输出与归档件「逐字节一致」——
+#     改它就等于**静默作废一条已归档证据**。新读数写新文件，两版并列。
+#
+#   ★★★ 修两层（`P135-11` §1/§1-1 定位）：
+#     (a) `if not ctx.card: continue` 静默丢掉 `[19,20]` ⇒ 分母 105 / 分子 103；
+#     (b) `DIRECTION_rev{n}` 把**目录号**当**版本号** —— `DIR-19` 的卡叫 `DIRECTION_rev15.md`
+#         （版本 15）、`DIR-20` 叫 `rev11..16`，`rev{n}` 的 glob **匹配不到**。
+#   ★★★ **两层必须一起修**：只删 `continue` 会得到 `97 + 8 = 105` 的「**假自洽**」
+#     （`19,20` 被误报为「缺失」，而 `DIR-20` 六个副本全有边界段）—— 比原缺陷更难发现。
+#
+#   ★★ 比修数值更根本的修法：**同时打印分子与分母**（`扫描 N / 分母 M`）
+#     ⇒ 任何「人口不匹配」在输出里**肉眼可见**，不靠读者去读源码。
+
+def probe_u4_fixed():
+    """`P135-12`：`--probe-u4` 的**人口缺陷修正版**（只报告，不判定）。
+
+    ★ 不进 `REGISTRY`、不改 `PASS/FAIL/N/A`、**不**替任何卡改一个字。
+    ★★ 与 `probe_u4()` 的差别**只在「取副本」两步**：不跳 `Ctx.card` + 用
+      `_u4_card_files`（任意名）；其余（`_u4_sections` strict · `_u4_clauses` ·
+      `_u4_parts` · `_u4_form`）**逐字相同**，所以两版可比。
+    """
+    print("=" * 100)
+    print("P135-12 探针 · `U4` 改写路径读数【**人口缺陷修正版**】（只报告，不判定）")
+    print("=" * 100)
+    print("★★★ 本输出与 `--probe-u4`（归档件 `revolve/P134-14/probe-u4.txt`）**并列**：")
+    print("   旧版**未改**（保留原始证据链）；本版修两层人口缺陷，两版数字不得混用。")
+    print("★ 口径与 `--probe-u4` **逐字相同**，只改「取副本」两步：")
+    print("   ① 不再 `if not ctx.card: continue`（该行曾静默丢掉无 `_v` 卡的目录）；")
+    print("   ② 副本改用 `_u4_card_files`（任意名）而非 `DIRECTION_rev{n}*`（目录号当版本号）。")
+
+    nums, skip = canonical_nums()
+    if skip:
+        print(f"   ★ 跳过非规范目录 {len(skip)} 个：{', '.join(map(str, skip))}")
+
+    # ★★★ 「人口不匹配」的可见化：分母与扫描数**分两个印**，并单列差集。
+    denominator = len(nums)
+    no_card = [n for n in nums if not Ctx(n).card]
+    scanned = [n for n in nums if _u4_card_files(Ctx(n).cdir)]
+    print("\n【⓿ 人口核对（★ 先看这一行）】")
+    print(f"   分母（规范目录总数）　　：**{denominator}**")
+    print(f"   实扫（有任意名卡可读）　：**{len(scanned)}**")
+    print(f"   ★ 无 `_v` 卡的目录　　　：**{len(no_card)}** 个"
+          + (f"（{', '.join('DIR-%d' % x for x in no_card)}）" if no_card else ""))
+    print("   ★★★ 旧版 `--probe-u4` 打印的分母是 **%d**，但实际只扫 **%d** 张"
+          "（它把无 `_v` 卡的目录 `continue` 掉了）⇒ 分母/分子**不同人口**。"
+          % (denominator, denominator - len(no_card)))
+    print("   ★★ 本版把两者**同时打印**：若上面两个数不等，说明仍有目录没读到卡，")
+    print("      ——这类缺陷**不靠读源码就能发现**。")
+
+    n_stmt, tgt_cards, census_p = _u4_census_targets()
+    if n_stmt:
+        print(f"\n★★ `U4` 语句数 / 卡集**从普查算出**（非硬编码）："
+              f"**{n_stmt}** 条 / **{len(tgt_cards)}** 张卡："
+              f"{', '.join('D%d' % x for x in tgt_cards)}")
+        print(f"   来源：`{census_p.relative_to(ROOT)}` 的 `| **U4** |` 行")
+        print("   ★ 旧版 `--probe-u4` 把「7 条 / 6 张卡」与 `TARGETS` 写成**硬编码字串**，")
+        print("     不参与计算 ⇒ 普查若变、字串不跟着变（「读数与生成代码解耦」）。本版改为现算。")
+    else:
+        print(f"\n   ★ 普查表不可读或零 `U4` 行：`{census_p}` ⇒ `U4` 语句数**不报**（不记 0）")
+    TARGETS = set(tgt_cards)
+
+    total_cl = y_cl = a_cl = 0
+    form = {"NEG": 0, "POS": 0, "BOTH": 0, "NONE": 0}
+    with_sec = []
+    with_cl = []
+    no_sec = []
+    with_alt = []
+    titles = set()
+    seven = {}
+    for n in nums:
+        ctx = Ctx(n)
+        # ★★★ 修 (a)：不跳 `Ctx.card` —— 否则无 `_v` 卡的目录被静默排除。
+        # ★★★ 修 (b)：`_u4_card_files` 取任意名副本 —— 否则 `DIR-19`（`rev15`）/`DIR-20`
+        #   （`rev11..16`）匹配不到 `DIRECTION_rev{n}*`。
+        cands = _u4_card_files(ctx.cdir)
+        if not cands:
+            no_sec.append(n)      # ★ 真·无卡：计入「容器缺失」
+            continue
+        seen = set()
+        cl_all = []
+        n_sec = 0
+        n_alt = 0
+        for f in cands:
+            try:
+                t = f.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            n_alt += bool(_u4_sections(t, _U4_SEC_ALT))
+            for ti, lines in _u4_sections(t):
+                titles.add(ti)
+                n_sec += 1
+                for c in _u4_clauses(lines):
+                    if c in seen:
+                        continue
+                    seen.add(c)
+                    cl_all.append(c)
+        if n_alt:
+            with_alt.append(n)
+        if n_sec:
+            with_sec.append(n)
+            if cl_all:
+                with_cl.append(n)
+        else:
+            no_sec.append(n)
+        if n in TARGETS:
+            seven[n] = cl_all
+        for c in cl_all:
+            total_cl += 1
+            names, axis, _neg = _u4_parts(c)
+            y_cl += names
+            a_cl += axis
+            form[_u4_form(c)] += 1
+
+    print(f"\n【① 卡 locus（`DIRECTION_*` 的边界段）】分母 {denominator} 个 · 有卡 {len(scanned)} 张")
+    print(f"   `R-A` 容器**可定位**（任一副本有段）：**{len(with_sec)}** 张")
+    print(f"     其中段内**有条款行**　　　　　　：**{len(with_cl)}** 张"
+          f" · **纯散文**（无条款行）：**{len(with_sec) - len(with_cl)}** 张")
+    print(f"   ★ 容器**缺失**（任何副本都没有含「边界」的 `##`–`####` 标题）：**{len(no_sec)}** 张"
+          + (f"（{', '.join('DIR-%d' % x for x in no_sec)}）" if no_sec else ""))
+    _noalt = [x for x in nums if x not in with_alt]
+    print(f"   ★ 广义容器（边界｜红线｜证明义务｜不做什么｜证据边界）：**{len(with_alt)}** 张"
+          + (f" · **任何**此类段都没有：**{len(_noalt)}** 张"
+             f"（{', '.join('DIR-%d' % x for x in _noalt)}）" if _noalt else ""))
+    print(f"   ★★ 段标题**变体数**：**{len(titles)}** 种")
+    if total_cl:
+        print(f"   条款合计（按内容去重）：**{total_cl}** 条 · "
+              f"`R-B` 点名 `Y` **{y_cl}**（{y_cl / total_cl:.1%}）· "
+              f"`R-C` 带轴值 **{a_cl}**（{a_cl / total_cl:.1%}）")
+        print(f"   句型分布：禁令型 `NEG` **{form['NEG']}** · "
+              f"正向型 `POS` **{form['POS']}** · 兼有 `BOTH` **{form['BOTH']}** · "
+              f"两者皆无 `NONE` **{form['NONE']}**")
+    print("   ★ 口径提醒：分母是**边界段内的条款**，不是「`U4` 语句」。")
+
+    print("\n【② 并列对照：旧版（归档）→ 本版（修正）】")
+    print("   ★★ 旧版值取自 `revolve/P134-14/probe-u4.txt`（`P135-11` §2 已机算复核）。")
+    print("   | 读数 | 旧（`--probe-u4`） | 本版（修正） |")
+    print("   |---|---:|---:|")
+    print(f"   | 扫描张数 | 103 | **{len(scanned)}** |")
+    print(f"   | `R-A` 容器可定位 | 97 | **{len(with_sec)}** |")
+    print(f"   | ↳ 段内有条款行 | 96 | **{len(with_cl)}** |")
+    print(f"   | ↳ 纯散文 | 1 | **{len(with_sec) - len(with_cl)}** |")
+    print(f"   | 容器缺失 | 6 | **{len(no_sec)}** |")
+    print(f"   | 广义容器 | 101 | **{len(with_alt)}** |")
+    print(f"   | ↳ 任何此类段都没有 | 4 | **{len(_noalt)}** |")
+    print(f"   | 段标题变体数 | 95 | **{len(titles)}** |")
+    print(f"   | 条款合计 | 944 | **{total_cl}** |")
+    if total_cl:
+        print(f"   | `R-B` 点名Y | 447 = 47.4% | **{y_cl}** = {y_cl / total_cl:.1%} |")
+        print(f"   | `R-C` 带轴值 | 159 = 16.8% | **{a_cl}** = {a_cl / total_cl:.1%} |")
+    print(f"   | 句型 NEG | 527 | **{form['NEG']}** |")
+    print(f"   | 句型 POS | 89 | **{form['POS']}** |")
+    print(f"   | 句型 BOTH | 125 | **{form['BOTH']}** |")
+    print(f"   | 句型 NONE | 203 | **{form['NONE']}** |")
+    print("   ★★★ **率稳健、绝对数不稳健**（漏掉的是整张卡 ⇒ 分子分母同比缩小），")
+    print("     与 `P135-11` §2-1 结论一致。★ 引用**绝对数**须用本版列。")
+
+    print(f"\n【③ 普查判为 `U4` 的 {len(seven)} 张卡：逐条读数（本版口径）】")
+    for n in sorted(seven):
+        cs = seven[n]
+        print(f"\n   DIR-{n} · 边界段条款 {len(cs)} 条")
+        for c in cs:
+            names, axis, neg = _u4_parts(c)
+            mark = ('Y' if names else '·') + ('A' if axis else '·') + ('N' if neg else '·')
+            print(f"     [{mark}] 「{c[:88]}」")
+    print("\n   ★ 标记 = 点名Y / 带轴值 / 带否定。★ **不判**该条是否真的守住了推论。")
+    if tgt_cards:
+        print(f"   ★★ 卡集由普查现算：{', '.join('D%d' % x for x in tgt_cards)}")
+
+    print("\n【④ 本探针未触碰判定】")
+    print(f"   `REGISTRY` 仍是 {len(REGISTRY)} 条：{sorted(REGISTRY)}")
+    print(f"   清单 `①自动化` 集合仍是 {sorted(checklist_auto())}（两者相等 ⇒ 无新增硬门）")
+    print("   ⇒ `PASS/FAIL/N/A` 计数与本探针**无关**；`--all` 的判决一字未动。")
+    print("\n★ 只报告，不改变任何判定。★ 旧版 `--probe-u4` 与本版**并列**，不替换。")
+    return 0
 # ---------------------------------------------------------------------------
 #   动机：`R-C` 只判「条款里出现 `a=b`」（`_U4_AX`），**不判**那个值是不是装置真值。
 #   `P134-14` 的卡片自己就写着「`R-C` **不判什么**：这些值是不是真实装置的值」。
@@ -3402,6 +3629,7 @@ def main():
     ap.add_argument("--probe-semantic-discipline", action="store_true")
     ap.add_argument("--probe-k26", action="store_true")
     ap.add_argument("--probe-u4", action="store_true")
+    ap.add_argument("--probe-u4-fixed", action="store_true")
     ap.add_argument("--probe-u4-axis", action="store_true")
     ap.add_argument("--probe-misread", action="store_true")
     ap.add_argument("--probe-u4-full", action="store_true")
@@ -3426,6 +3654,9 @@ def main():
 
     if a.probe_u4:
         return probe_u4()
+
+    if a.probe_u4_fixed:
+        return probe_u4_fixed()
 
     if a.probe_u4_axis:
         return probe_u4_axis()
