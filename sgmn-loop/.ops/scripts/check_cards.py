@@ -35,6 +35,7 @@ import pathlib
 import re
 import sys
 import tokenize
+import warnings
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = pathlib.Path(__import__("os").environ.get("SGMN_ROOT", HERE.parent.parent))
@@ -1015,8 +1016,76 @@ def selftest():
 
     ok += ok10
     bad += bad10
+
+    # ------------------------------------------------------------------
+    # ★ `P133-15`（Cycle 259）`K26` 探针夹具：8 条，**全部纯字符串**（不落盘）。
+    #   目的：让「实测 ≠ 声明」可**证伪** —— 若 `_k26_state` 读了 `*_decl`，
+    #   夹具 `-K26-9` 必红。
+    # ------------------------------------------------------------------
+    ok15 = bad15 = 0
+
+    def _t15(label, got, expect):
+        nonlocal ok15, bad15
+        _ok = (got == expect)
+        ok15, bad15 = (ok15 + 1, bad15) if _ok else (ok15, bad15 + 1)
+        print(f"  {'✓' if _ok else '✗'} {label:<44} 期望 {expect!r} 实得 {got!r}")
+
+    _MOD3 = 'FORB = ["聚合", "中间", "合并"]\n'
+    _t15("-K26-1 模块级 3 项字符串表 ⇒ 1 个词表",
+         _k26_ast_lit_lists(_MOD3), 1)
+    _t15("-K26-2 只有 2 项 ⇒ 0（阈值 min_len=3，参数表不算词表）",
+         _k26_ast_lit_lists('PAIR = ("a", "b")\n'), 0)
+    _t15("-K26-3 3 项但非字符串 ⇒ 0（数字/flag 表不是禁止集）",
+         _k26_ast_lit_lists('XS = [1, 2, 3]\n'), 0)
+    _t15("-K26-4 3 项字符串但在**函数体内** ⇒ 0（判据词表必须模块级冻结）",
+         _k26_ast_lit_lists('def f():\n    L = ["a", "b", "c"]\n    return L\n'), 0)
+    _t15("-K26-5 载体类 + 审计函数都被认出",
+         _k26_ast_carriers('class Agg:\n    pass\ndef s10_number_audit(x):\n    return True\n'),
+         (["Agg"], ["s10_number_audit"]))
+
+    _py_ok = [("x.py", _MOD3 + 'class Agg:\n    pass\n')]
+    _n = _k26_nets("`S9` 禁用词 表 + 形式无关 + 源头 让被禁量不可打印", _py_ok)
+    _t15("-K26-6 声明齐 + 实测齐 ⇒ 四个布尔全 True",
+         (_n["lit_meas"], _n["lit_decl"], _n["free_meas"], _n["free_decl"]),
+         (True, True, True, True))
+    _n2 = _k26_nets("白名单 定义如下（未提任何 S 号守卫）", [])
+    _t15("-K26-7 只说「白名单」而无 `S\\d+` ⇒ 字面(声) False（防当标点用）",
+         _n2["lit_decl"], False)
+    _n3 = _k26_nets("本纪律形式无关（但没说从哪一步掐断）", [])
+    _t15("-K26-8 只说「形式无关」而无源头动作 ⇒ 形式无关(声) False",
+         _n3["free_decl"], False)
+
+    # ★★★ 本探针的**核心**可证伪点：只会声明、没有实测 ⇒ 必须判「零道」
+    _only_decl = {"lit_meas": False, "lit_decl": True,
+                  "free_meas": False, "free_decl": True}
+    _t15("-K26-9 ★只会声明、零实测 ⇒ ZERO（**不得**判 TWO）",
+         _k26_state(_only_decl, False, False), ("ZERO", "★★零道（实测）⇒ **未配网**"))
+    _both = {"lit_meas": True, "lit_decl": False, "free_meas": True, "free_decl": False}
+    _t15("-K26-10 两道实测齐（即使零声明）⇒ TWO",
+         _k26_state(_both, False, False)[0], "TWO")
+    _t15("-K26-11 只有字面实测 ⇒ ONE（只有一道字面网 = 未配网）",
+         _k26_state({"lit_meas": True, "lit_decl": True,
+                     "free_meas": False, "free_decl": True}, False, False)[0], "ONE")
+    _t15("-K26-12 明示不可枚举 + 理由 ⇒ NONENUM（压过一切网读数）",
+         _k26_state(_both, True, True)[0], "NONENUM")
+    _t15("-K26-13 明示不可枚举但**无理由** ⇒ 不算合法出口（步骤 3 要求写明为什么）",
+         _k26_state(_both, True, False)[0], "TWO")
+    _ne_ev = _k26_nonenum("本纪律**不可枚举**\n因为禁止对象是推论方式")
+    _t15("-K26-14 ③ 触发行被返回（让触发词可被人工复核）",
+         (_ne_ev[0], _ne_ev[1], _ne_ev[2][0] if _ne_ev[2] else None),
+         (True, True, "不可枚举"))
+    # ★★★ 实测踩到的**误报**（`DIR-38/39/40/104`）：说的是**测量**不可判定，不是禁止集不可枚举。
+    _w = _k26_nonenum("- ★ 不可判定：若 C 与 D 同号则本判据不可判定")
+    _t15("-K26-15 ★「该判据不可判定」⇒ 强信号 False（不翻转状态）",
+         (_w[0], _w[1], _w[2][0] if _w[2] else None), (False, False, "弱:不可判定"))
+    _t15("-K26-16 弱信号不得让卡片走 ③ 出口",
+         _k26_state(_only_decl, _w[0], _w[1])[0], "ZERO")
+
+    ok += ok15
+    bad += bad15
+    print(f"   （其中 `P133-15` 的 `K26` 探针夹具 {ok15 + bad15} 条）")
     print(f"\n自测：{ok} 通过 / {bad} 不符（共 {len(cases)} 夹具 + {ok8 + bad8} 条 P133-8 探针夹具"
-          f" + {ok10 + bad10} 条 P133-10 探针夹具）")
+          f" + {ok10 + bad10} 条 P133-10 探针夹具 + {ok15 + bad15} 条 P133-15 探针夹具）")
     return 0 if bad == 0 else 1
 
 
@@ -1668,6 +1737,318 @@ def probe_semantic_discipline():
 
 
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# ★ `P133-15`（Cycle 259）探针：`K26`（**禁止集的可执行性**）的**操作化**。
+#
+#   `K26` 是 `②留痕` ⇒ **不判 `PASS/FAIL`、不进 `REGISTRY`**，只把三步落成可抄的读数：
+#     ① **能不能枚举**（候选形态，机械只报**标记**，判定仍归人）
+#     ② **已配几道网** + **形态**（字面 / 形式无关；★★ 「**实测**」与「**声明**」分开报）
+#     ③ **是否已明示「不可枚举」**
+#
+#   ★★★ 本探针的**核心区分**（`K26` 正文要求的两道网必须**形态不同**）：
+#     · **字面网（实测）**  = 卡片的 `precheck*.py`/`mech*.py` 里存在**模块级**的
+#                            字符串序列常量（≥3 项）⇒ 那是一个**真的 token 表**；
+#     · **字面网（声明）**  = 卡片文本里 `S\d+` 与「禁用词/白名单」同现 ⇒ 只是**说法**；
+#     · **形式无关网（实测）**= 卡片 py 里存在 **载体类**（`Agg`/`Carrier`/`Tagged`…）
+#                            或 **数字来源审计函数**（`*audit*`）⇒ 能让被禁量**不可打印**；
+#     · **形式无关网（声明）**= 卡片文本里「形式无关」+「源头/不打印/不算出」同现。
+#   ★★ **实测 ≠ 声明**：`P133-8` 的教训是「有守卫 ≠ 守卫够」，此处同理
+#      「**说**有两道网 ≠ 两道网在」，故四个布尔值**分列**，汇总只认**实测**。
+# ---------------------------------------------------------------------------
+
+#: 字面网**声明**：`S\d+` 守卫名 + token 表措辞（两者**同现**才算，防「白名单」一词被
+#:   当标点用 —— 本库里「白名单」出现在**关于**白名单的讨论里很常见）。
+_K26_LIT_DECL = re.compile(r"`?S\d+`?", re.I)
+_K26_LIT_WORDS = re.compile(r"禁用词|禁止 token|禁止token|黑名单|白名单|词表|token 表|token表")
+#: 形式无关网**声明**：必须同时有「形态无关的描述」与「源头动作」。
+_K26_FREE_WORDS = re.compile(r"形式无关|不认措辞|不认空格|与措辞无关|形态无关")
+_K26_SRC_ACTS = re.compile(r"源头|不可打印|不算出|不算出来|只报布尔|脱敏|身份载体|载体")
+#: ③ 明示「不可枚举」——**强信号**：`K26` 步骤 3 的唯一合法出口。
+#: ★★★ **实测收紧**（`Cycle 259`）：初版把「判不了 / 不可判定 / 欠定义」也算强信号，
+#:   结果 `DIR-38`/`39`/`40`/`104` 四张卡被判成「已明示不可枚举」——全是**误报**：
+#:   它们的原句是「★ 不可判定：若 …」，讲的是**测量**不可判定，**不是**禁止集不可枚举。
+#:   ⇒ 强信号**只认**带「枚举/穷举/逐一列举」的措辞；三者降为**弱信号**（下），
+#:     只报**不**翻转状态（否则 ③ 会变成一条只要写「判不了」就能走的**后门**）。
+_K26_NONENUM = re.compile(r"不可枚举|无法枚举|不能枚举|枚举不了|无法穷举|不能穷举"
+                          r"|无法逐一列举|不能逐一列举|无法逐项列举")
+#: 弱信号：与可枚举性**相关但不特定**的措辞 —— 只报给人看，**不**参与状态机。
+_K26_WEAK = re.compile(r"判不了|不可判定|欠定义|无法界定|说不清")
+_K26_WHY = re.compile(r"因为|理由|原因|为什么|由于|开放集|推论|二义")
+
+#: 载体类的名字（形式无关网的**实测**信号）—— 只认这些**结构性**名字，避免抓到普通变量。
+_K26_CARRIER = re.compile(r"^(Agg|Aggregate|Carrier|Tagged|Wrapped|Sealed|Redacted|"
+                          r"Bool|BoolOnly|Opaque)", re.I)
+#: 数字来源审计函数名（`DIR-130` 的 `s10_number_audit` 就是这一族）。
+_K26_AUDIT = re.compile(r"audit|provenance|trace_?num|num_?src", re.I)
+
+
+def _k26_ast_lit_lists(src, min_len=3):
+    """`src` 里**模块级**字符串序列常量（list/tuple/set，≥`min_len` 项）⇒ 计一个**字面网**。
+
+    ★ 为什么是「模块级」：局部 list 多为中间量，不等于**判据词表**；判据词表必须是卡
+      在**开卡时冻结**的东西（`K16` 判读理由）⇒ 只能在模块级。
+    ★ 为什么 `min_len=3`：1–2 项的表更像**分支参数**（`("a","b")`）而非**禁止集**
+      （实测本库 6 条禁止形式的词表是 `["聚合","中间","合并","累加","sum","mean"]` 这种量级）。
+    """
+    try:
+        with warnings.catch_warnings():      # ★ 卡片 py 里常有 `\l` 这类 escape ⇒ 别吵
+            warnings.simplefilter("ignore", SyntaxWarning)
+            tree = ast.parse(src)
+    except SyntaxError:
+        return 0
+    n = 0
+    for node in tree.body:                     # 只扫**顶层**（模块级）
+        if not isinstance(node, (ast.Assign, ast.AnnAssign)):
+            continue
+        val = node.value
+        if not isinstance(val, (ast.List, ast.Tuple, ast.Set)):
+            continue
+        elts = val.elts
+        if len(elts) < min_len:
+            continue
+        if all(isinstance(e, ast.Constant) and isinstance(e.value, str) for e in elts):
+            n += 1
+    return n
+
+
+def _k26_ast_carriers(src):
+    """`src` 里**形式无关网**的实测信号 ⇒ `(载体类名表, 审计函数名表)`。
+
+    载体类：`class Agg(...)` 这类 —— 让被禁量**根本不以原样存在**；
+    审计函数：`def s10_number_audit(...)` 这类 —— 让每个数字**必须带来源**。
+    """
+    try:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", SyntaxWarning)
+            tree = ast.parse(src)
+    except SyntaxError:
+        return [], []
+    classes, funcs = [], []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ClassDef) and _K26_CARRIER.match(node.name):
+            classes.append(node.name)
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and _K26_AUDIT.search(node.name):
+            funcs.append(node.name)
+    return classes, funcs
+
+
+def _k26_nets(card_text, py_srcs):
+    """`K26` 步骤 2 的四读数：`{lit_meas, lit_decl, free_meas, free_decl}`（**布尔**）。
+
+    `py_srcs` = [(文件名, 源码)]，来自该卡的 `precheck*.py` / `mech*.py`。
+    ★ 四个值**分开**报：实测是**事实**，声明是**说法**；汇总只认实测（`P133-8` 的教训）。
+    """
+    lit_meas = sum(_k26_ast_lit_lists(s) for _n, s in py_srcs) > 0
+    free_meas = False
+    for _n, s in py_srcs:
+        cls, fns = _k26_ast_carriers(s)
+        if cls or fns:
+            free_meas = True
+            break
+    t = card_text
+    lit_decl = bool(_K26_LIT_DECL.search(t)) and bool(_K26_LIT_WORDS.search(t))
+    free_decl = bool(_K26_FREE_WORDS.search(t)) and bool(_K26_SRC_ACTS.search(t))
+    return {"lit_meas": lit_meas, "lit_decl": lit_decl,
+            "free_meas": free_meas, "free_decl": free_decl}
+
+
+def _k26_evidence(py_srcs):
+    """`(实)` 两类网的**证据串**（哪个文件、什么名字）⇒ 让 `✓` 可审，而不是一个裸勾。"""
+    lit, free = [], []
+    for name, src in py_srcs:
+        k = _k26_ast_lit_lists(src)
+        if k:
+            lit.append(f"{name}: {k} 个模块级词表")
+        cls, fns = _k26_ast_carriers(src)
+        if cls:
+            free.append(f"{name}: class {'/'.join(cls)}")
+        if fns:
+            free.append(f"{name}: def {'/'.join(fns)}")
+    return lit, free
+
+
+def _k26_nonenum(text):
+    """`K26` 步骤 3：是否**明示**「不可枚举」、是否写了**为什么判不了**、**触发行**。
+
+    ★★ 返回触发行是**必须**的：③ 的三个词（「判不了」「不可判定」「欠定义」）在本库
+      也出现在**与可枚举性无关**的语境里（「该判据不可判定」说的是**测量**，不是
+      **禁止集**）⇒ 只报布尔会让读者无法判断这是否是**真的**声明。故把**证据**摊开。
+    """
+    m = _K26_NONENUM.search(text)
+    if not m:
+        # ★ 强信号缺 ⇒ `(False, False, 弱信号或 None)`；**不**翻转状态（见 `_k26_state`）。
+        w = _K26_WEAK.search(text)
+        return False, False, (("弱:" + w.group(0), "（弱信号，不参与状态机）") if w else None)
+    line = ""
+    for ln in text.splitlines():
+        if _K26_NONENUM.search(ln):
+            line = _de_emph(ln).strip()
+            break
+    return True, bool(_K26_WHY.search(text)), (m.group(0), line[:96])
+
+
+def _k26_forms(flags):
+    """机制标记 ⇒ 可抄进开卡声明的**形态候选**（★ 候选，不是判定）。"""
+    m = []
+    if "LIT" in flags:
+        m.append("E-LIT（显式 token 列举）")
+    if "COMP" in flags:
+        m.append("E-COMP（补集式，前提=列举完整）")
+    if "AGG" in flags:
+        m.append("U1-AGG（聚合/中间量）")
+    if "SRC" in flags:
+        m.append("U1-SRC（按来源/阶段）")
+    if "CLS" in flags:
+        m.append("U1-CLS（开放类别）")
+    if "SYM" in flags:
+        m.append("U3（符号二义）")
+    return m or ["—（无机制标记 ⇒ 人工定）"]
+
+
+def _k26_state(nets, ne, why):
+    """`K26` 四状态（**只认实测**）⇒ `(code, 说明)`。
+
+    ★★★ 抽出成函数是为了让它**可证伪**：`P133-15` 的核心主张是「**实测 ≠ 声明**」，
+      若状态机读了 `*_decl`，一个只会声明的卡就会被判成「两道网齐备」——
+      这正是 `P133-8`「有守卫 ≠ 守卫够」的同物种错误。夹具 `-K26-9` 专测这一点。
+    """
+    if ne and why:
+        return "NONENUM", "③已明示不可枚举（合法出口）"
+    if nets["lit_meas"] and nets["free_meas"]:
+        return "TWO", "②两道网（实测齐备）⇒ 满足步骤 2"
+    if nets["lit_meas"] or nets["free_meas"]:
+        return "ONE", "★只有一道（实测）⇒ **未配网**"
+    return "ZERO", "★★零道（实测）⇒ **未配网**"
+
+
+def probe_k26():
+    """`P133-15` 探针：把 `K26` 的三步**逐卡落成可抄读数**（只报告，不判定）。
+
+    ★ 不进 `REGISTRY`、不改 `PASS/FAIL/N/A`、**不替卡片发明白名单**
+      （那只能由卡片**开卡时**冻结，沿 `K16` 判读的理由）。
+    """
+    print("=" * 100)
+    print("P133-15 探针 · `K26`（禁止集的**可执行性**）的操作化读数（只报告，不判定）")
+    print("=" * 100)
+    print("口径（★ 抄进开卡声明时**照抄这四行**）：")
+    print("  ① 能枚举 ⇒ 至少**两道**网，且**形态互不相同**：(i) **字面网** ＋ (ii) **形式无关网**")
+    print("     ★ 只有一道**字面**网的判「**未配网**」（`P133-8` 实测字面网命中 2/6、漏 4/6）")
+    print("  ② 不能枚举 ⇒ **明示「不可枚举」＋ 写明为什么判不了** ＋ 该条降 `②留痕`；")
+    print("     且**不得**再声称「已被 `S\\d+` 守住」")
+    print("  ③ 本探针把**实测**与**声明**分列：`(实)` = 在卡片 py 里找到了结构证据，")
+    print("     `(声)` = 只在卡片文本里**说**有。★★ 汇总只认 `(实)`。")
+    print("  ④ `K26` 是 `②留痕` ⇒ 下列读数**不是** `PASS/FAIL`，而是**开卡时要声明的四个布尔值**")
+
+    nums, skip = canonical_nums()
+    if skip:
+        print(f"   ★ 跳过非规范目录 {len(skip)} 个：{', '.join(map(str, skip))}")
+    print(f"\n【① 逐卡扫描】规范目录 {len(nums)} 个")
+
+    rows = []          # (n, cn, stmt, forms, nets, nonenum, why, has_free_decl_only)
+    n_card = n_stmt = 0
+    for n in nums:
+        ctx = Ctx(n)
+        if not ctx.card:
+            continue
+        n_card += 1
+        sec_ctx = list(ctx.sections())
+        # ★★ 只扫**冻结交付物**（`precheck*.py` / `mech*.py`）—— 与 §2 的机械定义**一致**。
+        #   初版扫了 `dir{n}/*.py` 全部 ⇒ 读数取决于**工作区里恰好有哪些 probe 脚本**
+        #   （本地镜像与 trainer 文件集不同 ⇒ 两侧输出无法逐字节比对，`Cycle 259` 实测）。
+        #   「网」如果只存在于一张一次性 probe 里，它就不是**守卫**。
+        py_srcs = []
+        for f in sorted(ctx.py, key=lambda q: q.name):
+            if not re.match(r"^(precheck|mech)[A-Za-z0-9_]*\.py$", f.name):
+                continue
+            try:
+                py_srcs.append((f.name, f.read_text(encoding="utf-8", errors="replace")))
+            except OSError:
+                pass
+        ctext = ctx.card.read_text(encoding="utf-8")
+        ne, why, ne_ev = _k26_nonenum(ctext)
+        nets = _k26_nets(ctext, py_srcs)          # ★ 卡片级，hoist 出语句循环
+        ev_lit, ev_free = _k26_evidence(py_srcs)
+        seen = set()
+        for ln in ctx.text.splitlines():
+            if _TABLE_ROW.match(ln):
+                continue
+            h = _sem_hit(ln)
+            if not h:
+                continue
+            if any(ln in body.splitlines() and _DESCRIPTIVE_HEAD.search(head)
+                   for head, body in sec_ctx):
+                continue
+            key = _norm_stmt(ln)
+            if key in seen:
+                continue
+            seen.add(key)
+            rows.append((n, ctx.card.name, _de_emph(ln).strip(), _k26_forms(h[2]),
+                         nets, ne, why, ne_ev, ev_lit, ev_free))
+            n_stmt += 1
+
+    print(f"   有卡 {n_card} 张；含禁止语句 **{len({r[0] for r in rows})}** 张；"
+          f"禁止语句 **{n_stmt}** 条")
+
+    # ---------- ② 逐卡「开卡声明」草稿 ----------
+    print("\n【② 逐卡「开卡声明」草稿（可直接抄）】")
+    by_card = {}
+    for r in rows:
+        by_card.setdefault(r[0], []).append(r)
+    #   ★ 汇总口径：四状态 —— 只认**实测**
+    st_no_net = st_one_lit = st_two = st_non = 0
+    for n in sorted(by_card):
+        rs = by_card[n]
+        cn = rs[0][1]
+        nets = rs[0][4]
+        ne, why, ne_ev = rs[0][5], rs[0][6], rs[0][7]
+        ev_lit, ev_free = rs[0][8], rs[0][9]
+        n_lit = int(nets["lit_meas"]) + int(nets["lit_decl"])
+        n_free = int(nets["free_meas"]) + int(nets["free_decl"])
+        print(f"\n   DIR-{n}（{cn}）· 禁止语句 {len(rs)} 条 · 卡片级 ③明示不可枚举："
+              f"{'✓' if ne else '✗'}{'（附理由）' if ne and why else '（★无理由）' if ne else ''}"
+              + (f" ⟵ 触发 `{ne_ev[0]}`：「{ne_ev[1]}」" if (ne and ne_ev) else
+                 (f" ⟵ ★弱信号 `{ne_ev[0]}`（**不**算 ③ 的合法出口，仅提示人工复核）"
+                  if ne_ev else "")))
+        print(f"     ② 网 · 字面(实){'✓' if nets['lit_meas'] else '✗'}"
+              f"/字面(声){'✓' if nets['lit_decl'] else '✗'}"
+              f" · 形式无关(实){'✓' if nets['free_meas'] else '✗'}"
+              f"/形式无关(声){'✓' if nets['free_decl'] else '✗'}")
+        for e in (ev_lit + ev_free):
+            print(f"       (实)证据：{e}")
+        # 状态机（**只认实测**）
+        _code, state = _k26_state(nets, ne, why)
+        st_non += (_code == "NONENUM")
+        st_two += (_code == "TWO")
+        st_one_lit += (_code == "ONE")
+        st_no_net += (_code == "ZERO")
+        print(f"     ⇒ 判定**留给开卡人**；机械状态 = {state}")
+        if not ne and not nets["free_meas"]:
+            print("       ★ 若①判为「不可枚举」⇒ 必须**补 ③ 明示 + 理由**（`K26` 步骤 3）")
+        for stmt, forms in [(r[2], r[3]) for r in rs]:
+            print(f"       · ① 形态候选：{'、'.join(forms)}")
+            print(f"         「{stmt[:96]}」")
+
+    # ---------- ③ 汇总 ----------
+    print("\n【③ 汇总（★ 只认实测；不构成 `PASS/FAIL`）】")
+    print(f"  ③已明示不可枚举（合法出口）：**{st_non}** 张")
+    print(f"  ②两道网实测齐备　　　　　　：**{st_two}** 张")
+    print(f"  ★只有一道实测网（未配网）　：**{st_one_lit}** 张")
+    print(f"  ★★零道实测网（未配网）　　：**{st_no_net}** 张")
+    print("  ★ ★★ **未配网合计 = "
+          f"{st_one_lit + st_no_net} 张** —— 但**不得**读成「这些卡违规」：")
+    print("    `K26` 是 `②留痕`，判定「能不能枚举」的是**人**；本探针只把**事实**摆出来。")
+    print("  ★ 同样**不得**读成「配了网的卡就合规」：实测只证明**网在**，不证明**网够**")
+    print("    （那是 `K25`/`--probe-guard-coverage` 的问题，且它也判不了）。")
+
+    # ---------- ④ 不改判定 ----------
+    print("\n【④ 本探针未触碰判定】")
+    print(f"   `REGISTRY` 仍是 {len(REGISTRY)} 条：{sorted(REGISTRY)}")
+    print(f"   清单 `①自动化` 集合仍是 {sorted(checklist_auto())}（两者相等 ⇒ 无新增硬门）")
+    print("   ⇒ `PASS/FAIL/N/A` 计数与本探针**无关**；`--all` 的判决一字未动。")
+    print("\n★ 只报告，不改变任何判定。")
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dirs", nargs="*", type=int)
@@ -1676,6 +2057,7 @@ def main():
     ap.add_argument("--probe-k15-scope", action="store_true")
     ap.add_argument("--probe-guard-coverage", action="store_true")
     ap.add_argument("--probe-semantic-discipline", action="store_true")
+    ap.add_argument("--probe-k26", action="store_true")
     a = ap.parse_args()
 
     if a.selftest:
@@ -1689,6 +2071,9 @@ def main():
 
     if a.probe_semantic_discipline:
         return probe_semantic_discipline()
+
+    if a.probe_k26:
+        return probe_k26()
 
     # ★ 覆盖率守卫：清单声明的 ①自动化 集合必须与本脚本实现的一致（DEF-128-03）
     auto = checklist_auto()
@@ -1709,7 +2094,7 @@ def main():
         nums = a.dirs
     else:
         ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope / --probe-guard-coverage"
-                 " / --probe-semantic-discipline")
+                 " / --probe-semantic-discipline / --probe-k26")
 
     ks = sorted(REGISTRY)
     total = {PASS: 0, FAIL: 0, NA: 0}
