@@ -233,6 +233,48 @@ for _must in "03_LEDGERS/COVERAGE-v24.md" \
   [ -f "$PKG/$_must" ] || { say "★★ 归档必需品缺失：$_must ⇒ 中止"; exit 9; }
 done
 say "归档必需品齐备：DECISIONS.md + CARD-CHECKLIST.md + COMPLIANCE-BASELINE.md + 六脚本（rebuild_full / repack / audit_consistency / check_cards / blind_copy / restore_out）"
+
+# ★★ P134-14e（Cycle 265）：入包**差集**核对 —— 消灭「新增 `.ops/scripts/*` 静默漏包」。
+#   动机（Cycle 264 **实测**，不是假想）：新增 `test_audit_k27judge.py` 后，上方入包白名单
+#   （`for _s in …`）未同步，而本文件的注释自己早就写着「新增审计脚本时必须同步加到这里与下方
+#   `_must`」——但**没有任何断言**核对 ⇒ `repack.sh` 照报 `OK=3397 FAILED=0`、`audit_consistency`
+#   全绿（它只核对「包里文件的 md5」，从不核对「该进包的都进了」）⇒ 归档「看起来完整、实则缺件」。
+#   口径：源码 `.ops/scripts/*` 减去包内同目录文件，必须**恰好等于**下面的显式排除表；
+#   反向：排除表里每一项都必须在源码里**真实存在**（否则排除表会腐化成「万能后门」）。
+#   ★ 不得改成「自动全量入包」：会把隧道代理、推送辅助、一次性脚本与带环境依赖的实验脚手架
+#     一并卷进公开归档。★ 不得与上方 `_must` 合并：`_must` 判「清单里的在不在」，本条判「差集空不空」。
+declare -a _SCRIPT_EXCLUDE=(
+  tr.sh reconnect.sh reconnect2.sh wait_ssh.sh keepalive.sh patient.sh   # 隧道 / 连接 / 存活：含主机名与私钥路径
+  push18.sh push52.sh _push114.sh pull_formal.sh pull_live.sh            # 推送 / 拉取：只在 trainer↔本机之间有意义
+  cpu_bench.py cpu_round.sh cpu_round_run.sh parse_cpu_results.py         # CPU / 存储基准的脚手架（结果已入 05_LOGS）
+  package18.sh finalize18.sh autofinal.sh controller.sh lowfreq.sh        # 历史一次性打包 / 收尾 / 常驻调度
+  pipeline2.sh resume.sh reconcile_workspace.sh run_on_trainer.sh         # 历史一次性流程编排
+  finalize_d25.py make_d25_snippet.py parse_formal.py fill_verdict.py     # 单轮（D-25 / formal）专用，判据已入 VERDICT
+  assert_round.sh test_d56_resume.py test_perm_derangement.py            # 轮次内部自测（已被 ⑧/⑩ 与 check_cards --selftest 取代）
+  test_signature_consistency.py test_static_lint.py                      # 同上
+  COMPACTION_DIR17-DIR20.md                                              # 文档：已归 02/03 台账，不属脚本层
+)
+_missing_scripts=""
+for _f in "$ROOT"/.ops/scripts/*; do
+  [ -f "$_f" ] || continue
+  _b=${_f##*/}
+  case "$_b" in __pycache__*|*.pyc) continue ;; esac
+  _skip=0
+  for _e in "${_SCRIPT_EXCLUDE[@]}"; do [ "$_e" = "$_b" ] && { _skip=1; break; }; done
+  [ "$_skip" = 1 ] && continue
+  [ -f "$PKG/06_CONTINUITY/.ops/scripts/$_b" ] || _missing_scripts="$_missing_scripts $_b"
+done
+[ -z "$_missing_scripts" ] || {
+  say "★★ 入包差集核对失败：源码有、包内无，且不在排除表 ⇒$_missing_scripts（新脚本须同时加进上方 for _s 白名单与下方 _must）⇒ 中止"
+  exit 8
+}
+for _e in "${_SCRIPT_EXCLUDE[@]}"; do
+  [ -f "$ROOT/.ops/scripts/$_e" ] || {
+    say "★★ 入包排除表过期：源码里已无「$_e」⇒ 排除表会腐化成万能后门 ⇒ 中止"
+    exit 9
+  }
+done
+say "入包差集核对通过：源码 $(ls "$ROOT"/.ops/scripts/ | grep -vc __pycache__) 项 −包内 = 排除表 ${#_SCRIPT_EXCLUDE[@]} 项（每项在源码中真实存在）"
 N=$(wc -l < /tmp/_full_mf.txt)
 say "全包文件数 = $N（源文件数 = $N_SRC）"
 # ★ 2026-11-07：原实现用**硬编码下限 250**（旧沙箱布局的规模）⇒ 恢复后的工作区只有 186 个源文件
