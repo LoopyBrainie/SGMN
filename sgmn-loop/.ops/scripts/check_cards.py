@@ -41,6 +41,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 ROOT = pathlib.Path(__import__("os").environ.get("SGMN_ROOT", HERE.parent.parent))
 CHECKLIST = ROOT / "CARD-CHECKLIST.md"
 REVOLVE = ROOT / "revolve"
+EVIDENCE = ROOT / "evidence" / "table.md"
 CJK = re.compile(r"[\u4e00-\u9fff]")
 FLOAT = re.compile(r"(?<![\w.])-?\d+\.\d+(?![\w])")
 
@@ -1084,8 +1085,49 @@ def selftest():
     ok += ok15
     bad += bad15
     print(f"   （其中 `P133-15` 的 `K26` 探针夹具 {ok15 + bad15} 条）")
+    # ------------------------------------------------------------------
+    # ★ `P134-14`（Cycle 261）`U4` 探针夹具：8 条，**全部纯字符串**（不落盘）。
+    #   目的：让「**形态可判** ≠ **推论可判**」可**证伪** —— 三条替代只认形态，
+    #   若哪天有人把 `_u4_parts` 改成「判断语义」，下列夹具会立刻暴露它不再是形态判据。
+    # ------------------------------------------------------------------
+    ok14 = bad14 = 0
+
+    def _t14(label, got, expect):
+        nonlocal ok14, bad14
+        _ok = (got == expect)
+        ok14, bad14 = (ok14 + 1, bad14) if _ok else (ok14, bad14 + 1)
+        print(f"  {'✓' if _ok else '✗'} {label:<44} 期望 {expect!r} 实得 {got!r}")
+
+    _t14("-U4-1 文档标题里的「边界」**不得**被当边界段（一级标题不入定位器）",
+         _u4_sections("# DIRECTION · DIR-46 —— 外积记忆的容量/长期干扰边界\n- 不得外推\n"), [])
+    _s = _u4_sections("## §7 边界（**不可外推**）\n- **不得**把 $x$ 读成「y」\n")
+    _t14("-U4-2 `## §7 边界（…）` ⇒ 定位到 1 段", len(_s), 1)
+    _t14("-U4-3 跨段截断：第二节的条款不混进第一节",
+         _u4_sections("## §7 边界\n- A 条\n## §8 别的\n- B 条\n")[0][1], ["- A 条"])
+    _t14("-U4-4 只取 bullet/编号行（正文段落不算条款）",
+         _u4_clauses(["这是正文段落不是条款", "- 这是条款行足够长", "1. 编号条款也够长"]),
+         ["- 这是条款行足够长", "1. 编号条款也够长"])
+    _t14("-U4-5 三个布尔：点名Y / 带轴值 / 带否定",
+         _u4_parts("- **不得**外推为「记忆改善了 LLM」（$d_h{=}8$）"), (True, True, True))
+    _t14("-U4-6 无引号短语 ⇒ 点名Y False（**只**认形态，不认语义是否真是 Y）",
+         _u4_parts("- 不得外推为记忆改善了 LLM")[0], False)
+    _t14("-U4-7 无 `a=b` 轴值 ⇒ 带轴值 False（「玩具规模」这种裸词不算轴值）",
+         _u4_parts("- **玩具规模**；不得外推为「记忆改善 LLM」")[1], False)
+    _t14("-U4-8 证据边界栏：纯「无」被抓到（体例规则 3 禁止写「无」）",
+         _u4_ev_flags("无"), {"empty": False, "wu": True, "neg": False, "axis": False})
+
+    _t14("-U4-10 纯散文段：容器**在**（1 段）但条款行 0 条（两个读数不得混用）",
+         (len(_u4_sections("## §8 边界\n本卡只测线性化动力学。\n")),
+          len(_u4_clauses(_u4_sections("## §8 边界\n本卡只测线性化动力学。\n")[0][1]))), (1, 0))
+    _t14("-U4-9 句型：正向型与禁令型可区分（`只测`=POS，`不得`=NEG）",
+         (_u4_form("- 本卡**只测**层 1 的读"), _u4_form("- **不得**读成「y」")), ("POS", "NEG"))
+
+    ok += ok14
+    bad += bad14
+    print(f"   （其中 `P134-14` 的 `U4` 探针夹具 {ok14 + bad14} 条）")
     print(f"\n自测：{ok} 通过 / {bad} 不符（共 {len(cases)} 夹具 + {ok8 + bad8} 条 P133-8 探针夹具"
-          f" + {ok10 + bad10} 条 P133-10 探针夹具 + {ok15 + bad15} 条 P133-15 探针夹具）")
+          f" + {ok10 + bad10} 条 P133-10 探针夹具 + {ok15 + bad15} 条 P133-15 探针夹具"
+          f" + {ok14 + bad14} 条 P134-14 探针夹具）")
     return 0 if bad == 0 else 1
 
 
@@ -2049,6 +2091,253 @@ def probe_k26():
     return 0
 
 
+# ---------------------------------------------------------------------------
+# P134-14（Cycle 261）探针：`U4`（误读/解读禁令）的**改写路径**操作化读数
+# ---------------------------------------------------------------------------
+#   `U4` 原句形如「**不得把 X 读成 Y**」。★ **Y 是「推论方式」的开放集** ⇒ 任何守卫都
+#   判不了 ⇒ **不能**把 `U4` 记成「可枚举」（那是 `P133-1` 防的**假 `PASS`**）。
+#   本探针只实现**三条可判的形态替代**，它们判的是**形态齐备性**，不是推论：
+#     R-A **容器化**  ：边界段能被**机械定位**（`##`–`####` 标题含「边界」且非文档标题行）
+#     R-B **反向命名**：段内条款**点名 Y**（引号短语）—— 名字一旦落盘，核对者只需检索名字
+#     R-C **作用域随行**：段内条款带 X 的**轴值**（`a=b` 形式的冻结值）
+#   ★★ 三条**都不判**「`Y` 是否真的没被写进结论」⇒ 只报告、不判定、不进 `REGISTRY`。
+
+_U4_Q = re.compile(r'[「『“"]([^」』”"]{2,60})[」』”"]')
+_U4_AX = re.compile(r'(?:\$[^$\n]{0,40}\{[=＝][^}]*\}'
+                    r'|[A-Za-z_\\][A-Za-z0-9_\\^{}]*\s*[=＝]\s*[-\d.$,{}\\])')
+_U4_NEG = re.compile(r'不得|不可|不能|不构成|不回答|不是|未|非|无')
+_U4_CLAUSE = re.compile(r'^(?:[-*+]|\d+[.、)]|★|\*\*)\s*')
+
+
+_U4_SEC_ALT = ('边界', '红线', '证明义务', '不做什么', '证据边界')
+
+
+def _u4_sections(text, kws=('边界',)):
+    """`R-A` 的定位器：返回 [(标题, 行列表)]。
+
+    ★ 只认 `##`–`####`（**不认** `#` 一级标题）—— 因为 `# DIRECTION · DIR-46 —— …
+      容量/长期干扰边界` 这类**文档标题**里也含「边界」，一级标题若入口径就是假阳性。
+    ★ 另排除以 `DIRECTION` 开头的行（防御：有人在 `##` 里写文档标题）。
+    """
+    hs = [(m.start(), m.group(1), m.group(2).strip())
+          for m in re.finditer(r'^(#{2,4})\s*(.+)$', text, re.M)]
+    out = []
+    for i, (p, _lv, txt) in enumerate(hs):
+        if any(k in txt for k in kws) and not txt.startswith('DIRECTION'):
+            e = hs[i + 1][0] if i + 1 < len(hs) else len(text)
+            body = text[p:e].split('\n')[1:]
+            while body and not body[-1].strip():   # ★ 剔尾空行（`-U4-3` 夹具钉住）
+                body.pop()
+            out.append((txt, body))
+    return out
+
+
+def _u4_clauses(lines):
+    """段内**条款行**：以 bullet / 编号 / `★` / `**` 开头且长度 > 8。"""
+    out = []
+    for ln in lines:
+        s = ln.strip()
+        if len(s) > 8 and _U4_CLAUSE.match(s):
+            out.append(s)
+    return out
+
+
+def _u4_parts(clause):
+    """返回 (点名Y, 带轴值, 带否定) 三个布尔。
+
+    ★ **只判形态**：`点名Y` 判的是「有引号短语」，**不**判那个短语是不是真的 Y。
+    """
+    return (bool(_U4_Q.search(clause)),
+            bool(_U4_AX.search(clause)),
+            bool(_U4_NEG.search(clause)))
+
+
+_U4_POS = re.compile(r'只(?:测|回答|覆盖|能|在|限|许|给|对|有|作)|本卡(?:只|不)|'
+                      r'条件于|以[^，。]{0,14}为界|仅(?:测|在|限)')
+
+
+def _u4_form(clause):
+    """条款**句型**：`NEG`（「不得…」禁令型）/ `POS`（「只许/只测/本卡不…」正向型）/ `BOTH` / `NONE`。
+
+    ★★ 这是 `P134-14` 的**核心读数**：正向句型（`POS`）是「不得把 X 读成 Y」的
+       **首选替代** —— 它**可判**（判「有没有正向限定词」）且**可执行**（写不出 X 的界
+       就是没写边界），而禁令型必须先把 `Y` 想出来才写得下。
+    """
+    neg = bool(_U4_NEG.search(clause))
+    pos = bool(_U4_POS.search(clause))
+    return "BOTH" if (neg and pos) else "NEG" if neg else "POS" if pos else "NONE"
+
+
+def _u4_ev_cells(text):
+    """证据行的**边界栏**：返回 [(D-xx, 正文)]（只认 `| **边界** |` 形态）。"""
+    hits = [(m.group(1), m.start())
+            for m in re.finditer(r'^### \*\*`?(D-\d+)`?\*\*', text, re.M)]
+    out = []
+    for i, (n, p) in enumerate(hits):
+        e = hits[i + 1][1] if i + 1 < len(hits) else len(text)
+        for line in text[p:e].split('\n'):
+            if re.match(r'\| \*\*边界', line) and line.count('|') >= 3:
+                out.append((n, line.split('|')[2].strip()))
+    return out
+
+
+def _u4_ev_flags(body):
+    """证据行边界栏的四读数：空 / 纯「无」/ 无否定命题 / 无轴值。"""
+    wu = bool(re.fullmatch(r'[「"]?无[」"]?。?\s*', body)) if body else False
+    return {
+        "empty": not body,
+        "wu": wu,
+        # ★ 纯「无」**一个命题都没断言** ⇒ 不算「有否定命题」（`-U4-8` 夹具钉住）；
+        #   否则 `_U4_NEG` 里的「无」会把它自己判成「有否定」，读数就自相矛盾了。
+        "neg": bool(body) and not wu and bool(_U4_NEG.search(body)),
+        "axis": bool(_U4_AX.search(body)) if body else False,
+    }
+
+
+def probe_u4():
+    """`P134-14` 探针：把 `U4` 的**三条形态替代**逐卡落成可抄读数（只报告，不判定）。
+
+    ★ 不进 `REGISTRY`、不改 `PASS/FAIL/N/A`、**不**替任何卡改一个字。
+    """
+    print("=" * 100)
+    print("P134-14 探针 · `U4`（误读/解读禁令）的**改写路径**读数（只报告，不判定）")
+    print("=" * 100)
+    print("口径（★ 照抄进开卡声明/新纪律时**照抄这五行**）：")
+    print("  ① `U4` = 「不得把 X 读成 Y」，`Y` 是**推论方式的开放集** ⇒ 守卫判不了")
+    print("     ⇒ **不得**据此把 `U4` 记成「可枚举」（`P133-1` 防的假 `PASS`）")
+    print("  ② 可判的**只有形态**：`R-A` 容器可定位 · `R-B` 条款点名 `Y` · `R-C` 条款带轴值")
+    print("  ③ 三条**都不判**「`Y` 是否真的没被写进结论」⇒ 现状符合 ≠ 推论没越界")
+    print("  ④ `R-A/R-B/R-C` 判的是**齐备性**：某条缺轴值 ⇒ 不是「卡错了」，是**形态未齐**")
+    print("  ⑤ 下列读数**不是** `PASS/FAIL`，是**开卡时必须声明的三个布尔值**")
+
+    nums, skip = canonical_nums()
+    if skip:
+        print(f"   ★ 跳过非规范目录 {len(skip)} 个：{', '.join(map(str, skip))}")
+    print(f"\n【① 卡 locus（`DIRECTION_*` 的边界段）】规范目录 {len(nums)} 个")
+
+    TARGETS = {35, 36, 38, 39, 40, 129}      # `P133-10` 普查判为 `U4` 的 6 张卡（7 条语句）
+    total_cl = y_cl = a_cl = 0
+    form = {"NEG": 0, "POS": 0, "BOTH": 0, "NONE": 0}
+    with_sec = []      # ★ 容器**可定位**（≥1 段）—— 与「段内有没有条款行」是**两个**读数
+    with_cl = []       # 段内**有条款行**
+    no_sec = []
+    with_alt = []      # ★ 广义容器（边界 | 红线 | 证明义务 | 不做什么 | 证据边界）
+    titles = set()
+    seven = {}
+    for n in nums:
+        ctx = Ctx(n)
+        if not ctx.card:
+            continue
+        # ★★ `P134-14` 修：原 `glob("DIRECTION_rev{n}_v*.md")` **漏掉无 `_v` 的基卡**
+        #   （`DIRECTION_rev23.md` / `DIRECTION_rev15.md`）⇒ 会把「只在基卡里写了边界」的卡
+        #   误报成「容器缺失」。口径改为：`rev{n}` 后必须紧跟 `_` 或 `.`（防 `rev3` 撞 `rev30`）。
+        cands = sorted(
+            (p for p in ctx.cdir.glob(f"DIRECTION_rev{n}*.md")
+             if "archived" not in p.name
+             and re.match(rf"^DIRECTION_rev{n}([_]|\.)", p.name)),
+            key=lambda p: ((int(m.group(1)) if (m := re.search(r"_v(\d+)", p.name)) else -1),
+                           p.name),
+        )
+        seen = set()
+        cl_all = []
+        n_sec = 0
+        n_alt = 0
+        for f in cands:                     # ★ 跨**副本**并集：小修订常不重复基卡的 §7
+            try:
+                t = f.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            n_alt += bool(_u4_sections(t, _U4_SEC_ALT))
+            for ti, lines in _u4_sections(t):
+                titles.add(ti)
+                n_sec += 1
+                for c in _u4_clauses(lines):
+                    if c in seen:           # ★ 按内容去重（同一段在多副本里重复）
+                        continue
+                    seen.add(c)
+                    cl_all.append(c)
+        if n_alt:
+            with_alt.append(n)
+        if n_sec:
+            with_sec.append(n)
+            if cl_all:
+                with_cl.append(n)
+        else:
+            no_sec.append(n)
+        if n in TARGETS:
+            seven[n] = cl_all
+        for c in cl_all:
+            total_cl += 1
+            names, axis, _neg = _u4_parts(c)
+            y_cl += names
+            a_cl += axis
+            form[_u4_form(c)] += 1
+
+    print(f"   `R-A` 容器**可定位**（任一副本有段）：**{len(with_sec)}** 张")
+    print(f"     其中段内**有条款行**　　　　　　：**{len(with_cl)}** 张"
+          f" · **纯散文**（无条款行）：**{len(with_sec) - len(with_cl)}** 张")
+    print(f"   ★ 容器**缺失**（任何副本都没有含「边界」的 `##`–`####` 标题）：**{len(no_sec)}** 张"
+          + (f"（{', '.join('DIR-%d' % x for x in no_sec)}）" if no_sec else ""))
+    _noalt = [x for x in nums if x not in with_alt]
+    print(f"   ★ 广义容器（边界｜红线｜证明义务｜不做什么｜证据边界）：**{len(with_alt)}** 张"
+          + (f" · **任何**此类段都没有：**{len(_noalt)}** 张"
+             f"（{', '.join('DIR-%d' % x for x in _noalt)}）" if _noalt else ""))
+    print("   ★★ 三个读数**不得**混用：容器缺失 ≠ 没声明边界。实测：`DIR-46/47/48/49` 把边界写在")
+    print("     「§8 红线」+「§9 证明义务」里；`DIR-23/87` 在**任何副本**里都只有文档标题/引文")
+    print("     出现过「边界」二字，**没有**边界段 ⇒ 前四张是**命名**问题，后两张是**真缺**。")
+    print(f"   ★★ 段标题**变体数**：**{len(titles)}** 种 ⇒ 定位器能定位「含边界」的段，"
+          "但**名字不统一**")
+    if total_cl:
+        print(f"   条款合计（按内容去重）：**{total_cl}** 条 · "
+              f"`R-B` 点名 `Y` **{y_cl}**（{y_cl / total_cl:.1%}）· "
+              f"`R-C` 带轴值 **{a_cl}**（{a_cl / total_cl:.1%}）")
+        print(f"   句型分布：禁令型 `NEG` **{form['NEG']}** · "
+              f"正向型 `POS` **{form['POS']}** · 兼有 `BOTH` **{form['BOTH']}** · "
+              f"两者皆无 `NONE` **{form['NONE']}**")
+        print("   ★★ 正向型（「只测/只回答/本卡不…」）是「不得把 X 读成 Y」的**首选替代**：")
+        print("     它**可判**（判有没有正向限定词）且**可执行**（写不出 X 的界就是没写边界）。")
+    print("   ★ 口径提醒：分母是**边界段内的条款**，不是「`U4` 语句」。")
+    print("     `U4` 语句只是其中一类（普查口径下 **7** 条 / **6** 张卡）。")
+
+    print("\n【② 普查判为 `U4` 的 6 张卡：逐条读数】")
+    for n in sorted(seven):
+        cs = seven[n]
+        print(f"\n   DIR-{n} · 边界段条款 {len(cs)} 条")
+        for c in cs:
+            names, axis, neg = _u4_parts(c)
+            mark = ('Y' if names else '·') + ('A' if axis else '·') + ('N' if neg else '·')
+            print(f"     [{mark}] 「{c[:88]}」")
+    print("\n   ★ 标记 = 点名Y / 带轴值 / 带否定。★ **不判**该条是否真的守住了推论。")
+
+    print("\n【③ 证据 locus（`evidence/table.md` 的「边界」栏）】")
+    ev = EVIDENCE if EVIDENCE.exists() else None
+    if ev is None:
+        print("   ★ 证据表不可读 ⇒ 跳过（不记 PASS/FAIL）")
+    else:
+        cells = _u4_ev_cells(ev.read_text(encoding="utf-8", errors="replace"))
+        st = {"empty": 0, "wu": 0, "noneg": 0, "noaxis": 0}
+        for _n, b in cells:
+            fl = _u4_ev_flags(b)
+            st["empty"] += (not b)
+            st["wu"] += fl["wu"]
+            st["noneg"] += (bool(b) and not fl["neg"])
+            st["noaxis"] += (bool(b) and not fl["axis"])
+        print(f"   边界栏 **{len(cells)}** 个 · 空 **{st['empty']}** · "
+              f"纯「无」**{st['wu']}** · 无否定命题 **{st['noneg']}** · "
+              f"无轴值 **{st['noaxis']}**")
+        print("   ★ 体例规则 3 已把这里的 `U4` 改写成**正向可判**：「『不能外推为』必须显式")
+        print("     写出相邻但未验证的命题——这一栏不得写「无」」⇒ 空/**「无」** 是可判的。")
+        print("   ★★ 但 `audit_consistency.py` 至今**零**处检查该栏 ⇒ 体例有法、无器。")
+
+    print("\n【④ 本探针未触碰判定】")
+    print(f"   `REGISTRY` 仍是 {len(REGISTRY)} 条：{sorted(REGISTRY)}")
+    print(f"   清单 `①自动化` 集合仍是 {sorted(checklist_auto())}（两者相等 ⇒ 无新增硬门）")
+    print("   ⇒ `PASS/FAIL/N/A` 计数与本探针**无关**；`--all` 的判决一字未动。")
+    print("\n★ 只报告，不改变任何判定。")
+    return 0
+
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dirs", nargs="*", type=int)
@@ -2058,6 +2347,7 @@ def main():
     ap.add_argument("--probe-guard-coverage", action="store_true")
     ap.add_argument("--probe-semantic-discipline", action="store_true")
     ap.add_argument("--probe-k26", action="store_true")
+    ap.add_argument("--probe-u4", action="store_true")
     a = ap.parse_args()
 
     if a.selftest:
@@ -2074,6 +2364,9 @@ def main():
 
     if a.probe_k26:
         return probe_k26()
+
+    if a.probe_u4:
+        return probe_u4()
 
     # ★ 覆盖率守卫：清单声明的 ①自动化 集合必须与本脚本实现的一致（DEF-128-03）
     auto = checklist_auto()
@@ -2094,7 +2387,7 @@ def main():
         nums = a.dirs
     else:
         ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope / --probe-guard-coverage"
-                 " / --probe-semantic-discipline / --probe-k26")
+                 " / --probe-semantic-discipline / --probe-k26 / --probe-u4")
 
     ks = sorted(REGISTRY)
     total = {PASS: 0, FAIL: 0, NA: 0}
