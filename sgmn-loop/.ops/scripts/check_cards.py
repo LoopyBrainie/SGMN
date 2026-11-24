@@ -28,6 +28,7 @@
 """
 import argparse
 import ast
+import collections
 import json
 import io
 import pathlib
@@ -919,7 +920,103 @@ def selftest():
 
     ok += ok8
     bad += bad8
-    print(f"\n自测：{ok} 通过 / {bad} 不符（共 {len(cases)} 夹具 + {ok8 + bad8} 条 P133-8 探针夹具）")
+
+    # ★★★ `P133-10`：普查探针的**检测器**正确性。
+    #   ★★ 见证集**手工书写**、**不由量词表/禁止语表反推** —— 否则重演 `P133-8` §二
+    #      的「自证循环」（见证 = 被测判据 ⇒ 只证明「检测器非空转」）。
+    #   ★ 夹具钉的是**工具**的行为；**实况**（哪条纪律是语义型）由普查 + 人工标注承担。
+    ok10 = bad10 = 0
+
+    def _t10(label, ok_, info=""):
+        nonlocal ok10, bad10
+        ok10, bad10 = (ok10 + 1, bad10) if ok_ else (ok10, bad10 + 1)
+        print(f"  {'✓' if ok_ else '✗'} P133-10 {label} {info}")
+
+    # ① 真命中：来源界定 + 全称量词（`K16` 的原句形态）
+    _h = _sem_hit("**`precheck` 阶段不得打印属于 `formal` 的任何判据读数**")
+    _t10("-1 命中「任何判据读数」（来源+全称）",
+         bool(_h) and _h[0] == "任何" and "SRC" in _h[2] and "CLS" in _h[2], f"{_h}")
+
+    # ② **假阳性防护**：本库的「逐」多是「逐位/逐字」复合词，**不是**全称量词
+    _h = _sem_hit("冻结卡里不得要求浮点逐位相等")
+    _t10("-2 「逐位相等」**不**命中（逐位≠量词）", _h is None, f"{_h}")
+
+    # ③ **假阳性防护**：「均值」里的「均」是**名词的一部分**，不是量词
+    _h = _sem_hit("禁止只对 5 张图的均值做一次 3se")
+    _t10("-3 「均值」里的「均」**不**命中", _h is None, f"{_h}")
+
+    # ④ **假阳性防护**：有量词、无禁止语 ⇒ 不是「禁止语句」
+    _h = _sem_hit("任何判据读数都要在 VERDICT 里报告")
+    _t10("-4 无禁止语**不**命中", _h is None, f"{_h}")
+
+    # ⑤ **假阳性防护**：有禁止语、无量词 ⇒ 不是「全称型禁止语句」
+    _h = _sem_hit("不得打印 `C2` 读数")
+    _t10("-5 无量词**不**命中", _h is None, f"{_h}")
+
+    # ⑥ 聚合层级（`DIR-130` 的「跨读数的聚合」物种）
+    _h = _sem_hit("禁止输出一切跨读数的聚合")
+    _t10("-6 命中「一切跨读数的聚合」（聚合层级）",
+         bool(_h) and _h[0] == "一切" and "AGG" in _h[2], f"{_h}")
+
+    # ⑦ markdown 强调把词劈开 ⇒ 仍须命中（`P133-4` 同物种：`N/A` 静默失效）
+    _h = _sem_hit("**不得**打印**任何** `C2` 读数")
+    _t10("-7 强调劈开仍命中（`P133-4` 同物种）",
+         bool(_h) and _h[0] == "任何", f"{_h}")
+
+    # ⑧ ★★★ **符号二义抓不到**（`K22` 的 `α`）：无全称量词 ⇒ 量词普查漏掉它
+    #     ⇒ 证明第五段（符号扫描）**不可删**。
+    _alpha_line = "判决表必须显式含「若 size(判据) > α + 容差 ⇒ 记不可采用」"
+    _h = _sem_hit(_alpha_line)
+    _t10("-8 符号二义**抓不到** ⇒ 符号扫描不可删",
+         _h is None and "α" in re.findall(r"[α-ωΑ-Ω]", _de_emph(_alpha_line)), f"{_h}")
+
+    # ⑨ `LIT`（显式 token 列举）**只能在原行**判 —— 去强调后反引号已抹掉
+    #     （实测踩过：在去强调后的行上判 `LIT` 恒为 0）
+    _h = _sem_hit("不得含**任何** `C2`/`C3` 读数")
+    _t10("-9 `LIT`（`C2`/`C3` 列举）被认出",
+         bool(_h) and _h[0] == "任何" and "LIT" in _h[2], f"{_h}")
+
+    # ⑩ 被量化对象的短语：两侧都要抽（对象可能在量词**前**）
+    _lo, _ri = _object_phrase("Stage A 守卫断言冻结任一阻断项失败",
+                               _de_emph("Stage A 守卫断言冻结任一阻断项失败").find("任一"))
+    _t10("-10 对象短语两侧抽出",
+         "断言" in _lo and "失败" in _ri, f"左={_lo!r} 右={_ri!r}")
+
+    # ⑪ ★★★ **完备性夹具**：本普查的三个**指定候选**必须**全部**被机械普查抓到。
+    #     （`K15` 的「每处纪律」= 出现位置量词；`K16` 的「任何判据读数」= 来源+全称；
+    #       `K22` 的 `α` = 符号二义 ⇒ **抓不到** ⇒ 由第五段符号扫描负责。）
+    #     ★ 这条夹具的作用：**量词表再漏一族，三个候选里就有一个抓不到** ⇒ 立刻报红。
+    _k15 = "每处 `不得打印` / `不得输出` 都必须有一条 `S\\d+` 断言**执行**它"
+    _h = _sem_hit(_k15)
+    _t10("-11 `K15` 的「每处」被量词表抓到",
+         bool(_h) and _h[0] == "每处", f"{_h}")
+
+    # ⑫ ★ 三个指定候选里，`K22` 的 `α` **必须**由**第五段符号扫描**抓到
+    #     （而**不是**由量词普查抓到 —— 否则两个机制会互相顶替、掩盖漏检）。
+    _alpha_blocks = [b for b in _checklist_blocks() if "α" in _de_emph(b[2])]
+    _t10("-12 `K22` 的 `α` 由**符号扫描**抓到（量词普查抓不到它）",
+         bool(_alpha_blocks) and all(_sem_hit(b[2]) is None or "SYM" not in _sem_hit(b[2])[2]
+                                     for b in _alpha_blocks if b[0] == 22),
+         f"K 条目 {sorted({b[0] for b in _alpha_blocks})}")
+
+    # ⑬ ★★★ **已知正例夹具**：`DIR-130` `v1.3` 的「包括但不限于 …」式**开放列举**
+    #     —— 这条**已知欠定义**（`P133-8` 实测：`v1.2` 的「及其任一中间聚合」不可执行）。
+    #     ★ 该卡已**冻结**（`v1.3` 是终版）⇒ 可以写成夹具（不像 `--probe-guard-coverage`
+    #       的实况那样会随修复而变 ⇒ 那里**不能**写夹具）。
+    _d130 = cc_path = ROOT / "revolve" / "DIR-130" / "DIRECTION_rev130_v13.md"
+    if _d130.exists():
+        _ln130 = [l for l in _d130.read_text(encoding="utf-8").splitlines()
+                  if "包括但不限于" in l]
+        _h = _sem_hit(_ln130[0]) if _ln130 else None
+        _t10("-13 `DIR-130` 的「包括但不限于」被认出（已知正例）",
+             bool(_h) and _h[0] == "一切" and "AGG" in _h[2], f"{_h}")
+    else:
+        _t10("-13 `DIR-130` 的「包括但不限于」被认出（已知正例）", False, "缺 v1.3 卡片")
+
+    ok += ok10
+    bad += bad10
+    print(f"\n自测：{ok} 通过 / {bad} 不符（共 {len(cases)} 夹具 + {ok8 + bad8} 条 P133-8 探针夹具"
+          f" + {ok10 + bad10} 条 P133-10 探针夹具）")
     return 0 if bad == 0 else 1
 
 
@@ -1314,6 +1411,260 @@ def probe_guard_coverage():
 
 
 # ---------------------------------------------------------------------------
+# ★ `P133-10`（Cycle 257）普查探针：全库「**按语义定义的禁止集**」的纪律。
+#
+#   只**报告**，不判定、不进 `REGISTRY`（与 `K25` 同款 `②留痕`）——
+#   「可枚举 / 欠定义」是**人工**判定，机械部分只做**候选收窄**与**线索标注**。
+#
+#   ★ 本探针的存在理由（`P133-8` §二 + `P133-9` 实测）：按**字面**定义的禁止集用
+#   文本判据恰当；按**语义**定义的禁止集用文本判据**必漏**（实测漏 4/6）。
+#   ⇒ 故须先量清「哪些纪律是语义型」，否则 `K26`（`P133-11`）会写成一个空条款。
+# ---------------------------------------------------------------------------
+
+# 全称量词表（★ 按**本库语料**校准过，见 `revolve/P133-10-SEMANTIC-DISCIPLINE-CENSUS.md`）：
+#   ★★ **不含**裸「逐」—— 本库的「逐」几乎全是「逐位/逐字/逐字段/逐 seed/逐元素」
+#      这类**复合词**（方式副词），**不是**全称量词；把「逐位相等」当量词是纯假阳性。
+#   ★★ 也不含「逐条/逐字段」这类**逐项式**量词 —— 它们作用在**卡片自己的有限清单**上
+#      ⇒ 按定义即「可枚举」，不属本普查对象。
+QUANT_TOKENS = ("及其任一", "任一", "任何", "所有", "全部", "每一", "逐一", "逐个",
+                "每个", "一切", "凡是", "无论",
+                # ★★ 「每处」「每一处」「各处」「凡有」= 对**出现位置**的全称量化
+                #   （`K15` 的「每处 `不得打印`」就是这一族）。★★ 这四个是**实测补的**：
+                #   本普查的三个**指定候选**之一（`K15` 的「每处纪律」）在补它们之前
+                #   **机械普查抓不到** ⇒ 量词表漏了整个「出现位置」量词族。
+                "每处", "每一处", "各处", "凡有")
+
+# ★★ 「均」「皆」**不**作无条件量词：本库「均值」「平均」极常见（`均` 在「均值」里是
+#   **名词的一部分**，不是全称量词）。故二者只认**上下文**：后接情态/动词才算量词用法。
+#   （实测：不加这个约束时，「禁止只对5张图的均值做一次3se」这类行会被误收。）
+QUANT_CONTEXT = re.compile(r"均(?=须|应|需|不|为|已|未|是|要|当|取|可|能|得|照|依)"
+                           r"|皆(?=须|应|不|是|为|已|未|需|要)")
+
+# 禁止语表（★ **不含**「不可」—— 本库「不可」多为**属性标签**（「判据不可分辨」、
+#   「不可判」「不可读」）而非**对读者的禁令**；混进来会把判据标签当纪律）。
+PROHIB_TOKENS = ("不得", "禁止", "不许", "严禁", "不能", "只许", "仅限", "一律", "杜绝")
+
+# 机制标记：一条纪律的禁止集是「语义型」的**四种可辨形态**。
+_MECH = {
+    "AGG":  re.compile(r"聚合|汇总|池化|中间量|中间聚合|派生的?|衍生|子集|推论|不限于"),
+    "SRC":  re.compile(r"属于|来自|源自|formal|precheck|smoke|--stage|阶段"),
+    "CLS":  re.compile(r"读数|量值|中间量|聚合量|结果|输出|结论|数字|数值|条目|项|内容|机制|架构|判决|读出|配置|实现|映射|种子"),
+    "SYM":  re.compile(r"[α-ωΑ-Ω]"),
+    "LIT":  re.compile(r"`[^`]+`(?:\s*[/、,，]\s*`[^`]+`)+"),
+    "COMP": re.compile(r"之外|以外|其它|其他"),
+}
+
+# 描述性上下文：修订记录 / 缺陷表 / 历史 —— 这些行**记述**发生过什么，不是**对读者的禁令**。
+_DESCRIPTIVE_HEAD = re.compile(r"修订|缺陷|历史|变更|变更记录|revision|勘误|沿革|回顾", re.I)
+# 表格行（以 `|` 开头）= 判据标签 / 读数表 ⇒ 是**数据**，不是纪律语句。
+_TABLE_ROW = re.compile(r"^\s*\|")
+
+
+def _sem_hit(line):
+    """一行是否是「含全称量词的禁止语句」。
+
+    返回 `(量词, 禁止语, 机制标记元组)` 或 `None`。
+    ★ 匹配前先 `_de_emph`（去 markdown 强调/反引号）—— 否则 `**不得**打印` 这类写法
+      会因标记夹在词间而漏（`P133-4` 已实测过同一物种的假 `N/A`）。
+    """
+    d = _de_emph(line)
+    qm = pm = None
+    for tok in QUANT_TOKENS:
+        i = d.find(tok)
+        if i >= 0 and (qm is None or i < qm[0]):
+            qm = (i, tok)
+    if qm is None:
+        m = QUANT_CONTEXT.search(d)
+        if m:
+            qm = (m.start(), m.group(0))
+    for tok in PROHIB_TOKENS:
+        i = d.find(tok)
+        if i >= 0 and (pm is None or i < pm[0]):
+            pm = (i, tok)
+    if qm is None or pm is None:
+        return None
+    flags = tuple(k for k, r in _MECH.items() if r.search(line))
+    #   ★ 标记在**原行**上判（不是去强调后的 `d`）：`LIT`（显式 token 列举）靠**反引号**识别，
+    #   而 `_de_emph` 会把反引号抹掉 ⇒ 在 `d` 上判 `LIT` 恒为 0（实测踩过）。
+    return (qm[1], pm[1], flags)
+
+
+def _object_phrase(line, qstart):
+    """量词**前后**的短语（各 ≤12 字）—— 人工标注时必须看到「量词管的是谁」。
+
+    ★ 为什么两侧都要：被量化对象既可能**跟在**量词后（「不得含**任何** `C2`/`C3` 读数」），
+      也可能**在**量词前（「Stage A 守卫断言冻结**任一**阻断项失败」⇒ 对象是「阻断项」，
+      而「失败」在量词之后）。只取一侧会把对象抽错 ⇒ 标注就会跟着错。
+    """
+    d = _de_emph(line)
+    left = d[max(0, qstart - 12):qstart]
+    right = d[qstart:qstart + 16]
+    cut = r"[（(，,、。；;：:「」『』\s|｜/\\]"
+    left = re.split(cut, left)[-1][:12]
+    right = re.split(cut, right)[0][:12]
+    return left.strip(), right.strip()
+
+
+def _norm_stmt(line):
+    """禁止语句的归一化键（去强调 → 去空白 → 去标点 → 截断）。"""
+    s = _de_emph(line)
+    s = re.sub(r"\s+", "", s)
+    s = re.sub(r"[，、,；;：:（）()【】\[\]「」『』|｜/\\]", "", s)
+    return s[:72]
+
+
+def _checklist_blocks():
+    """`CARD-CHECKLIST.md` 的 25 条 ⇒ [(K号, 字段名, 行文本)]。"""
+    if not CHECKLIST.exists():
+        return []
+    t = CHECKLIST.read_text(encoding="utf-8")
+    hits = [(int(m.group(1)), m.start()) for m in re.finditer(r"^#{2,3} K(\d+) · ", t, re.M)]
+    out = []
+    for i, (n, pos) in enumerate(hits):
+        end = hits[i + 1][1] if i + 1 < len(hits) else len(t)
+        blk = t[pos:end]
+        for fld in ("原文", "检查"):
+            m = re.search(rf"\*\*{fld}\*\*\s*[：|]\s*([^\n]*)", blk)
+            if m:
+                out.append((n, fld, m.group(1).strip()))
+    return out
+
+
+def _symbol_roles(sym, limit=6):
+    """符号 `sym` 在全库里的**左上下文**（最近 6 个 CJK 字）分布 ⇒ 多义候选线索。
+
+    ★ 只报告**线索**，多义与否**由人工**判（机械聚类不承载语义判断）。
+    """
+    cnt = collections.Counter()
+    for n in canonical_nums()[0]:
+        ctx = Ctx(n)
+        if not ctx.card:
+            continue
+        d = _de_emph(ctx.text)
+        for m in re.finditer(re.escape(sym), d):
+            left = d[max(0, m.start() - 8):m.start()]
+            left = re.sub(r"[^\u4e00-\u9fff]", "", left)[-6:]
+            if left:
+                cnt[left] += 1
+    return cnt.most_common(limit)
+
+
+def probe_semantic_discipline():
+    """`P133-10` 探针：全库普查「**按语义定义的禁止集**」的纪律。
+
+    只**报告**：不判 `PASS/FAIL`、不进 `REGISTRY`、不改任何判决。
+    """
+    print("=" * 100)
+    print("P133-10 探针 · 全库普查「按语义定义的禁止集」的纪律（只报告，不判定）")
+    print("=" * 100)
+    print("口径：")
+    print("  总体 A = `CARD-CHECKLIST.md` 的 25 条条目（`原文` + `检查` 行）")
+    print("  总体 B = 105 个规范目录里每张卡的**规范当前 revision**（最高 `_vN`，排除 `archived`）")
+    print("  普查单元 = 一条**禁止语句**（禁止语 + 全称量词同句），跨卡去重")
+    print("  排除：修订记录/缺陷表等**描述性**小节、表格行（数据而非禁令）")
+    print(f"  量词表（已按本库语料校准，**不含**裸「逐」——本库「逐」多是「逐位/逐字」复合词）= "
+          f"{'、'.join(QUANT_TOKENS)}")
+    print(f"  禁止语表（**不含**「不可」——本库「不可」多为属性标签而非禁令）= "
+          f"{'、'.join(PROHIB_TOKENS)}")
+
+    # ---------- ① 总体 A：清单条目 ----------
+    print("\n【① 总体 A · 清单 25 条里的候选】")
+    blocks = _checklist_blocks()
+    a_hits = []
+    for n, fld, txt in blocks:
+        h = _sem_hit(txt)
+        if h:
+            a_hits.append((n, fld, txt, h))
+            print(f"   K{n:<3} 【{fld}】 量词={h[0]!r} 禁止={h[1]!r} 机制={'|'.join(h[2]) or '—'}")
+            print(f"        {txt[:120]}")
+    print(f"   ⇒ 25 条条目（×2 字段）里命中 **{len(a_hits)}** 条")
+
+    # ---------- ② 总体 B：卡片 ----------
+    nums, skip = canonical_nums()
+    if skip:
+        print(f"   ★ 跳过非规范目录 {len(skip)} 个：{', '.join(map(str, skip))}")
+    print("\n【② 总体 B · 105 张卡里的候选】")
+    stmts = {}
+    n_card = 0
+    for n in nums:
+        ctx = Ctx(n)
+        if not ctx.card:
+            continue
+        n_card += 1
+        sec_ctx = []
+        for head, body in ctx.sections():
+            sec_ctx.append((head, body))
+        for ln in ctx.text.splitlines():
+            if _TABLE_ROW.match(ln):
+                continue
+            h = _sem_hit(ln)
+            if not h:
+                continue
+            # 落在描述性小节里的行 ⇒ 排除（记述 ≠ 禁令）
+            skip_line = False
+            for head, body in sec_ctx:
+                if ln in body.splitlines() and _DESCRIPTIVE_HEAD.search(head):
+                    skip_line = True
+                    break
+            if skip_line:
+                continue
+            key = _norm_stmt(ln)
+            stmts.setdefault(key, []).append((n, ln.strip(), h))
+    n_occ = sum(len(v) for v in stmts.values())
+    cards_hit = sorted({o[0] for v in stmts.values() for o in v})
+    print(f"   有卡 {n_card} 张；命中行 **{n_occ}** 行；去重后不同禁止语句 **{len(stmts)}** 条；"
+          f"涉及 **{len(cards_hit)}** 张卡")
+
+    # ---------- ③ 机制标记分布 ----------
+    print("\n【③ 机制标记分布（一条语句可带多个）】")
+    mc = collections.Counter()
+    for v in stmts.values():
+        for f in v[0][2][2]:          # ★ v[0] = (卡号, 行文本, (量词, 禁止语, 标记)) ⇒ 标记在 [2][2]
+            mc[f] += 1
+    for f in sorted(_MECH):
+        print(f"   {f:<5} {mc.get(f, 0):>4} 条")
+
+    # ---------- ④ 候选逐条列出（人工标注用） ----------
+    def _emit(title, group):
+        print(f"\n【{title}（{len(group)} 条）—— 人工逐条标「可枚举 / 欠定义」】")
+        for k, v in sorted(group, key=lambda kv: (-len(kv[1]), kv[0])):
+            n, ln, h = v[0]
+            locs = ",".join(f"D{x[0]}" for x in v)
+            print(f"   [{'|'.join(h[2]) or '—':<17}] ×{len(v):<2} {locs:<24} {k[:46]}")
+            lo, ri = _object_phrase(ln, _de_emph(ln).find(h[0]))
+            print(f"        量词={h[0]!r} 禁={h[1]!r} 对象左={lo!r} 对象右={ri!r}")
+
+    flagged = [(k, v) for k, v in stmts.items() if v[0][2][2]]
+    plain = [(k, v) for k, v in stmts.items() if not v[0][2][2]]
+    _emit("④ 带机制标记的候选", flagged)
+    _emit("④b 无机制标记的候选（仍须逐条看对象 —— 「开放类别」不一定带机制词）", plain)
+    print(f"\n   ⇒ 合计候选 **{len(stmts)}** 条（带标记 {len(flagged)} + 无标记 {len(plain)}）")
+
+    # ---------- ⑤ 符号多义候选 ----------
+    print("\n【⑤ 符号多义候选（第三机制：符号二义）】")
+    print("   ★ 与①–④ **独立**：符号二义的纪律**未必**含全称量词 ⇒ 普查不得只靠量词抓它。")
+    syms = set()
+    for n, fld, txt in blocks:
+        ss = set(re.findall(r"[α-ωΑ-Ω]", _de_emph(txt)))
+        if ss:
+            syms |= ss
+            print(f"   K{n:<3} 【{fld}】含符号 {''.join(sorted(ss))}：{txt[:96]}")
+    for s in sorted(syms):
+        roles = _symbol_roles(s)
+        print(f"   ⇒ `{s}` 的左上下文分布（前 {len(roles)}）：")
+        for lc, c in roles:
+            print(f"        {c:>4}×  …{lc}{s}")
+    print("   ⇒ 多义与否**由人工判**；机械聚类不承载语义判断。")
+
+    # ---------- ⑥ 不改判定 ----------
+    print("\n【⑥ 本探针未触碰判定】")
+    print(f"   `REGISTRY` 仍是 {len(REGISTRY)} 条：{sorted(REGISTRY)}")
+    print(f"   清单 `①自动化` 集合仍是 {sorted(checklist_auto())}（两者相等 ⇒ 无新增硬门）")
+    print("   ⇒ `PASS/FAIL/N/A` 计数与本探针**无关**；`--all` 的判决一字未动。")
+    return 0
+
+
+# ---------------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dirs", nargs="*", type=int)
@@ -1321,6 +1672,7 @@ def main():
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--probe-k15-scope", action="store_true")
     ap.add_argument("--probe-guard-coverage", action="store_true")
+    ap.add_argument("--probe-semantic-discipline", action="store_true")
     a = ap.parse_args()
 
     if a.selftest:
@@ -1331,6 +1683,9 @@ def main():
 
     if a.probe_guard_coverage:
         return probe_guard_coverage()
+
+    if a.probe_semantic_discipline:
+        return probe_semantic_discipline()
 
     # ★ 覆盖率守卫：清单声明的 ①自动化 集合必须与本脚本实现的一致（DEF-128-03）
     auto = checklist_auto()
@@ -1350,7 +1705,8 @@ def main():
     elif a.dirs:
         nums = a.dirs
     else:
-        ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope / --probe-guard-coverage")
+        ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope / --probe-guard-coverage"
+                 " / --probe-semantic-discipline")
 
     ks = sorted(REGISTRY)
     total = {PASS: 0, FAIL: 0, NA: 0}
