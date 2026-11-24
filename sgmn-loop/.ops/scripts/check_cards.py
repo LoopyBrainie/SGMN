@@ -1207,10 +1207,39 @@ def selftest():
     ok += ok20
     bad += bad20
     print(f"   （其中 `P135-1` 的 `R-A` 行号定位夹具 {ok20 + bad20} 条）")
+
+    # ------------------------------------------------------------------
+    # `P135-3` 夹具（5 条）：`_ra_gap_drift` —— 防「嵌入分类表**静默失效**」。
+    #   为何这是本轮**唯一**要钉的机器：分类是人的判读，探针只能保证「表与检测集 1:1」。
+    #   若卡片日后改行号而表不跟着改，探针必须**当場报红**而不是假装“已分类”。
+    # ------------------------------------------------------------------
+    ok21 = bad21 = 0
+
+    def _t21(label, got, expect):
+        nonlocal ok21, bad21
+        _ok = (got == expect)
+        ok21, bad21 = (ok21 + 1, bad21) if _ok else (ok21, bad21 + 1)
+        print(f"  {'✓' if _ok else '✗'} {label:<46} 期望 {expect!r} 实得 {got!r}")
+
+    _R = lambda *ks: [{"card": a, "line": b} for a, b in ks]
+    _t21("-RAG-1 表与检测集完全一致 ⇒ 无漂移",
+         _ra_gap_drift(_R((1, 2), (3, 4)), [(1, 2), (3, 4)]), ([], []))
+    _t21("-RAG-2 ★检测集有、表里没有 ⇒ 报「未分类」（不静默）",
+         _ra_gap_drift(_R((1, 2), (3, 4)), [(1, 2)]), ([(3, 4)], []))
+    _t21("-RAG-3 ★表里有、检测集没有（行号移了/行被改） ⇒ 报「多出」",
+         _ra_gap_drift(_R((1, 2)), [(1, 2), (3, 4)]), ([], [(3, 4)]))
+    _t21("-RAG-4 空表对空集 ⇒ 两边皆空（不报伪漂移）",
+         _ra_gap_drift([], []), ([], []))
+    _t21("-RAG-5 ★真实嵌入表与真检测集 1:1（本轮断言的机检）",
+         _ra_gap_drift(), ([], []))
+
+    ok += ok21
+    bad += bad21
+    print(f"   （其中 `P135-3` 的分类表漂移夹具 {ok21 + bad21} 条）")
     print(f"\n自测：{ok} 通过 / {bad} 不符（共 {len(cases)} 夹具 + {ok8 + bad8} 条 P133-8 探针夹具"
           f" + {ok10 + bad10} 条 P133-10 探针夹具 + {ok15 + bad15} 条 P133-15 探针夹具"
           f" + {ok14 + bad14} 条 P134-14 探针夹具 + {ok13 + bad13} 条 P133-13 探针夹具"
-          f" + {ok20 + bad20} 条 P135-1 夹具）")
+          f" + {ok20 + bad20} 条 P135-1 夹具 + {ok21 + bad21} 条 P135-3 夹具）")
     return 0 if bad == 0 else 1
 
 
@@ -2070,6 +2099,118 @@ def _u4_sec_line_ranges(text, kws):
         #   不收空行才能与它同口径（夹具 `-U4F-1` 就是参这个的）。
         inside.update(i for i in range(i + 1, end) if lines[i].strip())
     return inside
+
+
+# ---------------------------------------------------------------------------
+# `P135-3`：`R-A` 缺口的 **19 行**的逐条分类。“19” 是`P135-1` 的读数，
+#   本表把它变成**可核对的断言**：键集必须与探针**重算出的集**逐位相同，否则报漂移。
+#   ★ 分类是**人的判读**，不是机器可判定的量。所以探针**不**假装自动分类，
+#     而是只做一件机器能做的事：**核对分类表与检测集 1:1**。
+#   ★ 类名：`a` 真缺口（唯一该搬）· `a1` 命名假象 · `b` 分支绑定 · `c` 职能备注 · `d` 转录。
+# ---------------------------------------------------------------------------
+_RA_GAP_CLASS = {
+    (34, 211): 'a1', (35, 144): 'c',  (38, 24): 'b',
+    (41, 42): 'a1',  (41, 176): 'b',  (41, 226): 'b',
+    (42, 52): 'a1',  (42, 93): 'c',   (42, 138): 'b',
+    (42, 152): 'b',  (42, 168): 'b',  (42, 192): 'b',
+    (43, 151): 'b',  (43, 152): 'b',  (43, 153): 'b',
+    (50, 36): 'a1',  (51, 9): 'c',    (51, 19): 'a1',
+    (95, 7): 'd',
+}
+_RA_GAP_CARDS = (34, 35, 38, 41, 42, 43, 50, 51, 95)
+
+
+def _ra_gap_rows():
+    """`P135-3`：重算「误读禁令落在广义容器外」的行 ⇒ [{card,line,sec,clause,text}]。
+
+    ★ 与 `--probe-u4-full` **同一套机器**（`_misread_hits` + `_u4_sec_line_ranges` + `_U4_SEC_ALT`）
+      ⇒ 行数与行号必须与 `P135-1` 的 19/79 逐位一致，否则就是探针漂了。
+    """
+    out = []
+    for n in _RA_GAP_CARDS:
+        ctx = Ctx(n)
+        if not ctx.card:
+            continue
+        lines = ctx.text.splitlines()
+        br = _u4_sec_line_ranges(ctx.text, _U4_SEC_ALT)
+        hs = [(i + 1, m.group(2).strip())
+              for i, ln in enumerate(lines)
+              if (m := re.match(r'^(#{2,4})\s*(.+)$', ln))]
+        for i, ln in enumerate(lines):
+            if i in br or not _misread_hits(ln):
+                continue
+            secs = [t for (j, t) in hs if j <= i + 1]
+            out.append({"card": n, "line": i + 1,
+                        "sec": secs[-1] if secs else '（卡头/无标题）',
+                        "clause": bool(_U4_CLAUSE.match(ln.strip())),
+                        "text": ln.strip()})
+    return out
+
+
+def _ra_gap_drift(rows=None, keys=()):
+    """分类表与**重算检测集**的差异 ⇒ (未分类的行, 分类表里多出的键)。
+
+    ★ 为何要有这个函数：卡片会被后续 cycle 改（行号会移）⇒ 嵌入的分类表会**静默失效**。
+      探针每次都跑它，漂移就**当場报红**，而不是让一份“已分类”的文档慢慢变成胡说。
+    ★ `rows`/`keys` 可显式传入 —— 让自测能测**真逻辑**而不必 monkeypatch。
+    """
+    rs = _ra_gap_rows() if rows is None else rows
+    got = {(r["card"], r["line"]) for r in rs}
+    ks = set(_RA_GAP_CLASS if keys == () else keys)
+    return sorted(got - ks), sorted(ks - got)
+
+
+def probe_ra_gap():
+    """`P135-3` 探针：`R-A` 缺口 19 行的**定位与分类核对**（只报告，不判定）。
+
+    ★ 本探针**不**自动分类 —— 分类是人文判读，机器无法判。
+      它只做两件机器能做的事：① 重算 19 行与它们所在段名；② **核对嵌入的分类表 1:1**。
+    """
+    print("=" * 100)
+    print("P135-3 探针 · `R-A` 缺口 19 行：定位 · 段名 · 分类核对（只报告，不判定）")
+    print("=" * 100)
+    print("口径：")
+    print("  ① 检测集 = 误读禁令（`_misread_hits`）∧ 落在广义容器（`_U4_SEC_ALT`）**外**")
+    print(f"  ② 卡范围 = `P135-1` 报的 9 张：{_RA_GAP_CARDS}")
+    print("  ③ ★ 分类（`a`/`a1`/`b`/`c`/`d`）是**人的判读**，写在 `_RA_GAP_CLASS` 里；")
+    print("     探针**不**自动分类，只**核对**它的键集与重算检测集 1:1。")
+
+    rows = _ra_gap_rows()
+    cl = sum(1 for r in rows if r["clause"])
+    print(f"\n【① 检测集】**{len(rows)}** 行（条款行 **{cl}** · 非条款行 **{len(rows) - cl}**）"
+          f"  ★ 须与 `P135-1` 的 19 / 11 / 8 逐位相同")
+
+    miss, extra = _ra_gap_drift()
+    print(f"\n【② 分类表核对】键 {len(_RA_GAP_CLASS)} · 检测 {len(rows)}"
+          f" ⇒ 未分类 **{len(miss)}** · 多出 **{len(extra)}**")
+    if miss:
+        print(f"   ✗ **漂移**（新出现但未分类）：{miss} ⇒ 分类表已失效，文档结论**不得再引用**")
+    if extra:
+        print(f"   ✗ **漂移**（分类表里已不存在）：{extra} ⇒ 同上")
+    if not miss and not extra:
+        print("   ✓ **1:1 对上**（分类表与检测集完全一致）")
+
+    from collections import Counter
+    cnt = Counter(_RA_GAP_CLASS.values())
+    print(f"\n【③ 分类计数】" + " · ".join(
+        f"`{k}`={cnt.get(k, 0)}" for k in ('a', 'a1', 'b', 'c', 'd'))
+          + f" ⇒ **真缺口 `a` = {cnt.get('a', 0)}**")
+
+    print("\n【④ 逐行（类 · 卡:行 · 段名 · 条款?）】")
+    for r in sorted(rows, key=lambda x: (x["card"], x["line"])):
+        k = _RA_GAP_CLASS.get((r["card"], r["line"]), '?')
+        print(f"   {k:>2s} · DIR-{r['card']}:{r['line']:<4} "
+              f"[{'条款' if r['clause'] else '段落'}] {r['sec'][:44]:44s} | {r['text'][:52]}")
+
+    print("\n【⑤ 按所在段名归组（缺口住在哪 —— 本探针唯一的机制读数）】")
+    for sec, v in Counter(r["sec"] for r in rows).most_common():
+        print(f"   {v:>2} 条（条款行{sum(1 for r in rows if r['sec'] == sec and r['clause'])}）  {sec[:70]}")
+    print("   ★ 若大多数条数落在「判定表/证伪条款/预登记/敏感性/操作化」⇒ 缺口量的是**段的命名**，")
+    print("     不是「边界工作的有无」⇒ 详见 revolve/P135-3-RA-GAP.md §4-1")
+
+    print(f"\n★ `REGISTRY` 未变（本探针不参与判决）：{len(REGISTRY)} 条")
+    print("\n★ 只报告，不改变任何判定。")
+    return 0
 
 
 def probe_u4_full():
@@ -3036,6 +3177,7 @@ def main():
     ap.add_argument("--probe-u4-axis", action="store_true")
     ap.add_argument("--probe-misread", action="store_true")
     ap.add_argument("--probe-u4-full", action="store_true")
+    ap.add_argument("--probe-ra-gap", action="store_true")
     a = ap.parse_args()
 
     if a.selftest:
@@ -3065,6 +3207,9 @@ def main():
     if a.probe_u4_full:
         return probe_u4_full()
 
+    if a.probe_ra_gap:
+        return probe_ra_gap()
+
     # ★ 覆盖率守卫：清单声明的 ①自动化 集合必须与本脚本实现的一致（DEF-128-03）
     auto = checklist_auto()
     if auto:
@@ -3085,7 +3230,7 @@ def main():
     else:
         ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope / --probe-guard-coverage"
                  " / --probe-semantic-discipline / --probe-k26 / --probe-u4 / --probe-u4-axis"
-                 " / --probe-misread / --probe-u4-full")
+                 " / --probe-misread / --probe-u4-full / --probe-ra-gap")
 
     ks = sorted(REGISTRY)
     total = {PASS: 0, FAIL: 0, NA: 0}
