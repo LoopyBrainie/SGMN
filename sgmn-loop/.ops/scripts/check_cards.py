@@ -1130,7 +1130,9 @@ def selftest():
     #   目的三条：
     #     (a) 证明入口**真的**能抓到「既无全称量词也无符号」的误读禁令（不是空转）；
     #     (b) 证明它**不**吃别家的地盘（带量词的归 `P133-10`；无引号断言的归谁都不管）；
-    #     (c) ★ 证明 `把/将` 分支**不可删**（窄框架漏 46 条 —— 反证要能红）。
+    #     (c) ★ 证明 `把/将` 分支**不可删**（窄框架实测漏 37 条 —— 反证要能红）。
+    #         ★ 注：初稿曾写「漏 46 条」，那是错的（+46 来自一个过宽的中间版本，
+    #           宾语自由匹配会跨句误配）⇒ 实测真实差是 +37（见夹具 `-MIS-11`）。
     # ------------------------------------------------------------------
     ok13 = bad13 = 0
 
@@ -1178,9 +1180,37 @@ def selftest():
     ok += ok13
     bad += bad13
     print(f"   （其中 `P133-13` 的误读禁令探针夹具 {ok13 + bad13} 条）")
+
+    # ------------------------------------------------------------------
+    # `P135-1` 夹具（4 条）：`_u4_sec_line_ranges` —— `R-A` 的**行号**定位器。
+    #   为何要单独钉：`_u4_sections` 返回段体**文本**，而 `P135-1` 要判「**某一行**在不在段内」。
+    #   两条容易错的语义：① 标题行**自己不算**段内；② 遇下一个标题**即止**。
+    # ------------------------------------------------------------------
+    ok20 = bad20 = 0
+
+    def _t20(label, got, expect):
+        nonlocal ok20, bad20
+        _ok = (got == expect)
+        ok20, bad20 = (ok20 + 1, bad20) if _ok else (ok20, bad20 + 1)
+        print(f"  {'✓' if _ok else '✗'} {label:<46} 期望 {expect!r} 实得 {got!r}")
+
+    _t20("-U4F-1 边界段体在内、**标题行自己不在内**",
+         sorted(_u4_sec_line_ranges("## §7 边界\n- A 条\n", ('边界',))), [1])
+    _t20("-U4F-2 ★遇下一个标题**即止**（§8 后的行不进 §7 段）",
+         sorted(_u4_sec_line_ranges("## §7 边界\n- A\n## §8 别的\n- B\n", ('边界',))), [1])
+    _t20("-U4F-3 ★`#` 一级标题不认（与 `_u4_sections` 同口径，防文档标题假阳）",
+         sorted(_u4_sec_line_ranges("# DIRECTION · DIR-46 边界\n- A\n", ('边界',))), [])
+    _t20("-U4F-4 广义关键字（`红线`）只在传 `_U4_SEC_ALT` 时命中",
+         (len(_u4_sec_line_ranges("## §8 红线\n- A\n", ('边界',))),
+          len(_u4_sec_line_ranges("## §8 红线\n- A\n", _U4_SEC_ALT))), (0, 1))
+
+    ok += ok20
+    bad += bad20
+    print(f"   （其中 `P135-1` 的 `R-A` 行号定位夹具 {ok20 + bad20} 条）")
     print(f"\n自测：{ok} 通过 / {bad} 不符（共 {len(cases)} 夹具 + {ok8 + bad8} 条 P133-8 探针夹具"
           f" + {ok10 + bad10} 条 P133-10 探针夹具 + {ok15 + bad15} 条 P133-15 探针夹具"
-          f" + {ok14 + bad14} 条 P134-14 探针夹具 + {ok13 + bad13} 条 P133-13 探针夹具）")
+          f" + {ok14 + bad14} 条 P134-14 探针夹具 + {ok13 + bad13} 条 P133-13 探针夹具"
+          f" + {ok20 + bad20} 条 P135-1 夹具）")
     return 0 if bad == 0 else 1
 
 
@@ -2013,6 +2043,138 @@ def probe_misread_prohibition():
     print()
     print("★ `REGISTRY` 未变（本探针不参与判决）："
           f"{len(REGISTRY)} 条 {sorted(REGISTRY)}")
+    print("\n★ 只报告，不改变任何判定。")
+    return 0
+
+
+def _u4_sec_line_ranges(text, kws):
+    """返回落在**边界段内**的行号集合（0-based），供 `P135-1` 判 `R-A`。
+
+    ★ 为何不直接用 `_u4_sections`：它返回**段体文本**，而本轮要把「某一行在不在段内」
+      与**行号**挂钩（一行可能在多副本里位置不同）⇒ 必须回推行号。
+    ★ 切分规则与 `_u4_sections` **一致**（只认 `##`–`####`、排除 `DIRECTION` 开头、
+      遇下一个标题即结束）—— 否则两处口径会漂移。
+    """
+    lines = text.split("\n")
+    # 先记每行起始偏移 → 行号，再用 `_u4_sections` 的同一个标题正则求段区间
+    hs = [(i, m.group(2).strip())
+          for i, ln in enumerate(lines)
+          if (m := re.match(r'^(#{2,4})\s*(.+)$', ln))]
+    inside = set()
+    for k, (i, txt) in enumerate(hs):
+        if not (any(kw in txt for kw in kws) and not txt.startswith('DIRECTION')):
+            continue
+        end = hs[k + 1][0] if k + 1 < len(hs) else len(lines)
+        # ★ 只收**非空行**：`text.split("\n")` 在文本以 `\n` 结尾时会多出一个**幽灵尾行**，
+        #   而 `_u4_sections` 是剔尾空行的（`while body and not body[-1].strip()`）⇒
+        #   不收空行才能与它同口径（夹具 `-U4F-1` 就是参这个的）。
+        inside.update(i for i in range(i + 1, end) if lines[i].strip())
+    return inside
+
+
+def probe_u4_full():
+    """`P135-1` 探针：把 `P134-14` 的三条替代（`R-A`/`R-B`/`R-C`）
+    用**同一把尺子**量到 `P133-13` 的误读禁令族上（只报告，不判定）。
+
+    ★ 为何这是**真问题**：`P134-14` 的总体（944 条）是**按 `R-A` 筛出来的**（段存在才取段内条款）
+      ⇒ `R-A` 在那边是**常数 100%**，不是测量值。而本族的 145 条在**任意位置**
+      ⇒ `R-A` 才是真变量。若偏低，改写路径不是「效果不足」而是「**无处落笔**」。
+    """
+    nums, _skip = canonical_nums()
+    print("=" * 100)
+    print("P135-1 探针 · `P134-14` 的改写路径能否外推？—— 同一把尺子、两个总体（只报告，不判定）")
+    print("=" * 100)
+    print("口径（★ 照拄进任何引用它的文档）：")
+    print("  ① 被测总体 = `P133-13` 的误读禁令（`_misread_hits`，**同一探针不另写词表**），去重前 145 条")
+    print("  ② 尺子 = `P134-14` 自己的机器：`_u4_sections`/`_U4_SEC_ALT`（容器）、")
+    print("     `_U4_Q`（`R-B` 点名 Y）、`_U4_AX`（`R-C` 轴值）、`_U4_CLAUSE`（是否条款行）")
+    print("  ③ ★ `A_*` 只对**卡片** locus 有定义；`evidence`/清单不是卡 ⇒ 记 `N/A`（口径限制，**不是**「不满足」）")
+    print("  ④ ★ 只判**形态**：`B` 不判那个短语是不是真 `Y`，`C` 不判那个值对不对")
+    print("  ⑤ 本读数是**可可行性复核**，**不是** `PASS/FAIL`，**不**进 `REGISTRY`")
+
+    # ---- 采集：与 `probe_misread_prohibition` 同源
+    rows = []          # (locus, card, lineno(1-based), line, quoted, is_clause, A_strict, A_broad)
+    nocard = 0
+    for n in nums:
+        ctx = Ctx(n)
+        if not ctx.card:
+            nocard += 1
+            continue
+        text = ctx.text
+        s_strict = _u4_sec_line_ranges(text, ('边界',))
+        s_broad = _u4_sec_line_ranges(text, _U4_SEC_ALT)
+        for i, ln in enumerate(text.splitlines()):
+            hits = _misread_hits(ln)
+            if not hits:
+                continue
+            for q, _b in hits:
+                rows.append(("card", n, i + 1, ln, q,
+                             bool(_U4_CLAUSE.match(ln.strip())),
+                             i in s_strict, i in s_broad))
+    ev_text = EVIDENCE.read_text(encoding="utf-8", errors="replace")
+    for i, ln in enumerate(ev_text.splitlines()):
+        for q, _b in _misread_hits(ln):
+            rows.append(("evidence", None, i + 1, ln, q,
+                         bool(_U4_CLAUSE.match(ln.strip())), None, None))
+    ck_text = CHECKLIST.read_text(encoding="utf-8", errors="replace")
+    for i, ln in enumerate(ck_text.splitlines()):
+        for q, _b in _misread_hits(ln):
+            rows.append(("checklist", None, i + 1, ln, q,
+                         bool(_U4_CLAUSE.match(ln.strip())), None, None))
+
+    card_rows = [r for r in rows if r[0] == "card"]
+    ev_rows = [r for r in rows if r[0] == "evidence"]
+    ck_rows = [r for r in rows if r[0] == "checklist"]
+
+    print(f"\n【① 总体】卡片 {len(card_rows)} 条 · `evidence` {len(ev_rows)} 条 · "
+          f"清单 {len(ck_rows)} 条 ⇒ 合计 **{len(rows)}** 条（与 `--probe-misread` 同源，应一致）")
+    print(f"   ★ 有卡目录但无现行卡而跳过的卡：{nocard} 张")
+
+    # ---- R-A：只对卡片 locus
+    a_strict = [r for r in card_rows if r[6]]
+    a_broad = [r for r in card_rows if r[7]]
+    print(f"\n【② `R-A`（容器可定位）—— ★ 只对卡片 locus 有定义，n={len(card_rows)}】")
+    print(f"   严格容器（`##`–`####` 标题含「边界」）：**{len(a_strict)}/{len(card_rows)}**"
+          f"（{len(a_strict) / max(len(card_rows), 1):.1%}）")
+    print(f"   广义容器（+红线/证明义务/不做什么/证据边界）：**{len(a_broad)}/{len(card_rows)}**"
+          f"（{len(a_broad) / max(len(card_rows), 1):.1%}）")
+    print(f"   ★ 对照 `P134-14`：那边的 `R-A` 是 **100%** —— 但**那是按构造的**")
+    print(f"     （总体 = 边界段内条款，段不存在就取不出条款）⇒ 它的 `R-A` 是**常数**不是读数。")
+
+    # ---- 条款行分组（`R-B`/`R-C` 只对**卡片条款行**有定义）
+    cl_c = [r for r in card_rows if r[5]]
+    cl_o = [r for r in rows if r[5] and r[0] != "card"]
+    noncl = [r for r in rows if not r[5]]
+    print(f"\n【③ 是否「条款行」（`P134-14` 的 `_u4_clauses` 口径：bullet/编号/★/** 开头且 >8 字）】")
+    print(f"   卡片条款行 **{len(cl_c)}** · 卡片非条款行（段落散文）**"
+          f"{len(card_rows) - len(cl_c)}** · `evidence`/清单条款行 **{len(cl_o)}** · "
+          f"非条款行合计 **{len(noncl)}**")
+    print("   ★★ **`R-B`/`R-C` 的分母只能是卡片条款行** —— `P134-14` 的两个读数")
+    print("      （47.4% / 16.8%）都是在这张卡条款行上量的，**从不**含 `evidence` 行。")
+    print("      把 `evidence` 条款行并进分母会**无根据地**稀释两个比例（本探针初版的错，已修）。")
+
+    # ---- R-B / R-C（只对卡片条款行）
+    for lab, rx, ref in (("`R-B`（点名 `Y`：含引号短语）", _U4_Q, "47.4%"),
+                         ("`R-C`（带轴值 `a=b`）", _U4_AX, "16.8%")):
+        hit = [r for r in cl_c if rx.search(r[3])]
+        print(f"\n【④ {lab}】n = 卡片条款行 {len(cl_c)}")
+        print(f"   命中 **{len(hit)}/{len(cl_c)}**（{len(hit) / max(len(cl_c), 1):.1%}）"
+              f"   ★ 对照 `P134-14` 的 {ref}（944 条边界段内条款）")
+
+    # ---- ★ 合取：能“就地改写”的条数
+    g = [r for r in cl_c if r[7]]
+    print(f"\n【⑤ ★ 合取读数：能**就地改写**的条数（卡片条款行 ∧ 广义容器内）】")
+    print(f"   **{len(g)}/{len(cl_c)}**（{len(g) / max(len(cl_c), 1):.1%}）"
+          f" ⇒ 其余 **{len(cl_c) - len(g)}** 条**无处落笔**（容器不存在，无法“改在边界段里”）")
+
+    # ---- 逐卡：R-A 的分布（哪些卡的误读禁令**不在**任何边界段内）
+    outside = sorted({r[1] for r in card_rows if not r[7]})
+    print(f"\n【⑥ `R-A` 缺口：误读禁令**不在**任何边界容器内的卡 {len(outside)} 张】")
+    print("   " + ("、".join(f"`DIR-{n}`" for n in outside) if outside else "（无）"))
+
+    print(f"\n【⑦ 去重后的被禁断言】{len({r[4] for r in rows})} 条（与 `P133-13` 的 116 应对上）")
+    print("\n★ `REGISTRY` 未变（本探针不参与判决）："
+          f"{len(REGISTRY)} 条")
     print("\n★ 只报告，不改变任何判定。")
     return 0
 
@@ -2873,6 +3035,7 @@ def main():
     ap.add_argument("--probe-u4", action="store_true")
     ap.add_argument("--probe-u4-axis", action="store_true")
     ap.add_argument("--probe-misread", action="store_true")
+    ap.add_argument("--probe-u4-full", action="store_true")
     a = ap.parse_args()
 
     if a.selftest:
@@ -2899,6 +3062,9 @@ def main():
     if a.probe_misread:
         return probe_misread_prohibition()
 
+    if a.probe_u4_full:
+        return probe_u4_full()
+
     # ★ 覆盖率守卫：清单声明的 ①自动化 集合必须与本脚本实现的一致（DEF-128-03）
     auto = checklist_auto()
     if auto:
@@ -2919,7 +3085,7 @@ def main():
     else:
         ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope / --probe-guard-coverage"
                  " / --probe-semantic-discipline / --probe-k26 / --probe-u4 / --probe-u4-axis"
-                 " / --probe-misread")
+                 " / --probe-misread / --probe-u4-full")
 
     ks = sorted(REGISTRY)
     total = {PASS: 0, FAIL: 0, NA: 0}

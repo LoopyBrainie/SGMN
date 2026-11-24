@@ -1,6 +1,6 @@
 # MANIFEST · SGMN Loop（`revolve/DIR-*` 目录 126 个〔非方向总数〕；SUCCEEDED = 57 / 57）
 
-> 生成：2026-11-24 16:50:59 UTC
+> 生成：2026-11-24 17:29:44 UTC
 > 校验：逐文件 md5（`md5sum -c`）
 
 ## 核心台账
@@ -31,7 +31,7 @@ d627feb14f3641bb9f095cadd06ec026  ./REPORT.md
 a70ff3b1cf42a268d1c17a4f5a977acf  ./SUMMARY.md
 d80efc637d5205fea9946aea6c05bd05  ./VERDICT-SCAFFOLD.md
 b1dd66c311fcc3100c1e8de2d922c1ca  ./VERDICT.md
-51655c210c321bfcf4639a3002aace85  ./decisions/DECISIONS.md
+e8042638620668e6c954e4681249763c  ./decisions/DECISIONS.md
 a7a8b0527d107be13c02fe4f2711a237  ./dir107/PRE-CHECK-25of72.md
 e82858cebcac81948980b3526d7d33cd  ./dir108/DIRECTION_rev108_v10.md
 89f2cb106630da51c86f2f4feb261a79  ./dir108/DIRECTION_rev108_v11.md
@@ -121,6 +121,7 @@ d23816dffa74af22032a2d568aa318aa  ./revolve/P133-15-K26-READINESS.md
 457e9be59ea2d9829a20b0183157da9e  ./revolve/P133-8-GUARD-COVERAGE.md
 8898a2dd7cabeb2736cb438c51686689  ./revolve/P134-2-PRECHECK-CENSUS.md
 b2403cb0ef2f2a4b9647981727a02cc7  ./revolve/P134-3-PRECHECK-STAGE-AUDIT.md
+c09fe694806c74902026cc7619ee11d8  ./revolve/P135-1-U4-FULL-AXIS.md
 47c69bf32b079c012dd25f5bd10bd177  ./table.md
 68c3d3f1d0f24da59ceb3058bafa37a3  ./tmp-nothing/DIRECTION_rev52_v10.md
 b0b1f66f19feff2384022cf15e9be5de  ./tmp-nothing/DIRECTION_rev52_v11.md
