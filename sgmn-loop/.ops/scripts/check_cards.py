@@ -1408,6 +1408,13 @@ def selftest():
           len(_k26_scan('pop', own_sections=False)[1])),
          (105, 148, 103, 145, 149))
 
+    # ★★★ `P135-15`：**接线**夹具 —— 注入实测出四条生产行为**零夹具覆盖**
+    #   （M2 首副本 / M3 扫全部 .py / M9 py_srcs 恒空 / M7 probe_k26 自身守卫）。
+    #   四者签名互异 ⇒ 一条断言同时罩住；★ 前四项来自 `_k26_scan`，末项**直接问** `probe_k26`。
+    #   ★★ 实测（`P135-15` §3）：把任一项的对应生产代码改坏 ⇒ 本条**必红**，其余夹具**仍全绿**。
+    _t23("-REC-28 ★★★探针**接线**：(语句, 有网卡, 两道网卡, all−pop, 守卫) —— M2/M3/M9/M7",
+         _k26_wiring(), (148, 7, 1, 78, 'ValueError'))
+
     ok += ok23
     bad += bad23
     print(f"   （其中 `P135-14` 的人口口径夹具 {ok23 + bad23} 条）")
@@ -3092,24 +3099,65 @@ def _k26_stmt_filter(text, secs):
     return out
 
 
+def _k26_wiring():
+    """★★★ `probe_k26` 的**接线**可观测事实 —— 夹具 `-REC-28` 用。
+
+    ★★★ 动机（`P135-15`）：`P135-14` 修了「夹具与探针解耦」的**一**处，但那是
+      **按函数**看的。`P135-15` 改用**注入实测**逐行为问，实测出**四条生产行为
+      零夹具覆盖** —— 全部 155/0 全绿：
+
+        | 变异 | 破坏的行为 | 实测签名 `(语句, 有网卡, 两道网卡, all−pop)` |
+        |---|---|---|
+        | M2 | `_k26_scan` 只看**首副本**（丢 `all` 的副本轴） | `(148, 7, 1, **16**)` |
+        | M3 | 扫**全部** `.py`（不止 `precheck|mech`） | `(148, **34**, **4**, 78)` |
+        | M9 | `py_srcs` 恒空（**网永远扫不到**） | `(148, **0**, **0**, 78)` |
+        | 基线 | — | `(148, **7**, **1**, 78)` |
+
+      ⇒ 四者**签名互异** ⇒ 一条断言即可同时罩住 M2/M3/M9。
+
+    ★★ 第 5 项（未知口径）的**准确**说法 —— 不要重犯「把冗余防御当缺陷」的错：
+      实测 `_k26_pairs('nope')` **自己就抛** `ValueError`（来自 `_u4_card_text`），
+      所以删掉 `probe_k26` 自己那道守卫后，`probe_k26('nope')` **仍然抛**
+      ⇒ 该守卫是**冗余防御**，M7 是**语义空变异**、**不可观测** ⇒ ★ **不是缺陷**，
+      `-REC-24` 的绿**不是**假信心。本项钉的是**对外可观测契约**
+      （「任何未知口径都必须 `ValueError`」），**不**主张它是唯一实现路径。
+
+    ★★ 另一处**修正**（`P135-15` §5，`P135-14` §8 的措辞过宽，原文留档不改）：
+      `_norm_stmt` 去重**并非**「恒 0 次触发」—— 实测 `legacy`/`pop` 各 **0** 次、
+      **`all` 模式 155 次**（同一张卡多副本才触发）。`P135-14` 的结论
+      （`148−145 = 3` 全部来自描述性段过滤、无一条来自去重）**在 legacy/pop 内仍成立**，
+      但「恒」字**外推到 `all` 即错**。本函数 `delta` 项实测就能察觉去重被关掉。
+
+    ★★ 本函数**只**从生产代码取数（`_k26_scan` / `probe_k26`），不复算任何聚合。
+    """
+    n_card, rows = _k26_scan('pop')
+    with_net = {r[0] for r in rows if r[4]['lit_meas'] or r[4]['free_meas']}
+    two = {r[0] for r in rows if r[4]['lit_meas'] and r[4]['free_meas']}
+    delta = len(_k26_scan('all')[1]) - len(rows)
+    # ★ 第 4 项**直接问 `probe_k26` 自己**（不是 `_k26_pairs`）
+    try:
+        probe_k26('nope', show_pop=False)
+        guard = 'no-raise'
+    except ValueError:
+        guard = 'ValueError'
+    except Exception as e:                                    # noqa: BLE001
+        guard = type(e).__name__
+    return (len(rows), len(with_net), len(two), delta, guard)
+
+
 def _k26_axis(mode):
-    """某口径的 `(实扫卡, 含语句卡, 语句)` —— 夹具 `-REC-19/20/21` 用。"""
-    pp = _k26_pairs(mode)
-    with_stmt, total = 0, 0
-    for n, fs in pp.items():
-        got = 0
-        seen_all = set()
-        for _q, t in fs:
-            for ln in _k26_stmt_filter(t, _k26_sections(t)):
-                k = _norm_stmt(ln)
-                if k in seen_all:
-                    continue
-                seen_all.add(k)
-                got += 1
-        if got:
-            with_stmt += 1
-            total += got
-    return (len(pp), with_stmt, total)
+    """某口径的 `(实扫卡, 含语句卡, 语句)` —— 夹具 `-REC-19/20/21` 用。
+
+    ★★★ `P135-15` 改造：原先是**第二份聚合实现**（自己再跑一遍
+      `_k26_pairs` + `_k26_stmt_filter` + `_norm_stmt` 的循环）⇒ 与 `probe_k26`
+      实际走的 `_k26_scan` **解耦**：把 `_k26_scan` 改坏，`-REC-19/20` 照旧全绿
+      （`P135-14` §6-2 的同一个缺陷型，只是当初只发现了一处）。
+      ⇒ 现**改为从 `_k26_scan` 的 rows 直接推导**，探针一退步这两条**立刻红**。
+    ★ 等价性已实测：三口径 `(legacy,pop,all)` 逐一相同 —— `(103,69,145)`
+      `(105,70,148)` `(105,83,226)`。
+    """
+    n_card, rows = _k26_scan(mode)
+    return (n_card, len({r[0] for r in rows}), len(rows))
 
 
 def _k26_nstmt(n, mode, own_sections=True):
