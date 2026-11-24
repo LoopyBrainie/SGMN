@@ -1236,10 +1236,45 @@ def selftest():
     ok += ok21
     bad += bad21
     print(f"   （其中 `P135-3` 的分类表漂移夹具 {ok21 + bad21} 条）")
+
+    # ------------------------------------------------------------------
+    # `P135-4`/`P135-5`（合并）夹具（5 条）：钉「按构造 vs 真变量」的机器判据，
+    #   以及「职能判据不得混入过宽段名」。★ 最后一条是**本轮主结论的机检**。
+    # ------------------------------------------------------------------
+    ok22 = bad22 = 0
+
+    def _t22(label, got, expect):
+        nonlocal ok22, bad22
+        _ok = (got == expect)
+        ok22, bad22 = (ok22 + 1, bad22) if _ok else (ok22, bad22 + 1)
+        print(f"  {'✓' if _ok else '✗'} {label:<46} 期望 {expect!r} 实得 {got!r}")
+
+    _R2 = lambda *ts: [{"text": t} for t in ts]
+    _t22("-REC-1 `_u4_entailed` 对全族成立 ⇒ 判「恒真」",
+         _u4_entailed(_R2('「a」不得', '「b」不得'), lambda t: '「' in t), (True, 2, 2))
+    _t22("-REC-2 只部分成立 ⇒ 判「非恒真」（真变量）",
+         _u4_entailed(_R2('「a」不得', '裸句不得'), lambda t: '「' in t), (False, 1, 2))
+    # ★ 防「偷偷挪尺子」：职能判据只许五个窄词，宽词（假说/缺陷/工作例）不得混入
+    _t22("-REC-3 ★职能判据只含五个窄词，不含 假说/缺陷/工作例",
+         (all(k in _u4_sec_new() for k in ('判定表', '证伪', '预登记', '敏感性', '操作化')),
+          any(k in _u4_sec_new() for k in ('假说', '缺陷', '工作例'))), (True, False))
+    _fam = _u4_family_rows()
+    _t22("-REC-4 族总体分母与 `P134-14` 一致（79 行 / 55 条款行）",
+         (len(_fam), sum(1 for r in _fam if r["clause"])), (79, 55))
+    _d = _u4_recount()
+    # ★★ 本轮主结论的机检：旧 R-B（有引号）被入选条件蕴含；新 R-B（可检索归档对象）不被蕴含
+    _t22("-REC-5 ★★旧 `R-B` 恒真 ∧ 新 `R-B` 非恒真（主结论机检）",
+         (_d["entail_RB_quote"][0], _d["RB_old"][0] == _d["RB_old"][1],
+          _d["RB_new"][0] < _d["RB_new"][1]), (True, True, True))
+
+    ok += ok22
+    bad += bad22
+    print(f"   （其中 `P135-4/5` 的非定义性读数夹具 {ok22 + bad22} 条）")
     print(f"\n自测：{ok} 通过 / {bad} 不符（共 {len(cases)} 夹具 + {ok8 + bad8} 条 P133-8 探针夹具"
           f" + {ok10 + bad10} 条 P133-10 探针夹具 + {ok15 + bad15} 条 P133-15 探针夹具"
           f" + {ok14 + bad14} 条 P134-14 探针夹具 + {ok13 + bad13} 条 P133-13 探针夹具"
-          f" + {ok20 + bad20} 条 P135-1 夹具 + {ok21 + bad21} 条 P135-3 夹具）")
+          f" + {ok20 + bad20} 条 P135-1 夹具 + {ok21 + bad21} 条 P135-3 夹具"
+          f" + {ok22 + bad22} 条 P135-4/5 夹具）")
     return 0 if bad == 0 else 1
 
 
@@ -2213,6 +2248,162 @@ def probe_ra_gap():
     return 0
 
 
+# ---------------------------------------------------------------------------
+# `P135-4` / `P135-5`（合并实施）：`K27` 四件的**非定义性**版本。
+#
+# ★★ 为什么必须合并做（两条任务行都写明）：`P135-5` 改的是 `R-A` 的**分母**（容器定义），
+#    `P135-4` 改的是 `R-A`/`R-B` 的**口径**（把「按构造恒真」换成「真变量」）。
+#    先改哪个都会让另一个的读数在旧口径上失去意义 ⇒ 一次实施、一次并列旧值。
+#
+# ★★★ 核心纪律：每个读数都要能回答「它是不是**被总体选择条件蕴含**的」。
+#    蕴含 ⇒ 恒真 ⇒ 不携带信息 ⇒ **不得**用来支撑硬纪律（`P135-1` 的教训）。
+#    本探针把这条做成**机器可检**：`_u4_entailed()` 逐行验证「该判据是否对全族成立」。
+# ---------------------------------------------------------------------------
+
+# `P133-13` 的**严尺**（`P135-1` §1-1 逐字引用）：引号里的短语能否对上**可检索归档对象**
+_U4_ARCH = re.compile(r'D-\d+|DIR-\d+|§\s*7\.2|证据行|E-\d+')
+
+# `P135-5`：边界**职能**段的段名（不含「边界」等旧关键字）。
+# ★★ 只收**窄且确属边界职能**的五个；**故意不收**「假说」(40.8% 的卡)、「缺陷」(40.8%)、
+#    「工作例」(26.2%) —— 它们是卡片的假说段/缺陷表/合成数示例，不是边界陈述；
+#    收进来会让 `R-A` 失去区分力（详见 §5 的敏感性带）。
+_U4_SEC_FUNC = ('判定表', '证伪', '预登记', '敏感性', '操作化')
+def _u4_sec_new():
+    """★ 惰性求值：`_U4_SEC_ALT` 定义在本文件**后段**（U4 常量区），
+    模块级拼接会在导入期抛 `NameError` ⇒ 必须推迟到调用时。"""
+    return _U4_SEC_ALT + _U4_SEC_FUNC
+
+
+def _u4_family_rows():
+    """`P133-13` 的误读禁令族在**卡片 locus** 的全部行 ⇒ [{card,line,text,clause}]。
+
+    ★ 与 `--probe-u4-full` 同源（`_misread_hits`），不另写词表。
+      n=79（全部）/ 其中条款行 n=55 —— 这两个数就是 `P134-14` 的两个分母。
+    """
+    out = []
+    for n in range(1, 300):
+        ctx = Ctx(n)
+        if not ctx.card:
+            continue
+        for i, ln in enumerate(ctx.text.splitlines()):
+            if not _misread_hits(ln):
+                continue
+            out.append({"card": n, "line": i + 1, "text": ln,
+                        "clause": bool(_U4_CLAUSE.match(ln.strip())) and len(ln.strip()) > 8})
+    return out
+
+
+def _u4_entailed(rows, crit):
+    """该判据是否**被总体选择条件蕴含**（= 对全族恒真）⇒ (是否恒真, 命中数, 总数)。
+
+    ★★ 这是「按构造 vs 真变量」的**机器判据**，不是我的话：
+      若某判据对**每一行**都成立，它就不携带信息（`P135-1` §4-1 的 `R-B` 100% 即此）。
+      ★ 注意：恒真只是「按构造」的**必要条件**——还需「它正是入选条件之一」；
+        本探针另报「入选条件」一栏由人判，两者合并才算定性（见文档 §2）。
+    """
+    hit = sum(1 for r in rows if crit(r["text"]))
+    return hit == len(rows), hit, len(rows)
+
+
+def _u4_recount():
+    """四个读数的 **旧口径 / 新口径** 双份 ⇒ dict。只算，不判。"""
+    fam = _u4_family_rows()
+    cl = [r for r in fam if r["clause"]]
+    txt = lambda rs: [r["text"] for r in rs]
+
+    def in_sec(rows, kws):
+        cache = {}
+        hit = 0
+        for r in rows:
+            if r["card"] not in cache:
+                cache[r["card"]] = _u4_sec_line_ranges(Ctx(r["card"]).text, kws)
+            if (r["line"] - 1) in cache[r["card"]]:
+                hit += 1
+        return hit
+
+    def has_arch(t):
+        return any(_U4_ARCH.search(m) for m in _U4_Q.findall(t))
+
+    forms = [_u4_form(t) for t in txt(cl)]
+    return {
+        "n_all": len(fam), "n_clause": len(cl),
+        # ---- R-A：分母是「全部误读禁令行」（**不预筛容器**）
+        "RA_old_strict": (in_sec(fam, ('边界',)), len(fam)),
+        "RA_old_broad": (in_sec(fam, _U4_SEC_ALT), len(fam)),
+        "RA_new": (in_sec(fam, _u4_sec_new()), len(fam)),
+        "RA_sens": {"+假说": in_sec(fam, _u4_sec_new() + ('假说',)),
+                    "+工作例": in_sec(fam, _u4_sec_new() + ('工作例',)),
+                    "+两者": in_sec(fam, _u4_sec_new() + ('假说', '工作例'))},
+        # ---- R-B：旧=「有引号」；新=「引号可对上可检索归档对象」
+        "RB_old": (sum(1 for t in txt(cl) if _U4_Q.search(t)), len(cl)),
+        "RB_new": (sum(1 for t in txt(cl) if has_arch(t)), len(cl)),
+        "RB_arch_hits": [f"DIR-{r['card']}:{r['line']}" for r in cl if has_arch(r["text"])],
+        # ---- R-C / R-D（本来就都是真变量，`P135-1` 已确认）
+        "RC": (sum(1 for t in txt(cl) if _U4_AX.search(t)), len(cl)),
+        "RD_pos_and_both": (sum(1 for f in forms if f in ("POS", "BOTH")), len(cl)),
+        "RD_pos_only": (sum(1 for f in forms if f == "POS"), len(cl)),
+        # ---- 「是否被入选条件蕴含」的机器判据
+        "entail_RB_quote": _u4_entailed(cl, lambda t: bool(_U4_Q.search(t))),
+        "entail_RC_ax": _u4_entailed(cl, lambda t: bool(_U4_AX.search(t))),
+        "entail_RD_pos": _u4_entailed(cl, lambda t: _u4_form(t) in ("POS", "BOTH")),
+    }
+
+
+def probe_u4_recount():
+    """`P135-4`+`P135-5` 合并探针：`K27` 四件的**非定义性**读数（只报告，不判定）。
+
+    ★★ 本探针只回答一件事：**这四个读数里，哪些是「真变量」、哪些是「按构造恒真」**。
+      恒真者**不得**作为硬纪律的判据（那是把纪律建在同义反复上）。
+    """
+    d = _u4_recount()
+    na, nc = d["n_all"], d["n_clause"]
+    pc = lambda kv: f"{kv[0]}/{kv[1]} = {100 * kv[0] / kv[1]:5.1f}%"
+
+    print("=" * 100)
+    print("P135-4/5 合并探针 · `K27` 四件的非定义性读数（只报告，不判定）")
+    print("=" * 100)
+    print("总体（`P133-13` 误读禁令族 · 卡片 locus，与 --probe-u4-full 同源）：")
+    print(f"  全部行 n={na} · 其中条款行 n={nc}（`R-B`/`R-C`/`R-D` 的分母只能是条款行）")
+    print("★★ 每个读数都问一句：它是不是**被总体选择条件蕴含**的？蕴含 ⇒ 恒真 ⇒ 不携带信息。")
+
+    print("\n【① R-A · 容器可定位】分母 = **全部误读禁令行**（★ 不预筛容器）")
+    print(f"   旧·严格（标题含「边界」）              {pc(d['RA_old_strict'])}")
+    print(f"   旧·广义（+红线/证明义务/不做什么/证据边界） {pc(d['RA_old_broad'])}")
+    print(f"   ★新·职能（+{'/'.join(_U4_SEC_FUNC)}） {pc(d['RA_new'])}")
+    s = d["RA_sens"]
+    print(f"   ★敏感性带（若把过宽的段名也扫进来）：+假说 {s['+假说']}/{na} · "
+          f"+工作例 {s['+工作例']}/{na} · +两者 {s['+两者']}/{na}"
+          f"  ⇒ {100 * min(s['+假说'], s['+工作例']) / na:.1f}%–{100 * max(s['+两者'], 0) / na:.1f}%")
+    print(f"   ★对照 `P134-14` 的 100% —— 那是**按构造**（总体=容器内条款，段不在就取不出条款）")
+
+    print("\n【② R-B · 反向命名】分母 = 条款行")
+    print(f"   旧（**有任何引号短语**）      {pc(d['RB_old'])}  ← "
+          f"{'**按构造恒真**（引号是入选必要条件）' if d['entail_RB_quote'][0] else '真变量'}")
+    print(f"   ★新（引号=**可检索归档对象**）{pc(d['RB_new'])}  ← 真变量"
+          f"（严尺 `_U4_ARCH`：D-n/DIR-n/§7.2/证据行/E-n）")
+    print(f"     命中：{', '.join(d['RB_arch_hits']) if d['RB_arch_hits'] else '（无）'}")
+    print(f"     ★交叉印证：`P133-13` 在 116 条去重断言上测得 4/116 = 3.4% ⇒ 同一把严尺、"
+          f"两套总体、都约 3.5%")
+
+    print("\n【③ R-C · 作用域随行】分母 = 条款行")
+    print(f"   {pc(d['RC'])}  ← {'按构造恒真' if d['entail_RC_ax'][0] else '真变量'}"
+          f"（`P134-14` 的 16.8% 也是真变量 ⇒ 唯一可跨界比较者，`P135-1` §4-1）")
+
+    print("\n【④ R-D · 正向限定】分母 = 条款行")
+    print(f"   POS|BOTH（「只测/本卡不…」）  {pc(d['RD_pos_and_both'])}  ← "
+          f"{'按构造恒真' if d['entail_RD_pos'][0] else '真变量'}")
+    print(f"   严格只算 POS                  {pc(d['RD_pos_only'])}")
+
+    print("\n【⑤ ★★ 结论（本探针只摆事实，判词见文档 §3）】")
+    ent = [k for k in ("entail_RB_quote", "entail_RC_ax", "entail_RD_pos") if d[k][0]]
+    print(f"   被入选条件**蕴含**（恒真 ⇒ 不携带信息）的读数：{ent if ent else '（无）'}")
+    print(f"   ⇒ 旧 `R-B` = {pc(d['RB_old'])} 属此类；新 `R-B` = {pc(d['RB_new'])} 才是真变量。")
+
+    print(f"\n★ `REGISTRY` 未变（本探针不参与判决）：{len(REGISTRY)} 条")
+    print("\n★ 只报告，不改变任何判定。")
+    return 0
+
+
 def probe_u4_full():
     """`P135-1` 探针：把 `P134-14` 的三条替代（`R-A`/`R-B`/`R-C`）
     用**同一把尺子**量到 `P133-13` 的误读禁令族上（只报告，不判定）。
@@ -3178,6 +3369,7 @@ def main():
     ap.add_argument("--probe-misread", action="store_true")
     ap.add_argument("--probe-u4-full", action="store_true")
     ap.add_argument("--probe-ra-gap", action="store_true")
+    ap.add_argument("--probe-u4-recount", action="store_true")
     a = ap.parse_args()
 
     if a.selftest:
@@ -3210,6 +3402,9 @@ def main():
     if a.probe_ra_gap:
         return probe_ra_gap()
 
+    if a.probe_u4_recount:
+        return probe_u4_recount()
+
     # ★ 覆盖率守卫：清单声明的 ①自动化 集合必须与本脚本实现的一致（DEF-128-03）
     auto = checklist_auto()
     if auto:
@@ -3230,7 +3425,8 @@ def main():
     else:
         ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope / --probe-guard-coverage"
                  " / --probe-semantic-discipline / --probe-k26 / --probe-u4 / --probe-u4-axis"
-                 " / --probe-misread / --probe-u4-full / --probe-ra-gap")
+                 " / --probe-misread / --probe-u4-full / --probe-ra-gap"
+                 " / --probe-u4-recount")
 
     ks = sorted(REGISTRY)
     total = {PASS: 0, FAIL: 0, NA: 0}
