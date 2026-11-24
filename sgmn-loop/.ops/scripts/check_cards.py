@@ -1347,6 +1347,71 @@ def selftest():
           len(_u4_family_rows('legacy'))),
          (182, 183, 79))
 
+    # ------------------------------------------------------------------
+    # `P135-14` 夹具（8 条 `-REC-19..26`）：钉 `--probe-k26` 的**人口口径**
+    #   与「只改闸门会制造新错」这个**二阶缺陷**（`P135-13` §3 的同型）。
+    #   ★★ 每条都**实测能红**（见 `revolve/P135-14-K26-POPULATION-FIX.md` §6）。
+    # ------------------------------------------------------------------
+    ok23 = bad23 = 0
+
+    def _t23(label, got, expect):
+        nonlocal ok23, bad23
+        _ok = (got == expect)
+        ok23, bad23 = (ok23 + 1, bad23) if _ok else (ok23, bad23 + 1)
+        print(f"  {'✓' if _ok else '✗'} {label:<46} 期望 {expect!r} 实得 {got!r}")
+
+    _AX = {m: _k26_axis(m) for m in ('legacy', 'pop', 'all')}
+    _t23("-REC-19 ★★★三轴（实扫卡,含语句卡,语句）逐轴分开：legacy/pop/all",
+         (_AX['legacy'] + _AX['pop'] + _AX['all']),
+         (103, 69, 145, 105, 70, 148, 105, 83, 226))
+
+    _t23("-REC-20 ★★只修人口 = 语句 +3 / 卡 +1 / 实扫 +2；all 的 +78 是**另一条轴**",
+         (_AX['pop'][2] - _AX['legacy'][2],
+          _AX['pop'][1] - _AX['legacy'][1],
+          _AX['pop'][0] - _AX['legacy'][0],
+          _AX['all'][2] - _AX['pop'][2]),
+         (3, 1, 2, 78))
+
+    _t23("-REC-21 ★pop 下 分母 = 实扫 = 105，且 19/20 均被救回（无目录静默丢失）",
+         (len(canonical_nums()[0]), len(_k26_pairs('pop')),
+          [n for n in (19, 20) if n in _k26_pairs('pop')]),
+         (105, 105, [19, 20]))
+
+    # ★★★ 二阶缺陷：段必须由**同源文本**现算，不能回读 `Ctx(n).text`（对 19/20 是空串）
+    _t23("-REC-22 ★★★段必须同源：DIR-20 同源 3 条 vs 回读 Ctx.text 时 4 条",
+         (_k26_nstmt(20, 'pop', own_sections=True),
+          _k26_nstmt(20, 'pop', own_sections=False)),
+         (3, 4))
+
+    _t23("-REC-23 legacy 跳 19/20（均 0 份）；pop 各救回 1 份",
+         ([len(_k26_pairs('legacy').get(n) or []) for n in (19, 20)],
+          [len(_k26_pairs('pop').get(n) or []) for n in (19, 20)]),
+         ([0, 0], [1, 1]))
+
+    _t23("-REC-24 ★★未知口径必须抛 ValueError（不得静默当成空）",
+         _k26_bad_mode(), 'ValueError')
+
+    _t23("-REC-25 ★★★两族不相交=0；(K26族, U4族, U4族落在表格行) —— 防跨族混算",
+         _k26_family_overlap('pop'), (0, 152, 82, 1))
+
+    _t23("-REC-26 ★★`148`/`145` 同名不同义：(raw, −描述性段, 语句) 逐轴",
+         (_k26_raw_desc('pop'), _k26_raw_desc('legacy')),
+         ((152, 4, 148), (148, 3, 145)))
+
+    # ★★★ 这条钉**探针自己的实现**（不是另写一份判据）⇒ 探针一退步必红。
+    #   动机：`-REC-22` 只证明「两种段来源确有差异」，与 `probe_k26` 的实际接线**解耦**
+    #   ⇒ 实测把 `sec_ctx` 改回 `list(ctx.sections())` 后 `--probe-k26` 变 149，
+    #   而 8 条夹具**全绿**。加本条后同一变异**必红**（见 `P135-14` §6）。
+    _t23("-REC-27 ★★★探针实际接线：(有卡, 语句) pop / legacy / 变异口径",
+         (_k26_scan('pop')[0], len(_k26_scan('pop')[1]),
+          _k26_scan('legacy')[0], len(_k26_scan('legacy')[1]),
+          len(_k26_scan('pop', own_sections=False)[1])),
+         (105, 148, 103, 145, 149))
+
+    ok += ok23
+    bad += bad23
+    print(f"   （其中 `P135-14` 的人口口径夹具 {ok23 + bad23} 条）")
+
     ok += ok22
     bad += bad22
     print(f"   （其中 `P135-4/5` 的非定义性读数夹具 {ok22 + bad22} 条）")
@@ -1354,7 +1419,7 @@ def selftest():
           f" + {ok10 + bad10} 条 P133-10 探针夹具 + {ok15 + bad15} 条 P133-15 探针夹具"
           f" + {ok14 + bad14} 条 P134-14 探针夹具 + {ok13 + bad13} 条 P133-13 探针夹具"
           f" + {ok20 + bad20} 条 P135-1 夹具 + {ok21 + bad21} 条 P135-3 夹具"
-          f" + {ok22 + bad22} 条 P135-4/5/10 夹具）")
+          f" + {ok22 + bad22} 条 P135-4/5/10 夹具 + {ok23 + bad23} 条 P135-14 夹具）")
     return 0 if bad == 0 else 1
 
 
@@ -2929,12 +2994,300 @@ def _k26_state(nets, ne, why):
     return "ZERO", "★★零道（实测）⇒ **未配网**"
 
 
-def probe_k26():
+def _k26_sections(text):
+    """`[(heading, body)]` —— 与 `Ctx.sections()` **逐字同规则**，但接受**任意文本**。
+
+    ★★★ 必须独立成函数：`Ctx.sections()` 只解析 `Ctx.text`（= 现行卡）；
+      对 `DIR-19/20` 那是**空串** ⇒ 描述性段过滤会**静默失效**（`P135-14` §3 实测：
+      若仍用 `ctx.sections()`，`DIR-20` 的散文「显式 del bf0 …」会被算成 1 条禁止语句）。
+    """
+    out, head, buf = [], "", []
+    for ln in text.splitlines():
+        m = re.match(r"^(#{2,3})\s+(.*)$", ln)
+        if m:
+            if head or buf:
+                out.append((head, "\n".join(buf)))
+            head, buf = m.group(2), []
+        else:
+            buf.append(ln)
+    out.append((head, "\n".join(buf)))
+    return out
+
+
+def _k26_scan(mode, own_sections=True):
+    """★ **本探针的**扫描实现（`probe_k26` 与夹具**共用**）⇒ `(有卡数, rows)`。
+
+    ★★★ 为什么必须抽出来：原先这段内联在 `probe_k26` 里，夹具只能**另写一份**
+      等价判据去比对 ⇒ 夹具与探针**解耦** ⇒ 探针自己退回错口径时，夹具照旧全绿。
+      实测（`P135-14` §6）：把 `sec_ctx` 改回 `list(ctx.sections())` 后
+      `--probe-k26` 从 148 变 **149**，而自测仍报 **154/0** —— 一条都没红。
+      ⇒ 现由 `-REC-27` 直接断言本函数的结果，回归必红。
+
+    `own_sections=False` **仅供夹具**重现「段回读 `Ctx.text`」这个二阶缺陷。
+    """
+    pairs = _k26_pairs(mode)
+    nums = canonical_nums()[0]
+    rows = []          # (n, cn, stmt, forms, nets, nonenum, why, has_free_decl_only)
+    n_card = 0
+    for n in nums:
+        ctx = Ctx(n)
+        mine = pairs.get(n) or []
+        if not mine:
+            continue
+        n_card += 1
+        # ★ 段来自**同一份文本**（不得回读 `Ctx(n).text`：对 19/20 是空串）
+        sec_ctx = (_k26_sections(mine[0][1]) if own_sections
+                   else list(ctx.sections()))
+        # ★★ 只扫**冻结交付物**（`precheck*.py` / `mech*.py`）—— 与 §2 的机械定义**一致**。
+        #   初版扫了 `dir{n}/*.py` 全部 ⇒ 读数取决于**工作区里恰好有哪些 probe 脚本**
+        #   （本地镜像与 trainer 文件集不同 ⇒ 两侧输出无法逐字节比对，`Cycle 259` 实测）。
+        #   「网」如果只存在于一张一次性 probe 里，它就不是**守卫**。
+        py_srcs = []
+        for f in sorted(ctx.py, key=lambda q: q.name):
+            if not re.match(r"^(precheck|mech)[A-Za-z0-9_]*\.py$", f.name):
+                continue
+            try:
+                py_srcs.append((f.name, f.read_text(encoding="utf-8", errors="replace")))
+            except OSError:
+                pass
+        # ★ `mode='all'` 时 mine 有多个副本 ⇒ 逐副本扫（**另一条轴**，不是人口）
+        # ★★ 判据用 `_k26_stmt_filter`（**唯一来源**）—— 夹具与探针共用，防手抄漂移
+        seen_global = set()
+        for card_p, card_t in mine:
+            secs_this = sec_ctx if card_p == mine[0][0] else _k26_sections(card_t)
+            ne, why, ne_ev = _k26_nonenum(card_t)
+            nets = _k26_nets(card_t, py_srcs)      # ★ 卡片级，hoist 出语句循环
+            ev_lit, ev_free = _k26_evidence(py_srcs)
+            for ln in _k26_stmt_filter(card_t, secs_this):
+                key = _norm_stmt(ln)
+                if key in seen_global:
+                    continue
+                seen_global.add(key)
+                h = _sem_hit(ln)
+                rows.append((n, card_p.name, _de_emph(ln).strip(), _k26_forms(h[2]),
+                             nets, ne, why, ne_ev, ev_lit, ev_free))
+    return n_card, rows
+
+
+def _k26_stmt_filter(text, secs):
+    """该文本在给定段视图下的**语句**（去重后）⇒ 探针与夹具共用的**唯一**判据。
+
+    ★ 抽出来是为了让夹具与探针**不可能**各自漂移（`P134-14d` 的教训：
+      手抄判据会漂）。过滤器顺序 = 表格行 → `_sem_hit` → 描述性段 → `_norm_stmt` 去重。
+    """
+    out, seen = [], set()
+    for ln in text.splitlines():
+        if _TABLE_ROW.match(ln):
+            continue
+        if not _sem_hit(ln):
+            continue
+        if any(ln in b.splitlines() and _DESCRIPTIVE_HEAD.search(h)
+               for h, b in secs):
+            continue
+        k = _norm_stmt(ln)
+        if k in seen:
+            continue
+        seen.add(k)
+        out.append(ln)
+    return out
+
+
+def _k26_axis(mode):
+    """某口径的 `(实扫卡, 含语句卡, 语句)` —— 夹具 `-REC-19/20/21` 用。"""
+    pp = _k26_pairs(mode)
+    with_stmt, total = 0, 0
+    for n, fs in pp.items():
+        got = 0
+        seen_all = set()
+        for _q, t in fs:
+            for ln in _k26_stmt_filter(t, _k26_sections(t)):
+                k = _norm_stmt(ln)
+                if k in seen_all:
+                    continue
+                seen_all.add(k)
+                got += 1
+        if got:
+            with_stmt += 1
+            total += got
+    return (len(pp), with_stmt, total)
+
+
+def _k26_nstmt(n, mode, own_sections=True):
+    """单卡语句数；`own_sections=False` 时**故意**回读 `Ctx(n).sections()`
+    （= 重现二阶缺陷，仅供夹具 `-REC-22` 证明「只改闸门会多算 1 条」）。"""
+    tot, seen_all = 0, set()
+    for _q, t in _k26_pairs(mode).get(n) or []:
+        secs = _k26_sections(t) if own_sections else list(Ctx(n).sections())
+        for ln in _k26_stmt_filter(t, secs):
+            k = _norm_stmt(ln)
+            if k in seen_all:
+                continue
+            seen_all.add(k)
+            tot += 1
+        if not own_sections:
+            break                      # 只重放「错口径」的第一次，够证明差异
+    return tot
+
+
+def _k26_bad_mode():
+    """未知口径必须抛 `ValueError`（`P135-13` 的 `-REC-17` 同型：静默降级是缺陷）。"""
+    try:
+        _k26_pairs('nope')
+    except ValueError:
+        return 'ValueError'
+    except Exception as e:                                    # noqa: BLE001
+        return type(e).__name__
+    return 'no-raise'
+
+
+def _k26_family_overlap(mode):
+    """`(交集, K26族行, U4族行)` —— 两族判据不同（`_sem_hit` vs `_misread_hits`）。
+
+    ★★★ 动机：`probe_k26` 的「145/148」与 `probe_u4` 的「145/148」是**同名不同义**的
+      两对数（`P135-14` §5 列了三个 148）。实测**交集 = 0** ⇒ 任何跨族相加/相减都无意义。
+    """
+    sem, mis, mis_tbl = set(), set(), set()
+    for n in range(1, 300):
+        for q, t in _u4_card_text(n, mode):
+            for ln in t.splitlines():
+                on_tbl = bool(_TABLE_ROW.match(ln))
+                # ★ `probe_k26` **跳过**表格行；`probe_u4` **不跳** ⇒ 两族口径本就不同
+                if _sem_hit(ln) and not on_tbl:
+                    sem.add((n, q.name, ln.strip()))
+                if _misread_hits(ln):
+                    mis.add((n, q.name, ln.strip()))
+                    if on_tbl:
+                        mis_tbl.add((n, q.name, ln.strip()))
+    return (len(sem & mis), len(sem), len(mis), len(mis_tbl))
+
+
+def _k26_raw_desc(mode):
+    """`(原始 _sem_hit 行, 被描述性段吃掉的行, 语句)` —— 拆开 145/148 的来源。"""
+    raw = desc = 0
+    kept = 0
+    for n in range(1, 300):
+        for _q, t in _u4_card_text(n, mode):
+            secs = _k26_sections(t)
+            seen = set()
+            for ln in t.splitlines():
+                if _TABLE_ROW.match(ln):
+                    continue
+                if not _sem_hit(ln):
+                    continue
+                raw += 1
+                if any(ln in b.splitlines() and _DESCRIPTIVE_HEAD.search(h)
+                       for h, b in secs):
+                    desc += 1
+                    continue
+                k = _norm_stmt(ln)
+                if k in seen:
+                    continue
+                seen.add(k)
+                kept += 1
+    return (raw, desc, kept)
+
+
+def _k26_pairs(mode):
+    """`{card: [(path, text)]}` —— 本探针要扫的卡片文本（口径唯一开关在 `_u4_card_text`）。
+
+    ★ `legacy`/`pop` ⇒ 每卡**一份**（现行卡 / 无现行卡时取任意名最新副本）；
+      `all` ⇒ 每卡**多份**（人口 + revision 扩大）⇒ ★ 这是**另一条轴**：
+      它把「一张卡写过几版」放大成「几条语句」，**不得**当成人口缺陷的代价报。
+    """
+    out = {}
+    for n in canonical_nums()[0]:
+        fs = _u4_card_text(n, mode)
+        if fs:
+            out[n] = fs
+    return out
+
+
+def _k26_pop_block(mode, nums, pairs):
+    """【⓿ 人口核对】+ 三轴表 —— `P135-12`/`P135-13` 的修法复用。
+
+    ★ 目的：把「分母 / 实扫 / 被口径丢掉的是谁」**印在读数前面**，
+      免得读者只看到「有卡 103」而以为规范目录就是 103。
+    """
+    ctxs = {n: Ctx(n) for n in nums}
+    no_v = [n for n in nums if ctxs[n].card is None]
+    mean = {'legacy': '现行卡（要求 `_v` 文件名），**无则跳过**（旧行为）',
+            'pop': '现行卡；无现行卡者取**任意名最新副本**（每卡一张，不动 revision）',
+            'all': '**全部副本**（人口 + revision 扩大）⇒ ★ 另一条轴'}[mode]
+    print("\n【⓿ 人口核对（★ 先看这一块）】")
+    print(f"   分母（规范目录总数）　　：{len(nums)}")
+    print(f"   实扫（本口径有卡片可读）：{len(pairs)}")
+    print(f"   ★ 无 `_v` 卡的目录　　　：{len(no_v)} 个"
+          + (f" ({', '.join(f'DIR-{n}' for n in no_v)})" if no_v else ""))
+    print(f"   本口径 = `{mode}`：{mean}")
+    if no_v:
+        kept = [n for n in no_v if n in pairs]
+        print(f"   ★ 其中被本口径**救回**：{len(kept)} 个"
+              + (f" ({', '.join(f'DIR-{n}' for n in kept)})" if kept else "")
+              + f"；仍**未**计入：{len(no_v) - len(kept)} 个")
+    # ---- 三轴表（逐轴分开报，不得合并归因）----
+    tri = []
+    for m in ('legacy', 'pop', 'all'):
+        pp = _k26_pairs(m)
+        ns = set()
+        cnt = 0
+        seen_by_card = {}
+        for n, fs in pp.items():
+            seen = set()
+            for _p, t in fs:
+                secs = _k26_sections(t)
+                for ln in t.splitlines():
+                    if _TABLE_ROW.match(ln):
+                        continue
+                    if not _sem_hit(ln):
+                        continue
+                    if any(ln in b.splitlines() and _DESCRIPTIVE_HEAD.search(head)
+                           for head, b in secs):
+                        continue
+                    k = _norm_stmt(ln)
+                    if k in seen:
+                        continue
+                    seen.add(k)
+                    cnt += 1
+                    ns.add(n)
+            if seen:
+                seen_by_card[n] = len(seen)
+        tri.append((m, len(pp), len(seen_by_card), cnt))
+    print("\n   ★★ 三轴逐轴分开报（**不得**把 `all` 的增量当人口缺陷的代价）：")
+    print(f"      {'口径':<8}{'实扫卡':>8}{'含语句卡':>10}{'语句':>8}")
+    for m, a, b, c in tri:
+        print(f"      {m:<8}{a:>8}{b:>10}{c:>8}")
+    print(f"      ⇒ **只修人口**（`legacy`→`pop`）增量 = 语句 "
+          f"**{tri[1][3] - tri[0][3]:+d}** / 含语句卡 **{tri[1][2] - tri[0][2]:+d}**"
+          f" / 实扫卡 **{tri[1][1] - tri[0][1]:+d}**")
+    print(f"      ⇒ `all` 相对 `pop` 的增量 = 语句 **{tri[2][3] - tri[1][3]:+d}** —— "
+          "这是 **revision 轴**（同一张卡的多版被重复计入），**另一个问题**")
+
+
+def probe_k26(mode='pop', show_pop=True):
     """`P133-15` 探针：把 `K26` 的三步**逐卡落成可抄读数**（只报告，不判定）。
 
     ★ 不进 `REGISTRY`、不改 `PASS/FAIL/N/A`、**不替卡片发明白名单**
       （那只能由卡片**开卡时**冻结，沿 `K16` 判读的理由）。
+
+    ★★★ `P135-14`：本探针原先**四**处都读 `Ctx.card`/`Ctx.text`，而 `Ctx.card` 的 glob
+      要求 `_v` 文件名 ⇒ `DIR-19`（`DIRECTION_rev15.md`）与 `DIR-20`（`DIRECTION_rev11..16.md`
+      加上 `DIRECTION.md`）的 `Ctx.card is None` ⇒ 被 `if not ctx.card: continue` **静默丢掉**
+      ⇒ 「有卡 **103**」而规范目录是 **105**。四处必须**一起**改：
+        ① 人口闸门 `if not ctx.card: continue` · ② `sec_ctx`（描述性段过滤）·
+        ③ `ctext`（`_k26_nonenum`/`_k26_nets` 的输入）· ④ 语句扫描的 `ctx.text`。
+      ★★ **只改 ① 会制造新错**：`DIR-20` 会多算 1 条**描述性散文**
+        （`显式 del bf0 …`）⇒ 语句从正确的 **148** 变成 **149**。实测见 `P135-14` §3。
+      ★ 段定位（②）必须由**同一份文本**现算，不能回读 `Ctx(n).text` —— 那对 19/20 是空串
+        （与 `P135-13` 修 `_u4_recount` 的同型缺陷）。
+
+    `mode` 复用 `_u4_card_text` 的唯一开关（`P135-13` 建立），语义见该函数：
+      `'legacy'` = 现状（要求 `_v`，无则**跳过**）⇒ `--probe-k26-legacy` 用它逐字节复现归档件
+      `'pop'`    = **只修人口**（无现行卡时取任意名最新副本），**默认**
+      `'all'`    = 人口 + revision 扩大 ⇒ ★ **另一个轴**，不得当成人口缺陷的代价
+    `show_pop=False` ⇒ 不打印 ⓿ 人口核对与三轴表（保持 legacy 逐字节可比）。
     """
+    if mode not in ('legacy', 'pop', 'all'):
+        raise ValueError(f"未知口径 {mode!r}（probe_k26 只接受 legacy/pop/all）")
     print("=" * 100)
     print("P133-15 探针 · `K26`（禁止集的**可执行性**）的操作化读数（只报告，不判定）")
     print("=" * 100)
@@ -2950,49 +3303,13 @@ def probe_k26():
     nums, skip = canonical_nums()
     if skip:
         print(f"   ★ 跳过非规范目录 {len(skip)} 个：{', '.join(map(str, skip))}")
+    pairs = _k26_pairs(mode)
+    if show_pop:
+        _k26_pop_block(mode, nums, pairs)
     print(f"\n【① 逐卡扫描】规范目录 {len(nums)} 个")
 
-    rows = []          # (n, cn, stmt, forms, nets, nonenum, why, has_free_decl_only)
-    n_card = n_stmt = 0
-    for n in nums:
-        ctx = Ctx(n)
-        if not ctx.card:
-            continue
-        n_card += 1
-        sec_ctx = list(ctx.sections())
-        # ★★ 只扫**冻结交付物**（`precheck*.py` / `mech*.py`）—— 与 §2 的机械定义**一致**。
-        #   初版扫了 `dir{n}/*.py` 全部 ⇒ 读数取决于**工作区里恰好有哪些 probe 脚本**
-        #   （本地镜像与 trainer 文件集不同 ⇒ 两侧输出无法逐字节比对，`Cycle 259` 实测）。
-        #   「网」如果只存在于一张一次性 probe 里，它就不是**守卫**。
-        py_srcs = []
-        for f in sorted(ctx.py, key=lambda q: q.name):
-            if not re.match(r"^(precheck|mech)[A-Za-z0-9_]*\.py$", f.name):
-                continue
-            try:
-                py_srcs.append((f.name, f.read_text(encoding="utf-8", errors="replace")))
-            except OSError:
-                pass
-        ctext = ctx.card.read_text(encoding="utf-8")
-        ne, why, ne_ev = _k26_nonenum(ctext)
-        nets = _k26_nets(ctext, py_srcs)          # ★ 卡片级，hoist 出语句循环
-        ev_lit, ev_free = _k26_evidence(py_srcs)
-        seen = set()
-        for ln in ctx.text.splitlines():
-            if _TABLE_ROW.match(ln):
-                continue
-            h = _sem_hit(ln)
-            if not h:
-                continue
-            if any(ln in body.splitlines() and _DESCRIPTIVE_HEAD.search(head)
-                   for head, body in sec_ctx):
-                continue
-            key = _norm_stmt(ln)
-            if key in seen:
-                continue
-            seen.add(key)
-            rows.append((n, ctx.card.name, _de_emph(ln).strip(), _k26_forms(h[2]),
-                         nets, ne, why, ne_ev, ev_lit, ev_free))
-            n_stmt += 1
+    n_card, rows = _k26_scan(mode)
+    n_stmt = len(rows)
 
     print(f"   有卡 {n_card} 张；含禁止语句 **{len({r[0] for r in rows})}** 张；"
           f"禁止语句 **{n_stmt}** 条")
@@ -3848,7 +4165,10 @@ def main():
     ap.add_argument("--probe-k15-scope", action="store_true")
     ap.add_argument("--probe-guard-coverage", action="store_true")
     ap.add_argument("--probe-semantic-discipline", action="store_true")
-    ap.add_argument("--probe-k26", action="store_true")
+    ap.add_argument("--probe-k26", action="store_true",
+                    help="K26 读数（★ 修正口径 `pop`：纳入无 `_v` 卡的目录）")
+    ap.add_argument("--probe-k26-legacy", action="store_true",
+                    help="K26 读数 · 旧口径（跳无 `_v` 卡目录）⇒ 逐字节复现归档件")
     ap.add_argument("--probe-u4", action="store_true")
     ap.add_argument("--probe-u4-fixed", action="store_true")
     ap.add_argument("--probe-u4-axis", action="store_true")
@@ -3874,7 +4194,9 @@ def main():
         return probe_semantic_discipline()
 
     if a.probe_k26:
-        return probe_k26()
+        return probe_k26()                      # ★ 修正口径（pop）
+    if a.probe_k26_legacy:
+        return probe_k26('legacy', show_pop=False)   # 旧口径，逐字节复现
 
     if a.probe_u4:
         return probe_u4()
@@ -3925,7 +4247,7 @@ def main():
         nums = a.dirs
     else:
         ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope / --probe-guard-coverage"
-                 " / --probe-semantic-discipline / --probe-k26 / --probe-u4 / --probe-u4-axis"
+                 " / --probe-semantic-discipline / --probe-k26 / --probe-k26-legacy / --probe-u4 / --probe-u4-axis"
                  " / --probe-misread / --probe-u4-full / --probe-ra-gap"
                  " / --probe-u4-recount / --probe-u4-recount-legacy"
                  " (each with -legacy for --probe-u4-full / --probe-u4-axis)")
