@@ -10,6 +10,7 @@
  ⑤ 关键 md5 记录一致（装置 / 脚本）
  ⑧ 开卡清单 CARD-CHECKLIST.md 的格式完整性（条目数/字段/执行方式，声明 vs 机械点数）
  ⑧e–⑧h `判读` 字段与 `check_cards.py` 的 `INTERP` **逐字同一** + 标签合法（`P133-1`/`P134-1`）
+ ⑨ 证据行「边界」栏的**形态**（非空 / ≠「无」/ 有否定命题 / 标签不漂移 / 新行必须有）——`P134-14b`
 
 用法：python3 audit_consistency.py
 """
@@ -439,6 +440,94 @@ else:
         check(not _e_tag,
               f"⑧h `判读` 标签须为 `[窄化]` 或 `[降级]`：不合 {_e_tag or '无'}")
 
+
+# ⑨ ★★ P134-14b（Cycle 262）：证据行「边界」栏的**形态**守卫。
+#   动机：`evidence/table.md` 的**新增行规则 3** 早已写着「『不能外推为』必须显式写出相邻但
+#   未验证的命题 —— **这一栏不得写「无」**」。这条规则**本身就是正向可判的**（非空 ∧ ≠「无」∧
+#   ≥1 边界命题），但审计对它**零**处检查（`grep -c 边界 audit_consistency.py` = 0）⇒
+#   「体例有法、无器」：现有栏全靠作者自觉，下一行写「无」不会有任何报错。
+#
+#   ★★ 三条设计边界（与 `P134-14b` 卡同义，改动本项前必须读）：
+#   (a) **只检查、只报红，不改任何已发布证据行**（`evidence/table.md` append-only）。
+#   (b) **新纪律不追溯**：老块没有这一行**不算缺陷**（历史格式不同，且部分是 `-CORR` 追加块，
+#       按设计不重述边界）⇒ 只有编号 **≥ `BOUNDARY_FROM`** 的**主块**（`D-<n>`，无后缀）
+#       才**必须**有该行。⇒ 「缺行数」只**打印**，不做断言。
+#   (c) 本项**只判形态**，**不判**「那栏写的相邻命题对不对」（那是人读）⇒
+#       **不得**把 ⑨a–⑨c 通过读成「边界已声明正确」。
+print("\n⑨ 证据行「边界」栏的形态（P134-14b）")
+BOUNDARY_LABELS = ("边界", "边界（不得外推）")   # ★ 现存只有这两种标签；第三种出现即报红（防漂移）
+BOUNDARY_FROM = 162                              # ★ 生效起点：本项落地时的**下一行**编号
+_NONE_WORDS = {"无", "**无**", "—", "-", "－", "none", "n/a", "na", "空"}
+# ★ ⑨c 的**限定/否定**词面。★★ 首版只用「不得/不能/未测/仅/只测」⇒ 实测**假红 3 条**
+#   （`D-77` 写「未对 `H55` 作任何裁决 · 未重测」、`D-95` 写「只能谈/只排除/不是二分」、
+#   `D-98` 写「只说明/不说」——全是**合格的边界陈述**，只是没命中那 6 个词）。
+#   ⇒ 词面按**实测语料**扩到「限定 + 否定」两族；★ 仍**不**收裸「无」「只」（它们在几乎任何句子
+#   里都出现 ⇒ 会让 ⑨c 恒真），只收带宾语的形态（`只能/只测/只说明/只排除/只说/只给/只约束`）。
+#   ★★ 这是**形态判据**，不是语义判据：它只能否掉「空 / 见卡片 / 同 D-x」这类**没有限定**的格子。
+_U4NEG9 = re.compile(
+    r"不得|不能|不可|不应|不该|不覆盖|不代表|不保证|不等同|不适用|不成立|不算|不足|"
+    r"未(测|扫|验证|证明|覆盖|做|核|对|重测|能|曾|知|作)|仅|只能|只测|只覆盖|只说明|只排除|只说|"
+    r"只给|只约束|无法|无从|并非|不是|边界"
+)
+if tb.exists():
+    _t9 = tb.read_text(encoding="utf-8")
+    _hdr9 = [(m.start(), m.group(1)) for m in
+             re.finditer(r"^#{2,4}\s+\*{0,2}(D-\d+(?:-[A-Za-z]+\d*)?)", _t9, re.M)]
+    _blk9 = []
+    for _i, (_pos, _d) in enumerate(_hdr9):
+        _end = _hdr9[_i + 1][0] if _i + 1 < len(_hdr9) else len(_t9)
+        _blk9.append((_d, _t9[_pos:_end]))
+    # ★ 「边界类标签」= 标签里含「边界」二字的行（不论是否在 BOUNDARY_LABELS 里）
+    _alllab9 = []
+    for _d, _b in _blk9:
+        for _m in re.finditer(r"^\|\s*\*\*([^*]{1,24})\*\*\s*\|(.*)$", _b, re.M):
+            if "边界" in _m.group(1):
+                _alllab9.append((_d, _m.group(1).strip(), _m.group(2)))
+    # ★★ 关键：表行的「单元格文本」= 标签 `|` 之后到**行末 `|` 之前**。首版没剥尾部 `|` ⇒
+    #   注入「无」后实测 `c.strip()` = `无 |` ⇒ ⑨b **假通过**（注入实验暴露，见决定二百五十一）。
+    #   ⇒ 统一剥掉行末竖线再判定（只影响判定口径，不改任何行）。
+    _norm9 = lambda c: re.sub(r"\|\s*$", "", c).strip()
+    _rows9 = [(d, _norm9(c)) for d, lab, c in _alllab9 if lab in BOUNDARY_LABELS]
+    _blocks_with9 = {d for d, _ in _rows9}
+    _main9 = [(d, c) for d, c in _rows9 if re.fullmatch(r"D-\d+", d)]
+    _deriv9 = [(d, c) for d, c in _rows9 if not re.fullmatch(r"D-\d+", d)]
+    _empty9 = [d for d, c in _rows9 if not c.strip()]
+    _none9 = [d for d, c in _rows9
+              if c.strip("*").strip().strip("「」\"'「」 ").lower() in _NONE_WORDS]
+    _noneg9 = [d for d, c in _rows9 if not _U4NEG9.search(c)]
+    # ★ ⑨d 只查**主块**的标签：派生块（`-CORR`/`-ERRATA`）的「更正一（边界收窄）」这类行是
+    #   **更正条目的标题**，不是「边界栏」本身（它有自己的层级语义）⇒ 收进白名单会混淆两层结构。
+    _badlab9 = sorted({lab for d, lab, _ in _alllab9
+                       if re.fullmatch(r"D-\d+", d) and lab not in BOUNDARY_LABELS})
+    # (b) 缺行：只打印，不断言
+    _main_ids9 = [d for d, _ in _blk9 if re.fullmatch(r"D-\d+", d)]
+    _deriv_ids9 = [d for d, _ in _blk9 if not re.fullmatch(r"D-\d+", d)]
+    # ★ 去重：证据表存在**同号两条标题行**（`D-103` 等，已在 `DUP-OK` 声明，见 ③）⇒
+    #   `_main_ids9` 是**标题行**列表、不是唯一编号集合；「缺行」以**唯一编号**计。
+    _miss_main9 = sorted({d for d in _main_ids9 if d not in _blocks_with9},
+                         key=lambda x: int(re.findall(r"\d+", x)[0]))
+    _miss_deriv9 = sorted({d for d in _deriv_ids9 if d not in _blocks_with9})
+    _maxmain9 = max((int(re.findall(r"\d+", d)[0]) for d in _main_ids9), default=0)
+
+    print(f"      （证据块标题行 {len(_blk9)} 条：主块 {len(_main_ids9)} 条（唯一 "
+          f"{len(set(_main_ids9))} 个编号）· 派生块 {len(_deriv_ids9)} 条"
+          f"；有边界行 **{len(_blocks_with9)}** 个块 / {len(_rows9)} 行"
+          f"——主块 {len(_main9)} 行 · 派生块 {len(_deriv9)} 行）")
+    print(f"      （★ 只报不判：主块**缺**边界行 {len(_miss_main9)} 个"
+          f"（最大 D-{max((int(re.findall(chr(92) + 'd+', d)[0]) for d in _miss_main9), default=0)}），"
+          f"派生块缺 {len(_miss_deriv9)} 个 ⇒ **不追溯**，见本项 (b)）")
+    print(f"      （★ 生效起点 D-{BOUNDARY_FROM}（现存主块最大 D-{_maxmain9}）⇒ "
+          f"新行必须带该栏；老行只做形态检查）")
+    check(not _empty9, f"⑨a 边界栏不得为空：空 {_empty9 or '无'}")
+    check(not _none9, f"⑨b 边界栏不得写「无」（新增行规则 3）：违规 {_none9 or '无'}")
+    check(not _noneg9,
+          f"⑨c 边界栏须含 ≥1 否定/边界命题（`不得/不能/未测/仅/边界…`）：缺 {_noneg9 or '无'}")
+    check(not _badlab9,
+          f"⑨d **主块**边界栏标签须 ∈ {list(BOUNDARY_LABELS)}（防标签漂移）：越界 {_badlab9 or '无'}")
+    _need9 = [d for d in _main_ids9
+              if int(re.findall(r"\d+", d)[0]) >= BOUNDARY_FROM and d not in _blocks_with9]
+    check(not _need9,
+          f"⑨e 主块编号 ≥ D-{BOUNDARY_FROM} 必须带边界栏：缺 {_need9 or '无'}")
 
 print("\n" + "=" * 88)
 print(("★ 全部通过" if not fails else f"★ {len(fails)} 项未通过"))
