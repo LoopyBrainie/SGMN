@@ -1293,6 +1293,60 @@ def selftest():
          (_cp.exists(), _cp.name),
          (True, 'P133-10-SEMANTIC-DISCIPLINE-CENSUS.md'))
 
+    def _raises_valerr(fn):
+        """该调用是否抛 `ValueError`（用未未知口径必须报错，不得静默降级）。"""
+        try:
+            fn()
+        except ValueError:
+            return True
+        except Exception:
+            return False
+        return False
+
+    # ★★★ `P135-13` 防回归：三个姊妹探针的人口缺陷 + **复现契约** + **口径不可统一**
+    _lg = _u4_recount('legacy')
+    _po = _u4_recount('pop')
+    _al = _u4_recount('all')
+    _t22("-REC-11 ★★★三轴**逐轴分开**（legacy 79/55 · pop 82/56 · all 182/134）",
+         ((_lg['n_all'], _lg['n_clause']), (_po['n_all'], _po['n_clause']),
+          (_al['n_all'], _al['n_clause'])),
+         ((79, 55), (82, 56), (182, 134)))
+    _t22("-REC-12 ★★★只修人口 = **+3 行**；+103 是 revision 轴（不得合并归因）",
+         (_po['n_all'] - _lg['n_all'], _al['n_all'] - _po['n_all']), (3, 100))
+    _t22("-REC-13 ★★`pop` 口径下**分母 = 实扫 = 105**（无一个目录被丢）",
+         (len(canonical_nums()[0]),
+          sum(1 for _n in canonical_nums()[0] if _u4_card_text(_n, 'pop')),
+          [_n for _n in canonical_nums()[0] if not _u4_card_text(_n, 'pop')]),
+         (105, 105, []))
+    _t22("-REC-14 ★★★`legacy` 跳 2 张（19/20）· `pop` 救回 2 张（不得静默）",
+         (sum(1 for _n in canonical_nums()[0] if not _u4_card_text(_n, 'legacy')),
+          sum(1 for _n in canonical_nums()[0]
+              if not Ctx(_n).card and _u4_card_text(_n, 'pop'))),
+         (2, 2))
+    # ★★★ 本轮踩过的坑：**三个探针的 legacy revision 语义不同** —— `axis` 本来读**全副本**
+    # ★★★ 钉**具体卡的语义差**，不钉全局总数 —— 全局数依赖本地镜像/训练机文件集是否一致
+    #   （实测：本地 272 / trainer 270，`DIR-64` 的两张卡 trainer 上缺；见 `P135-13` §16）。
+    #   钉 `DIR-21`（9 vs 1）与 `DIR-24`（3 vs 1）⇒ 两侧**逐位相同**，且正好体现
+    #   「`axis` 读**全副本**、另两个探针读**现行卡一张**」这个要保护的语义。
+    _t22("-REC-15 ★★★`axis-legacy` 是**全副本**（`DIR-21` 9 vs 1 · `DIR-24` 3 vs 1），"
+         "与另两个探针的「现行卡一张」**不同**",
+         (len(_u4_card_text(21, 'axis-legacy')), len(_u4_card_text(21, 'legacy')),
+          len(_u4_card_text(24, 'axis-legacy')), len(_u4_card_text(24, 'legacy'))),
+         (9, 1, 3, 1))
+    _t22("-REC-16 ★★★`axis-legacy` 仍受文件名规则限制（`DIR-19/20` = 0 副本）",
+         (len(_u4_card_text(19, 'axis-legacy')), len(_u4_card_text(20, 'axis-legacy')),
+          len(_u4_card_text(19, 'axis-fixed')), len(_u4_card_text(20, 'axis-fixed'))),
+         (0, 0, 1, 6))
+    _t22("-REC-17 ★★未知口径必须**报错**（不得静默降级）",
+         (_raises_valerr(lambda: _u4_card_text(1, 'nope')),
+          _raises_valerr(lambda: _u4_card_text(1, 'POP'))), (True, True))
+    # ★★ 计数单位区分：行级 vs 命中级（同总体可差 1）
+    _t22("-REC-18 ★★行级 182 ≠ 命中级 183（且 legacy 下两者相等 79）",
+         (len(_u4_family_rows('all')),
+          sum(len(_misread_hits(_r['text'])) for _r in _u4_family_rows('all')),
+          len(_u4_family_rows('legacy'))),
+         (182, 183, 79))
+
     ok += ok22
     bad += bad22
     print(f"   （其中 `P135-4/5` 的非定义性读数夹具 {ok22 + bad22} 条）")
@@ -2300,22 +2354,88 @@ def _u4_sec_new():
     return _U4_SEC_ALT + _U4_SEC_FUNC
 
 
-def _u4_family_rows():
-    """`P133-13` 的误读禁令族在**卡片 locus** 的全部行 ⇒ [{card,line,text,clause}]。
+def _u4_card_text(n, mode):
+    """某卡**按口径**要读的 `[(path, text)]`。`P135-13` 的口径开关（只此一处）。
+
+    ★★★ `mode` 三个值必须严格区分 —— 它们是**两个独立轴**的组合：
+      `'legacy'` = **现行卡**（`Ctx.card`，要求 `_v` 文件名）；无现行卡 ⇒ **空**（旧行为，
+                  静默丢掉 `DIR-19/20` ⇒ 「分母 105 / 分子 103」的根因）。
+      `'pop'`    = **只修人口**：同 `'legacy'`，但无现行卡时取**任意名最新副本**
+                  ⇒ 仍「每卡一张」，**不动 revision 范围**。★ 这是**最小修复**。
+      `'all'`    = **人口 + revision 扩大**：取全部副本。★★ 这是**另一个轴**，
+                  **不得**当成「人口缺陷的代价」报（会夸大 30+ 倍）。
+
+    ★ 为何不能用 `Ctx(n).text`：`Ctx.card` 的 glob 要求 `_v` ⇒ `DIR-19`（`DIRECTION_rev15.md`）
+      与 `DIR-20`（`rev11..16`）的 `Ctx.text` 是 **空串** ⇒ 即使把它们收进总体，
+      若回读 `Ctx(n).text` 仍会**静默记 0**（新一种「分母/分子不同人口」）。
+    """
+    # ★★★ 先验口径再取数据 —— 否则「无副本」的早点返回会把**未知口径静默吞掉**
+    #   （`-REC-17` 在喂入第一张真卡前就抓到了这个顺序错误）。
+    if mode not in ('legacy', 'pop', 'all', 'axis-legacy', 'axis-fixed'):
+        raise ValueError(f"未知口径 {mode!r}（只接受 legacy/pop/all/axis-legacy/axis-fixed）")
+    ctx = Ctx(n)
+    fs = _u4_card_files(ctx.cdir)
+    if not fs:
+        return []
+    if mode == 'legacy':
+        picked = [ctx.card] if ctx.card else []
+    elif mode == 'pop':
+        picked = [ctx.card] if ctx.card else [fs[-1]]
+    elif mode == 'all':
+        picked = fs
+    elif mode == 'axis-legacy':
+        # ★★★ `probe_u4_axis` 的**原始**语义与另两个探针不同：它本来就读
+        #   `DIRECTION_rev{n}*` 匹配到的**全部副本**（如 `DIR-21` 有 9 个），不是现行卡一张。
+        #   ⇒ 冻结它必须照抄「glob 全副本」，不能套用 `legacy`（那会从 149 掉到 100）。
+        picked = [p for p in ctx.cdir.glob(f"DIRECTION_rev{n}*.md")
+                  if "archived" not in p.name
+                  and re.match(rf"^DIRECTION_rev{n}([_]|\.)", p.name)]
+        picked = sorted(picked, key=lambda q: ((int(m.group(1)) if (m := re.search(r"_v(\d+)", q.name)) else -1),
+                                               q.name))
+    elif mode == 'axis-fixed':
+        # 修：文件名规则改为「任意名」（`_u4_card_files`），revision 范围**仍为全副本**（与原始一致）
+        picked = fs
+    else:                        # 不会到达：上面已验口径
+        raise AssertionError(mode)
+    out = []
+    for p in picked:
+        try:
+            out.append((p, p.read_text(encoding="utf-8", errors="replace")))
+        except OSError:
+            continue
+    return out
+
+
+def _u4_card_texts(mode):
+    """`{(card, src_name): text}` —— 供需要**回读原文**的步骤（如 `R-A` 的段定位）用。
+
+    ★ 为什么必须建这张图：行级读数只带 `card`/`line`，而 `DIR-19/20` 没有现行卡 ⇒
+      若下游照旧用 `Ctx(card).text` 定位段，那几行会**恒不命中**（分母已含、分子恒 0）。
+    """
+    txt = {}
+    for n in range(1, 300):
+        for p, t in _u4_card_text(n, mode):
+            txt[(n, p.name)] = t
+    return txt
+
+
+def _u4_family_rows(mode='legacy'):
+    """`P133-13` 的误读禁令族在**卡片 locus** 的全部行 ⇒ [{card,src,line,text,clause}]。
 
     ★ 与 `--probe-u4-full` 同源（`_misread_hits`），不另写词表。
-      n=79（全部）/ 其中条款行 n=55 —— 这两个数就是 `P134-14` 的两个分母。
+      `mode='legacy'` 时 n=79（全部）/ 条款行 n=55 —— 这两个数就是 `P134-14` 的两个分母。
+    ★★ `mode` 见 `_u4_card_text` 的说明；**默认 `legacy`** 以保持 `-REC-4` 可证伪。
+    ★★ 计数单位：**每行 1 条**（即使一行含 2 个命中）。`--probe-u4-full` 是**每命中 1 条** ⇒
+       同总体下两者可差 1（`P135-13` §4 已实测：182 行 vs 183 命中）。
     """
     out = []
     for n in range(1, 300):
-        ctx = Ctx(n)
-        if not ctx.card:
-            continue
-        for i, ln in enumerate(ctx.text.splitlines()):
-            if not _misread_hits(ln):
-                continue
-            out.append({"card": n, "line": i + 1, "text": ln,
-                        "clause": bool(_U4_CLAUSE.match(ln.strip())) and len(ln.strip()) > 8})
+        for p, text in _u4_card_text(n, mode):
+            for i, ln in enumerate(text.splitlines()):
+                if not _misread_hits(ln):
+                    continue
+                out.append({"card": n, "src": p.name, "line": i + 1, "text": ln,
+                            "clause": bool(_U4_CLAUSE.match(ln.strip())) and len(ln.strip()) > 8})
     return out
 
 
@@ -2331,9 +2451,14 @@ def _u4_entailed(rows, crit):
     return hit == len(rows), hit, len(rows)
 
 
-def _u4_recount():
-    """四个读数的 **旧口径 / 新口径** 双份 ⇒ dict。只算，不判。"""
-    fam = _u4_family_rows()
+def _u4_recount(mode='legacy'):
+    """四个读数的 **旧口径 / 新口径** 双份 ⇒ dict。只算，不判。
+
+    ★★ `mode` 透传给 `_u4_family_rows`；`R-A` 的段定位改用 `_u4_card_texts(mode)`
+      —— 否则 `DIR-19/20`（无现行卡）的行会**分母已含、分子恒 0**。
+    """
+    fam = _u4_family_rows(mode)
+    src_text = _u4_card_texts(mode)
     cl = [r for r in fam if r["clause"]]
     txt = lambda rs: [r["text"] for r in rs]
 
@@ -2341,9 +2466,10 @@ def _u4_recount():
         cache = {}
         hit = 0
         for r in rows:
-            if r["card"] not in cache:
-                cache[r["card"]] = _u4_sec_line_ranges(Ctx(r["card"]).text, kws)
-            if (r["line"] - 1) in cache[r["card"]]:
+            key = (r["card"], r["src"])
+            if key not in cache:
+                cache[key] = _u4_sec_line_ranges(src_text.get(key, ""), kws)
+            if (r["line"] - 1) in cache[key]:
                 hit += 1
         return hit
 
@@ -2375,19 +2501,63 @@ def _u4_recount():
     }
 
 
-def probe_u4_recount():
+def _u4_pop_block(mode, per_hit=False):
+    """`P135-13` 的统一【⓿ 人口核对】块 —— **分母与实扫必须并排打印**。
+
+    ★★★ 为何这是核心修法（而不是把 103 改成 105）：缺陷本质是「分母取 A、分子取 B，
+      而**输出里只有分母**」⇒ 只要两个数并排，任何「跳过 + 仍打印总数」都会当场暴露。
+    ★★ 并打三轴表：`legacy`（旧）/`pop`（只修人口）/`all`（人口+revision）——
+      **绝不得把 `all` 当成「人口缺陷的代价」**（那是两个独立轴，混算会夸大 30+ 倍）。
+    """
+    nums, _skip = canonical_nums()
+    n_dir = len(nums)
+    n_scanned = sum(1 for n in nums if _u4_card_text(n, mode))
+    nocard = [n for n in nums if not Ctx(n).card]
+    print("\n【⓿ 人口核对（★ 先看这一块）】")
+    print(f"   分母（规范目录总数）　　：**{n_dir}**")
+    print(f"   实扫（按本口径有副本可读）：**{n_scanned}**")
+    print(f"   ★ 无 `_v` 卡的目录　　　：**{len(nocard)}** 个 "
+          f"({', '.join(f'DIR-{n}' for n in nocard)})")
+    if n_scanned != n_dir:
+        print(f"   ★★★ **两个数不等 ⇒ 仍有目录没读到卡，本探针读数不得直接引用**。")
+    print(f"   本口径 = `{mode}`：" + {
+        'legacy': "现行卡（要求 `_v` 名）；无现行卡者**跳过** ← ★ 旧版口径",
+        'pop':    "每卡一张；无现行卡者取**任意名最新副本** ← ★ 最小修复（不动 revision 范围）",
+        'all':    "全部副本 ← ★★ **人口 + revision 扩大**，另一个轴，不得当人口代价",
+    }[mode])
+    # ---- 三轴表（同一探针家族，只报行级/命中级两个计数单位）
+    if mode == 'pop':
+        print("   ★★ 三轴对照（**逐轴分别报，不得混算**）：")
+        print("      | 口径 | 行的总体 | 命中的总体 |")
+        print("      |---|---:|---:|")
+        for m, lab in (('legacy', '旧（跳 DIR-19/20）'), ('pop', '★ 只修人口'),
+                       ('all', '人口 + revision 扩大')):
+            rows = _u4_family_rows(m)
+            hits = sum(len(_misread_hits(r["text"])) for r in rows)
+            print(f"      | {lab} | {len(rows)} | {hits} |")
+        print("      ⇒ ★★★ **只修人口 = +3 行**（79→82）；**+103 是 revision 轴**（82→182），")
+        print("        是**另一个问题**（是否要把已废弃的旧 revision 也算进纪律总库）。不得合并归因。")
+
+
+def probe_u4_recount(mode='pop', show_pop=True):
     """`P135-4`+`P135-5` 合并探针：`K27` 四件的**非定义性**读数（只报告，不判定）。
 
     ★★ 本探针只回答一件事：**这四个读数里，哪些是「真变量」、哪些是「按构造恒真」**。
       恒真者**不得**作为硬纪律的判据（那是把纪律建在同义反复上）。
+    ★★★ `P135-13` 修：默认口径改为 `'pop'`（**每卡一张，无现行卡者取任意名最新副本**）
+      ⇒ 分母 = 实扫 = **105 张**。旧默认 `'legacy'`（跳 `DIR-19/20`）仍可由
+      `--probe-u4-recount-legacy` 逐字节复现。
     """
-    d = _u4_recount()
+    d = _u4_recount(mode)
     na, nc = d["n_all"], d["n_clause"]
     pc = lambda kv: f"{kv[0]}/{kv[1]} = {100 * kv[0] / kv[1]:5.1f}%"
 
     print("=" * 100)
     print("P135-4/5 合并探针 · `K27` 四件的非定义性读数（只报告，不判定）")
     print("=" * 100)
+    if show_pop:
+        _u4_pop_block(mode)
+        print()
     print("总体（`P133-13` 误读禁令族 · 卡片 locus，与 --probe-u4-full 同源）：")
     print(f"  全部行 n={na} · 其中条款行 n={nc}（`R-B`/`R-C`/`R-D` 的分母只能是条款行）")
     print("★★ 每个读数都问一句：它是不是**被总体选择条件蕴含**的？蕴含 ⇒ 恒真 ⇒ 不携带信息。")
@@ -2430,9 +2600,23 @@ def probe_u4_recount():
     return 0
 
 
-def probe_u4_full():
+def probe_u4_recount_legacy():
+    """`--probe-u4-recount-legacy`：**冻结的旧口径**，供归档读数**逐字节复现**。
+
+    ★★★ `P135-13` 的复现方案 (a)：旧实现冻结成可调用路径。见 `P135-12` §1 的同类理由 ——
+      已发布读数（`79 / 55` 等）必须**仍能由当前代码重算**，否则证据链断开。
+    ★ 与 `--probe-u4-recount` 的差别**只有两处**：口径 `legacy`（跳 `DIR-19/20`）＋ 不印人口块。
+    """
+    return probe_u4_recount(mode='legacy', show_pop=False)
+
+
+def probe_u4_full(mode='pop', show_pop=True):
     """`P135-1` 探针：把 `P134-14` 的三条替代（`R-A`/`R-B`/`R-C`）
     用**同一把尺子**量到 `P133-13` 的误读禁令族上（只报告，不判定）。
+
+    ★★★ `P135-13` 修：默认口径 `'pop'`（每卡一张，无现行卡者取任意名最新副本）
+      ⇒ 分母 = 实扫 = **105**，卡片 locus **82** 条、合计 **148**。
+      旧默认（跳 `DIR-19/20`）仍可由 `--probe-u4-full-legacy` **逐字节复现**。
 
     ★ 为何这是**真问题**：`P134-14` 的总体（944 条）是**按 `R-A` 筛出来的**（段存在才取段内条款）
       ⇒ `R-A` 在那边是**常数 100%**，不是测量值。而本族的 145 条在**任意位置**
@@ -2443,7 +2627,17 @@ def probe_u4_full():
     print("P135-1 探针 · `P134-14` 的改写路径能否外推？—— 同一把尺子、两个总体（只报告，不判定）")
     print("=" * 100)
     print("口径（★ 照拄进任何引用它的文档）：")
-    print("  ① 被测总体 = `P133-13` 的误读禁令（`_misread_hits`，**同一探针不另写词表**），去重前 145 条")
+    if show_pop:
+        # ★★ 现算，不写死 —— 旧版把「145」硬编码进口径串，人口一变就成了假声明
+        _n_card = sum(len(_misread_hits(ln))
+                      for n in nums for _p, _t in _u4_card_text(n, mode)
+                      for ln in _t.splitlines())
+        _n_ev = sum(len(_misread_hits(ln))
+                    for ln in EVIDENCE.read_text(encoding="utf-8", errors="replace").splitlines())
+        print(f"  ① 被测总体 = `P133-13` 的误读禁令（`_misread_hits`，**同一探针不另写词表**），"
+              f"去重前 **{_n_card + _n_ev}** 条（卡片 {_n_card} + `evidence` {_n_ev}）")
+    else:
+        print("  ① 被测总体 = `P133-13` 的误读禁令（`_misread_hits`，**同一探针不另写词表**），去重前 145 条")
     print("  ② 尺子 = `P134-14` 自己的机器：`_u4_sections`/`_U4_SEC_ALT`（容器）、")
     print("     `_U4_Q`（`R-B` 点名 Y）、`_U4_AX`（`R-C` 轴值）、`_U4_CLAUSE`（是否条款行）")
     print("  ③ ★ `A_*` 只对**卡片** locus 有定义；`evidence`/清单不是卡 ⇒ 记 `N/A`（口径限制，**不是**「不满足」）")
@@ -2453,22 +2647,28 @@ def probe_u4_full():
     # ---- 采集：与 `probe_misread_prohibition` 同源
     rows = []          # (locus, card, lineno(1-based), line, quoted, is_clause, A_strict, A_broad)
     nocard = 0
+    rescued = 0
     for n in nums:
         ctx = Ctx(n)
         if not ctx.card:
             nocard += 1
-            continue
-        text = ctx.text
-        s_strict = _u4_sec_line_ranges(text, ('边界',))
-        s_broad = _u4_sec_line_ranges(text, _U4_SEC_ALT)
-        for i, ln in enumerate(text.splitlines()):
-            hits = _misread_hits(ln)
-            if not hits:
-                continue
-            for q, _b in hits:
-                rows.append(("card", n, i + 1, ln, q,
-                             bool(_U4_CLAUSE.match(ln.strip())),
-                             i in s_strict, i in s_broad))
+        # ★★★ `P135-13`：不再 `continue`。按口径取副本（`pop` ⇒ 无现行卡者取任意名最新副本）。
+        #   段定位必须**对每个副本各自的全文**算，不能回读 `Ctx(n).text`
+        #   （`DIR-19/20` 的 `Ctx.text` 是空串 ⇒ 会把救回的行静默记成「不在容器内」）。
+        files = _u4_card_text(n, mode)
+        if not ctx.card and files:
+            rescued += 1
+        for _p, text in files:
+            s_strict = _u4_sec_line_ranges(text, ('边界',))
+            s_broad = _u4_sec_line_ranges(text, _U4_SEC_ALT)
+            for i, ln in enumerate(text.splitlines()):
+                hits = _misread_hits(ln)
+                if not hits:
+                    continue
+                for q, _b in hits:
+                    rows.append(("card", n, i + 1, ln, q,
+                                 bool(_U4_CLAUSE.match(ln.strip())),
+                                 i in s_strict, i in s_broad))
     ev_text = EVIDENCE.read_text(encoding="utf-8", errors="replace")
     for i, ln in enumerate(ev_text.splitlines()):
         for q, _b in _misread_hits(ln):
@@ -2484,9 +2684,16 @@ def probe_u4_full():
     ev_rows = [r for r in rows if r[0] == "evidence"]
     ck_rows = [r for r in rows if r[0] == "checklist"]
 
+    if show_pop:
+        _u4_pop_block(mode)
     print(f"\n【① 总体】卡片 {len(card_rows)} 条 · `evidence` {len(ev_rows)} 条 · "
           f"清单 {len(ck_rows)} 条 ⇒ 合计 **{len(rows)}** 条（与 `--probe-misread` 同源，应一致）")
-    print(f"   ★ 有卡目录但无现行卡而跳过的卡：{nocard} 张")
+    if show_pop:
+        print(f"   ★ 有卡目录但无现行卡的卡：{nocard} 张 —— 其中 **{rescued}** 张已按本口径救回"
+              f"（『跳过』只应发生在该卡**一个副本都没有**时）")
+    else:
+        # ★ 冻结的旧措辞（`--probe-u4-full-legacy` 必须与归档输出逐字节一致）
+        print(f"   ★ 有卡目录但无现行卡而跳过的卡：{nocard} 张")
 
     # ---- R-A：只对卡片 locus
     a_strict = [r for r in card_rows if r[6]]
@@ -3479,8 +3686,15 @@ def _ax_dev_table(n, _seen=None, _depth=0):
     return ns
 
 
-def probe_u4_axis():
-    """`P134-14c` 探针：`R-C` 轴值的**可溯源率**与**不可溯源的原因**（只报告，不判定）。"""
+def probe_u4_axis(mode='axis-fixed', show_pop=True):
+    """`P134-14c` 探针：`R-C` 轴值的**可溯源率**与**不可溯源的原因**（只报告，不判定）。
+
+    ★★★ `P135-13` 修：去掉 `if not ctx.card: continue` 与 `DIRECTION_rev{n}*` glob（两层同修），
+      改用 `_u4_card_text(n, mode)`。★ **实测读数一字未变**（`dev=10` / `other=149` / 卡 `10`）
+      —— 因为 `DIR-19` 有 **0 个**容器段、`DIR-20` 段内 44 条款**无一**含 `_U4_AX` 形态
+      ⇒ 本探针对该人口缺陷**结构性免疫**。修的是**代码**，不是读数。
+      旧口径仍可由 `--probe-u4-axis-legacy` 逐字节复现。
+    """
     # ★ 先现算，后打印：口径块里要引用这些数 ⇒ **不得**先写死再让下面去凑
     nums, _skip = canonical_nums()
     _json_all = list(ROOT.glob("dir*/out/*.json"))
@@ -3499,6 +3713,24 @@ def probe_u4_axis():
     print("  ③ **`a=b` 形态语法歧义**：它还命中**公式**（`\\alpha(Wk-v)` 之类）⇒ 不能直接当冻结值")
     print("  ④ 故本探针**只核「装置轴声明型」条款**（≥3 个**不同**装置轴名），其余**落在核对之外**")
     print("  ⑤ 下列读数是**可行性普查**，**不是** `PASS/FAIL`，也**不**进 `REGISTRY`")
+
+    if show_pop:
+        # ★★★ `P135-13`【⓿】：分母/实扫并排 + 明说「本探针对该缺陷免疫」
+        _pd, _ps = len(nums), sum(1 for n2 in nums if _u4_card_text(n2, mode))
+        _pn = [n2 for n2 in nums if not Ctx(n2).card]
+        print(f"\n【⓿ 人口核对（★ 先看这一块）】")
+        print(f"   分母（规范目录总数）　　：**{_pd}**")
+        print(f"   实扫（按本口径有副本可读）：**{_ps}**")
+        print(f"   ★ 无 `_v` 卡的目录　　　：**{len(_pn)}** 个 "
+              f"({', '.join(f'DIR-{n2}' for n2 in _pn)})")
+        print(f"   本口径 = `{mode}`："
+              + {"axis-legacy": "**全副本**，但文件名须匹配 `DIRECTION_rev{n}*`（旧 glob）← ★ 旧版口径",
+                 "axis-fixed":  "**全副本**（任意名）← ★ 只修**文件名规则**；revision 范围与旧版一致（不动）",
+                 }.get(mode, "每卡一张；无现行卡者取任意名最新副本"))
+        print("   ★★★ **本探针对该人口缺陷结构性免疫**（实测 `legacy`/`pop`/`all` 三口径读数一字未变）：")
+        print("     · `DIR-19`：**0 个**容器段 ⇒ 段内条款为 0，救回也无从计入；")
+        print("     · `DIR-20`：6 段 / 44 段内条款，但**无一**含 `_U4_AX` 形态（`a=b`）⇒ 不落入本探针分母。")
+        print("     ⇒ 本探针修的是**代码**（两层缺陷真实存在），**不是**读数。★ 不得因此说「缺陷不存在」。")
 
     # ① 三个前提的存量（数字已在函数头现算）
     print(f"\n【① 溯源源的「存量」普查】")
@@ -3527,20 +3759,9 @@ def probe_u4_axis():
     # ② 逐卡：分「装置轴声明型」与「其余带轴值条款」
     dev_rows, other_rows = [], []
     for n in nums:
-        ctx = Ctx(n)
-        if not ctx.card:
-            continue
-        cands = sorted((p for p in ctx.cdir.glob(f"DIRECTION_rev{n}*.md")
-                        if "archived" not in p.name
-                        and re.match(rf"^DIRECTION_rev{n}([_]|\.)", p.name)),
-                       key=lambda p: ((int(m.group(1)) if (m := re.search(r"_v(\d+)", p.name)) else -1),
-                                      p.name))
+        # ★★★ `P135-13`：两层同修 —— 不跳无现行卡者，且用 `_u4_card_files`（任意名）而非 `rev{n}` glob。
         seen, cls = set(), []
-        for f in cands:
-            try:
-                t = f.read_text(encoding="utf-8", errors="replace")
-            except OSError:
-                continue
+        for _f, t in _u4_card_text(n, mode):
             for _ti, lines in _u4_sections(t):
                 for c in _u4_clauses(lines):
                     if c in seen:
@@ -3631,10 +3852,13 @@ def main():
     ap.add_argument("--probe-u4", action="store_true")
     ap.add_argument("--probe-u4-fixed", action="store_true")
     ap.add_argument("--probe-u4-axis", action="store_true")
+    ap.add_argument("--probe-u4-axis-legacy", action="store_true")
     ap.add_argument("--probe-misread", action="store_true")
     ap.add_argument("--probe-u4-full", action="store_true")
+    ap.add_argument("--probe-u4-full-legacy", action="store_true")
     ap.add_argument("--probe-ra-gap", action="store_true")
     ap.add_argument("--probe-u4-recount", action="store_true")
+    ap.add_argument("--probe-u4-recount-legacy", action="store_true")
     a = ap.parse_args()
 
     if a.selftest:
@@ -3658,17 +3882,26 @@ def main():
     if a.probe_u4_fixed:
         return probe_u4_fixed()
 
+    if a.probe_u4_axis_legacy:
+        return probe_u4_axis(mode='axis-legacy', show_pop=False)
+
     if a.probe_u4_axis:
-        return probe_u4_axis()
+        return probe_u4_axis(mode='axis-fixed')
 
     if a.probe_misread:
         return probe_misread_prohibition()
+
+    if a.probe_u4_full_legacy:
+        return probe_u4_full(mode='legacy', show_pop=False)
 
     if a.probe_u4_full:
         return probe_u4_full()
 
     if a.probe_ra_gap:
         return probe_ra_gap()
+
+    if a.probe_u4_recount_legacy:
+        return probe_u4_recount_legacy()
 
     if a.probe_u4_recount:
         return probe_u4_recount()
@@ -3694,7 +3927,8 @@ def main():
         ap.error("需要 --dirs / --all / --selftest / --probe-k15-scope / --probe-guard-coverage"
                  " / --probe-semantic-discipline / --probe-k26 / --probe-u4 / --probe-u4-axis"
                  " / --probe-misread / --probe-u4-full / --probe-ra-gap"
-                 " / --probe-u4-recount")
+                 " / --probe-u4-recount / --probe-u4-recount-legacy"
+                 " (each with -legacy for --probe-u4-full / --probe-u4-axis)")
 
     ks = sorted(REGISTRY)
     total = {PASS: 0, FAIL: 0, NA: 0}
