@@ -2,12 +2,15 @@
 
 > **机器生成**（生成逻辑见 §7，逐字可复跑）。工具 `check_cards.py` md5 `5863c98a9dfb…`，生成于 **2026-11-23 09:45:07 UTC**。
 > ★★ **`Cycle 259` 头部刷新**：现工具 md5 为 **`032cc31c23a4…`**（`P133-15` 加 `--probe-k26` + 16 条夹具 ⇒ 工具变了，证书须刷新）。
+> ★★★ **`Cycle 268` 起（`P133-12`）：本文件的**全部易变数字**由生成器现算** —— 现值见下行的 md5 与 §2/§3/§4 表体。
+> 生成器源码**逐字存档在本文件 §7b**（`/tmp/gen_baseline.py` 会丢，§7b 不会）。
+> ★★ **`Cycle 268` 头部刷新**：现工具 md5 为 **`94f23832aacb…`**（`P133-12` 把**全部易变数字**改为由 dump 现算 ⇒ 生成器见 **§7b**）。
 > ★★★ **本轮同样只刷头部，表体一字未改 —— 且这是实测的、不是声称的**：
 > 重跑 `check_cards.py --all` 得到 **1339** 条判决，与 §2 的 13 行**逐条一致**
 > （`PASS 384` / `FAIL 271` / `N/A 684`，`103` 卡 × `13` 条），合计行亦一致。
 > ★ **为什么表体不会变**：新增的是**探针**（`--probe-k26`，只报告）⇒ `REGISTRY` 仍 **13**
 > 条、清单 `①自动化` 集合仍 **13** 条 ⇒ 判决空间大小不变。
-> ★ **缺陷（`Cycle 257` 记，仍未修）**：基线生成器 `/tmp/gen_baseline.py` **已丢失** ⇒
+> ★ **缺陷（`Cycle 257` 记，`Cycle 268` 已修 —— 原文保留，不追认）**：基线生成器 `/tmp/gen_baseline.py` **已丢失** ⇒
 > 本文件现**无法整体逐字重生成**（§7 只有**数值**部分的逐字脚本，**散文**没有）⇒
 > 改工具后只能做「**表体校验 + 头部刷新**」两步（`P133-12` 仍待办）。
 > 依据任务：`P133-2`（`Cycle 245` `P132-1` 派生）；头部刷新依据 `P133-10`（`Cycle 257`）、`P133-11`（`Cycle 258`）与 `P133-15`（`Cycle 259`）。
@@ -33,6 +36,7 @@
 | 纳入卡片 | **103** 张（另有 **2** 张 `DIR-19,20` 缺卡文件 ⇒ 只出 `■` 头、**不出判据行**，故**不计入**上面的 103） |
 | 被跳过 | **21** 个变体目录（`DIR-26B`… 这类**没有同号 `dirN/`** 的，本脚本按 `dirN/` 定位 ⇒ 不覆盖）：DIR-26-S, DIR-26B, DIR-26C, DIR-26D, DIR-26E, DIR-26F, DIR-26G, DIR-26H, DIR-26I, DIR-26J, DIR-26K, DIR-26L, DIR-26M, DIR-26N, DIR-26O, DIR-26P, DIR-26Q, DIR-26R, DIR-26S, DIR-87b, DIR-87c |
 | 判据行数 | **1339** = 103 × 13 |
+| 生成器 | `/tmp/gen_baseline.py`（**不落 `.ops/scripts/`**，避免触发 `DEF-118-19` 的白名单/`_must` 义务）；★ **`/tmp` 会丢**（`Cycle 257` 就丢过一次）⇒ **源码逐字存档于本文件 §7b**，`--check` 漂了报红、`--write` 就地重写受管行 |
 
 ★ **年代分层**（用于回答「纪律是引入后才被遵守，还是至今无人遵守」）：
 `DIR-≤100`（早期，73 张卡 / 949 条判据）/ `101-120`（中期，20 张卡 / 260 条判据）/ `121-130`（近期，10 张卡 / 130 条判据）。
@@ -273,3 +277,539 @@ for k in sorted({r[1] for r in rows}):
 若改用总判据数做分母，`K15` 这类「全 N/A」会显示 `0%` 而不是 `—`，
 把「从未触发」误报成「全员违规」—— 这与它现在的「假 N/A」是同一枚硬币的两面。
 
+## §7b 生成器源码（**逐字存档** —— `/tmp` 丢了就靠这里取回）
+
+★★ **为什么把源码塞进本文件**：生成器按任务边界**必须留在 `/tmp`**（进 `.ops/scripts/` 会触发
+`DEF-118-19` 的白名单 / `_must` 同步义务），而 `/tmp` **会丢** —— `Cycle 257` 就是这么丢掉上一版的
+（本任务 `P133-12` 的由来）。⇒ 把源码**存进本文件**（在仓库内、进包、随 §7 一起走），
+**丢 `/tmp` 就不再等于丢生成器**。取回：
+
+```bash
+sed -n '/^#!\/usr\/bin\/env python3$/,/^## §8/p' .ops/COMPLIANCE-BASELINE.md \
+  | sed '$d' > /tmp/gen_baseline.py
+```
+
+★★★ **受管 vs 不受管（本生成器最重要的口径）**：受管 = 头部 md5、§1 六行、§2/§3 表体、§4 条目
+（**全部由 dump 现算**）；**不受管 = §5/§5b/§6/§7 的每一个字** —— §5 的 `Cycle 245` 原文任务明令不得改，
+其中 `383 / 272 / 684`、`103/103` 是**历史断言**，改成现值就是**篡改历史**（「一切皆留档，不追认」）。
+⇒ `--check` **故意不检查** §5/§5b：受管区漂了要报红；**历史区被"修"成现值反而是更严重的错**。
+
+★ 已验证（`Cycle 268`）：`--check` 在**真实文件**上 35 受管项 **0 漂移**；在隔离副本上注入
+三类漂移（① §2 合计 `384→383` ② 头部散文 `383/272` ③ §3 年代 `FAIL 81%→19%`）**全部点名报红**；
+`--write` 修回后与真实文件**逐字相同**（`diff` 为空）。
+
+````python
+#!/usr/bin/env python3
+"""基线生成器（`P133-12`）—— 把 `COMPLIANCE-BASELINE.md` 里**所有随卡片变化的数字**改为**由 dump 现算**。
+
+★★ 本文件**必须留在 `/tmp`**，不得进 `.ops/scripts/`（否则触发 `DEF-118-19` 的白名单 /
+   `_must` 同步义务）。**代价**：`/tmp` 会丢 —— `Cycle 257` 就是这么丢掉上一版的（`P133-12` 的由来）。
+   ⇒ **对策**：本文件的**源码逐字存档在** `COMPLIANCE-BASELINE.md` 的 **§7b** 里
+   （在仓库内、进包、可随时 `sed -n '/§7b/,/^## §8/p'` 取回）。**丢 /tmp 不等于丢生成器。**
+
+用法：
+  /usr/bin/python3 /tmp/gen_baseline.py --check      # 只核对，漂了就报红（退出码 1）
+  /usr/bin/python3 /tmp/gen_baseline.py --write      # 就地重写受管行（散文一字不动）
+  /usr/bin/python3 /tmp/gen_baseline.py --check --root <repo>   # 指定仓库根
+
+★★★ **受管 vs 不受管（这是本文件最重要的口径，写错会把历史改成现值）**：
+  * **受管**（由 dump 现算、本生成器可重写）：
+      - 头部：工具 md5、判据行数、`PASS/FAIL/N/A` 三数、卡数、K 数
+      - §1：纪律集合 / 规范目录数 / 纳入卡数 / 缺失卡清单 / 跳过目录数与清单 / 判据行数 / 年代分层
+      - §2：13 行 + 合计行
+      - §3：13 行
+      - §4：A/B/C/E 四个小节的条目
+  * **不受管**（**故意不碰**，本生成器既不读也不写）：
+      - §5 与 §5b 的**全部叙述** —— 含 `Cycle 245` 发现时的**原文**（任务明令不得改），
+        以及那些**历史断言**（`383 / 272 / 684`、`103/103`）—— 它们记录的是**当时的**状态，
+        改成现值就是**篡改历史**（「一切皆留档，不追认」）。
+      - §6 边界、§7 复算脚本（任务明令不得改）。
+★★ 因此本生成器的 `--check` **故意不检查 §5/§5b** —— 不是遗漏，是**划界**：
+   受管区漂了要报红；历史区被"修"成现值反而是**更严重的错**。
+"""
+
+import argparse
+import collections
+import hashlib
+import pathlib
+import re
+import subprocess
+import sys
+
+ERA = (("DIR-≤100", 0, 100), ("101-120", 101, 120), ("121-130", 121, 10 ** 9))
+
+
+def era_of(n):
+    for name, lo, hi in ERA:
+        if lo <= n <= hi:
+            return name
+    return ERA[-1][0]
+
+
+# ───────────────────────── dump ─────────────────────────
+def run_dump(root):
+    """跑 `check_cards.py --all`，返回 (文本, 退出码)。★ 只读。"""
+    cmd = [sys.executable, ".ops/scripts/check_cards.py", "--all"]
+    p = subprocess.run(cmd, cwd=str(root), capture_output=True, text=True,
+                       env={"SGMN_ROOT": str(root), "PYTHONDONTWRITEBYTECODE": "1",
+                            "PATH": "/usr/bin:/bin"})
+    return p.stdout, p.returncode
+
+
+def parse_dump(txt):
+    """→ rows [(dir, K, verdict)]，cards [(dir, card文件名)]。"""
+    rows, cards, cur = [], [], None
+    for line in txt.splitlines():
+        m = re.match(r"■ DIR-(\d+)\s+card=(\S+)", line)
+        if m:
+            cur = int(m.group(1))
+            cards.append((cur, m.group(2)))
+            continue
+        m = re.match(r"   (PASS|FAIL|N/A)\s+K(\d+)\s", line)
+        if m and cur is not None:
+            rows.append((cur, int(m.group(2)), m.group(1)))
+    return rows, cards
+
+
+def registry(root):
+    """从 `check_cards.py` 读 `REGISTRY`（不猜、不写死）。"""
+    t = (root / ".ops/scripts/check_cards.py").read_text(encoding="utf-8")
+    m = re.search(r"^REGISTRY\s*=\s*\{([^}]*)\}", t, re.M)
+    if not m:
+        raise SystemExit("★ 找不到 REGISTRY —— 工具结构变了，本生成器须同步")
+    return sorted(int(x) for x in re.findall(r"\b(\d+)\b", m.group(1)))
+
+
+def canonical(root):
+    """规范 `DIR-{n}` 与变体目录（与 `canonical_nums()` 同口径）。"""
+    canon, skip = [], []
+    for p in sorted((root / "revolve").glob("DIR-*")):
+        if not p.is_dir():
+            continue
+        m = re.fullmatch(r"DIR-(\d+)", p.name)
+        (canon if m else skip).append(int(m.group(1)) if m else p.name)
+    return sorted(canon), sorted(skip)
+
+
+def tool_md5(root):
+    return hashlib.md5((root / ".ops/scripts/check_cards.py").read_bytes()).hexdigest()
+
+
+# ───────────────────────── 聚合 ─────────────────────────
+def compute(root):
+    txt, rc = run_dump(root)
+    rows, cards = parse_dump(txt)
+    # ★★ `--all` **本来就**在库里有 FAIL 时退出 1（它把「有 FAIL」当非零）⇒ **不能**拿 rc 当
+    #    「dump 不可用」的判据。改判：必须解析出**判据行**，且每张有卡的 DIR 都要有行。
+    if not rows:
+        raise SystemExit(f"★ dump 解析出 0 条判据（rc={rc}）—— 工具输出格式变了，拒绝生成")
+    _ks = registry(root)
+    if len(rows) % len(_ks):
+        raise SystemExit(f"★ 判据行 {len(rows)} 不是 {len(_ks)} 的整数倍 —— dump 可能被截断")
+    ks = registry(root)
+    canon, skip = canonical(root)
+    total = len(rows)
+
+    allc = collections.defaultdict(collections.Counter)
+    erac = collections.defaultdict(collections.Counter)
+    for n, k, v in rows:
+        allc[k][v] += 1
+        erac[(k, era_of(n))][v] += 1
+
+    per_era_cards, per_era_rows = collections.Counter(), collections.Counter()
+    for n, _k, _v in rows:
+        per_era_rows[era_of(n)] += 1
+    seen = set()
+    for n, _k, _v in rows:
+        if n not in seen:
+            seen.add(n)
+            per_era_cards[era_of(n)] += 1
+
+    with_rows = sorted(seen)
+    missing = [n for n in canon if n not in seen]
+
+    st = {}
+    for k in ks:
+        c = allc[k]
+        p, f, na = c["PASS"], c["FAIL"], c["N/A"]
+        ap = p + f
+        rate = (p / ap * 100) if ap else None
+        st[k] = dict(p=p, f=f, na=na, ap=ap, rate=rate,
+                     cls=cls_label(ap, rate), trend=trend(k, erac))
+
+    return dict(ks=ks, canon=canon, skip=skip, total=total, cards=cards,
+                with_rows=with_rows, missing=missing, allc=allc, erac=erac,
+                st=st, tool_md5=tool_md5(root),
+                per_era_cards=per_era_cards, per_era_rows=per_era_rows,
+                tot_p=sum(v["p"] for v in st.values()),
+                tot_f=sum(v["f"] for v in st.values()),
+                tot_na=sum(v["na"] for v in st.values()))
+
+
+def cls_label(ap, rate):
+    if ap == 0:
+        return "D 疑空转"
+    if rate >= 100:
+        return "A 普遍遵守（适用处全过）"
+    if rate >= 75:
+        return "B 基本遵守"
+    if rate >= 25:
+        return "C 部分遵守"
+    return "E 形同未执行（适用处几乎不过）"
+
+
+def trend(k, erac):
+    """年代趋势。★★ 门（`|Δ|≥20pp`）与三段标签是**从 §2 现有 13 行反解出来并逐行验证**的，不是猜。"""
+    first, last = ERA[0][0], ERA[-1][0]
+    c1, cl = erac[(k, first)], erac[(k, last)]
+    ap1, apl = c1["PASS"] + c1["FAIL"], cl["PASS"] + cl["FAIL"]
+    if ap1 == 0 or apl == 0:
+        return "不适判（某年代无适用项）"
+    d = round(cl["PASS"] / apl * 100 - c1["PASS"] / ap1 * 100)
+    body = f"（{c1['PASS']}/{ap1}→{cl['PASS']}/{apl}，{d:+d}pp）"
+    if d >= 20:
+        return "引入后逐步遵守" + body
+    if d <= -20:
+        return "近期退化" + body
+    return "无显著趋势" + body
+
+
+# ───────────────────────── 受管行的期望文本 ─────────────────────────
+def want_s2(d):
+    out = []
+    for k in d["ks"]:
+        s = d["st"][k]
+        apr = f"{round(s['ap'] / d['total'] * 100)}%"
+        pr = f"{s['rate']:.1f}%" if s["ap"] else "—"
+        out.append(f"| **K{k}** | {s['p']} | {s['f']} | {s['na']} | {s['ap']} | "
+                   f"{apr} | {pr} | {s['cls']} | {s['trend']} |")
+    tp, tf, tna = d["tot_p"], d["tot_f"], d["tot_na"]
+    tap = tp + tf
+    out.append(f"| **合计** | **{tp}** | **{tf}** | **{tna}** | **{tap}** | "
+               f"**{round(tap / d['total'] * 100)}%** | **{tp / tap * 100:.1f}%** | — | — |")
+    return out
+
+
+def want_s3(d):
+    out = []
+    for k in d["ks"]:
+        cells = []
+        for name, _lo, _hi in ERA:
+            c = d["erac"][(k, name)]
+            p, f, na = c["PASS"], c["FAIL"], c["N/A"]
+            tot = p + f + na
+            cells.append(f"{p}/{f}/{na} ⇒ FAIL {round(f / tot * 100) if tot else 0}%")
+        out.append(f"| **K{k}** | " + " | ".join(cells) + " |")
+    return out
+
+
+def want_s4(d):
+    """→ {小节标签: [条目行]}；小节顺序 A/B/C/E（无 D 时不输出该节）。"""
+    buckets = {"A": [], "B": [], "C": [], "D": [], "E": []}
+    for k in d["ks"]:
+        s = d["st"][k]
+        buckets[s["cls"][0]].append(
+            f"- **K{k}** —— PASS {s['p']} / FAIL {s['f']} / N/A {s['na']}；{s['trend']}")
+    return buckets
+
+
+# ───────────────────────── 文件侧：定位受管区 ─────────────────────────
+SECT = re.compile(r"^## (§[0-9A-Za-z]+)", re.M)
+
+
+def sections(text):
+    """→ {节名: (起, 止)} 字符区间；节名取 `## §2` 这类的 `§2`。"""
+    marks = [(m.start(), m.group(1)) for m in SECT.finditer(text)]
+    out = {}
+    for i, (pos, key) in enumerate(marks):
+        end = marks[i + 1][0] if i + 1 < len(marks) else len(text)
+        out[key] = (pos, end)
+    return out
+
+
+def line_of(text, needle, start=0, stop=None):
+    """→ 含 needle 的**整行**在 text 里的 (行起, 行止)；找不到 → None。"""
+    seg = text[start:stop if stop is not None else len(text)]
+    i = seg.find(needle)
+    if i < 0:
+        return None
+    a = start + seg.rfind("\n", 0, i) + 1
+    b = text.find("\n", a)
+    return (a, b if b >= 0 else len(text))
+
+
+def replace_span(text, span, new):
+    a, b = span
+    return text[:a] + new + text[b:]
+
+
+# ───────────────────────── check / write ─────────────────────────
+def managed_expectations(d, text):
+    """→ [(名字, 现文件里的 span, 期望整行文本)]；span 为 None 表示缺失（也是缺陷）。"""
+    secs = sections(text)
+    exp = []
+
+    # 头部：工具 md5 行
+    # ★ 锚点必须是**本生成器自己写的那一行**：`现工具 md5 为` 在 `Cycle 259` 的历史行里也有
+    #   （首个匹配会抓到历史行 ⇒ 会把历史当成受管项去改）⇒ 用本行独有的尾串 `§7b`。
+    sp = line_of(text, "⇒ 生成器见 **§7b**")
+    if sp:
+        exp.append(("头部·工具 md5", sp,
+                    f"> ★★ **`Cycle 268` 头部刷新**：现工具 md5 为 **`{d['tool_md5'][:12]}…`**"
+                    f"（`P133-12` 把**全部易变数字**改为由 dump 现算 ⇒ 生成器见 **§7b**）。"))
+
+    # 头部：实测一致性断言
+    sp = line_of(text, "重跑 `check_cards.py --all` 得到")
+    if sp:
+        a = sp[0]
+        b2 = text.find("\n", text.find("\n", a) + 1)
+        ncards = len(d["with_rows"])
+        exp.append(("头部·实测断言", (a, b2),
+                    f"> 重跑 `check_cards.py --all` 得到 **{d['total']}** 条判决，与 §2 的 "
+                    f"{len(d['ks'])} 行**逐条一致**\n"
+                    f"> （`PASS {d['tot_p']}` / `FAIL {d['tot_f']}` / `N/A {d['tot_na']}`，"
+                    f"`{ncards}` 卡 × `{len(d['ks'])}` 条），合计行亦一致。"))
+
+    # §1 六行
+    s1 = secs.get("§1")
+    if s1:
+        kl = ", ".join(f"K{k}" for k in d["ks"])
+        miss = ",".join(str(n) for n in d["missing"])   # ★ 与文件一致：无空格
+        sk = ", ".join(d["skip"])
+        exp.append(("§1·纪律集合", line_of(text, "| 纪律集合 |", *s1),
+                    f"| 纪律集合 | `REGISTRY` 的 **{len(d['ks'])}** 条"
+                    f"（= 清单里标 `①自动化` 的全部：{kl}） |"))
+        exp.append(("§1·卡片总体", line_of(text, "| 卡片总体 |", *s1),
+                    f"| 卡片总体 | `revolve/DIR-{{n}}/` 下**规范**目录（`n` 为纯数字，"
+                    f"共 {len(d['canon'])} 个） |"))
+        exp.append(("§1·纳入卡片", line_of(text, "| 纳入卡片 |", *s1),
+                    f"| 纳入卡片 | **{len(d['with_rows'])}** 张（另有 **{len(d['missing'])}** 张 "
+                    f"`DIR-{miss}` 缺卡文件 ⇒ 只出 `■` 头、**不出判据行**，故**不计入**上面的 "
+                    f"{len(d['with_rows'])}） |"))
+        exp.append(("§1·被跳过", line_of(text, "| 被跳过 |", *s1),
+                    f"| 被跳过 | **{len(d['skip'])}** 个变体目录（`DIR-26B`… 这类**没有同号 "
+                    f"`dirN/`** 的，本脚本按 `dirN/` 定位 ⇒ 不覆盖）：{sk} |"))
+        exp.append(("§1·判据行数", line_of(text, "| 判据行数 |", *s1),
+                    f"| 判据行数 | **{d['total']}** = {len(d['with_rows'])} × "
+                    f"{len(d['ks'])} |"))
+        sp = line_of(text, "**年代分层**", *s1)
+        if sp:
+            b2 = text.find("\n", text.find("\n", sp[0]) + 1) + 1
+            parts = "/ ".join(
+                f"`{name}`（{lab}，{d['per_era_cards'][name]} 张卡 / "
+                f"{d['per_era_rows'][name]} 条判据）"
+                for (name, _lo, _hi), lab in zip(ERA, ("早期", "中期", "近期")))
+            exp.append(("§1·年代分层", (sp[0], b2),
+                        f"★ **年代分层**（用于回答「纪律是引入后才被遵守，还是至今无人遵守」）：\n"
+                        f"{parts}。\n"))
+
+    # §2 / §3 / §4 的整块行
+    for sec, name in (("§2", "§2 全库总表"), ("§3", "§3 按年代展开")):
+        rg = secs.get(sec)
+        if not rg:
+            continue
+        want = want_s2(d) if sec == "§2" else want_s3(d)
+        for k in d["ks"]:
+            sp = line_of(text, f"| **K{k}** |", *rg)
+            if sp:
+                exp.append((f"{name}·K{k}", sp, want[d["ks"].index(k)]))
+        if sec == "§2":
+            sp = line_of(text, "| **合计** |", *rg)
+            if sp:
+                exp.append((f"{name}·合计", sp, want[-1]))
+
+    # §4 条目
+    s4 = secs.get("§4")
+    if s4:
+        buckets = want_s4(d)
+        lab2key = {"A · ": "A", "B · ": "B", "C · ": "C", "D · ": "D", "E · ": "E"}
+        sub = [(m.start(), m.group(0)) for m in
+               re.finditer(r"^### ([ABCDE]) · ", text[s4[0]:s4[1]], re.M)]
+        sub = [(s4[0] + p, n) for p, n in sub]
+        for i, (pos, head) in enumerate(sub):
+            key = head[4]
+            end = sub[i + 1][0] if i + 1 < len(sub) else s4[1]
+            body_start = text.find("\n", pos) + 1
+            # ★★ span 必须覆盖**连续 bullet 行的完整区间**：原实现止于"第一个空行"，
+            #    而 §4 的 bullet 之间**没有空行** ⇒ 只换掉第一行、其余旧行留在原地 ⇒ 新旧混叠。
+            #    实测（`Cycle 268` 新增一张卡的隔离副本）：旧 4 行 + 新 4 行交错，`--check` 仍报 4 处漂移。
+            lines = text[body_start:end].splitlines(keepends=True)
+            first = None
+            stop = 0
+            for ln in lines:
+                if ln.startswith("- **K"):
+                    if first is None:
+                        first = stop
+                    stop += len(ln)
+                elif first is not None:
+                    break
+                else:
+                    stop += len(ln)
+            if first is None:
+                continue
+            # ★ **无条件**登记（不因"当前已相等"而跳过）：否则「受管项」这个**分母**会随状态
+            #   浮动（实测 35 ↔ 39），从而**掩盖掉"某一项消失了"**这种缺陷。
+            want = buckets[key]
+            exp.append((f"§4·{key} 条目", (body_start + first, body_start + stop),
+                        "\n".join(want) + "\n"))
+
+    return exp
+
+
+def do_check(root, verbose=True):
+    f = root / ".ops/COMPLIANCE-BASELINE.md"
+    text = f.read_text(encoding="utf-8")
+    d = compute(root)
+    bad = 0
+    for name, sp, want in managed_expectations(d, text):
+        if sp is None:
+            print(f"  ✗ {name}：**受管行缺失**（文件结构变了？）")
+            bad += 1
+            continue
+        cur = text[sp[0]:sp[1]]
+        if cur != want:
+            bad += 1
+            print(f"  ✗ {name}")
+            print(f"      现: {cur[:150]}")
+            print(f"      应: {want[:150]}")
+    if verbose:
+        print(f"\n受管项 = {len(managed_expectations(d, text))} · 漂移 = {bad}")
+        if bad == 0:
+            print("★ 受管区与 dump **逐字一致**；§5/§5b/§6/§7 为历史或不许改区，**故意不检查**。")
+    return bad
+
+
+def do_write(root):
+    f = root / ".ops/COMPLIANCE-BASELINE.md"
+    text = f.read_text(encoding="utf-8")
+    d = compute(root)
+    exp = managed_expectations(d, text)
+    # ★★ 写前守卫：每个 span 必须**整行对齐**（起点是行首、终点是行尾或文末）。
+    #    动因（`Cycle 268` 实测）：§4 的 span 曾按"第一个空行"截断，而 §4 的 bullet 之间
+    #    **没有空行** ⇒ 只换掉第一行、旧行留在原地 ⇒ 新旧混叠（`--check` 仍报 4 处漂移）。
+    #    **写坏的文档比漂移的文档更糟**：漂移可被 `--check` 抓，写坏只能靠人眼。故先拒后写。
+    bad = []
+    for name, sp, _w in exp:
+        if not sp:
+            continue
+        a, b = sp
+        if a > 0 and text[a - 1] != "\n":
+            bad.append((name, "起点不在行首"))
+        if b < len(text) and text[b] != "\n":
+            bad.append((name, "终点不在行尾"))
+    if bad:
+        for name, why in bad:
+            print(f"  ★ 拒绝写入：{name} —— {why}")
+        raise SystemExit("★ span 未整行对齐，拒绝写（宁可留漂移，不可写坏）")
+    # 从后往前替换，避免偏移
+    for name, sp, want in sorted([e for e in exp if e[1]], key=lambda e: -e[1][0]):
+        cur = text[sp[0]:sp[1]]
+        if cur != want:
+            text = replace_span(text, sp, want)
+            print(f"  ✎ {name}")
+    f.write_text(text, encoding="utf-8")
+    left = do_check(root)
+    print(f"\n写后复检：漂移 = {left}")
+    return left
+
+
+def archive(root):
+    """把**本文件当前源码**写回 `COMPLIANCE-BASELINE.md` 的 §7b（自举闭环）。
+
+    ★★ 为什么必须由生成器**自己**做：同步器若另存一份（`/tmp/sync_s7b.py`），它会**和生成器一起丢**
+      ⇒ 「丢 `/tmp` 可恢复」这句话就不成立。自举才闭环：**生成器 → §7b → 取回 → 生成器**。
+    ★ 只重写 §7b 里那**一个**代码块；§7b 之前的每一个字节、§7b 的散文，全部不动。
+    """
+    f = root / ".ops/COMPLIANCE-BASELINE.md"
+    t2 = f.read_text(encoding="utf-8")
+    if "## §7b" not in t2:
+        raise SystemExit("★ 本文件没有 §7b —— 拒绝自举（不新造节，节序由人定）")
+    head, blk = t2[:t2.index("## §7b")], t2[t2.index("## §7b"):]
+    f4 = "`" * 4
+    src = pathlib.Path(__file__).read_text(encoding="utf-8")
+    if f4 in src:
+        raise SystemExit("★ 源码里出现了 4 连反引号字面量 —— 围栏会不自洽，拒绝自举")
+    m = re.search(f4 + r"python\n(.*?)\n" + f4 + r"\s*$", blk, re.S)
+    if not m:
+        raise SystemExit("★ §7b 里找不到 4 反引号的 python 代码块，拒绝自举")
+    blk = blk[:m.start()] + f4 + "python\n" + src.rstrip() + "\n" + f4 + "\n"
+    f.write_text(head + blk, encoding="utf-8")
+    print(f"  ✓ §7b 已自举（源码 {len(src.rstrip())} B）")
+    return 0
+
+
+def selftest(root):
+    """证明 §7b 里存的生成器源码**不是死文本**：能提取、与自身一致、提取版能跑出 0 漂移。
+
+    ★ 口径必须精确：存档版比运行时版**多一个末尾换行**（存档为 Python 卫生起见补的）
+      ⇒ 比较时**规范化末尾空白**，并**如实**报告这一点，不写成「逐字相同」。
+    """
+    import tempfile
+    f = root / ".ops/COMPLIANCE-BASELINE.md"
+    t2 = f.read_text(encoding="utf-8")
+    if "## §7b" not in t2:
+        print("  ✗ §7b 缺失 —— 存档不存在，生成器一旦丢 /tmp 就找不回")
+        return 1
+    blk = t2[t2.index("## §7b"):]
+    # ★★ 围栏**在运行时拼出来**：本文件自身含三反引号，若把 4 反引号写成字面量，
+    #    存档里就会出现 5 连串 ⇒ 永远无法自洽。故 f = "`" * 4，源码里不出现该字面。
+    f = "`" * 4
+    m = re.search(f + r"python\n(.*?)\n" + f + r"\s*$", blk, re.S)
+    if not m:
+        print("  ✗ §7b 里找不到 " + str(len(f)) + " 反引号的 python 代码块")
+        return 1
+    rec = m.group(1) + "\n"
+    here = pathlib.Path(__file__).read_text(encoding="utf-8")
+    same = rec.rstrip() == here.rstrip()
+    print(f"  {'✓' if same else '✗'} 存档可提取（{len(rec)} B）；与运行时版"
+          f"{'一致（除末尾换行）' if same else '不一致'}")
+    if not same:
+        import difflib
+        for ln in list(difflib.unified_diff(here.splitlines(), rec.splitlines(),
+                                            "运行时", "§7b", n=0))[:12]:
+            print("      " + ln)
+        return 1
+    tmp = pathlib.Path(tempfile.mkdtemp()) / "gen_rec.py"
+    tmp.write_text(rec, encoding="utf-8")
+    pr = subprocess.run([sys.executable, str(tmp), "--check", "--root", str(root)],
+                        capture_output=True, text=True,
+                        env={"SGMN_ROOT": str(root), "PYTHONDONTWRITEBYTECODE": "1",
+                             "PATH": "/usr/bin:/bin"})
+    ok = pr.returncode == 0
+    print(f"  {'✓' if ok else '✗'} 提取版独立运行：`--check` 退出码 {pr.returncode}"
+          f"（{'0 漂移' if ok else '有漂移'}）")
+    print("★ 结论：" + ("§7b 存档是**活的** —— 丢 /tmp 可从此处恢复。" if ok and same
+                        else "§7b 存档**不可用**，必须先修。"))
+    return 0 if (ok and same) else 1
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--root", default=None)
+    g = ap.add_mutually_exclusive_group(required=True)
+    g.add_argument("--check", action="store_true")
+    g.add_argument("--write", action="store_true")
+    g.add_argument("--emit", action="store_true", help="只打印受管的期望行")
+    g.add_argument("--selftest", action="store_true", help="证明 §7b 存档是活的")
+    g.add_argument("--archive", action="store_true", help="把本文件源码写回 §7b（自举）")
+    a = ap.parse_args()
+    root = pathlib.Path(a.root or "/home/brra1n0/.sandbox/experiment/1107/sgmn-loop")
+
+    if a.emit:
+        d = compute(root)
+        text = (root / ".ops/COMPLIANCE-BASELINE.md").read_text(encoding="utf-8")
+        for name, _sp, want in managed_expectations(d, text):
+            print(f"--- {name}\n{want}")
+        return 0
+    if a.archive:
+        return archive(root)
+    if a.selftest:
+        return selftest(root)
+    if a.check:
+        return 1 if do_check(root) else 0
+    return 1 if do_write(root) else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+````
