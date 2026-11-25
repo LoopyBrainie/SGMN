@@ -34,6 +34,8 @@ fails = []
 #   「证据表缺 VERDICT 行」= **诊断错误**）。
 #   ⇒ 本项即 `P135-16` 的 `-REC-31` 同型：**没有独立见证，就没有覆盖**。
 #   ★ 只盘存**已执行**的检查，不制造「必然通过」的断言（那是假守卫，同 `k17`）。
+import sys as _sys
+_sites = set()                     # 已执行 check 的**调用者行号**集合（站点数，不随循环漂移）
 _cur_item = ["?"]
 ran = {}                      # item -> 已执行的 check 数
 
@@ -44,6 +46,13 @@ def section(tag, title):
 def check(cond, msg):
     print(("  ✓ " if cond else "  ✗ ") + msg)
     ran[_cur_item[0]] = ran.get(_cur_item[0], 0) + 1
+    # ★★★ P135-18（Cycle 281）：**区分「调用次数」与「站点数」**。`ran` 数的是**调用**
+    #   ⇒ 循环里的 check 会把计数抬高（实测：L66 在 2 个文档上转 2 次、L273 在 6 条
+    #   `MD5` 条目上转 6 次 ⇒ 38 个站点产生 41 次调用）。后果：**预算随语料漂移**
+    #   （加第 7 条 md5 ⇒ 42，而消息写的是「少于此数说明有检查被跳过」= **方向说反**）。
+    #   ⇒ 另记一份**站点**（调用者行号）集：它不随循环次数变化，是同一事实的**第二个
+    #   独立来源**；`ran` 的 41 保留为冻结实测值（不得静默改数）。
+    _sites.add(_sys._getframe(1).f_lineno)
     if not cond:
         fails.append(msg)
 
@@ -651,6 +660,9 @@ _CHECK_BUDGET = {"①": 2, "②": 1, "③": 1, "④": 7, "⑤": 6,
 #   并把总数抬高（实测：总数从 41 变 43、⑩ 从 3 变 4）。快照后 ⑪ 只断言**它之前**的实况。
 _ran_snapshot = dict(ran)
 _total_snapshot = sum(_ran_snapshot.values())
+# ★★ 站点数也**必须快照**（同 ⑪c 的理由）：`_sites` 是全局集，⑪ 自己的 a/b/c 会先加进去
+#   ⇒ 不快照就得到 35+3=38，把 ⑪ 自己的三条混进 ①–⑩ 的账里（实测踩中）。
+_n_site_snapshot = len(_sites)
 
 section("⑪", "自盘存（审计有没有跑全；P135-17）")
 _miss_item = [k for k in _CHECK_BUDGET if k not in _ran_snapshot]
@@ -661,9 +673,23 @@ check(not _diff_budget,
       f"⑪b 每项执行的检查数须与冻结预算一致（实跑, 预算）：{_diff_budget or '一致'}"
       f" · 合计 {_total_snapshot} / 预算 {sum(_CHECK_BUDGET.values())}")
 _total = _total_snapshot
-check(_total == sum(_CHECK_BUDGET.values()),
-      f"⑪c 已执行检查总数 = {_total}（冻结预算 {sum(_CHECK_BUDGET.values())}）"
-      f"——★ 少于此数说明有检查**被跳过**（文件缺失/守卫条件变化/重构删漏）")
+_budget_sum = sum(_CHECK_BUDGET.values())
+check(_total == _budget_sum,
+      f"⑪c 已执行检查**调用**总数 = {_total}（冻结预算 {_budget_sum}）"
+      + ("" if _total == _budget_sum else
+         ("——★ 少于预算 ⇒ 有检查**被跳过**（文件缺失/守卫条件变化/重构删漏）"
+          if _total < _budget_sum else
+          "——★ 多于预算 ⇒ **不是**跳过；这是**循环多转了一圈**（语料变大）"
+          "，本项因而是**调用计数**、会随语料漂移")))
+# ★★★ ⑪d（P135-18 新增）：**站点数**——同一事实的第二个独立来源。
+#   ⑪c 数调用 ⇒ 随语料漂移；⑪d 数**调用者行号** ⇒ 与循环次数无关。
+#   两者**必须分开报**：⑪c 变动未必是覆盖丢失，⑪d 变动必然是「某个 check 不再执行」。
+_SITE_BUDGET = 35
+_n_site = _n_site_snapshot
+check(_n_site == _SITE_BUDGET,
+      f"⑪d 已执行 check 的**站点**数 = {_n_site}（冻结 {_SITE_BUDGET}）"
+      f"——★ 这一项与循环次数无关：少一个就是**某个 check 真的不再执行**"
+      f"（⑪c 因语料变大而升高时，本项**不动** ⇒ 两项合起来才能区分「跳过」与「多转」）")
 
 print("\n" + "=" * 88)
 print(("★ 全部通过" if not fails else f"★ {len(fails)} 项未通过"))
