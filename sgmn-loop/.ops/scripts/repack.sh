@@ -140,7 +140,16 @@ md5sum -c /tmp/_mf.txt > /tmp/_mf_check.txt 2>&1
 OK=$(grep -c ": OK$" /tmp/_mf_check.txt)
 BAD=$(grep -c ": FAILED$" /tmp/_mf_check.txt)   # ★ 只匹配行尾的 FAILED（文件名里含 "FAILED" 不算失败）
 say "MANIFEST 校验：OK=$OK  FAILED=$BAD"
-if [ "$BAD" != "0" ]; then grep "FAILED" /tmp/_mf_check.txt | head -20 | tee -a "$LOG"; fi
+# ★★★ P135-17（Cycle 280）：原实现**只报告不阻断** —— `FAILED>0` 时仅打印，随后照旧
+#   走到末尾打印「打包结束（全部校验通过）」并 exit 0 ⇒ **包已损坏却宣告全部通过**。
+#   这正是本脚本 line 146 自己记载的 `DEF-26P-10`「假成功」同型缺陷，当时只修了
+#   `rebuild_full.sh` 的退出码，**没修自己的 md5 校验**。注入实测（篡改一个受管文件）：
+#   `OK=1 FAILED=1` → 「全部校验通过」→ rc=0。⇒ 现改为硬闸门。
+if [ "$BAD" != "0" ]; then
+  grep "FAILED" /tmp/_mf_check.txt | head -20 | tee -a "$LOG"
+  say "★★ MANIFEST 校验 FAILED=$BAD ⇒ 归档已损坏或被改写，**不打印「打包结束」**"
+  exit 10
+fi
 # ---------- ⑤ full 包重建（自足版）----------
 # ★ DEF-26P-10（补）：原实现**不检查退出码** ⇒ 完整包构建失败时仍打印「打包结束」（假成功）
 if ! bash "$ROOT/.ops/scripts/rebuild_full.sh"; then

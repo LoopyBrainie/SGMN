@@ -27,8 +27,23 @@ FROZEN = ROOT / "LOOP_REPORT_DIR04-DIR17.md"
 CIRC = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㉑㉒㉓㉔㉕㉖㉗㉘㉙㉚㉛㉜㉝"
 fails = []
 
+# ★★★ P135-17（Cycle 280）：**自盘存**。改造前 `check()` 只往 `fails` 追加，**没有任何东西**
+#   记录「到底执行了几个检查、十项是不是都跑了」。实测缺陷（本 cycle 注入）：
+#   把 `evidence/table.md` 改名 ⇒ ③/④b/⑨ 三段**静默跳过**，执行数 41→29（**12 个检查消失**），
+#   而审计**不报「有检查没跑」**（只有 ⑦ 因另扫目录而误打误撞报红，且报的是
+#   「证据表缺 VERDICT 行」= **诊断错误**）。
+#   ⇒ 本项即 `P135-16` 的 `-REC-31` 同型：**没有独立见证，就没有覆盖**。
+#   ★ 只盘存**已执行**的检查，不制造「必然通过」的断言（那是假守卫，同 `k17`）。
+_cur_item = ["?"]
+ran = {}                      # item -> 已执行的 check 数
+
+def section(tag, title):
+    _cur_item[0] = tag
+    print(f"\n{tag} {title}")
+
 def check(cond, msg):
     print(("  ✓ " if cond else "  ✗ ") + msg)
+    ran[_cur_item[0]] = ran.get(_cur_item[0], 0) + 1
     if not cond:
         fails.append(msg)
 
@@ -37,7 +52,7 @@ print("SGMN Loop · 一致性审计")
 print("=" * 88)
 
 # ① 纪律编号连续
-print("\n① 纪律编号连续性")
+section("①", '纪律编号连续性')
 for name, f in (("活文档 LOOP-MECHANISM.md", LIVE), ("冻结报告 LOOP_REPORT_DIR04-DIR17.md", FROZEN)):
     if not f.exists():
         check(False, f"{name} 缺失")
@@ -51,7 +66,7 @@ for name, f in (("活文档 LOOP-MECHANISM.md", LIVE), ("冻结报告 LOOP_REPOR
     check(not gaps, f"{name}：编号 {min(alln)}–{top} 连续" + (f"，缺号 {gaps}" if gaps else ""))
 
 # ② 双文件对照
-print("\n② 活文档 ↔ 冻结报告 的纪律对照")
+section("②", '活文档 ↔ 冻结报告 的纪律对照')
 if LIVE.exists() and FROZEN.exists():
     lt = LIVE.read_text(encoding="utf-8")
     ft = FROZEN.read_text(encoding="utf-8")
@@ -65,7 +80,7 @@ if LIVE.exists() and FROZEN.exists():
     print(f"      （说明：冻结报告之后的纪律 {newer} 按设计**不回填**到已冻结报告）")
 
 # ③ 证据表编号
-print("\n③ 证据表编号唯一性")
+section("③", '证据表编号唯一性')
 tb = ROOT / "evidence" / "table.md"
 if tb.exists():
     t = tb.read_text(encoding="utf-8")
@@ -99,7 +114,7 @@ if tb.exists():
           f"（每个编号只应有一行；冲突见 evidence/table.md 的 `DUP-OK` 声明与消歧表）")
 
 # ④ SUCCEEDED 计数
-print("\n④ SUCCEEDED 计数")
+section("④", 'SUCCEEDED 计数')
 sm = ROOT / "SUMMARY.md"
 if sm.exists():
     t = sm.read_text(encoding="utf-8")
@@ -239,7 +254,7 @@ if tb.exists():
         check(False, f"共域校验失败：{_e}")
 
 # ⑤ 关键 md5
-print("\n⑤ 关键 md5 记录")
+section("⑤", '关键 md5 记录')
 MD5 = {
     # ★ 2026-11-07：路径从旧沙箱的 `revolve/DIR-18/...` 改为**恢复后工作区的真实布局** `dir18/...`
     #   （工作区是**部分**恢复：只带 DIR-15…DIR-20 + 台账；完整历史在交付包内）。
@@ -260,7 +275,7 @@ for rel, want in MD5.items():
         check(False, f"{rel} 缺失")
 
 # ⑥ 纪律计数跨文件一致（新增于纪律 ㉜/#32 之后）
-print("\n⑥ 纪律计数跨文件一致")
+section("⑥", '纪律计数跨文件一致')
 import re as _re
 _cnt = {}
 for _f, _pat in (("LOOP-MECHANISM.md", r"合计\s*\*\*(\d+)\s*条"),
@@ -295,7 +310,7 @@ if _lm.exists():
 
 # ⑦ ★ 归档完整性（2026-11-17，DEF-71-7）：审计原先只核**计数一致性**，
 #    抓不到「某个 DIR 的 VERDICT 没进证据表 / 没进 register」这类**静默丢失**（本轮实际发生：D-92 未推上 trainer）。
-print("\n⑦ 归档完整性（DIR ≥ 69：register 与证据表都必须覆盖）")
+section("⑦", '归档完整性（DIR ≥ 69：register 与证据表都必须覆盖）')
 _revdirs = sorted([_p.name for _p in (ROOT / "revolve").glob("DIR-*") if _p.is_dir()])
 _reg_t = (ROOT / "DIRECTION-REGISTER.md").read_text(encoding="utf-8") if (ROOT / "DIRECTION-REGISTER.md").exists() else ""
 _tb_t = (ROOT / "evidence/table.md").read_text(encoding="utf-8") if (ROOT / "evidence/table.md").exists() else ""
@@ -320,7 +335,7 @@ check(not _mev, f"⑦ 有 VERDICT 的 DIR（≥69）都在证据表出现：缺 
 #   以及 `### K1 的回扫结果` 被当成条目 ⇒ 朴素切分器数出 25 条）。
 #   本项不检查纪律**内容**（那属 `P132-1` 的核对器），只检查**形式**是否可被机械解析。
 #   ★ 口径同 ⑥b：**不硬编码条目数**，而是断言「声明值 == 机械点数」（DEF-128-03）。
-print("\n⑧ 开卡清单格式（CARD-CHECKLIST.md；P131-1）")
+section("⑧", '开卡清单格式（CARD-CHECKLIST.md；P131-1）')
 _cc = ROOT / "CARD-CHECKLIST.md"
 if not _cc.exists():
     check(False, "⑧ CARD-CHECKLIST.md 缺失（开卡纪律的唯一归档地）")
@@ -455,7 +470,7 @@ else:
 #       才**必须**有该行。⇒ 「缺行数」只**打印**，不做断言。
 #   (c) 本项**只判形态**，**不判**「那栏写的相邻命题对不对」（那是人读）⇒
 #       **不得**把 ⑨a–⑨c 通过读成「边界已声明正确」。
-print("\n⑨ 证据行「边界」栏的形态（P134-14b）")
+section("⑨", '证据行「边界」栏的形态（P134-14b）')
 BOUNDARY_LABELS = ("边界", "边界（不得外推）")   # ★ 现存只有这两种标签；第三种出现即报红（防漂移）
 BOUNDARY_FROM = 162                              # ★ 生效起点：本项落地时的**下一行**编号
 _NONE_WORDS = {"无", "**无**", "—", "-", "－", "none", "n/a", "na", "空"}
@@ -539,7 +554,7 @@ if tb.exists():
 #     （丢 `?:`，捕获组语义随之改变），另有 `_U4_AX`/`_U4_Q` 被抄成「人话摘要」而非模式串。
 #   口径：**字符串同一性**，不判正则等价、不做语义判断；两侧都从**源码/归档**机械取，
 #   任一侧改动即红。★ 本项**不改** `--probe-u4` 的判定行为、不进 `INTERP`、不改任何卡。
-print("\n⑩ `K27` 判定式 ↔ check_cards.py 源码（字符串同一性；P134-14d）")
+section("⑩", '`K27` 判定式 ↔ check_cards.py 源码（字符串同一性；P134-14d）')
 _K27_SRC = ROOT / ".ops" / "scripts" / "check_cards.py"
 
 
@@ -616,6 +631,39 @@ else:
                                f"源码…{_s[max(0,_at-6):_at+10]}… ≠ 归档…{_a[max(0,_at-6):_at+10]}…)")
         check(not _diff10,
               f"⑩ `K27` 判定式须与源码**逐字相同**：不一致 {_diff10 or '无'}")
+
+# ============================================================================
+# ⑪ ★★★ P135-17（Cycle 280）：**自盘存** —— 审计自己有没有跑全
+# ----------------------------------------------------------------------------
+# ★ 为什么必须有这一项（本 cycle 注入实测，不是假想）：
+#   把 `evidence/table.md` 改名 ⇒ ③/④b/⑨ 三段**静默跳过**，执行数 41→29
+#   （**12 个检查消失**），而审计**不报「有检查没跑」**。当时唯一的红来自 ⑦
+#   （它另扫 `dir*/`），报的却是「证据表缺 VERDICT 行」= **诊断错误**。
+#   ⇒ 覆盖丢失本身必须是**断言**，不能靠别的项**偶然**撞上。
+# ★ 判据形态（沿用 `P135-16` §六 的接线原则）：
+#   只断言「**已执行**的检查数」与「十项是否都跑过」——**不**为任何「恒失败分支」
+#   造必然通过的断言（那是假守卫，同 `k17` 的结构性空）。
+# ★ 本项**钉的是当前库的实测值**（与 `-REC-29/30/31` 同性质）：新增/删除一个
+#   `check()` 或让某项的守卫条件变化 ⇒ **会红**，那是**预期**，改数须走新 revision。
+_CHECK_BUDGET = {"①": 2, "②": 1, "③": 1, "④": 7, "⑤": 6,
+                 "⑥": 3, "⑦": 2, "⑧": 11, "⑨": 5, "⑩": 3}
+# ★★ 先**快照**：⑪ 自己的断言也会经 check() 计数 ⇒ 若不快照，⑪ 会把自己算进 ⑩ 的桶
+#   并把总数抬高（实测：总数从 41 变 43、⑩ 从 3 变 4）。快照后 ⑪ 只断言**它之前**的实况。
+_ran_snapshot = dict(ran)
+_total_snapshot = sum(_ran_snapshot.values())
+
+section("⑪", "自盘存（审计有没有跑全；P135-17）")
+_miss_item = [k for k in _CHECK_BUDGET if k not in _ran_snapshot]
+check(not _miss_item, f"⑪a 十项必须**全部**执行到：未执行 {_miss_item or '无'}（实际跑了 {sorted(_ran_snapshot)}）")
+_diff_budget = {k: (_ran_snapshot.get(k, 0), _CHECK_BUDGET[k]) for k in _CHECK_BUDGET
+                if _ran_snapshot.get(k, 0) != _CHECK_BUDGET[k]}
+check(not _diff_budget,
+      f"⑪b 每项执行的检查数须与冻结预算一致（实跑, 预算）：{_diff_budget or '一致'}"
+      f" · 合计 {_total_snapshot} / 预算 {sum(_CHECK_BUDGET.values())}")
+_total = _total_snapshot
+check(_total == sum(_CHECK_BUDGET.values()),
+      f"⑪c 已执行检查总数 = {_total}（冻结预算 {sum(_CHECK_BUDGET.values())}）"
+      f"——★ 少于此数说明有检查**被跳过**（文件缺失/守卫条件变化/重构删漏）")
 
 print("\n" + "=" * 88)
 print(("★ 全部通过" if not fails else f"★ {len(fails)} 项未通过"))
