@@ -266,6 +266,29 @@ done
 }
 say "归档必需品齐备：DECISIONS.md + CARD-CHECKLIST.md + COMPLIANCE-BASELINE.md + ENV-NOTES.md + 七脚本（rebuild_full / repack / audit_consistency / check_cards / blind_copy / restore_out / sync_check）"
 
+# ★★ P135-20（Cycle 283）：`_must` 的**入包侧**完整性断言 —— 消灭「`.ops/` 顶层普通文件
+#   拷贝失败而无人报红」。★ 与上一条（`.md ⊆ _MUST`）方向**相反**、**互补**：
+#     上一条管「**清单**漏列」；本条管「**文件**没进包」。
+#   动机（Cycle 283 **实测**，不是假想）：`.ops/` 顶层是通配拷入且带 `2>/dev/null`
+#     `cp -f "$ROOT"/.ops/* "$PKG/06_CONTINUITY/" 2>/dev/null`
+#   ⇒ 实测把 `.ops/ZZPROBE.txt` 置为**不可读**（`chmod 000`）后：拷贝**静默失败**，
+#     而 `归档必需品齐备` / `入包差集核对通过` **全绿**，唯一非零是 zip 自己的报错
+#     （且**不指名**那个文件）⇒ 一个**普通文件没进包而无人报红**。
+#   ★ 覆盖面**从文件系统推导**（不手写名单，故不重蹈 `MD5` 的维护负担 ——
+#     `.ops/*.json` 是逐轮 formal 产物，数量会漂；本断言**不需要**知道有几份）。
+#   ★ 只比「**普通文件**」：`.ops/archive`、`.ops/scripts`、`.ops/scratch` 是目录，
+#     `cp -f` 无 `-r` 本就不拷（`DEF-26P-12` 已记），故不得计入。
+_topmiss=""
+for _p in "$ROOT"/.ops/*; do
+  [ -f "$_p" ] || continue
+  _pb=${_p##*/}
+  [ -f "$PKG/06_CONTINUITY/$_pb" ] || _topmiss="$_topmiss $_pb"
+done
+[ -z "$_topmiss" ] || {
+  say '★★ `.ops/` 顶层普通文件未入包 ⇒'"$_topmiss"'（通配拷贝静默失败：查权限/磁盘/文件名）⇒ 中止'
+  exit 11
+}
+
 # ★★ P134-14e（Cycle 265）：入包**差集**核对 —— 消灭「新增 `.ops/scripts/*` 静默漏包」。
 #   动机（Cycle 264 **实测**，不是假想）：新增 `test_audit_k27judge.py` 后，上方入包白名单
 #   （`for _s in …`）未同步，而本文件的注释自己早就写着「新增审计脚本时必须同步加到这里与下方
