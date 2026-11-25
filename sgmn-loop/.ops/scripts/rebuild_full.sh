@@ -217,24 +217,54 @@ done > /tmp/_full_mf.txt
 } > "$PKG/00_MANIFEST.md"
 # ★ DEF-26P-12 硬断言：以下**归档必需品**必须在包内（缺一即中止，不许靠「源==包」断言糊过去，
 #   因为 decisions/ 与 .ops/scripts/ 从来不进 ② 的内容根，两边同时漏 ⇒ 计数断言照不出来）。
-for _must in "03_LEDGERS/COVERAGE-v24.md" \
-              "03_LEDGERS/CARD-CHECKLIST.md" \
-              "06_CONTINUITY/COMPLIANCE-BASELINE.md" \
-              "03_LEDGERS/decisions/DECISIONS.md" \
-             "06_CONTINUITY/.ops/scripts/rebuild_full.sh" \
-             "06_CONTINUITY/.ops/scripts/repack.sh" \
-             "06_CONTINUITY/.ops/scripts/audit_consistency.py" \
-             "06_CONTINUITY/.ops/scripts/audit_counts.py" \
-             "06_CONTINUITY/.ops/scripts/test_audit_counts.py" \
-             "06_CONTINUITY/.ops/scripts/test_audit_boundary9.py" \
-             "06_CONTINUITY/.ops/scripts/test_audit_k27judge.py" \
-             "06_CONTINUITY/.ops/scripts/check_cards.py" \
-             "06_CONTINUITY/.ops/scripts/blind_copy.sh" \
-             "06_CONTINUITY/.ops/scripts/restore_out.sh" \
-             "06_CONTINUITY/.ops/scripts/sync_check.sh"; do
+# ★ P135-19 改动：改成**数组**（不再内联列举）—— 下方新增的「`.ops/*.md` 必在 `_must` 里」需要在
+#   循环外引用完整清单；内联 `for` 的清单在循环后不可再访问。
+declare -a _MUST=(
+             "03_LEDGERS/COVERAGE-v24.md"
+             "03_LEDGERS/CARD-CHECKLIST.md"
+             "06_CONTINUITY/COMPLIANCE-BASELINE.md"
+             "06_CONTINUITY/ENV-NOTES.md"
+             "03_LEDGERS/decisions/DECISIONS.md"
+             "06_CONTINUITY/.ops/scripts/rebuild_full.sh"
+             "06_CONTINUITY/.ops/scripts/repack.sh"
+             "06_CONTINUITY/.ops/scripts/audit_consistency.py"
+             "06_CONTINUITY/.ops/scripts/audit_counts.py"
+             "06_CONTINUITY/.ops/scripts/test_audit_counts.py"
+             "06_CONTINUITY/.ops/scripts/test_audit_boundary9.py"
+             "06_CONTINUITY/.ops/scripts/test_audit_k27judge.py"
+             "06_CONTINUITY/.ops/scripts/check_cards.py"
+             "06_CONTINUITY/.ops/scripts/blind_copy.sh"
+             "06_CONTINUITY/.ops/scripts/restore_out.sh"
+             "06_CONTINUITY/.ops/scripts/sync_check.sh"
+)
+for _must in "${_MUST[@]}"; do
   [ -f "$PKG/$_must" ] || { say "★★ 归档必需品缺失：$_must ⇒ 中止"; exit 9; }
 done
-say "归档必需品齐备：DECISIONS.md + CARD-CHECKLIST.md + COMPLIANCE-BASELINE.md + 七脚本（rebuild_full / repack / audit_consistency / check_cards / blind_copy / restore_out / sync_check）"
+
+# ★★ P135-19（Cycle 282）：`_must` 自身的**完整性**断言 —— 消灭「`.ops/*.md` 静默消失」。
+#   动机（实测，不是假想）：`.ops/` 顶层文件是**通配**拷入的（`cp -f "$ROOT"/.ops/*`，带 `2>/dev/null`）
+#   ⇒ 某文件**从 `.ops/` 消失**时，通配照常成功、包内也没有它，**源==包**两边同时缺 ⇒
+#   上方 `_must` 是它**唯一**的见证。实测：删 `.ops/COMPLIANCE-BASELINE.md` 而保留 `_must` 条目 ⇒
+#   rc=9 报「归档必需品缺失」✓；但**同时**删掉 `_must` 条目 ⇒ 一路走到 zip 才断，**静默缺件** ✗。
+#   ⇒ 本条把 `_must` 的覆盖面**从文件系统推导**（不再手写）：`.ops/` 顶层的每个 `.md`
+#     必须在 `_must` 里出现。★ 这不是「数量守卫」（`P135-18` 已占位），是**集合包含**断言。
+#   ★ 只覆盖 `.md`：`.ops/*.json` 是本 loop 的**逐轮 formal 产物**（bulk artifact），
+#     把它们逐条写进 `_must` 会把清单变成维护负担、收益远低于成本 ⇒ 故意不覆盖，见
+#     `revolve/P135-19-WHITELIST-COVERAGE.md` 的「故意不补」一节。
+_unmust_md=""
+for _m in "$ROOT"/.ops/*.md; do
+  [ -f "$_m" ] || continue
+  _mb=${_m##*/}
+  _hit=0
+  for _must in "${_MUST[@]}"; do [ "$_must" = "06_CONTINUITY/$_mb" ] && { _hit=1; break; }; done
+  [ "$_hit" = 1 ] || _unmust_md="$_unmust_md $_mb"
+done
+[ -z "$_unmust_md" ] || {
+  # ★ 反引号在双引号内会触发**命令替换**（实测把 `.ops/` 吞成空串）⇒ 这里用单引号拼接。
+  say '★★ `.ops/` 顶层 .md 未列入归档必需品 ⇒'"$_unmust_md"'（新增 .md 须同时加进上方 _must）⇒ 中止'
+  exit 10
+}
+say "归档必需品齐备：DECISIONS.md + CARD-CHECKLIST.md + COMPLIANCE-BASELINE.md + ENV-NOTES.md + 七脚本（rebuild_full / repack / audit_consistency / check_cards / blind_copy / restore_out / sync_check）"
 
 # ★★ P134-14e（Cycle 265）：入包**差集**核对 —— 消灭「新增 `.ops/scripts/*` 静默漏包」。
 #   动机（Cycle 264 **实测**，不是假想）：新增 `test_audit_k27judge.py` 后，上方入包白名单
